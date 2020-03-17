@@ -1,1 +1,108 @@
 /* You can add global styles to this file, and also import other style files */
+* {
+    font-family: 'Droid Arabic Kufi', sans-serif;
+    text-align: right;
+    direction: rtl;
+}
+body {
+    background-color: whitesmoke;
+}
+
+.fadeLayer {
+    position: absolute;
+    display: none;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 500;
+}
+.cardHeader {
+    color: rgb(8, 151, 170);
+    font-weight: bold;
+}
+.card {
+    border: solid 1px teal;
+}
+.tableBody {
+    overflow-y: auto;
+    height: 450px;
+}
+.headerLeftBorder {
+    width: 1px;
+    background-color: black;
+    height: 70px;
+}
+// scrolltable
+.container-fluid {
+    .panel-body {
+      height: 650px;
+      padding: 0px; 
+      table.flex-table {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        thead,
+        tbody {
+          display: block;
+        }
+        thead {
+          margin-right: 0px; //margin to align correctly to scrollbar in table body
+        }
+        tbody {
+          flex: 1; //variable height
+          overflow-y: scroll;
+        }
+        tr {
+          width: 100% ;
+          display: flex;
+          td,
+          th {
+            display: block;
+            flex: 1;
+          }
+        }
+      }
+      /*
+      table.flex-widths {
+        &.flex-table-aligned {
+          thead > tr {
+            overflow-y: scroll;
+            //overflow-x: hidden;
+          }
+        }
+        tr {
+          td, th {
+            &:nth-child(2) {
+              flex: 3;
+            }
+            &:nth-child(4) {
+              flex: 2;
+            }
+          }
+        }
+      }*/
+    }
+  }
+
+  .askForDelete {
+    // display: none;
+     width: 30%;
+     margin-top: 10%;
+     z-index: 1000;
+     background-color: white;
+     transform: scale(.75);
+     transition: .09s;
+ }
+ .askForDelete.animate {
+     transform: scale(1);
+ }
+
+ .inpCard {
+   background-color: whitesmoke;
+ }
+
+ .settinLable {
+   font-weight: bold;
+ }

@@ -1,0 +1,13 @@
+<div class="container" style="margin-top: 85px;">
+    <div class="card m-3 shadow">
+        <form class="formgroup m-5" [formGroup]="userData" (ngSubmit)="logIn()">
+            <h1 class="mb-5">تسجيل الدخول</h1>
+            <label>اسم المستخدم</label>
+            <input formControlName="userName" type="text" class="form-control mb-3">
+            <label>كلمة السر</label>
+            <input formControlName="userPassword" type="password" class="form-control mb-3">
+            <button id="logInBtn" class="btn btn-info" type="submit">تسجيل الدخول</button>
+            <div class="alert alert-danger d-none mt-2" role="alert">خطأ فى اسم المستخدم او كلمة السر</div>
+        </form>
+    </div>
+</div>

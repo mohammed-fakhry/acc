@@ -1,0 +1,15 @@
+<nav class="navbar navbar-light bg-light fixed-top" id="nav">
+    <div class="ml-2 form-inline">
+        <h5 class="navbar-toggler-icon" id="sidebarToggle" style="cursor: pointer; margin-left: 18px; color: grey;">
+        </h5>
+        <button id="homeBtn" class="btn btn-light m-2 d-none" routerLink="/home">الرئيسية</button>
+    </div>
+    <!--<h1 class="text-info text-weight-bold">مشروع مدينة نصر الجديدة</h1>-->
+    
+    <div class="ml-2 form-inline" id="navSearch">
+        <!--<img class="img-fluid" width="10%" src="../../assets/WhatsApp Image 2020-03-09 at 3.24.40 PM.png" alt="">-->
+        <!--<i class="fa fa-search ml-2" style="cursor: pointer;"></i>-->
+        <i class="fa fa-times ml-2" style="cursor: pointer; display: none;"></i>
+        <button class="btn btn-danger m-2" id="logOut" (click)="logOut()" style="display: none;">تسجيل الخروج</button>
+    </div>
+</nav>
