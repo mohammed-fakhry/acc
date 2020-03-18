@@ -20,26 +20,22 @@ export class CustomerComponent implements OnInit {
 
   ngOnInit() {
 
-    if (this.logService.check) {
-      this.logService.isUser = true;
-      this.logService.checkIsUser();
-    }
-    
-    if (this.logService.isUser == false) {
+    this.logService.logStart(); this.logService.reternlog();
+    /*if (this.logService.isUser == false) {
       this.router.navigate(['/logIn'])
-    }
+    }*/
     this._custService.getCustomer().subscribe((data: Customer[]) => {
       this.customers = data;
     })
     this.customerDataView = {
       customerId: null,
-      customerName: null, //
-      customerTell: null, //
-      customerUnit: null, //
-      customerPaid: null, //
-      customerRemain: null, //
-      customerAdd: null, //
-      customerDateIN: null, //
+      customerName: null,
+      customerTell: null,
+      customerUnit: null,
+      customerPaid: null,
+      customerRemain: null,
+      customerAdd: null,
+      customerDateIN: null,
     }
 
     this.customerData = this.formBuilder.group({

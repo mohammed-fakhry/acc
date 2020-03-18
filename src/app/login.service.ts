@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -14,6 +15,8 @@ export class LoginService {
   url: string;
   mainRoute: string;
 
+  constructor( private http: HttpClient, private router: Router ) { }
+  
   checkCurrentRoute() {
     this.currentUrl = window.location.href;
     this.ind = this.currentUrl.lastIndexOf("/");
@@ -37,7 +40,19 @@ export class LoginService {
     }
   }
 
-  constructor( private http: HttpClient ) { }
+  logStart() {
+    if (this.check) {
+      this.isUser = true;
+      this.checkIsUser();
+    }
+  }
+  reternlog() {
+    if (this.isUser == false) {
+      this.router.navigate(['/logIn'])
+    }
+  }
+
+  
 
   getUsers() {
     return this.http.get<Worker[]>('http://localhost/accounting/getUsers.php');

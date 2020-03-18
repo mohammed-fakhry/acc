@@ -17,7 +17,9 @@ import { SearchPipe } from './search.pipe';
 import { SearchCustomerPipe } from './search-customer.pipe';
 import { MainSettingComponent } from './main-setting/main-setting.component';
 import { UnitSearchPipe } from './unit-search.pipe';
-
+import { TheStocksComponent } from './accountings/stocks/the-stocks/the-stocks.component';
+import { AddStocksComponent } from './accountings/stocks/the-stocks/add-stocks/add-stocks.component';
+import { EnquireStocksComponent } from './accountings/stocks/the-stocks/enquire-stocks/enquire-stocks.component';
 
 
 @NgModule({
@@ -36,6 +38,9 @@ import { UnitSearchPipe } from './unit-search.pipe';
     SearchCustomerPipe,
     MainSettingComponent,
     UnitSearchPipe,
+    TheStocksComponent,
+    AddStocksComponent,
+    EnquireStocksComponent
   ],
   imports: [
     BrowserModule,

@@ -31,8 +31,6 @@ export class SideBarComponent implements OnInit {
     this.ind = this.currentUrl.lastIndexOf("/");
     this.url = this.currentUrl.slice(this.ind);
    
-   
-
     // main buttons
     $('#sideBar h3').hover(function () {
       $(this).animate({ fontSize: '1.3em' }, 100)
@@ -43,38 +41,50 @@ export class SideBarComponent implements OnInit {
       $(this).removeClass('btn-light').addClass('btn-info')
       $(this).next().slideToggle(500);
       $("#sideBar div").not($(this).next()).slideUp(500);
-      $('#sideBar h3').not($(this)).not('#logOut').removeClass('btn-info').addClass('btn-light')
+      $('#sideBar h3').not($(this)).not('#logOut').not('#MainSettingBtn').removeClass('btn-info').addClass('btn-light')
     })
     // make active button
-    if (this.url == '/customers' || this.url == '/workers' || this.url == '/unites') {
+    let customerBtn = $('#customersBtn'); let workersBtn = $('#workersBtn'); let unitesBtn = $('#unitesBtn');
+    let htmlDbItemsBtns: any[] = [customerBtn, workersBtn, unitesBtn]
+    let dBUrls: any[] = ['/customers', '/workers', '/unites'] // dataBaseUrls
+    
+    let stocksBtn = $('#stocksBtn')
+    let htmlAccItemsBtns: any[] = [stocksBtn]
+    let accUrls: any[] = ['/stocks']
+
+
+    if (dBUrls.includes(this.url)) {
       this.mainRoute = 'Db'
       $('#dbBtn').next().show()
       $('#dbBtn').removeClass('btn-light').addClass('btn-info')
       $('#sideBar div').not($('#dbBtn').next()).hide()
-    } else {
+    } else if (accUrls.includes(this.url)) {
+      this.mainRoute = 'acc'
+      $('#accBtn').next().show()
+      $('#accBtn').removeClass('btn-light').addClass('btn-info')
+      $('#sideBar div').not($('#accBtn').next()).hide()
+     } else {
       this.mainRoute = 'false'
       $('#sideBar div').hide();
       $('#sidBar h3').not('#logOut').removeClass('btn-info').addClass('btn-light')
     }
+
+    // active main btn
     //console.log(this.mainRoute)
-    if (this.url == '/customers') {
-      $('#customersBtn').removeClass('btn-light').addClass('btn-secondary');
-      //document.getElementById("customersBtn").classList.replace('btn-light', 'btn-dark')
-      console.log('ok')
-    } else if (this.url == '/workers') {
-      $('#workersBtn').removeClass('btn-light').addClass('btn-secondary');
-
-    } else if (this.url == '/unites') {
-      $('#unitesBtn').removeClass('btn-light').addClass('btn-secondary');
+    for(let i = 0 ; i <= customerBtn.length ; i++) {
+      if (this.url == dBUrls[i]) { // dataBase
+        htmlDbItemsBtns[i].removeClass('btn-light').addClass('btn-secondary');
+      } else if (this.url == accUrls[i]) { // accounting
+        htmlAccItemsBtns[i].removeClass('btn-light').addClass('btn-secondary');
+      }
     }
-
-    // sideBar buttons effect
-    //console.log(this.ind);
+    // hoverEffect
     $('#sideBar button').hover(function () {
       $(this).animate({ fontSize: '1.2em' }, 100)
     }, function () {
       $(this).animate({ fontSize: '1em' }, 100)
     })
+    // clickEffect
     $("#sideBar button").click(function () {
       $(this).removeClass('btn-light').addClass('btn-secondary')// .next().slideToggle(500);
       $("#sideBar button").not(this).removeClass('btn-secondary').addClass('btn-light');

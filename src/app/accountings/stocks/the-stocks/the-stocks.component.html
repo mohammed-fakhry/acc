@@ -1,0 +1,53 @@
+<!--fadeLayer-->
+<div class="fadeLayer">
+    <div class="container p-3 card askForDelete">
+        <h3 class="p-3 bg-danger text-light">هل انت متأكد من حذف</h3>
+        <h4 class="mb-2">
+            {{_stockService.stockDataView.stockName}}
+        </h4>
+        <hr>
+        <div class="d-flex flex-row-reverse">
+            <button class="btn btn-danger mr-2" id="deleteStock" (click)="deleteStock()">نعم</button>
+            <button class="btn btn-info" id="hideFadeLayer">الغاء</button>
+        </div>
+    </div>
+</div>
+<!--header-->
+<div class="container-fluid shadow p-3 card bg-light mt-3 sticky-top">
+    <nav class="navbar navbar-light bg-light">
+        <div class="form-inline">
+            <h1 class="px-2" style="font-weight: bold;">المخازن</h1>
+            <div class="headerLeftBorder"></div>
+            <!--stocks-->
+            <div class="dropdown">
+                <button class="btn btn-light dropdown-toggle mx-2" type="button" id="stockBtn"
+                    style="height: 70px; font-size: 1.5em;" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    بيانات المخازن
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <button class="dropdown-item btn-light" id="showStocksEnquiry" (click)="showStocksEnquiry()">استعلام</button>
+                    <button class="dropdown-item" id="showAddNewStock" (click)="showAddNewStock()">اضافة مخزن</button>
+                </div>
+            </div>
+            <!--premissionInvoice-->
+            <div class="dropdown">
+                <button class="btn btn-info dropdown-toggle mx-2" type="button" id="premissionBtn"
+                    style="height: 70px;" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    اذونات
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <button class="dropdown-item btn-light">اذن اضافة</button>
+                    <button class="dropdown-item">اذن خصم</button>
+                    <button class="dropdown-item">اذن نقل</button>
+                </div>
+            </div>
+            <div class="headerLeftBorder"></div>
+            <input *ngIf="router.url === '/stocks'" [(ngModel)]="searchTxt" placeholder="بحث" class="form-control mx-3"
+                id="stocksSearch">
+        </div>
+    </nav>
+</div>
+<!--stocksEnquiry-->
+<app-enquire-stocks class="stocksClass" id="stocksEnquiry" style="display: block;"></app-enquire-stocks>
+<!--addNewStock-->
+<app-add-stocks class="stocksClass" id="addNewStock"></app-add-stocks>

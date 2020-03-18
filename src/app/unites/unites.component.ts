@@ -40,14 +40,11 @@ export class UnitesComponent implements OnInit {
      private _service: ServicesService) { }
 
   ngOnInit() {
-    if (this.logService.check) {
-      this.logService.isUser = true;
-      this.logService.checkIsUser();
-    }
-
-    if (this.logService.isUser == false) {
+    
+    this.logService.logStart(); this.logService.reternlog();
+    /*if (this.logService.isUser == false) {
       this.router.navigate(['/logIn'])
-    }
+    }*/
 
     // getUnites
     this.unitService.getUnites().subscribe((data: UnitData[]) => {

@@ -6,6 +6,7 @@ import { WorkersComponent } from './workers/workers.component';
 import { CustomerComponent } from './customer/customer.component';
 import { UnitesComponent } from './unites/unites.component';
 import { MainSettingComponent } from './main-setting/main-setting.component';
+import { TheStocksComponent } from './accountings/stocks/the-stocks/the-stocks.component';
 
 
 const routes: Routes = [
@@ -16,7 +17,8 @@ const routes: Routes = [
   {path:'workers/:id', component:WorkersComponent},
   {path:'customers', component:CustomerComponent},
   {path:'unites', component:UnitesComponent},
-  {path:'MainSetting', component:MainSettingComponent}
+  {path:'MainSetting', component:MainSettingComponent},
+  {path:'stocks', component:TheStocksComponent}
 ];
 
 @NgModule({

@@ -103,16 +103,8 @@ export class WorkersComponent implements OnInit {
 
   ngOnInit() {
 
-    //this.logService.changeIsUser();
-    //this.logService.checkIsUser();
-    if (this.logService.check) {
-      this.logService.isUser = true;
-      this.logService.checkIsUser();
-    }
-    if (this.logService.isUser == false) {
-      this.router.navigate(['/logIn'])
-    }
-    //console.log(this.logService.isUser)
+    this.logService.logStart(); this.logService.reternlog();
+
     this._service.getWorker().subscribe((data: Worker[]) => {
       this.workers = data;
     })
@@ -150,7 +142,7 @@ export class WorkersComponent implements OnInit {
       workerCheckOut: [''],
     })
 
-    // Methods ------------------------------------------
+    // hide Fade layer
     $('#hideFadeLayer').click(function () {
       $('.fadeLayer').hide()
       $('.askForDelete').removeClass('animate')

@@ -33,7 +33,7 @@ export class LoginComponent implements OnInit {
 
     console.log(this.logService.isUser)
     if (this.logService.isUser == true) {
-      this.router.navigate(['/workers'])
+      this.router.navigate(['/home'])
     }
 
   } // ngOnInit
@@ -49,7 +49,7 @@ export class LoginComponent implements OnInit {
     }
 
     if (this.logService.isUser == true) { // if true
-      this.router.navigate(['/workers']);
+      this.router.navigate(['/home']);
       this.logService.checkIsUser();
       //this.logService.isUser = true;
     } else { // if false

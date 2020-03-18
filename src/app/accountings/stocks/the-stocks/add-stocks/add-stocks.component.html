@@ -1,0 +1,26 @@
+<div class="container-fluid shadow mt-3 card inpCard">
+    <div class="p-4">
+        <h2 class="pb-3 cardHeader">اضافة بيانات مخزن</h2>
+        <form [formGroup]='stockData' (ngSubmit)="addNewStock()" class="pt-3">
+            <div class="row">
+                <input formControlName="stockId" id="stockId" class="form-control d-none">
+                <div class="form-group col-md-4">
+                    <label>اسم المخزن</label>
+                    <input formControlName="stockName" [(ngModel)]="_stockService.stockDataView.stockName" id="stockName"
+                        class="form-control">
+                </div>
+                <div class="form-group col-md-4">
+                    <label>امين المخزن</label>
+                    <input formControlName="stockEmployee" [(ngModel)]="_stockService.stockDataView.stockEmployee" id="stockEmployee"
+                        class="form-control">
+                </div>
+                <div class="form-group col-md-4">
+                    <label>عنوان المخزن</label>
+                    <input formControlName="stockPlace" [(ngModel)]="_stockService.stockDataView.stockPlace" id="stockPlace"
+                        class="form-control">
+                </div>
+            </div>
+            <button class="btn btn-primary ml-2" type="submit" id="addNewStockBtn">اضافة</button>
+        </form>
+    </div>
+</div>
