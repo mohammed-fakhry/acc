@@ -20,6 +20,10 @@ import { UnitSearchPipe } from './unit-search.pipe';
 import { TheStocksComponent } from './accountings/stocks/the-stocks/the-stocks.component';
 import { AddStocksComponent } from './accountings/stocks/the-stocks/add-stocks/add-stocks.component';
 import { EnquireStocksComponent } from './accountings/stocks/the-stocks/enquire-stocks/enquire-stocks.component';
+import { StockDetailsComponent } from './accountings/stocks/the-stocks/stock-details/stock-details.component';
+import { AddProductsComponent } from './accountings/stocks/the-stocks/add-products/add-products.component';
+import { AddToStockPermissionComponent } from './accountings/stocks/stockPermission/add-to-stock-permission/add-to-stock-permission.component';
+
 
 
 @NgModule({
@@ -40,7 +44,10 @@ import { EnquireStocksComponent } from './accountings/stocks/the-stocks/enquire-
     UnitSearchPipe,
     TheStocksComponent,
     AddStocksComponent,
-    EnquireStocksComponent
+    EnquireStocksComponent,
+    StockDetailsComponent,
+    AddProductsComponent,
+    AddToStockPermissionComponent
   ],
   imports: [
     BrowserModule,

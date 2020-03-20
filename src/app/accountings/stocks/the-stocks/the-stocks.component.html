@@ -27,6 +27,7 @@
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                     <button class="dropdown-item btn-light" id="showStocksEnquiry" (click)="showStocksEnquiry()">استعلام</button>
                     <button class="dropdown-item" id="showAddNewStock" (click)="showAddNewStock()">اضافة مخزن</button>
+                    <button class="dropdown-item" id="showAddNewProduct" (click)="showAddNewProduct()">اضافة صنف</button>
                 </div>
             </div>
             <!--premissionInvoice-->
@@ -36,11 +37,12 @@
                     اذونات
                 </button>
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    <button class="dropdown-item btn-light">اذن اضافة</button>
+                    <button class="dropdown-item btn-light" id="showAddToStockPrem" (click)="showAddToStockPrem()">اذن اضافة</button>
                     <button class="dropdown-item">اذن خصم</button>
                     <button class="dropdown-item">اذن نقل</button>
                 </div>
             </div>
+            <button class="btn btn-success mx-2" id="testBtn" (click)='testBackend()'>test</button>
             <div class="headerLeftBorder"></div>
             <input *ngIf="router.url === '/stocks'" [(ngModel)]="searchTxt" placeholder="بحث" class="form-control mx-3"
                 id="stocksSearch">
@@ -51,3 +53,9 @@
 <app-enquire-stocks class="stocksClass" id="stocksEnquiry" style="display: block;"></app-enquire-stocks>
 <!--addNewStock-->
 <app-add-stocks class="stocksClass" id="addNewStock"></app-add-stocks>
+<!--addNewProduct-->
+<app-add-products class="stocksClass" id="addNewProduct"></app-add-products>
+<!--stockDtails-->
+<app-stock-details class="stocksClass" id="stockDtails"></app-stock-details>
+<!--addToStockPrem-->
+<app-add-to-stock-permission class="stocksClass" id="addToStockPrem"></app-add-to-stock-permission>

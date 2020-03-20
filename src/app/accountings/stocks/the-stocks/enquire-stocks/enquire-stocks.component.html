@@ -7,6 +7,7 @@
                     <th>اسم المخزن</th>
                     <th>امين المخزن</th>
                     <th>عنوان المخزن</th>
+                    <th>تفاصيل</th>
                     <th>تعديل</th>
                     <th>حذف</th>
                 </tr>
@@ -16,6 +17,8 @@
                     <td>{{stock.stockName}}</td>
                     <td>{{stock.stockEmployee}}</td>
                     <td>{{stock.stockPlace}}</td>
+                    <td><button class="btn btn-light ml-2" id="showStockDetails" (click)="showStockDetails(stock)"><i
+                        class="fa fa-edit"></i></button></td>
                     <td><button class="btn btn-success ml-2" id="showUpdateStock" (click)="showUpdateStock(stock)"><i
                         class="fa fa-edit"></i></button></td>
                     <td><button class="btn btn-danger ml-2" (click)="askForDelete(stock)"><i

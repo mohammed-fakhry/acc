@@ -3,5 +3,5 @@ export class Stock {
     stockName: string;
     stockPlace: string;
     stockEmployee: string;
-    stockProducts: any[];
+    stockProducts: number;
 }

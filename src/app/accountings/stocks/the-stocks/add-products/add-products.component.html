@@ -1,0 +1,14 @@
+<!--onlyForm-->
+<div class="container-fluid card shadow mt-3 p-5">
+    <form [formGroup]='productData' (ngSubmit)="addNewProduct()" class="pt-3">
+        <div class="row">
+            <input formControlName="productId" id="productId" class="form-control d-none">
+            <div class="form-group col-md-6">
+                <label>اسم الصنف</label>
+                <input formControlName="productName" [(ngModel)]="_stockService.productDataView.productName" id="productName"
+                    class="form-control">
+            </div>
+        </div>
+        <button class="btn btn-primary ml-2" type="submit" id="addNewProductBtn">اضافة</button>
+    </form>
+</div>

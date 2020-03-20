@@ -30,7 +30,7 @@ export class SideBarComponent implements OnInit {
     this.currentUrl = window.location.href;
     this.ind = this.currentUrl.lastIndexOf("/");
     this.url = this.currentUrl.slice(this.ind);
-   
+
     // main buttons
     $('#sideBar h3').hover(function () {
       $(this).animate({ fontSize: '1.3em' }, 100)
@@ -47,7 +47,7 @@ export class SideBarComponent implements OnInit {
     let customerBtn = $('#customersBtn'); let workersBtn = $('#workersBtn'); let unitesBtn = $('#unitesBtn');
     let htmlDbItemsBtns: any[] = [customerBtn, workersBtn, unitesBtn]
     let dBUrls: any[] = ['/customers', '/workers', '/unites'] // dataBaseUrls
-    
+
     let stocksBtn = $('#stocksBtn')
     let htmlAccItemsBtns: any[] = [stocksBtn]
     let accUrls: any[] = ['/stocks']
@@ -63,7 +63,7 @@ export class SideBarComponent implements OnInit {
       $('#accBtn').next().show()
       $('#accBtn').removeClass('btn-light').addClass('btn-info')
       $('#sideBar div').not($('#accBtn').next()).hide()
-     } else {
+    } else {
       this.mainRoute = 'false'
       $('#sideBar div').hide();
       $('#sidBar h3').not('#logOut').removeClass('btn-info').addClass('btn-light')
@@ -71,16 +71,17 @@ export class SideBarComponent implements OnInit {
 
     // active main btn
     //console.log(this.mainRoute)
-    for(let i = 0 ; i <= customerBtn.length ; i++) {
+    for (let i = 0; i <= customerBtn.length; i++) {
       if (this.url == dBUrls[i]) { // dataBase
         htmlDbItemsBtns[i].removeClass('btn-light').addClass('btn-secondary');
       } else if (this.url == accUrls[i]) { // accounting
         htmlAccItemsBtns[i].removeClass('btn-light').addClass('btn-secondary');
       }
     }
+    
     // hoverEffect
     $('#sideBar button').hover(function () {
-      $(this).animate({ fontSize: '1.2em' }, 100)
+      $(this).animate({ fontSize: '1.05em' }, 100)
     }, function () {
       $(this).animate({ fontSize: '1em' }, 100)
     })
@@ -102,5 +103,6 @@ export class SideBarComponent implements OnInit {
     //this.logService.changeIsUser();
     $('#logOut').hide()
     console.log(this.logService.isUser)
-}
+    location.reload();
+  }
 }

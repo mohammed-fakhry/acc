@@ -52,8 +52,6 @@ export class LoginService {
     }
   }
 
-  
-
   getUsers() {
     return this.http.get<Worker[]>('http://localhost/accounting/getUsers.php');
   }

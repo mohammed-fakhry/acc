@@ -13,6 +13,7 @@ export class AddStocksComponent implements OnInit {
 
   stockData: FormGroup;
   stockDataView: Stock;
+  addBtnVal: string;
   constructor(private _stockService: StocksService, private formBuilder: FormBuilder,
     private _service: ServicesService) { }
 
@@ -28,10 +29,24 @@ export class AddStocksComponent implements OnInit {
   } // ngOnInit
 
   addNewStock() {
-    this._stockService.creatStock(this.stockData.value)
-      .subscribe();
+    this.addBtnVal = $('#addNewStockBtn').html();
+    if (this.addBtnVal == 'اضافة') {
+      this._stockService.creatStock(this.stockData.value)
+        .subscribe();
       this._service.clearForm();
-      console.log(this.stockData.value)
-  }
+    } else if (this.addBtnVal == 'تعديل') {
+      this._stockService.updateStockSer(this._stockService.stockDataView).subscribe(() => {
+        // show stockEnquiry
+        $('.stocksClass').not('#stocksEnquiry').hide();
+        $('#stocksEnquiry').show();
+        $('#stocksSearch').show(100);
+        $('#stockBtn').removeClass("btn-info").addClass("btn-light").animate({ fontSize: '1.5em' }, 50);
+        $('#premissionBtn').removeClass('btn-light').addClass('btn-info').animate({ fontSize: '1em' }, 50);
+      },
+      error => {
+        alert(error);
+      });
+    };
+  };
 
 } // End
