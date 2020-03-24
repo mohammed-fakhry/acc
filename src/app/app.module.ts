@@ -24,8 +24,6 @@ import { StockDetailsComponent } from './accountings/stocks/the-stocks/stock-det
 import { AddProductsComponent } from './accountings/stocks/the-stocks/add-products/add-products.component';
 import { AddToStockPermissionComponent } from './accountings/stocks/stockPermission/add-to-stock-permission/add-to-stock-permission.component';
 
-
-
 @NgModule({
   declarations: [
     AppComponent,
@@ -47,7 +45,7 @@ import { AddToStockPermissionComponent } from './accountings/stocks/stockPermiss
     EnquireStocksComponent,
     StockDetailsComponent,
     AddProductsComponent,
-    AddToStockPermissionComponent
+    AddToStockPermissionComponent,
   ],
   imports: [
     BrowserModule,

@@ -1,37 +1,83 @@
 <!--onlyForm-->
-<div class="container-fluid card shadow mt-3 p-5">
-    <h2 class="pb-3 cardHeader">اذن اضافة لمخزن</h2>
-    <hr>
-    <form [formGroup]='addToStockPremData' (ngSubmit)="addToStockPrem()" class="pt-3">
-        <div class="form-group">
-            <div class="form-inline">
-                <label for="exampleFormControlSelect1">اسم المخزن</label>
-                <select class="form-control text-center mr-3 p-1" id="exampleFormControlSelect1" formControlName="stockName" style="width: 25%;">
-                    <option *ngFor="let stock of _stockService.stocks">{{stock.stockName}}</option>
-                </select>
+<div class="container-fluid card inpCard shadow mt-3 p-3">
+    <div class="form-inline" id="callInvoice">
+        <h2 class="cardHeader">فاتورة شراء</h2>
+        <div class="headerLeftBorder mr-2"></div>
+        <input [(ngModel)]="searchTxt" placeholder="بحث" class="form-control mx-3" id="addInvoiceSearch">
+        <button class="btn btn-info ml-2" type="submit" id="callInvoiceBtn" (click)="showAddNewInvoice()">فاتورة
+            جديدة</button>
+    </div>
+
+    <div id="addInvoiceForm" style="display: none;">
+        <h2 class="cardHeader">فاتورة شراء</h2>
+        <!--[formGroup]='addToStockPremData'-->
+        <form (ngSubmit)="addToStockPrem()" class="pt-3">
+            <div class="form-group">
+                <div class="form-row">
+                    <!--stockName-->
+                    <div class="col form-inline">
+                        <label for="stockNameForAdd">اسم المخزن</label>
+                        <select class="form-control text-center mr-3 p-1" id="stockNameForAdd">
+                            <option *ngFor="let stock of _stockService.stocks">{{stock.stockName}}</option>
+                        </select>
+                    </div>
+                    <!--customerName-->
+                    <div class="col form-inline">
+                        <label for="customerNameForAdd">اسم المورد</label>
+                        <select class="form-control text-center mr-3 p-1" id="customerNameForAdd">
+                            <option *ngFor="let customer of customers">{{customer.customerName}}</option>
+                        </select>
+                    </div>
+                    <div class="d-flex justify-content-end ml-3">
+                        <label class="ml-2 pt-1" for="addInvoiceNote" style="vertical-align: text-bottom;">ملاحظات</label>
+                        <input class="form-control" name="addInvoiceNote" id="addInvoiceNote">
+                        
+                    </div>
+
+                    
+                </div>
+            </div>
+            <div class="panel-body panel-flex-table" style="height: 570px;">
+                <table class="flex-table table">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>اسم الصنف</th>
+                            <th>العدد</th>
+                            <th>السعر</th>
+                            <th class="text-center">الاجمالى</th>
+                        </tr>
+                    </thead>
+                    <tbody class=" mt-3 tableBody">
+                        <tr *ngFor="let inpt of invoiceInpArry; let i = index">
+                            <td>
+                                <input type="search" name="product{{i}}" [(ngModel)]="inpt.product"
+                                    class="form-control mdb-autocomplete" list="datalist1">
+                                <datalist id="datalist1">
+                                    <option *ngFor="let product of _stockService.allProducts"
+                                        value="{{product.productName}}"></option>
+                                </datalist>
+                            </td>
+                            <td><input type="number" name="qty{{i}}" [(ngModel)]="inpt.qty" class="form-control"
+                                    (change)="calcTotals()"></td>
+                            <td><input type="number" name="price{{i}}" [(ngModel)]="inpt.price" class="form-control"
+                                    (change)="calcTotals()"></td>
+                            <td class="text-center font-weight-bold">{{inpt.total}}</td>
+                        </tr>
+                        <div class="btn btn-dark my-2 mr-3" style="width: 50px;" (click)="addFilds()" id="addFilds">+
+                        </div>
+                    </tbody>
+
+                </table>
+            </div>
+            <div class="d-flex justify-content-between">
+                <button class="btn btn-primary mb-1 mt-3" type="submit" id="addNewProductBtn">اضافة</button>
+
+                <h5 class="ml-5  mt-3 bg-dark text-light p-2 rounded" id="invoiceTotal">اجمالى الفاتورة : 0</h5>
             </div>
 
-        </div>
-        <div class="panel-body panel-flex-table">
-            <table class="flex-table table table-striped">
-                <thead class="table-dark">
-                    <tr>
-                        <th>اسم الصنف</th>
-                        <th>العدد</th>
-                        <th>التكلفة</th>
-                    </tr>
-                </thead>
-                <tbody class=" mt-3 tableBody">
-                    <tr *ngFor="let products of _stockService.productsFromStockArryView">
-                        <td>{{products.productName}}</td>
-                        <td>{{products.productQty}}</td>
-                        <td>{{products.productCost}}</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-        <button class="btn btn-primary ml-2" type="submit" id="addNewProductBtn">اضافة</button>
-    </form>
+        </form>
+    </div>
+
 
 
 </div>

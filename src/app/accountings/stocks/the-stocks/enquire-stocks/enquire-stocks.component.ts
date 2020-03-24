@@ -40,7 +40,19 @@ export class EnquireStocksComponent implements OnInit {
     this._stockService.stockDataView = stock;
   }
 
+  sumArry(arr: any[]) {
+    let s = 0
+    for (let i = 0; i < arr.length; i++) {
+      s = s + arr[i]
+    }
+    return s
+  };
+
+  //totalProductsValuInStock: number ; // in stockDetails
+  //totalProductsValuArry: any[];
   showStockDetails(stock: Stock) {
+    this._stockService.totalProductsValuInStock = 0;
+    //this.totalProductsValuArry = [];
     $('.stocksClass').not('#stockDtails').hide();
     $('#stockDtails').show();
     $('#stocksSearch').hide(100);
@@ -52,10 +64,16 @@ export class EnquireStocksComponent implements OnInit {
       if (stock.stockId == this._stockService.makeStockArry[i].stockId) {
         this._stockService.makeStockArryView = this._stockService.makeStockArry[i]
         this._stockService.productsFromStockArryView = this._stockService.makeStockArry[i].stockProducts;
+        this._stockService.productsFromStockArryView.toLocaleString()
         break
       }
     }
-    console.log(this._stockService.makeStockArry)
+    let total = 0
+    for (let s = 0 ; s < this._stockService.productsFromStockArryView.length; s++ ) {
+      this._stockService.totalProductsValuInStock = this._stockService.totalProductsValuInStock +  parseInt(this._stockService.productsFromStockArryView[s].productQty) * parseInt(this._stockService.productsFromStockArryView[s].productCost)
+    }
+
+    //console.log(this.totalProductsValu)
   }
   
 }

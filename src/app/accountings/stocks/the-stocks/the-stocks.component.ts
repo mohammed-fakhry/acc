@@ -7,6 +7,7 @@ import { LoginService } from '../../../login.service';
 import { StocksService } from './stocks.service';
 import { Stock } from '../../stock';
 import { HandleBackEnd } from '../../../handle-back-end'
+import { ProductsClass } from '../products-class';
 @Component({
   selector: 'app-the-stocks',
   templateUrl: './the-stocks.component.html',
@@ -15,7 +16,7 @@ import { HandleBackEnd } from '../../../handle-back-end'
 export class TheStocksComponent implements OnInit {
 
   constructor(private router: Router, private logService: LoginService,
-    private _stockService: StocksService) { }
+    private _stockService: StocksService, private _service: ServicesService) { }
 
 
   ngOnInit() {
@@ -29,6 +30,10 @@ export class TheStocksComponent implements OnInit {
     // get handle BackEnd
     this._stockService.getHandleBackEnd().subscribe((data: HandleBackEnd[]) => {
       this._stockService.handleBackEnd = data;
+    })
+
+    this._stockService.getProducts().subscribe((data: ProductsClass[]) => {
+      this._stockService.allProducts = data;
     })
 
     this._stockService.makeStockArry = [{
@@ -64,11 +69,6 @@ export class TheStocksComponent implements OnInit {
         }
       }
     }
-    /*for (let h = 0 ; h < this.handleBackEnd.length ; h++) {
- 
-    }*/
-    console.log(this._stockService.makeStockArry)
-    //console.log(this._stockService.stocks)
   }
 
   resetBackendValues() {
@@ -103,22 +103,23 @@ export class TheStocksComponent implements OnInit {
       }] // stockProducts
     }
     ]; // makeStockArry
-  
+
     this._stockService.productsFromStockArryView = []
   }
   showStocksEnquiry() {
-    $('.stocksClass').not('#stocksEnquiry').hide();
+    $('.stocksClass').not('#stocksEnquiry').hide()
     $('#stocksEnquiry').show();
-    $('#stocksSearch').show(100);
+    $('#stocksSearch').fadeIn(100);
     $('#stockBtn').removeClass("btn-info").addClass("btn-light").animate({ fontSize: '1.5em' }, 50);
     $('#premissionBtn').removeClass('btn-light').addClass('btn-info').animate({ fontSize: '1em' }, 50);
     this.resetBackendValues();
-    console.log(this._stockService.productsFromStockArryView)
+    location.reload();
+    //console.log(this._stockService.productsFromStockArryView)
   };
 
   showAddNewStock() {
-    $('.stocksClass').not('#addNewStock').hide();
-    $('#addNewStock').show();
+    $('.stocksClass').not('#addNewStock').hide()
+    $('#addNewStock').show()
     $('#stocksSearch').hide(100);
     $('#stockBtn').removeClass("btn-info").addClass("btn-light").animate({ fontSize: '1.5em' }, 50);
     $('#premissionBtn').removeClass('btn-light').addClass('btn-info').animate({ fontSize: '1em' }, 50);
@@ -126,8 +127,8 @@ export class TheStocksComponent implements OnInit {
   };
 
   showAddNewProduct() {
-    $('.stocksClass').not('#addNewProduct').hide();
-    $('#addNewProduct').show();
+    $('.stocksClass').not('#addNewProduct').hide()
+    $('#addNewProduct').show()
     $('#stocksSearch').hide(100);
     $('#stockBtn').removeClass("btn-info").addClass("btn-light").animate({ fontSize: '1.5em' }, 50);
     $('#premissionBtn').removeClass('btn-light').addClass('btn-info').animate({ fontSize: '1em' }, 50);
@@ -135,12 +136,17 @@ export class TheStocksComponent implements OnInit {
   }
 
   showAddToStockPrem() {
-    $('.stocksClass').not('#addToStockPrem').hide();
-    $('#addToStockPrem').show();
+    $('.stocksClass').not('#addToStockPrem').hide()
+    $('#addToStockPrem').show()
     $('#stocksSearch').hide(100);
     $('#premissionBtn').removeClass("btn-info").addClass("btn-light").animate({ fontSize: '1.5em' }, 50);
     $('#stockBtn').removeClass('btn-light').addClass('btn-info').animate({ fontSize: '1em' }, 50);
+    // hide invoice addForm
+    $('#callInvoice').show();
+    $('#addInvoiceForm').hide();
+
     this.resetBackendValues();
+    this._service.clearForm()
   }
 
   deleteStock() {
@@ -150,5 +156,7 @@ export class TheStocksComponent implements OnInit {
         this._stockService.stocks = this._stockService.stocks.filter(u => u !== this._stockService.stockDataView)
       });
   };
+
+
 
 } // End

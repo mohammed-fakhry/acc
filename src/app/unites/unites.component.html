@@ -1,5 +1,5 @@
 <!--fadeLayer-->
-<div class="fadeLayer">
+<div class="fadeLayer" id="DelFade">
     <div class="container p-3 card askForDelete">
         <h3 class="p-3 bg-danger text-light">هل انت متأكد من حذف</h3>
         <h4 class="mb-2">الوحدة رقم {{unitDataView.unitNum}}</h4>
@@ -11,9 +11,10 @@
 
     </div>
 </div>
-<!--header-->
-<div class="container-fluid shadow p-3 card mt-3 sticky-top">
-    <div>
+<!--header-class="fa fa-calculator-->
+<div class="container-fluid shadow p-3 card mt-3 sticky-top bg-light">
+
+    <nav class="navbar navbar-light bg-light">
         <div class="form-inline">
             <h1 class="mb-3 px-2">الوحدات</h1>
             <div style="width: 1px; background-color: black; height: 90px;"></div>
@@ -25,7 +26,9 @@
             <input *ngIf="router.url === '/unites'" [(ngModel)]="searchTxt" placeholder="بحث" class="form-control mx-3"
                 id="unitSearch">
         </div>
-    </div>
+        <button class="btn btn-info ml-2 mx-2 p-3" id="showcalculatorBtn"
+            (click)="showcalculator()"><i class="fa fa-calculator"></i></button>
+    </nav>
 </div>
 
 <!--addUnit-->
@@ -107,65 +110,72 @@
         </table>
     </div>
 </div>
-<!--calculator-->
-<div class="container shadow card p-3 mt-2 unitsClass" id="calculator" style="display: none;">
-    <div class="row">
-        <div class="form-group col-md-2 col-sm-6">
-            <label class="settinLable p-2">المساحة</label>
-            <div class="input-group">
-                <div class="input-group-append">
-                    <span class="input-group-text">متر</span>
+<!--calculator--->
+<div class="fadeLayer" id="calcFade"  style="display: none; padding-top: 10%;">
+    <div class="container shadow card p-3 mt-2" id="calculator">
+        <div>
+            <button class="btn btn-danger mb-3" id="hideCalcLayer">×</button>
+        </div>
+        <div class="row">
+            <div class="form-group col-md-2 col-sm-6">
+                <label class="settinLable p-2">المساحة</label>
+                <div class="input-group">
+                    <div class="input-group-append">
+                        <span class="input-group-text">متر</span>
+                    </div>
+                    <input type="number" class="form-control" [(ngModel)]='apartWidth'>
                 </div>
-                <input type="number" class="form-control" [(ngModel)]='apartWidth'>
+            </div>
+            <div class="form-group col-md-2 col-sm-6">
+                <label class="settinLable p-2">سعر المتر</label>
+                <div class="input-group">
+                    <div class="input-group-append">
+                        <span class="input-group-text">بالجنيه</span>
+                    </div>
+                    <input type="number" class="form-control" [(ngModel)]='metrPrice'>
+                </div>
+            </div>
+            <div class="form-group col-md-2 col-sm-6">
+                <label class="settinLable p-2">المقدمة</label>
+                <div class="input-group">
+                    <div class="input-group-append">
+                        <span class="input-group-text">مئوية</span>
+                    </div>
+                    <input type="number" class="form-control" [(ngModel)]='preMoney'>
+                </div>
+            </div>
+            <div class="form-group col-md-2 col-sm-6">
+                <label class="settinLable p-2">عدد السنين</label>
+                <div class="input-group">
+                    <div class="input-group-append">
+                        <span class="input-group-text">سنة</span>
+                    </div>
+                    <input type="number" class="form-control" [(ngModel)]='years'>
+                </div>
             </div>
         </div>
-        <div class="form-group col-md-2 col-sm-6">
-            <label class="settinLable p-2">سعر المتر</label>
-            <div class="input-group">
-                <div class="input-group-append">
-                    <span class="input-group-text">بالجنيه</span>
-                </div>
-                <input type="number" class="form-control" [(ngModel)]='metrPrice'>
-            </div>
+        <div class="mt-2">
+            <button class="btn btn-info" (click)='calcRemain()'>احسب</button>
         </div>
-        <div class="form-group col-md-2 col-sm-6">
-            <label class="settinLable p-2">المقدمة</label>
-            <div class="input-group">
-                <div class="input-group-append">
-                    <span class="input-group-text">مئوية</span>
-                </div>
-                <input type="number" class="form-control" [(ngModel)]='preMoney'>
-            </div>
-        </div>
-        <div class="form-group col-md-2 col-sm-6">
-            <label class="settinLable p-2">عدد السنين</label>
-            <div class="input-group">
-                <div class="input-group-append">
-                    <span class="input-group-text">سنة</span>
-                </div>
-                <input type="number" class="form-control" [(ngModel)]='years'>
-            </div>
-        </div>
+        <table class="table mt-2" style="width: 100%;">
+            <thead class="table-dark">
+                <tr>
+                    <th><h5>اجمالى السعر</h5></th>
+                    <th><h5>المقدمة</h5></th>
+                    <th><h5>المتبقى</h5></th>
+                    <th><h5>الاقساط</h5></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="bigNum font-weight-bold"><h3>{{totalPrice}}</h3></td>
+                    <td class="bigNum font-weight-bold"><h3>{{preMoneyResult}}</h3></td>
+                    <td class="bigNum font-weight-bold"><h3>{{remainPrice}}</h3></td>
+                    <td class="bigNum font-weight-bold"><h3>{{remainPaid}}</h3></td>
+                </tr>
+            </tbody>
+        </table>
+        
     </div>
-    <div class="mt-2">
-        <button class="btn btn-info" (click)='calcRemain()'>احسب</button>
-    </div>
-    <table class="table mt-2" style="width: 100%;">
-        <thead class="table-dark">
-            <tr>
-                <th>اجمالى السعر</th>
-                <th>المقدمة</th>
-                <th>المتبقى</th>
-                <th>الاقساط</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>{{totalPrice}}</td>
-                <td>{{preMoneyResult}}</td>
-                <td>{{remainPrice}}</td>
-                <td>{{remainPaid}}</td>
-            </tr>
-        </tbody>
-    </table>
+
 </div>

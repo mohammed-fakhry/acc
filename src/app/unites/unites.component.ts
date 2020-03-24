@@ -78,7 +78,11 @@ export class UnitesComponent implements OnInit {
       $('.fadeLayer').hide()
       $('.askForDelete').removeClass('animate')
     })
-
+    $('#hideCalcLayer').click(function() {
+      $('#calcFade').hide()
+      $('#calculator').removeClass('animate');
+      this._service.clearForm();
+    })
   } // ngOnInit
 
   // show Methods
@@ -147,16 +151,22 @@ export class UnitesComponent implements OnInit {
   }
 
   askForDeleteUnit(unit: UnitData) {
-    $('.fadeLayer').show(0)
+    $('#DelFade').show(0)
     $('.askForDelete').addClass('animate')
     this.unitDataView = unit;
   };
 
   deletUnit() {
-    $('.fadeLayer').hide()
+    $('#DelFade').hide()
     this.unitService.deleteUnitSer(this.unitDataView.unitId)
       .subscribe(data => {
         this.unites = this.unites.filter(u => u !== this.unitDataView)
       });
   };
+
+  showcalculator() {
+    $('#calcFade').show(0);
+    $('#calculator').addClass('animate')
+  }
 } // end
+

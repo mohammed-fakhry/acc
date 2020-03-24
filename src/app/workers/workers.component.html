@@ -341,8 +341,8 @@
     <div class="p-4">
         <h2 class="pb-3 cardHeader" style="border-bottom: solid 1.5px teal;">الاعدادات</h2>
         <form [formGroup]='workerRule' (ngSubmit)="updateSetting()" class="pt-3">
-            <div class="row">
-                <div class="form-group col-md-2 col-sm-6 d-none">
+            <div class="form-row">
+                <div class="form-group col d-none">
                     <label class="p-2 settinLable">تأخير مسموح به</label>
                     <div class="input-group-append">
                         <span class="input-group-text">دقيقة</span>
@@ -351,7 +351,7 @@
                         [(ngModel)]="WorkerRuleResult.authDelayTime">
                 </div>
                 <!--1-->
-                <div class="form-group col-md-2 col-sm-6">
+                <div class="form-group col">
                     <label class="settinLable p-2">انصراف مبكر مسموح به</label>
                     <div class="input-group">
                         <div class="input-group-append">
@@ -362,7 +362,7 @@
                     </div>
                 </div>
                 <!--2-->
-                <div class="form-group col-md-2 col-sm-6">
+                <div class="form-group col">
                     <label class="settinLable p-2">خصم نصف يوم بعد تأخير</label>
                     <div class="input-group">
                         <div class="input-group-append">
@@ -373,7 +373,7 @@
                     </div>
                 </div>
                 <!---->
-                <div class="form-group col-md-2 col-sm-6">
+                <div class="form-group col">
                     <label class="settinLable p-2">خصم يوم كامل بعد تأخير</label>
                     <div class="input-group">
                         <div class="input-group-append">
@@ -384,7 +384,7 @@
                     </div>
                 </div>
                 <!---->
-                <div class="form-group col-md-2 col-sm-6">
+                <div class="form-group col">
                     <label class="settinLable p-2">حساب الاضافى بعد</label>
                     <div class="input-group">
                         <div class="input-group-append">
@@ -394,7 +394,7 @@
                             [(ngModel)]="WorkerRuleResult.authOverTime">
                     </div>
                 </div>
-                <div class="form-group col-md-2 col-sm-6">
+                <div class="form-group col">
                     <label class="settinLable p-2">الراتب</label>
                     <select formControlName="salarytimeKind" class="custom-select" id="inputGroupSelect01"
                         [(ngModel)]="WorkerRuleResult.salarytimeKind">

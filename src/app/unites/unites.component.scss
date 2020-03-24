@@ -1,3 +1,15 @@
 #addUnit {
     display: none;
 }
+
+#calculator {
+    margin-top: 10%;
+    z-index: 1000;
+    background-color: white;
+    transform: scale(.75);
+    transition: .09s;
+}
+
+#calculator.animate {
+    transform: scale(1);
+}

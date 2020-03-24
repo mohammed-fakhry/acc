@@ -4,6 +4,7 @@ import { FormControl, FormGroup, FormBuilder } from '@angular/forms'
 import { HttpClient } from '@angular/common/http';
 import { HandleBackEnd } from '../../../handle-back-end'
 import { ProductsClass } from '../products-class';
+import { StockPridge } from '../stock-pridge';
 
 @Injectable({
   providedIn: 'root'
@@ -22,6 +23,7 @@ export class StocksService {
   // merge every stock with it's products
   handleBackEnd: HandleBackEnd[];
   makeStockArry: any[];
+  allProducts: ProductsClass[];
   makeStockArryView: any = {
     stockId: 0,
     stockName: '',
@@ -46,6 +48,7 @@ export class StocksService {
   }
 
   productsFromStockArryView: any[];
+  totalProductsValuInStock: number ; // in stockDetails
   constructor(private http: HttpClient) { };
 
   stockDataViewVal() {
@@ -64,8 +67,18 @@ export class StocksService {
     return this.http.delete<Stock[]>('http://localhost/accounting/deleteStock.php?id=' + id)
   }
 
+  
+
   updateStockSer(stock: Stock) {
     return this.http.put('http://localhost/accounting/editeStock.php?id=' + stock.stockId, stock )
+  }
+
+  postStockPridge(stockPridge : StockPridge) {
+    return this.http.post('http://localhost/accounting/postProductPridge.php', stockPridge)
+  }
+
+  updateStockPridge(stockPridge: StockPridge) {
+    return this.http.put('http://localhost/accounting/updatePridgeList.php?id=' + stockPridge.stockProductId, stockPridge )
   }
 
   getHandleBackEnd() {
@@ -74,5 +87,9 @@ export class StocksService {
 
   creatProduct(product: ProductsClass) {
     return this.http.post('http://localhost/accounting/postProduct.php', product)
+  }
+
+  getProducts() {
+    return this.http.get<ProductsClass[]>('http://localhost/accounting/productsList.php');
   }
 }

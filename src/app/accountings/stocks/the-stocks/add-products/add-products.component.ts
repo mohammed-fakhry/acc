@@ -29,7 +29,7 @@ export class AddProductsComponent implements OnInit {
     this._stockService.creatProduct(this.productData.value)
     .subscribe();
     this._service.clearForm();
-    console.log(this.productData.value)
+    //console.log(this.productData.value);
   }
 
 }

@@ -45,12 +45,12 @@ export class SideBarComponent implements OnInit {
     })
     // make active button
     let customerBtn = $('#customersBtn'); let workersBtn = $('#workersBtn'); let unitesBtn = $('#unitesBtn');
-    let htmlDbItemsBtns: any[] = [customerBtn, workersBtn, unitesBtn]
-    let dBUrls: any[] = ['/customers', '/workers', '/unites'] // dataBaseUrls
+    let htmlDbItemsBtns: any[] = [ workersBtn, unitesBtn]
+    let dBUrls: any[] = [ '/workers', '/unites'] // dataBaseUrls
 
     let stocksBtn = $('#stocksBtn')
-    let htmlAccItemsBtns: any[] = [stocksBtn]
-    let accUrls: any[] = ['/stocks']
+    let htmlAccItemsBtns: any[] = [customerBtn,stocksBtn]
+    let accUrls: any[] = ['/customers','/stocks']
 
 
     if (dBUrls.includes(this.url)) {
@@ -71,7 +71,7 @@ export class SideBarComponent implements OnInit {
 
     // active main btn
     //console.log(this.mainRoute)
-    for (let i = 0; i <= customerBtn.length; i++) {
+    for (let i = 0; i <= htmlDbItemsBtns.length; i++) {
       if (this.url == dBUrls[i]) { // dataBase
         htmlDbItemsBtns[i].removeClass('btn-light').addClass('btn-secondary');
       } else if (this.url == accUrls[i]) { // accounting
