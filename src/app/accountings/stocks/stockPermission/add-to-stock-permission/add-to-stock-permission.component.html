@@ -3,7 +3,12 @@
     <div class="form-inline" id="callInvoice">
         <h2 class="cardHeader">فاتورة شراء</h2>
         <div class="headerLeftBorder mr-2"></div>
-        <input [(ngModel)]="searchTxt" placeholder="بحث" class="form-control mx-3" id="addInvoiceSearch">
+        <!--<input [(ngModel)]="searchTxt" placeholder="بحث" class="form-control mx-3" id="addInvoiceSearch">-->
+        <input type="search" name="searchTxt" [(ngModel)]="searchTxt" class="form-control mdb-autocomplete mx-3"
+            list="datalistInvoiceSearch" id="invoiceSearch" (change)="changAddInvoiceBtn()">
+        <datalist id="datalistInvoiceSearch">
+            <option *ngFor="let invoice of this._stockService.makeInvoiceArry" value="{{invoice.invoiceSearchVal}}"></option>
+        </datalist>
         <button class="btn btn-info ml-2" type="submit" id="callInvoiceBtn" (click)="showAddNewInvoice()">فاتورة
             جديدة</button>
     </div>
@@ -24,23 +29,29 @@
                     <!--customerName-->
                     <div class="col form-inline">
                         <label for="customerNameForAdd">اسم المورد</label>
-                        <select class="form-control text-center mr-3 p-1" id="customerNameForAdd">
+                        <!--<select class="form-control text-center mr-3 p-1" id="customerNameForAdd">
                             <option *ngFor="let customer of customers">{{customer.customerName}}</option>
-                        </select>
+                        </select> name="product{{i}}"-->
+                        <input type="search" id="customerNameForAdd" class="form-control mdb-autocomplete mr-3 p-1"
+                            list="datalist0">
+                        <datalist id="datalist0">
+                            <option *ngFor="let customer of customers" value="{{customer.customerName}}">
+                            </option>
+                        </datalist>
                     </div>
                     <div class="d-flex justify-content-end ml-3">
-                        <label class="ml-2 pt-1" for="addInvoiceNote" style="vertical-align: text-bottom;">ملاحظات</label>
+                        <label class="ml-2 pt-1" for="addInvoiceNote"
+                            style="vertical-align: text-bottom;">ملاحظات</label>
                         <input class="form-control" name="addInvoiceNote" id="addInvoiceNote">
-                        
-                    </div>
 
-                    
+                    </div>
                 </div>
             </div>
             <div class="panel-body panel-flex-table" style="height: 570px;">
                 <table class="flex-table table">
                     <thead class="table-dark">
                         <tr>
+                            <th style="flex: none;">م</th>
                             <th>اسم الصنف</th>
                             <th>العدد</th>
                             <th>السعر</th>
@@ -49,6 +60,7 @@
                     </thead>
                     <tbody class=" mt-3 tableBody">
                         <tr *ngFor="let inpt of invoiceInpArry; let i = index">
+                            <td style="flex: none;" class="pt-4">{{i + 1}}</td>
                             <td>
                                 <input type="search" name="product{{i}}" [(ngModel)]="inpt.product"
                                     class="form-control mdb-autocomplete" list="datalist1">
@@ -63,15 +75,14 @@
                                     (change)="calcTotals()"></td>
                             <td class="text-center font-weight-bold">{{inpt.total}}</td>
                         </tr>
-                        <div class="btn btn-dark my-2 mr-3" style="width: 50px;" (click)="addFilds()" id="addFilds">+
+                        <div class="btn btn-dark my-2 mr-1" style="width: 50px;" (click)="addFilds()" id="addFilds">+
                         </div>
                     </tbody>
 
                 </table>
             </div>
             <div class="d-flex justify-content-between">
-                <button class="btn btn-primary mb-1 mt-3" type="submit" id="addNewProductBtn">اضافة</button>
-
+                <button class="btn btn-primary mb-1 mt-3" type="submit" id="addNewInvoicetBtn"></button>
                 <h5 class="ml-5  mt-3 bg-dark text-light p-2 rounded" id="invoiceTotal">اجمالى الفاتورة : 0</h5>
             </div>
 

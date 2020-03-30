@@ -5,6 +5,9 @@ import { HttpClient } from '@angular/common/http';
 import { HandleBackEnd } from '../../../handle-back-end'
 import { ProductsClass } from '../products-class';
 import { StockPridge } from '../stock-pridge';
+import { StockTransactionD } from '../stock-transaction-d';
+import { StockTransaction } from '../stock-transaction';
+import { HandleAddPrimBE } from '../handle-add-prim-be';
 
 @Injectable({
   providedIn: 'root'
@@ -20,10 +23,15 @@ export class StocksService {
     stockEmployee: null,
     stockProducts: null,
   }
+  
   // merge every stock with it's products
   handleBackEnd: HandleBackEnd[];
   makeStockArry: any[];
   allProducts: ProductsClass[];
+  stockTransactionArr: StockTransaction[];
+  stockTransactionDetailsArr: StockTransactionD[];
+  makeInvoiceArry:any[];
+
   makeStockArryView: any = {
     stockId: 0,
     stockName: '',
@@ -50,6 +58,8 @@ export class StocksService {
   productsFromStockArryView: any[];
   totalProductsValuInStock: number ; // in stockDetails
   constructor(private http: HttpClient) { };
+
+  HandleAddtoStockPrimArry: HandleAddPrimBE[];
 
   stockDataViewVal() {
     return this.stockDataView;
@@ -92,4 +102,27 @@ export class StocksService {
   getProducts() {
     return this.http.get<ProductsClass[]>('http://localhost/accounting/productsList.php');
   }
+
+  creatStockTransactionDetails(StockTransactionD: StockTransactionD) {
+    return this.http.post('http://localhost/accounting/postStocktTransactionDetailsId.php', StockTransactionD)
+  };
+
+  creatStockTransaction(StockTransaction: StockTransaction) {
+    return this.http.post('http://localhost/accounting/stockTransaction.php', StockTransaction)
+  }
+
+  // for invoice search || edite
+  getHandleAddtoStockPrimList() {
+    return this.http.get<HandleAddPrimBE[]>('http://localhost/accounting/addtoStockPrimList.php');
+  }
+  // stockTransactionDetailsList
+  getStockTransactionDetailsList() {
+    return this.http.get<StockTransactionD[]>('http://localhost/accounting/stockTransactionDetailsList.php');
+  }
+
+  // stockTransactionList
+  getStockTransactionList() {
+    return this.http.get<StockTransaction[]>('http://localhost/accounting/stockTransactionList.php');
+  }
+
 }

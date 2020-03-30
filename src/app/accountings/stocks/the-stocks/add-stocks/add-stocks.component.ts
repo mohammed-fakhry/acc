@@ -34,6 +34,7 @@ export class AddStocksComponent implements OnInit {
       this._stockService.creatStock(this.stockData.value)
         .subscribe();
       this._service.clearForm();
+      location.reload()
     } else if (this.addBtnVal == 'تعديل') {
       this._stockService.updateStockSer(this._stockService.stockDataView).subscribe(() => {
         // show stockEnquiry
@@ -42,10 +43,11 @@ export class AddStocksComponent implements OnInit {
         $('#stocksSearch').show(100);
         $('#stockBtn').removeClass("btn-info").addClass("btn-light").animate({ fontSize: '1.5em' }, 50);
         $('#premissionBtn').removeClass('btn-light').addClass('btn-info').animate({ fontSize: '1em' }, 50);
+        location.reload()
       },
-      error => {
-        alert(error);
-      });
+        error => {
+          alert(error);
+        });
     };
   };
 

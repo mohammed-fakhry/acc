@@ -16,7 +16,7 @@ export class CustomerComponent implements OnInit {
   customers: Customer[];
   customerDataView: Customer;
   constructor(private formBuilder: FormBuilder, private _service: ServicesService, private _custService: CustomerService,
-    private router: Router,private logService: LoginService) { }
+    private router: Router, private logService: LoginService) { }
 
   ngOnInit() {
 
@@ -63,10 +63,12 @@ export class CustomerComponent implements OnInit {
         .subscribe()
       console.log(this.customerData.value)
       this._service.clearForm();
+      location.reload();
     } else if (addBtnVal == 'تعديل') {
       this._custService.updateCustomerSer(this.customerDataView).subscribe(() => {
         console.log(this.customerData.value, this.customerDataView);
-        this.showCustomerEnquiry()
+        this.showCustomerEnquiry();
+        location.reload();
       },
         error => {
           // alert(error);

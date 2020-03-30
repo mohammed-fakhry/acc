@@ -215,9 +215,11 @@ export class WorkersComponent implements OnInit {
       this._service.creatEmployee(this.workerData.value)
         .subscribe()
       this._service.clearForm();
+      //location.reload();
     } else if (this.addBtnVal == 'تعديل') {
       this._service.updateWorkerSer(this.workerDataView).subscribe(() => {
         this.showWorkerEnquiry()
+        //location.reload();
       },
         error => {
           alert(error);

@@ -34,15 +34,15 @@
             <div class="dropdown">
                 <button class="btn btn-info dropdown-toggle mx-2" type="button" id="premissionBtn"
                     style="height: 70px;" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    اذونات
+                    فواتير
                 </button>
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    <button class="dropdown-item btn-light" id="showAddToStockPrem" (click)="showAddToStockPrem()">اذن اضافة</button>
-                    <button class="dropdown-item">اذن خصم</button>
+                    <button class="dropdown-item btn-light" id="showAddToStockPrem" (click)="showAddToStockPrem()">فاتورة شراء</button>
+                    <button class="dropdown-item">فاتور بيع</button>
                     <button class="dropdown-item">اذن نقل</button>
                 </div>
             </div>
-            <button class="btn btn-success mx-2 " id="testBtn" (click)='getProductsVal()'>test</button>
+            <button class="btn btn-success mx-2 " id="testBtn" (click)='testbtn()'>test</button>
             <div class="headerLeftBorder"></div>
             <input *ngIf="router.url === '/stocks'" [(ngModel)]="searchTxt" placeholder="بحث" class="form-control mx-3"
                 id="stocksSearch">

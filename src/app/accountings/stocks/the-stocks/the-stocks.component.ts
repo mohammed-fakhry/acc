@@ -8,6 +8,7 @@ import { StocksService } from './stocks.service';
 import { Stock } from '../../stock';
 import { HandleBackEnd } from '../../../handle-back-end'
 import { ProductsClass } from '../products-class';
+import { HandleAddPrimBE } from '../handle-add-prim-be';
 @Component({
   selector: 'app-the-stocks',
   templateUrl: './the-stocks.component.html',
@@ -25,11 +26,16 @@ export class TheStocksComponent implements OnInit {
     // getStocks data from backEnd
     this._stockService.getStockes().subscribe((data: Stock[]) => {
       this._stockService.stocks = data;
+      //console.log(this._stockService.stocks)
     });
 
     // get handle BackEnd
     this._stockService.getHandleBackEnd().subscribe((data: HandleBackEnd[]) => {
       this._stockService.handleBackEnd = data;
+    })
+    // getHandleAddtoStockPrimList
+    this._stockService.getHandleAddtoStockPrimList().subscribe((data: HandleAddPrimBE[]) => {
+      this._stockService.HandleAddtoStockPrimArry = data;
     })
 
     this._stockService.getProducts().subscribe((data: ProductsClass[]) => {
@@ -51,24 +57,86 @@ export class TheStocksComponent implements OnInit {
     }
     ]; // makeStockArry
 
+    // make InvoiceArry
+    this._stockService.makeInvoiceArry = [{
+      invoiceId: null,
+      invoiceSearchVal: null,
+      stockTransactionId: null,
+      stockId: null,
+      stockName: '',
+      customerName: null,
+      transactionType: null,
+      notes: null,
+      invoiceDetails: [{
+        stockTransactionId: null,
+        productName: null,
+        stockName: '',
+        price: null,
+        Qty: null,
+        notes: null,
+      }]
+    }]
+
     //this.testBackend();
     //console.log(this._stockService.stocks.length)
   } // ngOnInit
 
+  CreateTheInvoiceArry() {
+    let countId = 0
+    this._stockService.makeInvoiceArry = [];
+    for (let i = 0; i < this._stockService.stockTransactionArr.length; i++) {
+      this._stockService.makeInvoiceArry.push(this._stockService.stockTransactionArr[i])
+    }
+    for (let s = 0; s < this._stockService.makeInvoiceArry.length; s++) {
+      countId++
+      this._stockService.makeInvoiceArry[s].invoiceId = countId;
+      this._stockService.makeInvoiceArry[s].invoiceDetails = [];
+    }
+    for (let h = 0; h < this._stockService.HandleAddtoStockPrimArry.length; h++) {
+      for (let m = 0; m < this._stockService.makeInvoiceArry.length; m++) {
+        if (this._stockService.HandleAddtoStockPrimArry[h].stockTransactionId == this._stockService.makeInvoiceArry[m].stockTransactionId) {
+          this._stockService.makeInvoiceArry[m].invoiceDetails.push(this._stockService.HandleAddtoStockPrimArry[h]);
+
+        };
+      };
+    };
+    this._stockService.makeInvoiceArry.shift(); // delete the first index "coz its Null"
+
+    for (let m = 0; m < this._stockService.makeInvoiceArry.length; m++) {
+      this._stockService.makeInvoiceArry[m].customerName = this._stockService.makeInvoiceArry[m].invoiceDetails[0].customerName;
+      let inVal = `${this._stockService.makeInvoiceArry[m].invoiceId} - ${this._stockService.makeInvoiceArry[m].customerName}`
+      this._stockService.makeInvoiceArry[m].invoiceSearchVal = inVal;
+      this._stockService.makeInvoiceArry[m].stockName = this._stockService.makeInvoiceArry[m].invoiceDetails[0].stockName;
+    }
+    console.log(this._stockService.makeInvoiceArry)
+  }; // CreateTheInvoiceArry
+
+
+
   testBackend() {
     //
     for (let i = 0; i < this._stockService.stocks.length; i++) {
-      this._stockService.makeStockArry[i].stockProducts = []
-      this._stockService.makeStockArry.push(this._stockService.stocks[i])
-      //console.log(this._stockService.stocks[i])
+      this._stockService.makeStockArry.push(this._stockService.stocks[i]);
+      //console.log(this._stockService.makeStockArry)
+    };
+    for (let m = 0; m < this._stockService.makeStockArry.length; m++) {
+      this._stockService.makeStockArry[m].stockProducts = [];
     }
-    for (let i = 0; i < this._stockService.handleBackEnd.length; i++) {
+    for (let h = 0; h < this._stockService.handleBackEnd.length; h++) {
       for (let s = 0; s < this._stockService.makeStockArry.length; s++) {
-        if (this._stockService.handleBackEnd[i].stockId == this._stockService.makeStockArry[s].stockId) {
-          this._stockService.makeStockArry[s].stockProducts.push(this._stockService.handleBackEnd[i])
-        }
-      }
-    }
+        if (this._stockService.handleBackEnd[h].stockId == this._stockService.makeStockArry[s].stockId) {
+          this._stockService.makeStockArry[s].stockProducts.push(this._stockService.handleBackEnd[h]);
+          //console.log(this._stockService.makeStockArry[s].stockProducts)
+        };
+      };
+    };
+  };
+
+  randomId: number;
+  // testBtn
+  testbtn() {
+    this.randomId = Date.now()
+    console.log(this.randomId)
   }
 
   resetBackendValues() {
@@ -113,7 +181,7 @@ export class TheStocksComponent implements OnInit {
     $('#stockBtn').removeClass("btn-info").addClass("btn-light").animate({ fontSize: '1.5em' }, 50);
     $('#premissionBtn').removeClass('btn-light').addClass('btn-info').animate({ fontSize: '1em' }, 50);
     this.resetBackendValues();
-    location.reload();
+    //location.reload();
     //console.log(this._stockService.productsFromStockArryView)
   };
 
@@ -136,6 +204,7 @@ export class TheStocksComponent implements OnInit {
   }
 
   showAddToStockPrem() {
+    this.CreateTheInvoiceArry()
     $('.stocksClass').not('#addToStockPrem').hide()
     $('#addToStockPrem').show()
     $('#stocksSearch').hide(100);
@@ -144,6 +213,7 @@ export class TheStocksComponent implements OnInit {
     // hide invoice addForm
     $('#callInvoice').show();
     $('#addInvoiceForm').hide();
+    $('#callInvoiceBtn').html("فاتورة جديدة");
 
     this.resetBackendValues();
     this._service.clearForm()

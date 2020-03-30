@@ -29,6 +29,7 @@ export class AddProductsComponent implements OnInit {
     this._stockService.creatProduct(this.productData.value)
     .subscribe();
     this._service.clearForm();
+    location.reload();
     //console.log(this.productData.value);
   }
 

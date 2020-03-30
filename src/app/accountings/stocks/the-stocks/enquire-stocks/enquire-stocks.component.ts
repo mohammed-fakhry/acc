@@ -20,6 +20,7 @@ export class EnquireStocksComponent implements OnInit {
       $('.askForDelete').removeClass('animate')
     })
 
+    //console.log(this._stockService.stocks)
 
   } // ngOnInit
 
@@ -60,11 +61,12 @@ export class EnquireStocksComponent implements OnInit {
     $('#premissionBtn').removeClass('btn-light').addClass('btn-info').animate({ fontSize: '1em' }, 50);
     // get the data
     this._theStocksComponent.testBackend();
-    for (let i=0 ; this._stockService.makeStockArry.length ; i++) {
+    for (let i=0 ; i < this._stockService.makeStockArry.length ; i++) {
       if (stock.stockId == this._stockService.makeStockArry[i].stockId) {
         this._stockService.makeStockArryView = this._stockService.makeStockArry[i]
         this._stockService.productsFromStockArryView = this._stockService.makeStockArry[i].stockProducts;
         this._stockService.productsFromStockArryView.toLocaleString()
+        console.log(this._stockService.makeStockArry)
         break
       }
     }
