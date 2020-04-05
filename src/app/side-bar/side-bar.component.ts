@@ -32,11 +32,14 @@ export class SideBarComponent implements OnInit {
     this.url = this.currentUrl.slice(this.ind);
 
     // main buttons
+    /*
     $('#sideBar h3').hover(function () {
-      $(this).animate({ fontSize: '1.3em' }, 100)
+      $(this).removeClass('btn-light').addClass('btn-info');
+      //$(this).animate({ fontSize: '1.3em' }, 100)
     }, function () {
-      $(this).animate({ fontSize: '1.2em' }, 100)
-    })
+      $(this).addClass('btn-light').removeClass('btn-info');
+      //$(this).animate({ fontSize: '1.2em' }, 100)
+    })*/
     $("#sideBar h3").click(function () {
       $(this).removeClass('btn-light').addClass('btn-info')
       $(this).next().slideToggle(500);
@@ -80,11 +83,12 @@ export class SideBarComponent implements OnInit {
     }
     
     // hoverEffect
+    /*
     $('#sideBar button').hover(function () {
       $(this).animate({ fontSize: '1.05em' }, 100)
     }, function () {
       $(this).animate({ fontSize: '1em' }, 100)
-    })
+    })*/
     // clickEffect
     $("#sideBar button").click(function () {
       $(this).removeClass('btn-light').addClass('btn-secondary')// .next().slideToggle(500);

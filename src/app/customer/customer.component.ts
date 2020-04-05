@@ -5,6 +5,11 @@ import { ServicesService } from '../services.service';
 import { CustomerService } from '../customer.service';
 import { Router } from '@angular/router'
 import { LoginService } from '../login.service';
+import { CustomerInvArry } from '../accountings/customer-inv-arry';
+import { StocksService } from '../accountings/stocks/the-stocks/stocks.service';
+import { HandleAddPrimBE } from '../accountings/stocks/handle-add-prim-be';
+import { StockTransaction } from '../accountings/stocks/stock-transaction';
+
 @Component({
   selector: 'app-customer',
   templateUrl: './customer.component.html',
@@ -15,8 +20,11 @@ export class CustomerComponent implements OnInit {
   customerData: FormGroup;
   customers: Customer[];
   customerDataView: Customer;
+  customerInvArry: any[];
+  //customerInvDetail:CustomerInvArry;
+
   constructor(private formBuilder: FormBuilder, private _service: ServicesService, private _custService: CustomerService,
-    private router: Router, private logService: LoginService) { }
+    private router: Router, private logService: LoginService, private _stockService:StocksService) { }
 
   ngOnInit() {
 
@@ -27,6 +35,15 @@ export class CustomerComponent implements OnInit {
     this._custService.getCustomer().subscribe((data: Customer[]) => {
       this.customers = data;
     })
+
+    this._stockService.getHandleAddtoStockPrimList().subscribe((data: HandleAddPrimBE[]) => { // get the details to make customerInvArry
+      this._stockService.HandleAddtoStockPrimArry = data;
+    })
+
+    this._stockService.getStockTransactionList().subscribe((data: StockTransaction[]) => {
+      this._stockService.stockTransactionArr = data;
+    })
+
     this.customerDataView = {
       customerId: null,
       customerName: null,
@@ -54,6 +71,37 @@ export class CustomerComponent implements OnInit {
       $('.askForDelete').removeClass('animate')
     })
   }
+
+  makeCustomerInvArry() {
+    this.customerInvArry = []
+
+    for (let i = 0 ; i < this._stockService.stockTransactionArr.length ; i ++) {
+
+      if(this._stockService.stockTransactionArr[i].customerId == this.customerDataView.customerId) {
+
+        let customerInvDetail: any = {
+          stockTransactionId:0,
+          transactionType:0,
+          invoiceTotal:0,
+          netTotal:0,
+        }
+
+        customerInvDetail.stockTransactionId = this._stockService.stockTransactionArr[i].stockTransactionId;
+        customerInvDetail.transactionType = this._stockService.stockTransactionArr[i].transactionType;
+        customerInvDetail.invoiceTotal = this._stockService.stockTransactionArr[i].invoiceTotal;
+        this.customerInvArry.push(customerInvDetail)
+      };
+    };
+
+    for (let c = 0 ; c < this.customerInvArry.length; c++) {
+      if (c == 0) {
+        this.customerInvArry[c].netTotal = parseInt(this.customerInvArry[c].invoiceTotal);
+      } else {
+        this.customerInvArry[c].netTotal = parseInt(this.customerInvArry[c-1].netTotal) + parseInt(this.customerInvArry[c].invoiceTotal)
+      }
+    }
+
+  };
 
   // CRUD Functions
   addNewCustomer() {
@@ -92,8 +140,7 @@ export class CustomerComponent implements OnInit {
   }
 
   showUpdateCustomer(customer: Customer) {
-    $('#customerEnquiry').hide();
-    $('#customerDetails').hide();
+    $('.customerClass').not('#addCustomer').hide();
     $('#addCustomer').show();
     $('#addNewCustomerBtn').html('تعديل');
     $('#addCustomer h2:first').html('تعديل بيانات عميل');
@@ -105,26 +152,24 @@ export class CustomerComponent implements OnInit {
 
   showCustomerCard(customer: Customer) {
     this.customerDataView = customer;
+    this.makeCustomerInvArry();
     $('#showAddCustomerBtn').removeClass('btn-light').addClass('btn-info').animate({ fontSize: '1em' }, 50);
     $('#customerEnquirybtn').removeClass('btn-light').addClass('btn-info').animate({ fontSize: '1em' }, 50);
+    $('.customerClass').not('#customerDetails').hide();
     $('#customerDetails').show();
-    $('#customerEnquiry').hide();
-    $('#addCustomer').hide();
+    $('#customerInvDetails').show();
   }
 
   ShowAddNewCustomer() {
     this._service.clearForm();
     this.restValues()
-    $('#customerDetails').hide();
-    $('#customerEnquiry').hide();
+    $('.customerClass').not('#addCustomer').hide();
     $('#addCustomer').show();
     $('#addNewCustomerBtn').html('اضافة');
     $('#addCustomer h2:first').html('اضافة بيانات عميل');
     $('#showAddCustomerBtn').removeClass("btn-info").addClass("btn-light").animate({ fontSize: '1.5em' }, 50);
     $('#customerEnquirybtn').removeClass('btn-light').addClass('btn-info').animate({ fontSize: '1em' }, 50);
   };
-
-
 
   restValues() {
     this.customerDataView = {
@@ -151,9 +196,8 @@ export class CustomerComponent implements OnInit {
   };
 
   showCustomerEnquiry() {
-    $('#customerDetails').hide();
+    $('.customerClass').not('#customerEnquiry').hide();
     $('#customerEnquiry').show();
-    $('#addCustomer').hide();
     $('#customerEnquirybtn').removeClass("btn-info").addClass("btn-light").animate({ fontSize: '1.5em' }, 50);
     $('#showAddCustomerBtn').removeClass('btn-light').addClass('btn-info').animate({ fontSize: '1em' }, 50);
   };

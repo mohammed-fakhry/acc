@@ -11,10 +11,12 @@
         </div>
     </div>
 </div>
-<!--workerHeader-->
+<!--customerHeader-->
 <div class="container-fluid shadow p-3 card bg-light mt-3 sticky-top">
     <nav class="navbar navbar-light bg-light">
+        
         <div class="form-inline">
+            <button class="btn btn-success" (click)='makeCustomerInvArry()'>test</button>
             <h1 class="px-2" style="font-weight: bold;">العملاء</h1>
             <div class="headerLeftBorder"></div>
             <button class="btn btn-info mx-2" style="height: 70px;" id="showAddCustomerBtn"
@@ -22,12 +24,13 @@
             <button class="btn btn-light mx-2" style="height: 70px; font-size: 1.5em;" id="customerEnquirybtn"
                 (click)="showCustomerEnquiry()">استعلام</button>
             <div class="headerLeftBorder"></div>
-            <input *ngIf="router.url === '/customers'" [(ngModel)]="searchCust" placeholder="بحث" class="form-control mx-3">
+            <input *ngIf="router.url === '/customers'" [(ngModel)]="searchCust" placeholder="بحث"
+                class="form-control mx-3">
         </div>
     </nav>
 </div>
 <!--customerEnquiry-->
-<div class="container-fluid card shadow mt-3 p-5" id="customerEnquiry">
+<div class="container-fluid card shadow mt-3 p-5 customerClass" id="customerEnquiry">
     <div class="panel-body panel-flex-table">
         <table class="flex-table table table-striped">
             <thead class="table-dark">
@@ -59,7 +62,7 @@
     </div>
 </div>
 <!--addCustomer-->
-<div class="container-fluid shadow mt-3 card inpCard" id="addCustomer" style="display: none;">
+<div class="container-fluid shadow mt-3 card inpCard customerClass" id="addCustomer" style="display: none;">
     <div class="p-3">
         <h2 class="pb-3 cardHeader" style="border-bottom: solid 1.5px teal;">اضافة بيانات عميل</h2>
         <form [formGroup]='customerData' (ngSubmit)="addNewCustomer()" class="pt-3">
@@ -98,7 +101,7 @@
     </div>
 </div>
 <!--customerDetails-->
-<div class="container-fluid card mt-3" id="customerDetails" style="display: none;">
+<div class="container-fluid card mt-3 customerClass" id="customerDetails" style="display: none;">
     <div class="card-body">
         <h3 class="card-title cardHeader">{{customerDataView.customerName}}</h3>
         <h5 class="card-text pb-3" style="border-bottom: solid 1.5px teal;">{{customerDataView.customerTell}}</h5>
@@ -136,5 +139,28 @@
             </div>
         </div>
         <!---->
+    </div>
+</div>
+<!--customerInvDetails-->
+<div class="container-fluid card shadow mt-3 p-5 customerClass" id="customerInvDetails" style="display: none;">
+    <div class="panel-body panel-flex-table">
+        <table class="flex-table table table-striped">
+            <thead class="table-dark">
+                <tr>
+                    <th>رقم الفاتورة</th>
+                    <th>دائن</th>
+                    <th>مدين</th>
+                    <th>صافى</th>
+                </tr>
+            </thead>
+            <tbody class=" mt-3">
+                <tr *ngFor = "let invoice of customerInvArry; let i=index">
+                    <td></td>
+                    <td>{{invoice.invoiceTotal}}</td>
+                    <td></td>
+                    <td>{{invoice.netTotal}}</td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 </div>

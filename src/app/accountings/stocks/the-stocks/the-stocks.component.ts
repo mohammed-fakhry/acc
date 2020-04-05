@@ -9,6 +9,7 @@ import { Stock } from '../../stock';
 import { HandleBackEnd } from '../../../handle-back-end'
 import { ProductsClass } from '../products-class';
 import { HandleAddPrimBE } from '../handle-add-prim-be';
+//import { AddToStockPermissionComponent } from '../stockPermission/add-to-stock-permission/add-to-stock-permission.component';
 @Component({
   selector: 'app-the-stocks',
   templateUrl: './the-stocks.component.html',
@@ -18,7 +19,7 @@ export class TheStocksComponent implements OnInit {
 
   constructor(private router: Router, private logService: LoginService,
     private _stockService: StocksService, private _service: ServicesService) { }
-
+  //, private _AddToStockPermissionComponent: AddToStockPermissionComponent
 
   ngOnInit() {
 
@@ -57,6 +58,15 @@ export class TheStocksComponent implements OnInit {
     }
     ]; // makeStockArry
 
+
+
+    //this.testBackend();
+    //console.log(this._stockService.stocks.length)
+  } // ngOnInit
+
+  CreateTheInvoiceArry() {
+    let countId = -1
+    this._stockService.makeInvoiceArry = [];
     // make InvoiceArry
     this._stockService.makeInvoiceArry = [{
       invoiceId: null,
@@ -64,51 +74,50 @@ export class TheStocksComponent implements OnInit {
       stockTransactionId: null,
       stockId: null,
       stockName: '',
-      customerName: null,
+      customerName: '',
       transactionType: null,
       notes: null,
       invoiceDetails: [{
         stockTransactionId: null,
         productName: null,
         stockName: '',
+        customerName: '',
         price: null,
         Qty: null,
         notes: null,
       }]
     }]
 
-    //this.testBackend();
-    //console.log(this._stockService.stocks.length)
-  } // ngOnInit
-
-  CreateTheInvoiceArry() {
-    let countId = 0
-    this._stockService.makeInvoiceArry = [];
     for (let i = 0; i < this._stockService.stockTransactionArr.length; i++) {
       this._stockService.makeInvoiceArry.push(this._stockService.stockTransactionArr[i])
     }
+
     for (let s = 0; s < this._stockService.makeInvoiceArry.length; s++) {
       countId++
       this._stockService.makeInvoiceArry[s].invoiceId = countId;
       this._stockService.makeInvoiceArry[s].invoiceDetails = [];
     }
+
     for (let h = 0; h < this._stockService.HandleAddtoStockPrimArry.length; h++) {
       for (let m = 0; m < this._stockService.makeInvoiceArry.length; m++) {
         if (this._stockService.HandleAddtoStockPrimArry[h].stockTransactionId == this._stockService.makeInvoiceArry[m].stockTransactionId) {
           this._stockService.makeInvoiceArry[m].invoiceDetails.push(this._stockService.HandleAddtoStockPrimArry[h]);
-
+          //console.log(this._stockService.HandleAddtoStockPrimArry[h])
+          this._stockService.makeInvoiceArry[m].customerName = this._stockService.makeInvoiceArry[m].invoiceDetails[0].customerName;
+          this._stockService.makeInvoiceArry[m].stockName = this._stockService.makeInvoiceArry[m].invoiceDetails[0].stockName;
         };
       };
     };
+
     this._stockService.makeInvoiceArry.shift(); // delete the first index "coz its Null"
 
     for (let m = 0; m < this._stockService.makeInvoiceArry.length; m++) {
-      this._stockService.makeInvoiceArry[m].customerName = this._stockService.makeInvoiceArry[m].invoiceDetails[0].customerName;
+      //this._stockService.makeInvoiceArry[m].customerName = this._stockService.makeInvoiceArry[m].invoiceDetails[0].customerName;
       let inVal = `${this._stockService.makeInvoiceArry[m].invoiceId} - ${this._stockService.makeInvoiceArry[m].customerName}`
       this._stockService.makeInvoiceArry[m].invoiceSearchVal = inVal;
-      this._stockService.makeInvoiceArry[m].stockName = this._stockService.makeInvoiceArry[m].invoiceDetails[0].stockName;
+      //this._stockService.makeInvoiceArry[m].stockName = this._stockService.makeInvoiceArry[m].invoiceDetails[0].stockName;
     }
-    console.log(this._stockService.makeInvoiceArry)
+    
   }; // CreateTheInvoiceArry
 
 
@@ -135,8 +144,9 @@ export class TheStocksComponent implements OnInit {
   randomId: number;
   // testBtn
   testbtn() {
-    this.randomId = Date.now()
-    console.log(this.randomId)
+    console.log(this._stockService.makeInvoiceArry)
+    console.log(this._stockService.handleBackEnd)
+    //this._AddToStockPermissionComponent.testBtn()
   }
 
   resetBackendValues() {

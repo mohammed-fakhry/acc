@@ -90,7 +90,7 @@ export class StocksService {
   updateStockPridge(stockPridge: StockPridge) {
     return this.http.put('http://localhost/accounting/updatePridgeList.php?id=' + stockPridge.stockProductId, stockPridge )
   }
-
+  
   getHandleBackEnd() {
     return this.http.get<HandleBackEnd[]>('http://localhost/accounting/pridgeList.php');
   }
@@ -123,6 +123,14 @@ export class StocksService {
   // stockTransactionList
   getStockTransactionList() {
     return this.http.get<StockTransaction[]>('http://localhost/accounting/stockTransactionList.php');
+  }
+
+  UpdateStockTransactionDetails(stockTransactionDetails: StockTransactionD) {
+    return this.http.put('http://localhost/accounting/updatestocktransactiondetails.php?id=' + stockTransactionDetails.stockTransactionDetailsId, stockTransactionDetails )
+  }
+
+  UpdateStockTransaction(stockTransaction: StockTransaction) {
+    return this.http.put('http://localhost/accounting/updateStocktransaction.php?id=' + stockTransaction.stockTransactionId, stockTransaction )
   }
 
 }

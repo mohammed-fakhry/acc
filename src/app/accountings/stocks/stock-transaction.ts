@@ -3,5 +3,6 @@ export class StockTransaction {
     stockId:number;
     customerId:number;
     transactionType: number;
+    invoiceTotal:number;
     notes:string;
 }

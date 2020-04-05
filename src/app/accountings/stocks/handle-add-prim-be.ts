@@ -4,9 +4,11 @@ export class HandleAddPrimBE {
     productId: number; // frm products table
     productName: string; // frm products table
     customerName:string;
+    customerId:number;
     stockId:number; // frm stocks table
     transactionType: number; // frm the Main table
     price: number; // forign table
     Qty: number; // forign table
+    invoiceTotal:number;
     notes:string; // frm the Main table
 }
