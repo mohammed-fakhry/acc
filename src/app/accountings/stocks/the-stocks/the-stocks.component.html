@@ -38,7 +38,7 @@
                 </button>
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                     <button class="dropdown-item btn-light" id="showAddToStockPrem" (click)="showAddToStockPrem()">فاتورة شراء</button>
-                    <button class="dropdown-item">فاتور بيع</button>
+                    <button class="dropdown-item" id="showMinToStockPrem" (click)="showMinToStockPrem()">فاتور بيع</button>
                     <button class="dropdown-item">اذن نقل</button>
                 </div>
             </div>
@@ -59,3 +59,5 @@
 <app-stock-details class="stocksClass" id="stockDtails"></app-stock-details>
 <!--addToStockPrem-->
 <app-add-to-stock-permission class="stocksClass" id="addToStockPrem"></app-add-to-stock-permission>
+<!--minFrmStockPrem-->
+<app-min-frm-stock-permission class="stocksClass" id="minFrmStockPrem"></app-min-frm-stock-permission>

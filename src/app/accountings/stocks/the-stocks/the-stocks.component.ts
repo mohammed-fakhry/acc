@@ -17,6 +17,9 @@ import { HandleAddPrimBE } from '../handle-add-prim-be';
 })
 export class TheStocksComponent implements OnInit {
 
+  minInvArry: any[];
+  addInvArry: any[];
+
   constructor(private router: Router, private logService: LoginService,
     private _stockService: StocksService, private _service: ServicesService) { }
   //, private _AddToStockPermissionComponent: AddToStockPermissionComponent
@@ -120,7 +123,27 @@ export class TheStocksComponent implements OnInit {
     
   }; // CreateTheInvoiceArry
 
+  makeMinInvArry() {
+    this.CreateTheInvoiceArry();
+    this.minInvArry = [];
+    for (let i = 0 ; i < this._stockService.makeInvoiceArry.length ; i ++) {
+      if (this._stockService.makeInvoiceArry[i].transactionType == 2) {
+        this.minInvArry.push(this._stockService.makeInvoiceArry[i])
+      }
+    }
+    console.log(this.minInvArry)
+  }
 
+  makeAddInvArry() {
+    this.CreateTheInvoiceArry();
+    this.addInvArry = [];
+    for (let i = 0 ; i < this._stockService.makeInvoiceArry.length ; i ++) {
+      if (this._stockService.makeInvoiceArry[i].transactionType == 1) {
+        this.addInvArry.push(this._stockService.makeInvoiceArry[i])
+      }
+    }
+    console.log(this.minInvArry)
+  }
 
   testBackend() {
     //
@@ -214,7 +237,7 @@ export class TheStocksComponent implements OnInit {
   }
 
   showAddToStockPrem() {
-    this.CreateTheInvoiceArry()
+    this.makeAddInvArry()
     $('.stocksClass').not('#addToStockPrem').hide()
     $('#addToStockPrem').show()
     $('#stocksSearch').hide(100);
@@ -227,6 +250,20 @@ export class TheStocksComponent implements OnInit {
 
     this.resetBackendValues();
     this._service.clearForm()
+  }
+
+  showMinToStockPrem() {
+    this.makeMinInvArry()
+    $('.stocksClass').not('#minFrmStockPrem').hide();
+    $('#minFrmStockPrem').show();
+    $('#stocksSearch').hide(100);
+    $('#premissionBtn').removeClass("btn-info").addClass("btn-light").animate({ fontSize: '1.5em' }, 50);
+    $('#stockBtn').removeClass('btn-light').addClass('btn-info').animate({ fontSize: '1em' }, 50);
+    $('#minCallInvoice').show();
+    $('#minInvoiceForm').hide();
+    $('#callInvoiceBtn').html("فاتورة جديدة");
+    this.resetBackendValues();
+    this._service.clearForm();
   }
 
   deleteStock() {

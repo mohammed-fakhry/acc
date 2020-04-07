@@ -23,6 +23,7 @@ import { EnquireStocksComponent } from './accountings/stocks/the-stocks/enquire-
 import { StockDetailsComponent } from './accountings/stocks/the-stocks/stock-details/stock-details.component';
 import { AddProductsComponent } from './accountings/stocks/the-stocks/add-products/add-products.component';
 import { AddToStockPermissionComponent } from './accountings/stocks/stockPermission/add-to-stock-permission/add-to-stock-permission.component';
+import { MinFrmStockPermissionComponent } from './accountings/stocks/stockPermission/min-frm-stock-permission/min-frm-stock-permission.component';
 
 @NgModule({
   declarations: [
@@ -46,6 +47,7 @@ import { AddToStockPermissionComponent } from './accountings/stocks/stockPermiss
     StockDetailsComponent,
     AddProductsComponent,
     AddToStockPermissionComponent,
+    MinFrmStockPermissionComponent,
   ],
   imports: [
     BrowserModule,

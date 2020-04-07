@@ -1,49 +1,50 @@
 <!--onlyForm-->
 <div class="container-fluid card inpCard shadow mt-3 p-3">
-    <div class="form-inline" id="callInvoice">
-        <h2 class="cardHeader">فاتورة شراء</h2>
+    <div class="form-inline" id="minCallInvoice">
+        <h2 class="cardHeader">فاتورة بيع</h2>
+        
         <div class="headerLeftBorder mr-2"></div>
         <!--<input [(ngModel)]="searchTxt" placeholder="بحث" class="form-control mx-3" id="addInvoiceSearch">-->
         <input type="search" name="searchTxt" [(ngModel)]="searchTxt" class="form-control mdb-autocomplete mx-3"
-            list="datalistInvoiceSearch" id="invoiceSearch" (change)="changAddInvoiceBtn()">
-        <datalist id="datalistInvoiceSearch">
-            <option *ngFor="let invoice of _theStockComp.addInvArry" value="{{invoice.invoiceSearchVal}}">
+            list="minDatalistInvoiceSearch" id="minInvoiceSearch" (change)="changMinInvoiceBtn()">
+        <datalist id="minDatalistInvoiceSearch">
+            <option *ngFor="let invoice of _theStockComp.minInvArry" value="{{invoice.invoiceSearchVal}}">
             </option>
         </datalist>
-        <button class="btn btn-info ml-2" type="submit" id="callInvoiceBtn" (click)="showAddNewInvoice()">فاتورة
+        <button class="btn btn-info ml-2" type="submit" id="minCallInvoiceBtn" (click)="ShowMinNewInvoice()">فاتورة
             جديدة</button>
     </div>
 
-    <div id="addInvoiceForm" style="display: none;">
-        <h2 class="cardHeader">فاتورة شراء</h2>
+    <div id="minInvoiceForm" style="display: none;">
+        <h2 class="cardHeader">فاتورة بيع</h2>
         <!--[formGroup]='addToStockPremData'-->
-        <form (ngSubmit)="addToStockPrem()" class="pt-3">
+        <form (ngSubmit)="minFrmStockPrem()" class="pt-3">
             <div class="form-group">
                 <div class="form-row">
-                    <input id="stockTransactionId" class="d-none">
+                    <input id="minStockTransactionId" class="d-none">
                     <!--stockName-->
                     <div class="col form-inline">
-                        <label for="stockNameForAdd">اسم المخزن</label>
-                        <select class="form-control mr-3 p-1" id="stockNameForAdd">
+                        <label for="stockNameForMin">اسم المخزن</label>
+                        <select class="form-control mr-3 p-1" id="stockNameForMin">
                             <option *ngFor="let stock of _stockService.stocks">{{stock.stockName}}</option>
                         </select>
                     </div>
                     <!--customerName-->
                     <div class="col form-inline">
-                        <label for="customerNameForAdd">اسم المورد</label>
+                        <label for="customerNameForMin">اسم المورد</label>
                         <!--<select class="form-control text-center mr-3 p-1" id="customerNameForAdd">
                             <option *ngFor="let customer of customers">{{customer.customerName}}</option>
                         </select> name="product{{i}}"-->
-                        <input type="search" id="customerNameForAdd" class="form-control mdb-autocomplete mr-3 p-1"
-                            list="datalistCustomer">
-                        <datalist id="datalistCustomer">
+                        <input type="search" id="customerNameForMin" class="form-control mdb-autocomplete mr-3 p-1"
+                            list="minDatalistCustomer">
+                        <datalist id="minDatalistCustomer">
                             <option *ngFor="let customer of customers" value="{{customer.customerName}}">
                             </option>
                         </datalist>
                     </div>
                     <div class="col form-inline">
-                        <label for="addInvoiceNote">ملاحظات</label>
-                        <input class="form-control mr-3 p-1" name="addInvoiceNote" id="addInvoiceNote">
+                        <label for="minInvoiceNote">ملاحظات</label>
+                        <input class="form-control mr-3 p-1" name="addInvoiceNote" id="minInvoiceNote">
 
                     </div>
                 </div>
@@ -64,8 +65,8 @@
                             <td style="flex: none; width: 50px;" class="pt-4">{{i + 1}}</td>
                             <td>
                                 <input type="search" name="product{{i}}" [(ngModel)]="inpt.product"
-                                    class="form-control mdb-autocomplete" list="datalist1">
-                                <datalist id="datalist1">
+                                    class="form-control mdb-autocomplete" list="minDatalist1">
+                                <datalist id="minDatalist1">
                                     <option *ngFor="let product of _stockService.allProducts"
                                         value="{{product.productName}}"></option>
                                 </datalist>
@@ -77,22 +78,21 @@
                             <td class="text-center font-weight-bold">{{inpt.total}}</td>
                             <input name="stockTransactionDetailsId{{i}}" [(ngModel)]="inpt.stockTransactionDetailsId" class="d-none">
                         </tr>
-                        <div class="btn btn-dark my-2 mr-1" style="width: 50px;" (click)="addFilds()" id="addFilds">+
+                        <div class="btn btn-dark my-2 mr-1" style="width: 50px;" (click)="minAddFilds()" id="minAddFilds">+
                         </div>
                     </tbody>
 
                 </table>
             </div>
             <div class="d-flex justify-content-between">
-                <button class="btn btn-primary mb-1 mt-3" type="submit" id="addNewInvoicetBtn"></button>
+                <button class="btn btn-primary mb-1 mt-3" type="submit" id="minNewInvoicetBtn"></button>
                 <div class="form-inline ml-5  mt-3 bg-dark text-light py-2 rounded">
                     <h5 class="bg-dark text-light pr-3">اجمالى الفاتورة : </h5>
-                    <h5 class="bg-dark text-light mr-2 pl-3"  id="invoiceTotal">{{invoiceTotal}}</h5>
+                    <h5 class="bg-dark text-light mr-2 pl-3"  id="minInvoiceTotal">{{invoiceTotal}}</h5>
                 </div>
-                
             </div>
-
         </form>
-        <button class="btn btn-success mx-2 d-none" id="testBtnP" (click)='testBtn()'>test</button>
+        <button class="btn btn-success mx-2" id="minTestBtn" (click)='minTestBtn()'>test</button>
+
     </div>
 </div>

@@ -23,6 +23,7 @@ export class CustomerComponent implements OnInit {
   customerInvArry: any[];
   //customerInvDetail:CustomerInvArry;
 
+
   constructor(private formBuilder: FormBuilder, private _service: ServicesService, private _custService: CustomerService,
     private router: Router, private logService: LoginService, private _stockService:StocksService) { }
 
