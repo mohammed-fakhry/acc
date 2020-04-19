@@ -14,8 +14,8 @@ export class AddStocksComponent implements OnInit {
   stockData: FormGroup;
   stockDataView: Stock;
   addBtnVal: string;
-  constructor(private _stockService: StocksService, private formBuilder: FormBuilder,
-    private _service: ServicesService) { }
+  constructor(public _stockService: StocksService, public formBuilder: FormBuilder,
+    public _service: ServicesService) { }
 
   ngOnInit() {
 

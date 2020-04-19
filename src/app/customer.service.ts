@@ -7,6 +7,9 @@ import {Customer} from './customer'
 })
 export class CustomerService {
 
+  customerInv: any[];
+  //customerInvDetail: any;
+
   constructor(private http: HttpClient) { }
   getCustomer() {
     return this.http.get<Customer[]>('http://localhost/accounting/customerList.php');

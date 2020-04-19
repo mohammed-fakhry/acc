@@ -13,7 +13,7 @@
     </div>
 </div>
 <!--header-->
-<div class="container-fluid shadow p-3 card bg-light mt-3 sticky-top">
+<div class="container-fluid  p-3 card bg-light mt-3 sticky-top">
     <nav class="navbar navbar-light bg-light">
         <div class="form-inline">
             <h1 class="px-2" style="font-weight: bold;">المخازن</h1>
@@ -38,11 +38,11 @@
                 </button>
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                     <button class="dropdown-item btn-light" id="showAddToStockPrem" (click)="showAddToStockPrem()">فاتورة شراء</button>
-                    <button class="dropdown-item" id="showMinToStockPrem" (click)="showMinToStockPrem()">فاتور بيع</button>
+                    <button class="dropdown-item text-danger" id="showMinToStockPrem" (click)="showMinToStockPrem()">فاتور بيع</button>
                     <button class="dropdown-item">اذن نقل</button>
                 </div>
             </div>
-            <button class="btn btn-success mx-2 " id="testBtn" (click)='testbtn()'>test</button>
+            <button class="btn btn-success mx-2 d-none" id="testBtn" (click)='testbtn()'>test</button>
             <div class="headerLeftBorder"></div>
             <input *ngIf="router.url === '/stocks'" [(ngModel)]="searchTxt" placeholder="بحث" class="form-control mx-3"
                 id="stocksSearch">

@@ -19,10 +19,10 @@ export class TheStocksComponent implements OnInit {
 
   minInvArry: any[];
   addInvArry: any[];
-
-  constructor(private router: Router, private logService: LoginService,
-    private _stockService: StocksService, private _service: ServicesService) { }
-  //, private _AddToStockPermissionComponent: AddToStockPermissionComponent
+  searchTxt:string;
+  constructor(public router: Router, public logService: LoginService,
+    public _stockService: StocksService, public _service: ServicesService) { }
+  //, public _AddToStockPermissionComponent: AddToStockPermissionComponent
 
   ngOnInit() {
 
@@ -147,6 +147,21 @@ export class TheStocksComponent implements OnInit {
 
   testBackend() {
     //
+    this._stockService.makeStockArry = [{
+      stockId: 0,
+      stockName: '',
+      stockProducts: [{ // as HandleBackEnd Class
+        stockName: '',
+        stockId: 0,
+        productName: '',
+        productId: 0,
+        productQty: 0,
+        productCost: 0,
+        productPrice: 0
+      }] // stockProducts
+    }
+    ]; // makeStockArry
+    
     for (let i = 0; i < this._stockService.stocks.length; i++) {
       this._stockService.makeStockArry.push(this._stockService.stocks[i]);
       //console.log(this._stockService.makeStockArry)
@@ -168,7 +183,7 @@ export class TheStocksComponent implements OnInit {
   // testBtn
   testbtn() {
     console.log(this._stockService.makeInvoiceArry)
-    console.log(this._stockService.handleBackEnd)
+    //console.log(this._stockService.handleBackEnd)
     //this._AddToStockPermissionComponent.testBtn()
   }
 

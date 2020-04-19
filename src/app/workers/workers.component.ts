@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import * as $ from 'jquery';
-import { FormControl, FormGroup, FormBuilder } from '@angular/forms'
+import { FormControl, FormGroup, FormBuilder, Validators } from '@angular/forms'
 import { ServicesService } from '../services.service';
 import { Worker } from '../worker'
 import { Router } from '@angular/router'
@@ -19,7 +19,7 @@ export class WorkersComponent implements OnInit {
   counter: number = 0;
   total: number;
   net: number;
-  totalDisc:number;
+  totalDisc: number;
   netSalary: number = 0;
   netMinutes: number;
   moneyOut: number = 0;
@@ -74,7 +74,8 @@ export class WorkersComponent implements OnInit {
   workerData: FormGroup;
   workers: Worker[];
   rulesFromSql: WorkerRules[];
-  workerDataView: Worker;
+  //workerDataView: Worker;
+  searchTxt: string;
 
   //Rules to setting
   WorkerRuleResult: WorkerRules = {
@@ -98,8 +99,8 @@ export class WorkersComponent implements OnInit {
   checkCurrentRoute = this.logService.checkCurrentRoute();
   //------
 
-  constructor(private _service: ServicesService, private formBuilder: FormBuilder,
-    private router: Router, private logService: LoginService) {}
+  constructor(public _service: ServicesService, public formBuilder: FormBuilder,
+    public router: Router, public logService: LoginService) { }
 
   ngOnInit() {
 
@@ -112,36 +113,20 @@ export class WorkersComponent implements OnInit {
       this.rulesFromSql = dataRules;
     })
 
-    this.workerDataView = {
-      workerId: null,
-      workerName: null, 
-      workerTell: null, 
-      workerAdd: null, 
-      workerJopCateg: null, 
-      workerJop: null, 
-      workerFbCode: null, 
-      workerJopDate: null,
-      workerSalary: null, 
-      workerYearVacation: null,
-      workerCheckIN: null, 
-      workerCheckOut: null, 
-    }
-
-    this.workerData = this.formBuilder.group({
-      workerId: [''],
-      workerName: [''],
-      workerTell: [''],
-      workerAdd: [''],
-      workerJopCateg: [''],
-      workerJop: [''],
-      workerFbCode: [''],
-      workerJopDate: [''],
-      workerSalary: [''],
-      workerYearVacation: [''],
-      workerCheckIN: [''],
-      workerCheckOut: [''],
-    })
-
+    this.workerData = new FormGroup({
+      workerId: new FormControl(''),
+      workerName: new FormControl('', [Validators.required, Validators.minLength(5), Validators.maxLength(100)]),
+      workerTell: new FormControl('', [Validators.required, Validators.minLength(11), Validators.maxLength(11)]),
+      workerAdd: new FormControl('', [Validators.required, Validators.min(5), Validators.max(100)]),
+      workerJopCateg: new FormControl('', [Validators.required]),
+      workerJop: new FormControl('', [Validators.required]),
+      workerFbCode: new FormControl('', [Validators.required]),
+      workerJopDate: new FormControl(''),
+      workerSalary: new FormControl('', [Validators.required]),
+      workerYearVacation: new FormControl(''),
+      workerCheckIN: new FormControl('', [Validators.required]),
+      workerCheckOut: new FormControl('', [Validators.required]),
+    });
     // hide Fade layer
     $('#hideFadeLayer').click(function () {
       $('.fadeLayer').hide()
@@ -149,6 +134,84 @@ export class WorkersComponent implements OnInit {
     })
 
   } // ngOnInit
+
+  putWorkerDataValue(worker: Worker) {
+    this.workerData = new FormGroup({
+      workerId: new FormControl(worker.workerId),
+      workerName: new FormControl(worker.workerName, [Validators.required, Validators.minLength(5)]),
+      workerTell: new FormControl(worker.workerTell, [Validators.required, Validators.minLength(11), Validators.maxLength(11)]),
+      workerAdd: new FormControl(worker.workerAdd, [Validators.required, Validators.minLength(5), Validators.maxLength(100)]),
+      workerJopCateg: new FormControl(worker.workerJopCateg, [Validators.required]),
+      workerJop: new FormControl(worker.workerJop, [Validators.required]),
+      workerFbCode: new FormControl(worker.workerFbCode, [Validators.required]),
+      workerJopDate: new FormControl(worker.workerJopDate),
+      workerSalary: new FormControl(worker.workerSalary, [Validators.required]),
+      workerYearVacation: new FormControl(worker.workerYearVacation),
+      workerCheckIN: new FormControl(worker.workerCheckIN, [Validators.required]),
+      workerCheckOut: new FormControl(worker.workerCheckOut, [Validators.required]),
+    })
+
+  }
+
+  validTest: boolean;
+  inpArrErroTest = [];
+  inpArrErroTouched = [];
+  isValid() {
+    let inpArrValidId = [
+      'workerName',
+      'workerTell',
+      'workerAdd',
+      'workerJopCateg',
+      'workerJop',
+      'workerFbCode',
+      'workerJopDate',
+      'workerSalary',
+      'workerYearVacation',
+      'workerCheckIN',
+      'workerCheckOut',
+    ]
+
+    document.addEventListener("keyup", e => {
+      this.inpArrErroTest = [
+        this.workerData.controls.workerName.errors,
+        this.workerData.controls.workerTell.errors,
+        this.workerData.controls.workerAdd.errors,
+        this.workerData.controls.workerJopCateg.errors,
+        this.workerData.controls.workerJop.errors,
+        this.workerData.controls.workerFbCode.errors,
+        this.workerData.controls.workerJopDate.errors,
+        this.workerData.controls.workerSalary.errors,
+        this.workerData.controls.workerYearVacation.errors,
+        this.workerData.controls.workerCheckIN.errors,
+        this.workerData.controls.workerCheckOut.errors,
+      ]
+      this.inpArrErroTouched = [
+        this.workerData.controls.workerName.touched,
+        this.workerData.controls.workerTell.touched,
+        this.workerData.controls.workerAdd.touched,
+        this.workerData.controls.workerJopCateg.touched,
+        this.workerData.controls.workerJop.touched,
+        this.workerData.controls.workerFbCode.touched,
+        this.workerData.controls.workerJopDate.touched,
+        this.workerData.controls.workerSalary.touched,
+        this.workerData.controls.workerYearVacation.touched,
+        this.workerData.controls.workerCheckIN.touched,
+        this.workerData.controls.workerCheckOut.touched,
+      ]
+      for (let i = 0; i < this.inpArrErroTest.length; i++) {
+        if (this.inpArrErroTouched[i]) {
+          if (this.inpArrErroTest[i] != null) {
+            //this.validTest = true
+            $(`#${inpArrValidId[i]}`).addClass('is-invalid').removeClass('is-valid')
+          } else {
+            $(`#${inpArrValidId[i]}`).removeClass('is-invalid').addClass('is-valid')
+            //this.validTest = false
+          }
+        }
+      }
+      console.log(this.workerData.controls.workerAdd.errors)
+    })
+  }
 
   // saveSalarySetting
   updateSetting() {
@@ -178,20 +241,21 @@ export class WorkersComponent implements OnInit {
   }
 
   resetValues() {
-    this.workerData = this.formBuilder.group({
-      workerId: [''],
-      workerName: [''],
-      workerTell: [''],
-      workerAdd: [''],
-      workerJopCateg: [''],
-      workerJop: [''],
-      workerFbCode: [''],
-      workerJopDate: [''],
-      workerSalary: [''],
-      workerYearVacation: [''],
-      workerCheckIN: [''],
-      workerCheckOut: [''],
-    });
+    this.workerData = new FormGroup({
+      workerId: new FormControl(''),
+      workerName: new FormControl('', [Validators.required, Validators.minLength(5), Validators.maxLength(100)]),
+      workerTell: new FormControl('', [Validators.required, Validators.minLength(11), Validators.maxLength(11)]),
+      workerAdd: new FormControl('', [Validators.required, Validators.minLength(5), Validators.maxLength(100)]),
+      workerJopCateg: new FormControl('', [Validators.required]),
+      workerJop: new FormControl('', [Validators.required]),
+      workerFbCode: new FormControl('', [Validators.required]),
+      workerJopDate: new FormControl(''),
+      workerSalary: new FormControl('', [Validators.required]),
+      workerYearVacation: new FormControl(''),
+      workerCheckIN: new FormControl('', [Validators.required]),
+      workerCheckOut: new FormControl('', [Validators.required]),
+    })
+    /*
     this.workerDataView = {
       workerId: null,
       workerName: null,
@@ -205,7 +269,7 @@ export class WorkersComponent implements OnInit {
       workerYearVacation: null,
       workerCheckIN: null,
       workerCheckOut: null,
-    };
+    };*/
   };
 
   // CRUD Functions
@@ -217,13 +281,13 @@ export class WorkersComponent implements OnInit {
       this._service.clearForm();
       //location.reload();
     } else if (this.addBtnVal == 'تعديل') {
-      this._service.updateWorkerSer(this.workerDataView).subscribe(() => {
+      this._service.updateWorkerSer(this.workerData.value).subscribe(() => { //view
         this.showWorkerEnquiry()
         //location.reload();
       },
         error => {
           alert(error);
-          console.log(this.workerDataView);
+          console.log(this.workerData.value);
         });
     };
   };
@@ -231,7 +295,8 @@ export class WorkersComponent implements OnInit {
   askForDelete(worker: Worker) {
     $('.fadeLayer').show(0)
     $('.askForDelete').addClass('animate')
-    this.workerDataView = worker;
+    this.putWorkerDataValue(worker);
+    console.log(this.workerData.value)
   };
 
   showUpdateWorker(worker: Worker) {
@@ -239,17 +304,20 @@ export class WorkersComponent implements OnInit {
     $('#addWorker').show();
     $('#addNewWorkerBtn').html('تعديل');
     $('#addWorker h2:first').html('تعديل بيانات موظف');
-    this.workerDataView = worker;
+    //console.log(worker)
+    //this.workerDataView = worker;
     $('#showAddWorkerBtn').removeClass('btn-light').addClass('btn-info').animate({ fontSize: '1em' }, 50);
     $('#workerEnquirybtn').removeClass('btn-light').addClass('btn-info').animate({ fontSize: '1em' }, 50);
     $('#workerSearch').hide(100)
+    console.log(this.workerData.controls)
+    this.putWorkerDataValue(worker);
   };
 
   deletWorker() {
     $('.fadeLayer').hide()
-    this._service.deleteWorkerSer(this.workerDataView.workerId)
+    this._service.deleteWorkerSer(this.workerData.value.workerId)
       .subscribe(data => {
-        this.workers = this.workers.filter(u => u !== this.workerDataView)
+        this.workers = this.workers.filter(u => u !== this.workerData.value)
       });
   };
 
@@ -266,7 +334,8 @@ export class WorkersComponent implements OnInit {
   };
 
   showWorkerCard(worker: Worker) {
-    this.workerDataView = worker;
+    this.putWorkerDataValue(worker);
+    //this.workerDataView = worker;
     $('#showAddWorkerBtn').removeClass('btn-light').addClass('btn-info').animate({ fontSize: '1em' }, 50);
     $('#workerEnquirybtn').removeClass('btn-light').addClass('btn-info').animate({ fontSize: '1em' }, 50);
     $('.workerClass').not('#workerDetails').hide();
@@ -283,7 +352,8 @@ export class WorkersComponent implements OnInit {
   };
 
   showSalaryCount(worker: Worker) {
-    this.workerDataView = worker;
+    this.putWorkerDataValue(worker);
+    //this.workerDataView = worker;
     $('#salaryCount h4:first').val(worker.workerCheckIN);
     $('#salaryCount h4:first').next().val(worker.workerCheckOut);
     $('#salaryCount h4:first').next().next().val(worker.workerSalary);
@@ -298,7 +368,7 @@ export class WorkersComponent implements OnInit {
       this.dailyResultDArry[i] = 0;
     };
     this.total = 0; this.netSalary = 0; this.counter = 0; this.net = 0; this.totalDisc = 0; // reset values
-   
+
     this.snd = worker.workerCheckIN; this.thrd = worker.workerCheckIN; this.forth = worker.workerCheckIN; this.fif = worker.workerCheckIN; this.six = worker.workerCheckIN; this.sev = worker.workerCheckIN // checkIn variables
     this.sndO = worker.workerCheckOut; this.thrdO = worker.workerCheckOut; this.forthO = worker.workerCheckOut; this.fifO = worker.workerCheckOut; this.sixO = worker.workerCheckOut; this.sevO = worker.workerCheckOut // checkOut variables
   }
@@ -317,8 +387,8 @@ export class WorkersComponent implements OnInit {
   };
 
   mathWorkerInfo() {
-    let checkIn = this.workerDataView.workerCheckIN
-    let checkOut = this.workerDataView.workerCheckOut
+    let checkIn = this.workerData.value.workerCheckIN
+    let checkOut = this.workerData.value.workerCheckOut
     let startHour = checkIn.split(":");
     let endHour = checkOut.split(":");
     let inH: number = parseInt(startHour[0]);
@@ -411,7 +481,7 @@ export class WorkersComponent implements OnInit {
         if (timeOutArry[i] < timeStartArr[i]) { // handle 24 hour
           timeOutArry[i] = timeOut
         }
-        this.minutesOArry[i] = this.diff_minutes( timeOutArry[i] , endTimeOut)
+        this.minutesOArry[i] = this.diff_minutes(timeOutArry[i], endTimeOut)
       }
     }; //console.log('timeOutArry : ' + timeOutArry[1], 'timeStartArr : ' + timeStartArr[1])
 
@@ -521,7 +591,7 @@ export class WorkersComponent implements OnInit {
     }
     this.netSalary = Math.floor(this.total - this.moneyOut);
 
-    
+
   } // calc()
 
   reCount() {

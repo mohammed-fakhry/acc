@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ServicesService } from 'src/app/services.service';
 import { StocksService } from '../../the-stocks/stocks.service';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validator, FormControl } from '@angular/forms';
 import { HandleBackEnd } from 'src/app/handle-back-end';
 import { StockPridge } from '../../stock-pridge';
 import { CustomerService } from 'src/app/customer.service';
@@ -22,11 +22,19 @@ export class AddToStockPermissionComponent implements OnInit {
   customers: Customer[]
   addToStockPremData: FormGroup;
   invoiceInp = new InvoiceInp()
+  newinvoiceInp = {}
   invoiceInpArry: any[] = [];
   totalInvoice: any[];
+  searchTxt:string;
 
-  constructor(private _stockService: StocksService, private formBuilder: FormBuilder,
-    private _service: ServicesService, private _custService: CustomerService, private _theStockComp: TheStocksComponent) { }
+  invoiceData = new FormGroup({
+    theStock : new FormControl(''),
+    theCustomer: new FormControl(''),
+    theNote: new FormControl(''),
+  })
+
+  constructor(public _stockService: StocksService, public formBuilder: FormBuilder,
+    public _service: ServicesService, public _custService: CustomerService, public _theStockComp: TheStocksComponent) { }
 
   ngOnInit() {
 
@@ -47,7 +55,7 @@ export class AddToStockPermissionComponent implements OnInit {
 
   } // ngOnInit
 
-
+  productArr: any[] = [];
 
 
   sumArry(arr: any[]) {
@@ -62,7 +70,37 @@ export class AddToStockPermissionComponent implements OnInit {
     this.invoiceInp = new InvoiceInp();
     this.invoiceInp.total = 0;
     this.invoiceInpArry.push(this.invoiceInp);
+    console.log(this.invoiceInpArry)
     //console.log(this.invoiceInp)
+  }
+
+  isAddInvVaild: boolean = false;
+
+  isAddNameVaild() { // inputValidation
+
+    for (let i = 0 ; i < this.invoiceInpArry.length ; i ++) {
+      let productinpt = $(`#product${i}`).val();
+      if(this.productArr.includes(productinpt) || productinpt == '') {
+        this.invoiceInpArry[i].inpVaild = false;
+      } else {
+        this.invoiceInpArry[i].inpVaild = true;
+      }
+    }
+    
+    for (let i = 0 ; i < this.invoiceInpArry.length ; i ++) {
+      if (this.invoiceInpArry[i].inpVaild == true) {
+        this.isAddInvVaild = true;
+        break
+      } else {
+        this.isAddInvVaild = false;
+      }
+    }
+    console.log(this._stockService.allProducts)
+  }
+
+  inptDisabled: boolean = true;
+  stockChanged() {
+    this.inptDisabled = false;
   }
 
   invoiceTotal: string = '0';
@@ -70,6 +108,8 @@ export class AddToStockPermissionComponent implements OnInit {
     this.totalInvoice = []
     this.invoiceTotal = '0'
     for (let i = 0; i < this.invoiceInpArry.length; i++) {
+      // Qty change
+      //$(`#qty${i}`)
       if (this.invoiceInpArry[i].qty == null || this.invoiceInpArry[i].price == null) {
         this.invoiceInpArry[i].total = 0;
         //console.log(this.invoiceInpArry[i].qty)
@@ -82,6 +122,7 @@ export class AddToStockPermissionComponent implements OnInit {
     let total: any = this.sumArry(this.totalInvoice)
     this.invoiceTotal = total;
     //$('#invoiceTotal').html(`اجمالى الفاتورة : ${total}`)
+    console.log(this._stockService.handleBackEnd)
   }
 
   theStockId: number;
@@ -132,7 +173,7 @@ export class AddToStockPermissionComponent implements OnInit {
 
   theNote: string;
   theStockTransactionId: string;
-  
+
   ivoiceItemesForEdit: any[]; /* = [{
     stockTransactionId: '',
     stockTransactionDetailsId: "",
@@ -161,6 +202,9 @@ export class AddToStockPermissionComponent implements OnInit {
       productCost: 0, //
       productPrice: 0,
     }
+    let productTotalsPriceAvr: number;
+    let minOldTotal: number; // to get back the old priceAvr
+    let allProductQty: number;
 
     if (BtnSubmitHtml == "تعديل الفاتورة") {
 
@@ -179,13 +223,17 @@ export class AddToStockPermissionComponent implements OnInit {
 
                 postStockPridgeObj.productId = theProductId; // for edit and add
                 postStockPridgeObj.stockId = this.theStockId; // for edit and add
-                //productTotalsPriceAvr = (this._stockService.handleBackEnd[hE].productCost * this._stockService.handleBackEnd[hE].productQty)
-                //+ (parseInt(this.ivoiceItemesForEdit[v].price) * parseInt(this.ivoiceItemesForEdit[v].Qty));
-                //allProductQty = this._stockService.handleBackEnd[hE].productQty + parseInt(this.ivoiceItemesForEdit[v].Qty);
-                //postStockPridgeObj.productCost = Math.floor(productTotalsPriceAvr / allProductQty) // price avarage
+
+                allProductQty = this._stockService.handleBackEnd[hE].productQty - parseInt(this.ivoiceItemesForEdit[v].Qty);
+                productTotalsPriceAvr = (this._stockService.handleBackEnd[hE].productCost * this._stockService.handleBackEnd[hE].productQty)
+                  - (parseInt(this.ivoiceItemesForEdit[v].price) * parseInt(this.ivoiceItemesForEdit[v].Qty));
+
+                postStockPridgeObj.productCost = Math.floor(productTotalsPriceAvr / allProductQty) // price avarage
                 postStockPridgeObj.stockProductId = this._stockService.handleBackEnd[hE].stockProductId;
                 postStockPridgeObj.productQty = this._stockService.handleBackEnd[hE].productQty - parseInt(this.ivoiceItemesForEdit[v].Qty);
                 this._stockService.handleBackEnd[hE].productQty = postStockPridgeObj.productQty;
+                this._stockService.handleBackEnd[hE].productCost = postStockPridgeObj.productCost;
+
                 this._stockService.updateStockPridge(postStockPridgeObj).subscribe() // for stocks DB
               }
             }
@@ -256,7 +304,6 @@ export class AddToStockPermissionComponent implements OnInit {
 
           if (this.invoiceInpArry[i].product == this._stockService.allProducts[s].productName) {
             theProductId = this._stockService.allProducts[s].productId;
-            console.log(this._stockService.handleBackEnd.length + ' : this._stockService.handleBackEnd.length')
 
             // for the first invoice *********************************************************************************************
             if (this._stockService.handleBackEnd.length == 0) { // if the product isn't in theStock's DataBase
@@ -308,9 +355,17 @@ export class AddToStockPermissionComponent implements OnInit {
                 if (BtnSubmitHtml == "تعديل الفاتورة") {
                   stockTransactionD.stockTransactionDetailsId = this.invoiceInpArry[i].stockTransactionDetailsId;
                   this._stockService.UpdateStockTransactionDetails(stockTransactionD).subscribe();
-
+                  if (stockTransactionD.stockTransactionDetailsId == undefined) {
+                    this._stockService.creatStockTransactionDetails(stockTransactionD).subscribe(); // for invoice DB 
+                  }
+                  // if not productName to delete stocktransactionDetail
+                  for (let d = 0 ; d < this.invoiceInpArry.length ; d ++) {
+                    if (this.invoiceInpArry[d].stockTransactionDetailsId !== undefined && this.invoiceInpArry[d].product == '') {
+                      this._stockService.deleteStockTransactionDetails(this.invoiceInpArry[d].stockTransactionDetailsId).subscribe();
+                    }
+                  }
                 } else if (BtnSubmitHtml == "تسجيل") {
-                  this._stockService.creatStockTransactionDetails(stockTransactionD).subscribe() // for invoice DB 
+                  this._stockService.creatStockTransactionDetails(stockTransactionD).subscribe(); // for invoice DB 
 
                 }
 
@@ -358,6 +413,15 @@ export class AddToStockPermissionComponent implements OnInit {
   }
 
   showAddNewInvoice() {
+    
+    this._theStockComp.testBackend(); // to make stockArry
+    this.productArr = []
+    this.invoiceTotal = "0"
+    console.log(this._stockService.makeStockArry)
+    for (let p = 0 ; p <  this._stockService.allProducts.length ; p ++) {
+      this.productArr.push(this._stockService.allProducts[p].productName)
+    }
+
     let callInvoiceBtnVal: string = $('#callInvoiceBtn').html()
     this.invoiceInpArry = [];
     this.ivoiceItemesForEdit = [];
@@ -365,6 +429,8 @@ export class AddToStockPermissionComponent implements OnInit {
     for (let i = 0; i < 7; i++) {
       this.invoiceInp = new InvoiceInp()
       this.invoiceInp.total = 0;
+      this.invoiceInp.inpVaild = false;
+      this.invoiceInp.Qtyinvaild = false;
       this.invoiceInpArry.push(this.invoiceInp);
     }
 
@@ -374,10 +440,13 @@ export class AddToStockPermissionComponent implements OnInit {
       $('#addNewInvoicetBtn').html("تسجيل")
       $('#stockTransactionId').val('')
       this.resetAddinvoiceValu()
+      this.inptDisabled = true;
+      this.isAddInvVaild = true;
     } else if (callInvoiceBtnVal == "بحث") {
       // add fildes if the inputArry < invoiceArry
       $('#addNewInvoicetBtn').html("تعديل الفاتورة")
-
+      this.inptDisabled = false;
+      //this.isAddInvVaild = true;
       for (let i = 0; i < this._stockService.makeInvoiceArry.length; i++) { // add fields if the invoice details > 7 inpts
         if (this._stockService.makeInvoiceArry[i].invoiceSearchVal == this.searchInVal) {
           //console.log(this.invoiceInpArry.length);
@@ -396,9 +465,7 @@ export class AddToStockPermissionComponent implements OnInit {
         if (this._stockService.makeInvoiceArry[i].invoiceSearchVal == this.searchInVal) {
           console.log(this._stockService.makeInvoiceArry[i].stockTransactionId)
           $('#stockTransactionId').val(this._stockService.makeInvoiceArry[i].stockTransactionId)
-
           for (let d = 0; d < this._stockService.makeInvoiceArry[i].invoiceDetails.length; d++) {
-
             this.ivoiceItemesForEdit.push(this._stockService.makeInvoiceArry[i].invoiceDetails[d])
             this.invoiceInpArry[d].stockTransactionDetailsId = this._stockService.makeInvoiceArry[i].invoiceDetails[d].stockTransactionDetailsId;
             this.invoiceInpArry[d].product = this._stockService.makeInvoiceArry[i].invoiceDetails[d].productName;
@@ -413,15 +480,15 @@ export class AddToStockPermissionComponent implements OnInit {
       $('#callInvoice').hide();
       $('#addInvoiceForm').show();
       this.calcTotals();
-      
+
     }
 
   } // showAddNewInvoice
 
-  
+
 
   testBtn() {
-    console.log(this.invoiceInpArry)
+
   }
 
 } // end

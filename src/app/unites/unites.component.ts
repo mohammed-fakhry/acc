@@ -22,7 +22,8 @@ export class UnitesComponent implements OnInit {
   remainPrice: number;
   remainPaid: number;
   preMoneyResult: number;
-
+  searchTxt:string;
+  
   // addUnit vars
   unitData: FormGroup;
   unitDataView: UnitData;
@@ -35,9 +36,9 @@ export class UnitesComponent implements OnInit {
     this.remainPrice = this.totalPrice - this.preMoneyResult;
     this.remainPaid = Math.ceil(this.remainPrice / this.years / 12);
   }
-  constructor(private router: Router, private logService: LoginService,
-     private formBuilder: FormBuilder , private unitService: UnitService,
-     private _service: ServicesService) { }
+  constructor(public router: Router, public logService: LoginService,
+     public formBuilder: FormBuilder , public unitService: UnitService,
+     public _service: ServicesService) { }
 
   ngOnInit() {
     

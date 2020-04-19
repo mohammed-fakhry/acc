@@ -10,8 +10,8 @@ import { TheStocksComponent } from '../the-stocks.component';
 })
 export class EnquireStocksComponent implements OnInit {
 
-  constructor(private _stockService: StocksService,
-    private _theStocksComponent:TheStocksComponent) { }
+  constructor(public _stockService: StocksService,
+    public _theStocksComponent:TheStocksComponent) { }
 
   ngOnInit() {
     // hide Fade layer

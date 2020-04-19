@@ -13,8 +13,8 @@ export class AddProductsComponent implements OnInit {
   
   productData: FormGroup;
 
-  constructor(private _stockService: StocksService, private formBuilder: FormBuilder,
-    private _service: ServicesService) { }
+  constructor(public _stockService: StocksService, public formBuilder: FormBuilder,
+    public _service: ServicesService) { }
 
   ngOnInit() {
 

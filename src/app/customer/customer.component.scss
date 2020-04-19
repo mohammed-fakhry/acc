@@ -5,3 +5,15 @@
     z-index: 1000;
     background-color: white;
 }
+
+#minFrmStockPrem {
+    // display: none;
+     margin-top: 10%;
+     z-index: 1000;
+     background-color: white;
+     transform: scale(.75);
+     transition: .09s;
+ }
+ #minFrmStockPrem.animate {
+     transform: scale(1);
+ }

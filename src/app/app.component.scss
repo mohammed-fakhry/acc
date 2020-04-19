@@ -2,13 +2,14 @@ body {
     position: relative;    
 }
 
-
 #app-side-bar {
+    background-color: rgb(241, 242, 246);
     position: fixed;
     right: 0;
     width: 8.33%;
     //height: 100%;
-    //bottom: 0;
+    top: 0;
+    bottom: 0;
 }
 
 /*

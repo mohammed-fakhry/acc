@@ -2,12 +2,20 @@ import { Injectable } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Worker} from './worker'
 import { WorkerRules } from './worker-rules';
+import { Router } from '@angular/router';
+import { StocksService } from './accountings/stocks/the-stocks/stocks.service';
+
 @Injectable({
   providedIn: 'root'
 })
 export class ServicesService {
   
-  constructor(private http: HttpClient) { }
+  constructor(public http: HttpClient, public router: Router, public _stockService: StocksService) { }
+
+  showAddNewInvoiceSer(invoice) {
+    this.router.navigate['stocks'];
+    
+  }
 
   clearForm() {
     $('.form-control').val('')

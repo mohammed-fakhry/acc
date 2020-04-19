@@ -38,6 +38,7 @@ export class LoginComponent implements OnInit {
 
   } // ngOnInit
 
+
   //check = localStorage.getItem('y')
   logIn() {
     for (let i = 0; i < this.users.length; i++) {
@@ -53,7 +54,8 @@ export class LoginComponent implements OnInit {
       this.logService.checkIsUser();
       //this.logService.isUser = true;
     } else { // if false
-      $('.alert').removeClass('d-none')
+      $('.form-control').addClass('is-invalid')
+      $('.invalid-feedback').removeClass('d-none')
     }
 
     console.log(this.logService.isUser)

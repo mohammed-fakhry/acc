@@ -21,7 +21,7 @@ export class MainSettingComponent implements OnInit {
     userPassword: new FormControl(),
     userPremission: new FormControl()
   })
-  constructor(private router: Router, private logService: LoginService, private formBuilder: FormBuilder) { }
+  constructor(public router: Router, public logService: LoginService, public formBuilder: FormBuilder) { }
 
   ngOnInit() {
     // first check
