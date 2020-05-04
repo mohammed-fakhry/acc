@@ -6,6 +6,7 @@ export class HandleAddPrimBE {
     customerName:string;
     customerId:number;
     stockId:number; // frm stocks table
+    sndStockId: number;
     transactionType: number; // frm the Main table
     price: number; // forign table
     Qty: number; // forign table

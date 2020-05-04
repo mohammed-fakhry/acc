@@ -209,7 +209,6 @@ export class WorkersComponent implements OnInit {
           }
         }
       }
-      console.log(this.workerData.controls.workerAdd.errors)
     })
   }
 
@@ -217,14 +216,11 @@ export class WorkersComponent implements OnInit {
   updateSetting() {
     this.showWorkerEnquiry()
     this._service.updateWorkerRulesSer(this.WorkerRuleResult).subscribe(() => {
-      //console.log(this.WorkerRuleResult);
       this.showWorkerEnquiry()
       location.reload()
-      //console.log('data : ' + this.workerData.value, "view : " + this.workerDataView)
     },
       error => {
         alert(error);
-        //console.log(this.workerDataView);
       });
   }
 
@@ -232,7 +228,6 @@ export class WorkersComponent implements OnInit {
     this._service.getWorkerRules().subscribe((dataRules: WorkerRules[]) => {
       this.rulesFromSql = dataRules;
     });
-    console.log(this.logService.isUser)
     $('#showAddWorkerBtn').removeClass('btn-light').addClass('btn-info').animate({ fontSize: '1em' }, 50);
     $('#workerEnquirybtn').removeClass('btn-light').addClass('btn-info').animate({ fontSize: '1em' }, 50);
     $('.workerClass').not('#workerSetting').hide();
@@ -279,15 +274,14 @@ export class WorkersComponent implements OnInit {
       this._service.creatEmployee(this.workerData.value)
         .subscribe()
       this._service.clearForm();
-      //location.reload();
+      location.reload();
     } else if (this.addBtnVal == 'تعديل') {
       this._service.updateWorkerSer(this.workerData.value).subscribe(() => { //view
-        this.showWorkerEnquiry()
-        //location.reload();
+        //this.showWorkerEnquiry()
+        location.reload();
       },
         error => {
           alert(error);
-          console.log(this.workerData.value);
         });
     };
   };
@@ -296,7 +290,6 @@ export class WorkersComponent implements OnInit {
     $('.fadeLayer').show(0)
     $('.askForDelete').addClass('animate')
     this.putWorkerDataValue(worker);
-    console.log(this.workerData.value)
   };
 
   showUpdateWorker(worker: Worker) {
@@ -304,12 +297,10 @@ export class WorkersComponent implements OnInit {
     $('#addWorker').show();
     $('#addNewWorkerBtn').html('تعديل');
     $('#addWorker h2:first').html('تعديل بيانات موظف');
-    //console.log(worker)
     //this.workerDataView = worker;
     $('#showAddWorkerBtn').removeClass('btn-light').addClass('btn-info').animate({ fontSize: '1em' }, 50);
     $('#workerEnquirybtn').removeClass('btn-light').addClass('btn-info').animate({ fontSize: '1em' }, 50);
     $('#workerSearch').hide(100)
-    console.log(this.workerData.controls)
     this.putWorkerDataValue(worker);
   };
 
@@ -402,7 +393,6 @@ export class WorkersComponent implements OnInit {
     }
     let diffD: number = this.endTimeD.getTime() - this.startTimeD.getTime();
     this.netMinutes = Math.floor(diffD / 1000 / 60);
-    //console.log('net minutes : ' + this.netMinutes)
   }
 
 
@@ -483,7 +473,7 @@ export class WorkersComponent implements OnInit {
         }
         this.minutesOArry[i] = this.diff_minutes(timeOutArry[i], endTimeOut)
       }
-    }; //console.log('timeOutArry : ' + timeOutArry[1], 'timeStartArr : ' + timeStartArr[1])
+    };
 
     // start minutes result
     for (let i = 0; i < weekDays; i++) {
@@ -494,7 +484,7 @@ export class WorkersComponent implements OnInit {
       } else {
         this.checkInDailyMinutes[i] = this.minutesArry[i]
       }
-    }; //console.log('minutesArry : ' + this.minutesArry[1])
+    };
     // end minutes result
     for (let i = 0; i < weekDays; i++) {
       if (this.condTest.includes(this.CheckOutInputsArry[i])) {

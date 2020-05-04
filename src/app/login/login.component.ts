@@ -31,7 +31,6 @@ export class LoginComponent implements OnInit {
       this.logService.checkIsUser();
     }*/
 
-    console.log(this.logService.isUser)
     if (this.logService.isUser == true) {
       this.router.navigate(['/home'])
     }
@@ -58,7 +57,6 @@ export class LoginComponent implements OnInit {
       $('.invalid-feedback').removeClass('d-none')
     }
 
-    console.log(this.logService.isUser)
   } // logIn
 
 } // end -----

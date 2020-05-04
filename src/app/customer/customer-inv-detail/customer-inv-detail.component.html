@@ -1,4 +1,8 @@
-<div class="panel-body panel-flex-table">
+<div class="panel-body panel-flex-table" id="custInvDetTable">
+    <div class="d-flex justify-content-between">
+        <h4 class="py-2">{{_customerService.invoiceKind}}</h4>
+        <h5 class="py-2">{{_customerService.date_time}}</h5>
+    </div>
     <table class="flex-table table table-striped">
         <thead class="table-dark">
             <tr>
@@ -8,7 +12,7 @@
                 <th>الاجمالى</th>
             </tr>
         </thead>
-        <tbody class=" mt-3 tableBody" style="height: 200px;">
+        <tbody class=" mt-3 tableBody" style="height: 200px; overflow: hidden;">
             <tr *ngFor="let invoice of _customerService.customerInv">
                 <td>{{invoice.productName}}</td>
                 <td>{{invoice.Qty}}</td>

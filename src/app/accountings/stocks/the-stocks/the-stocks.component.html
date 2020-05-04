@@ -1,5 +1,5 @@
 <!--fadeLayer-->
-<div class="fadeLayer">
+<div class="fadeLayer" id="theStockFadeLayer">
     <div class="container p-3 card askForDelete">
         <h3 class="p-3 bg-danger text-light">هل انت متأكد من حذف</h3>
         <h4 class="mb-2">
@@ -13,7 +13,7 @@
     </div>
 </div>
 <!--header-->
-<div class="container-fluid  p-3 card bg-light mt-3 sticky-top">
+<div class="container-fluid  p-3 card bg-light mt-3 sticky-top" id="mainStockHeader">
     <nav class="navbar navbar-light bg-light">
         <div class="form-inline">
             <h1 class="px-2" style="font-weight: bold;">المخازن</h1>
@@ -39,7 +39,7 @@
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                     <button class="dropdown-item btn-light" id="showAddToStockPrem" (click)="showAddToStockPrem()">فاتورة شراء</button>
                     <button class="dropdown-item text-danger" id="showMinToStockPrem" (click)="showMinToStockPrem()">فاتور بيع</button>
-                    <button class="dropdown-item">اذن نقل</button>
+                    <button class="dropdown-item" id="showTranceStockPrem"  (click)="showTranceStockPrem()">اذن نقل</button>
                 </div>
             </div>
             <button class="btn btn-success mx-2 d-none" id="testBtn" (click)='testbtn()'>test</button>
@@ -61,3 +61,5 @@
 <app-add-to-stock-permission class="stocksClass" id="addToStockPrem"></app-add-to-stock-permission>
 <!--minFrmStockPrem-->
 <app-min-frm-stock-permission class="stocksClass" id="minFrmStockPrem"></app-min-frm-stock-permission>
+<!--tranceFrmStockPrem-->
+<app-stoc-trance-prem class="stocksClass" id="tranceFrmStockPrem"></app-stoc-trance-prem>

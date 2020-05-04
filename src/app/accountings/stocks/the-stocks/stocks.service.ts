@@ -137,4 +137,8 @@ export class StocksService {
     return this.http.put('http://localhost/accounting/updateStocktransaction.php?id=' + stockTransaction.stockTransactionId, stockTransaction )
   }
 
+  deleteStockTransaction(id: number) {
+    return this.http.delete<StockTransactionD[]>('http://localhost/accounting/deleteInvoice.php?id=' + id)
+  }
+
 }

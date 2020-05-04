@@ -19,6 +19,8 @@ export class TheStocksComponent implements OnInit {
 
   minInvArry: any[];
   addInvArry: any[];
+  //tranceInvArry: any[];
+
   searchTxt:string;
   constructor(public router: Router, public logService: LoginService,
     public _stockService: StocksService, public _service: ServicesService) { }
@@ -40,6 +42,7 @@ export class TheStocksComponent implements OnInit {
     // getHandleAddtoStockPrimList
     this._stockService.getHandleAddtoStockPrimList().subscribe((data: HandleAddPrimBE[]) => {
       this._stockService.HandleAddtoStockPrimArry = data;
+      //console.log(this._stockService.HandleAddtoStockPrimArry + ' : data')
     })
 
     this._stockService.getProducts().subscribe((data: ProductsClass[]) => {
@@ -52,6 +55,7 @@ export class TheStocksComponent implements OnInit {
       stockProducts: [{ // as HandleBackEnd Class
         stockName: '',
         stockId: 0,
+        sndStockId: 0,
         productName: '',
         productId: 0,
         productQty: 0,
@@ -77,6 +81,7 @@ export class TheStocksComponent implements OnInit {
       stockTransactionId: null,
       stockId: null,
       stockName: '',
+      sndStockName:'',
       customerName: '',
       transactionType: null,
       notes: null,
@@ -84,9 +89,11 @@ export class TheStocksComponent implements OnInit {
         stockTransactionId: null,
         productName: null,
         stockName: '',
+        sndStockId:null,
         customerName: '',
         price: null,
         Qty: null,
+        date_time : null,
         notes: null,
       }]
     }]
@@ -108,6 +115,7 @@ export class TheStocksComponent implements OnInit {
           //console.log(this._stockService.HandleAddtoStockPrimArry[h])
           this._stockService.makeInvoiceArry[m].customerName = this._stockService.makeInvoiceArry[m].invoiceDetails[0].customerName;
           this._stockService.makeInvoiceArry[m].stockName = this._stockService.makeInvoiceArry[m].invoiceDetails[0].stockName;
+          this._stockService.makeInvoiceArry[m].sndStockId = this._stockService.makeInvoiceArry[m].invoiceDetails[0].sndStockId;
         };
       };
     };
@@ -143,6 +151,25 @@ export class TheStocksComponent implements OnInit {
       }
     }
     console.log(this.minInvArry)
+  }
+
+  makeTranceInvArry() {
+    this.CreateTheInvoiceArry();
+    this.addInvArry = [];
+    for (let i = 0 ; i < this._stockService.makeInvoiceArry.length ; i ++) {
+      if (this._stockService.makeInvoiceArry[i].transactionType == 3) {
+        for (let s = 0 ; s < this._stockService.stocks.length ; s++) {
+          if (this._stockService.makeInvoiceArry[i].sndStockId == this._stockService.stocks[s].stockId) {
+            this._stockService.makeInvoiceArry[i].sndStockName = this._stockService.stocks[s].stockName;
+            break
+          }
+        }
+        let inVal = `${this._stockService.makeInvoiceArry[i].invoiceId} - ${this._stockService.makeInvoiceArry[i].stockName} - ${this._stockService.makeInvoiceArry[i].sndStockName}`
+        this._stockService.makeInvoiceArry[i].invoiceSearchVal = inVal;
+        this.addInvArry.push(this._stockService.makeInvoiceArry[i]);
+      }
+    }
+    console.log(this.addInvArry)
   }
 
   testBackend() {
@@ -233,6 +260,8 @@ export class TheStocksComponent implements OnInit {
     //console.log(this._stockService.productsFromStockArryView)
   };
 
+
+
   showAddNewStock() {
     $('.stocksClass').not('#addNewStock').hide()
     $('#addNewStock').show()
@@ -262,9 +291,23 @@ export class TheStocksComponent implements OnInit {
     $('#callInvoice').show();
     $('#addInvoiceForm').hide();
     $('#callInvoiceBtn').html("فاتورة جديدة");
-
     this.resetBackendValues();
     this._service.clearForm()
+  }
+
+  showTranceStockPrem() {
+    this.makeTranceInvArry();
+    $('.stocksClass').not('#tranceFrmStockPrem').hide();
+    $('#tranceFrmStockPrem').show();
+    $('#stocksSearch').hide(100);
+    $('#premissionBtn').removeClass("btn-info").addClass("btn-light").animate({ fontSize: '1.5em' }, 50);
+    $('#stockBtn').removeClass('btn-light').addClass('btn-info').animate({ fontSize: '1em' }, 50);
+    $('#callTranceInvoice').show();
+    $('#tranceInvoiceForm').hide();
+    $('#callTranceInvoiceBtn').html("فاتورة جديدة");
+    this.resetBackendValues();
+    this._service.clearForm();
+    //console.log(this.tranceInvArr)
   }
 
   showMinToStockPrem() {
@@ -276,7 +319,7 @@ export class TheStocksComponent implements OnInit {
     $('#stockBtn').removeClass('btn-light').addClass('btn-info').animate({ fontSize: '1em' }, 50);
     $('#minCallInvoice').show();
     $('#minInvoiceForm').hide();
-    $('#callInvoiceBtn').html("فاتورة جديدة");
+    $('#minCallInvoiceBtn').html("فاتورة جديدة");
     this.resetBackendValues();
     this._service.clearForm();
   }

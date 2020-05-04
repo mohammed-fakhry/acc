@@ -8,6 +8,8 @@ import {Customer} from './customer'
 export class CustomerService {
 
   customerInv: any[];
+  invoiceKind: string;
+  date_time: string;
   //customerInvDetail: any;
 
   constructor(private http: HttpClient) { }

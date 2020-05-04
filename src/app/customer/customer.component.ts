@@ -21,19 +21,17 @@ export class CustomerComponent implements OnInit {
   customers: Customer[];
   //customerDataView: Customer;
   customerInvArry: any[];
-  searchCust:string;
+  searchCust: string;
   //customerInvDetail:CustomerInvArry;
 
 
   constructor(public formBuilder: FormBuilder, public _service: ServicesService, public _custService: CustomerService,
-    public router: Router, public logService: LoginService, public _stockService:StocksService) { }
+    public router: Router, public logService: LoginService, public _stockService: StocksService) { }
 
   ngOnInit() {
 
     this.logService.logStart(); this.logService.reternlog();
-    /*if (this.logService.isUser == false) {
-      this.router.navigate(['/logIn'])
-    }*/
+
     this._custService.getCustomer().subscribe((data: Customer[]) => {
       this.customers = data;
     })
@@ -59,11 +57,13 @@ export class CustomerComponent implements OnInit {
 
     $('#hideFadeLayer').click(function () {
       $('.fadeLayer').hide();
-      $('.askForDelete').removeClass('animate')
+      $('.askForDelete').removeClass('animate').hide()
     })
 
-    $(".fadeLayer").click(function() {
-      $(".fadeLayer").hide()
+    $(".fadeLayer").click(function () {
+      $(".fadeLayer").hide();
+      $('.askForDelete').removeClass('animate').hide();
+      $('#customerInvDetail').hide();
     })
 
   }
@@ -81,43 +81,50 @@ export class CustomerComponent implements OnInit {
     });
   };
 
+  customerRemain: number;
+
   makeCustomerInvArry() {
     this.customerInvArry = []
 
-    for (let i = 0 ; i < this._stockService.stockTransactionArr.length ; i ++) {
+    for (let i = 0; i < this._stockService.stockTransactionArr.length; i++) {
 
-      if(this._stockService.stockTransactionArr[i].customerId == this.customerData.value.customerId) {
+      if (this._stockService.stockTransactionArr[i].customerId == this.customerData.value.customerId) {
 
         let customerInvDetail: any = {
-          stockTransactionId:0,
-          transactionType:0,
-          invoiceTotalMin:0,
-          invoiceTotalAdd:0,
-          netTotal:0,
+          stockTransactionId: 0,
+          invoiceKind: '',
+          transactionType: 0,
+          invoiceTotalMin: 0,
+          invoiceTotalAdd: 0,
+          netTotal: 0,
         }
 
         customerInvDetail.stockTransactionId = this._stockService.stockTransactionArr[i].stockTransactionId;
         customerInvDetail.transactionType = this._stockService.stockTransactionArr[i].transactionType;
+        customerInvDetail.date_time = this._stockService.stockTransactionArr[i].date_time;
+        //date_time
         if (this._stockService.stockTransactionArr[i].transactionType == 1) {
           customerInvDetail.invoiceTotalAdd = this._stockService.stockTransactionArr[i].invoiceTotal;
+          customerInvDetail.invoiceKind = 'فاتورة شراء'
           customerInvDetail.invoiceTotalMin = 0;
         } else if (this._stockService.stockTransactionArr[i].transactionType == 2) {
           customerInvDetail.invoiceTotalMin = this._stockService.stockTransactionArr[i].invoiceTotal;
+          customerInvDetail.invoiceKind = 'فاتورة بيع'
           customerInvDetail.invoiceTotalAdd = 0;
         }
-        
+
         this.customerInvArry.push(customerInvDetail)
       };
     };
 
     console.log(this.customerInvArry)
 
-    for (let c = 0 ; c < this.customerInvArry.length; c++) {
+    for (let c = 0; c < this.customerInvArry.length; c++) {
 
       if (c == 0) {
-        this.customerInvArry[c].netTotal = parseInt(this.customerInvArry[c].invoiceTotalMin) -  parseInt(this.customerInvArry[c].invoiceTotalAdd);
+        this.customerInvArry[c].netTotal = parseInt(this.customerInvArry[c].invoiceTotalMin) - parseInt(this.customerInvArry[c].invoiceTotalAdd);
       } else {
-        this.customerInvArry[c].netTotal = parseInt(this.customerInvArry[c-1].netTotal) - parseInt(this.customerInvArry[c].invoiceTotalAdd) + parseInt(this.customerInvArry[c].invoiceTotalMin)
+        this.customerInvArry[c].netTotal = parseInt(this.customerInvArry[c - 1].netTotal) - parseInt(this.customerInvArry[c].invoiceTotalAdd) + parseInt(this.customerInvArry[c].invoiceTotalMin)
       }
     }
 
@@ -125,16 +132,19 @@ export class CustomerComponent implements OnInit {
 
   showCustomerInvoice(invoice) {
 
+    let sectionPosition = $("#customerInvDetail").offset().top;
+    $("html , body").animate({ scrollTop: sectionPosition }, 150);
+
     this._custService.customerInv = [];
 
     //console.log(invoice)
-    for (let i = 0 ; i < this._stockService.HandleAddtoStockPrimArry.length ; i++) {
+    for (let i = 0; i < this._stockService.HandleAddtoStockPrimArry.length; i++) {
 
       let customerInvDetail = {
-        productName:'',
+        productName: '',
         price: 0,
-        Qty:0,
-        total:0
+        Qty: 0,
+        total: 0
       }
 
       if (this._stockService.HandleAddtoStockPrimArry[i].stockTransactionId == invoice.stockTransactionId) {
@@ -145,9 +155,11 @@ export class CustomerComponent implements OnInit {
         this._custService.customerInv.push(customerInvDetail)
       }
     }
-    
-    console.log(this._custService.customerInv)
-    
+    this._custService.invoiceKind = invoice.invoiceKind;
+    this._custService.date_time = invoice.date_time
+
+    console.log(invoice)
+
     $('.fadeLayer').show(0);
     $('#customerInvDetail').show()
   }
@@ -163,7 +175,7 @@ export class CustomerComponent implements OnInit {
       location.reload();
     } else if (addBtnVal == 'تعديل') {
       this._custService.updateCustomerSer(this.customerData.value).subscribe(() => {
-        console.log(this.customerData.value, /*this.customerDataView*/);
+        console.log(this.customerData.value);
         this.showCustomerEnquiry();
         location.reload();
       },

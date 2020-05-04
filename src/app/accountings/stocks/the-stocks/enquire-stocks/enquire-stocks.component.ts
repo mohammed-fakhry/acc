@@ -16,7 +16,8 @@ export class EnquireStocksComponent implements OnInit {
   ngOnInit() {
     // hide Fade layer
     $('#hideFadeLayer').click(function () {
-      $('.fadeLayer').hide()
+      //$('.fadeLayer').hide()
+      $('#theStockFadeLayer').hide()
       $('.askForDelete').removeClass('animate')
     })
 
@@ -25,7 +26,8 @@ export class EnquireStocksComponent implements OnInit {
   } // ngOnInit
 
   askForDelete(stock: Stock) {
-    $('.fadeLayer').show(0);
+    //$('.fadeLayer').show(0);
+    $('#theStockFadeLayer').show(0)
     $('.askForDelete').addClass('animate');
     this._stockService.stockDataView = stock;
   };

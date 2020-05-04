@@ -17,6 +17,24 @@ export class ServicesService {
     
   }
 
+  printThis(show: string, hide1:string, hide2:string, hide3:string) {
+
+    $(show).addClass('wideScreen');
+    $('#app-side-bar').hide();
+    if (hide1 != '') {
+      $(hide1).hide();
+    }
+    if (hide2 != '') {
+      $(hide2).hide();
+    }
+    if (hide3 !='') {
+      $(hide3).hide();
+    }
+    $('#mainStockHeader').hide();
+    $('.vaildAlert').hide();
+
+  }
+
   clearForm() {
     $('.form-control').val('')
   };

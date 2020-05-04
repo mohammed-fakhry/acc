@@ -25,13 +25,15 @@ export class AddToStockPermissionComponent implements OnInit {
   newinvoiceInp = {}
   invoiceInpArry: any[] = [];
   totalInvoice: any[];
-  searchTxt:string;
+  searchTxt: string;
 
   invoiceData = new FormGroup({
-    theStock : new FormControl(''),
+    theStock: new FormControl(''),
     theCustomer: new FormControl(''),
     theNote: new FormControl(''),
-  })
+  });
+
+  deleteInvBtnDisabled: boolean;
 
   constructor(public _stockService: StocksService, public formBuilder: FormBuilder,
     public _service: ServicesService, public _custService: CustomerService, public _theStockComp: TheStocksComponent) { }
@@ -53,6 +55,11 @@ export class AddToStockPermissionComponent implements OnInit {
       this._stockService.stockTransactionDetailsArr = data;
     })
 
+    $('#hideFadeLayerAP').click(function () {
+      $('#fadeLayerAP').hide();
+      $('.askForDelete').removeClass('animate')
+    })
+
   } // ngOnInit
 
   productArr: any[] = [];
@@ -67,27 +74,26 @@ export class AddToStockPermissionComponent implements OnInit {
   };
 
   addFilds() {
+    this.deleteInvBtnDisabled = true;
     this.invoiceInp = new InvoiceInp();
     this.invoiceInp.total = 0;
     this.invoiceInpArry.push(this.invoiceInp);
-    console.log(this.invoiceInpArry)
-    //console.log(this.invoiceInp)
   }
 
   isAddInvVaild: boolean = false;
 
   isAddNameVaild() { // inputValidation
-
-    for (let i = 0 ; i < this.invoiceInpArry.length ; i ++) {
+    this.deleteInvBtnDisabled = true;
+    for (let i = 0; i < this.invoiceInpArry.length; i++) {
       let productinpt = $(`#product${i}`).val();
-      if(this.productArr.includes(productinpt) || productinpt == '') {
+      if (this.productArr.includes(productinpt) || productinpt == '') {
         this.invoiceInpArry[i].inpVaild = false;
       } else {
         this.invoiceInpArry[i].inpVaild = true;
       }
     }
-    
-    for (let i = 0 ; i < this.invoiceInpArry.length ; i ++) {
+
+    for (let i = 0; i < this.invoiceInpArry.length; i++) {
       if (this.invoiceInpArry[i].inpVaild == true) {
         this.isAddInvVaild = true;
         break
@@ -95,16 +101,26 @@ export class AddToStockPermissionComponent implements OnInit {
         this.isAddInvVaild = false;
       }
     }
-    console.log(this._stockService.allProducts)
   }
 
+  stockNameVaild: boolean;
   inptDisabled: boolean = true;
+
   stockChanged() {
-    this.inptDisabled = false;
+    this.deleteInvBtnDisabled = true;
+    if ($('#stockNameForAdd').val() == '-') {
+      this.stockNameVaild = true;
+      this.inptDisabled = true;
+    } else {
+      this.stockNameVaild = false;
+      this.inptDisabled = false;
+    }
   }
 
   invoiceTotal: string = '0';
   calcTotals() {
+    this.deleteInvBtnDisabled = true;
+    this.inptDisabled = false;
     this.totalInvoice = []
     this.invoiceTotal = '0'
     for (let i = 0; i < this.invoiceInpArry.length; i++) {
@@ -112,17 +128,15 @@ export class AddToStockPermissionComponent implements OnInit {
       //$(`#qty${i}`)
       if (this.invoiceInpArry[i].qty == null || this.invoiceInpArry[i].price == null) {
         this.invoiceInpArry[i].total = 0;
-        //console.log(this.invoiceInpArry[i].qty)
         this.totalInvoice.push(this.invoiceInpArry[i].total)
       } else {
-        this.invoiceInpArry[i].total = this.invoiceInpArry[i].qty * this.invoiceInpArry[i].price
+        this.invoiceInpArry[i].total = this.invoiceInpArry[i].qty * this.invoiceInpArry[i].price;
         this.totalInvoice.push(this.invoiceInpArry[i].total)
       }
     }
     let total: any = this.sumArry(this.totalInvoice)
     this.invoiceTotal = total;
     //$('#invoiceTotal').html(`اجمالى الفاتورة : ${total}`)
-    console.log(this._stockService.handleBackEnd)
   }
 
   theStockId: number;
@@ -168,7 +182,6 @@ export class AddToStockPermissionComponent implements OnInit {
     } else {
       $('#callInvoiceBtn').html("بحث")
     }
-    //console.log(this.searchInVal);
   };
 
   theNote: string;
@@ -227,21 +240,49 @@ export class AddToStockPermissionComponent implements OnInit {
                 allProductQty = this._stockService.handleBackEnd[hE].productQty - parseInt(this.ivoiceItemesForEdit[v].Qty);
                 productTotalsPriceAvr = (this._stockService.handleBackEnd[hE].productCost * this._stockService.handleBackEnd[hE].productQty)
                   - (parseInt(this.ivoiceItemesForEdit[v].price) * parseInt(this.ivoiceItemesForEdit[v].Qty));
-
-                postStockPridgeObj.productCost = Math.floor(productTotalsPriceAvr / allProductQty) // price avarage
+                if (allProductQty == 0) {
+                  postStockPridgeObj.productCost = this._stockService.handleBackEnd[hE].productCost;
+                } else {
+                  postStockPridgeObj.productCost = Math.floor(productTotalsPriceAvr / allProductQty) // price avarage
+                }
                 postStockPridgeObj.stockProductId = this._stockService.handleBackEnd[hE].stockProductId;
                 postStockPridgeObj.productQty = this._stockService.handleBackEnd[hE].productQty - parseInt(this.ivoiceItemesForEdit[v].Qty);
+
                 this._stockService.handleBackEnd[hE].productQty = postStockPridgeObj.productQty;
                 this._stockService.handleBackEnd[hE].productCost = postStockPridgeObj.productCost;
-
                 this._stockService.updateStockPridge(postStockPridgeObj).subscribe() // for stocks DB
               }
             }
           }
         }
       }
+
     }
   } // editStockQtys
+
+  dateNow: any;
+  day: any;
+  month: any;
+  year: any;
+  fullDate: any;
+  hour: any;
+  minutes: any;
+  fullTime: any;
+  date_time: any;
+
+  makeTime_date(currentDate) {
+    this.dateNow = currentDate // new Date();
+    this.day = this.dateNow.getDate();
+    this.month = this.dateNow.getMonth();
+    this.year = this.dateNow.getFullYear();
+    this.fullDate = this.day + '-' + this.month + '-' + this.year
+    this.hour = this.dateNow.getHours();
+    this.minutes = this.dateNow.getMinutes();
+    this.fullTime = this.hour + ':' + this.minutes
+    this.fullDate.toString();
+    this.fullTime.toString()
+    this.date_time = this.fullDate + ' ' + this.fullTime
+  }
 
   makeAddStockPremArry() {
 
@@ -278,9 +319,11 @@ export class AddToStockPermissionComponent implements OnInit {
     let stockTransaction: StockTransaction = {
       stockTransactionId: Date.now().toString(),
       stockId: this.theStockId,
+      sndStockId: 11,
       customerId: this.theCustomerId,
       transactionType: 1,
       invoiceTotal: parseInt(this.invoiceTotal),
+      date_time: this.date_time,
       notes: this.theNote,
     }
 
@@ -308,8 +351,6 @@ export class AddToStockPermissionComponent implements OnInit {
             // for the first invoice *********************************************************************************************
             if (this._stockService.handleBackEnd.length == 0) { // if the product isn't in theStock's DataBase
 
-              console.log('newProduct');
-
               postStockPridgeObj.productId = theProductId;
               postStockPridgeObj.stockId = this.theStockId;
               postStockPridgeObj.productQty = parseInt(this.invoiceInpArry[i].qty);
@@ -332,7 +373,6 @@ export class AddToStockPermissionComponent implements OnInit {
 
               if (theProductId == this._stockService.handleBackEnd[h].productId &&
                 this.theStockId == this._stockService.handleBackEnd[h].stockId) {
-                console.log('ok')
 
                 postStockPridgeObj.productId = theProductId; // for edit and add
                 postStockPridgeObj.stockId = this.theStockId; // for edit and add
@@ -359,14 +399,13 @@ export class AddToStockPermissionComponent implements OnInit {
                     this._stockService.creatStockTransactionDetails(stockTransactionD).subscribe(); // for invoice DB 
                   }
                   // if not productName to delete stocktransactionDetail
-                  for (let d = 0 ; d < this.invoiceInpArry.length ; d ++) {
+                  for (let d = 0; d < this.invoiceInpArry.length; d++) {
                     if (this.invoiceInpArry[d].stockTransactionDetailsId !== undefined && this.invoiceInpArry[d].product == '') {
                       this._stockService.deleteStockTransactionDetails(this.invoiceInpArry[d].stockTransactionDetailsId).subscribe();
                     }
                   }
                 } else if (BtnSubmitHtml == "تسجيل") {
                   this._stockService.creatStockTransactionDetails(stockTransactionD).subscribe(); // for invoice DB 
-
                 }
 
                 this._service.clearForm();
@@ -375,11 +414,7 @@ export class AddToStockPermissionComponent implements OnInit {
               }
 
               this.checkAllArry++ // for handleBackEnd[]
-              console.log(this.checkAllArry)
-              //console.log(this.checkAllArry)
               if (this.checkAllArry > this._stockService.handleBackEnd.length) { // if the product isn't in theStock's DataBase
-
-                console.log('newProduct');
 
                 postStockPridgeObj.productId = theProductId;
                 postStockPridgeObj.stockId = this.theStockId;
@@ -399,9 +434,7 @@ export class AddToStockPermissionComponent implements OnInit {
 
           }
         } // snd for _stockService.allProducts
-
       }
-
     } // fst for invoiceInpArry
 
   }; // makeAddStockPremArry
@@ -412,17 +445,30 @@ export class AddToStockPermissionComponent implements OnInit {
     location.reload();
   }
 
+
+  printThis() {
+    let show = '#headerAddInv'
+    let hide1 = '#deleteAddInvoice'
+    let hide2 = '#callInvoice'
+    let hide3 = '#addNewInvoicetBtn'
+    this._service.printThis(show, hide1, hide2, hide3)
+    $('#addPrimTable').css(
+      { 'height': '100%' }
+    )
+    window.print()
+    location.reload()
+  }
+
   showAddNewInvoice() {
-    
+
     this._theStockComp.testBackend(); // to make stockArry
     this.productArr = []
     this.invoiceTotal = "0"
-    console.log(this._stockService.makeStockArry)
-    for (let p = 0 ; p <  this._stockService.allProducts.length ; p ++) {
+    for (let p = 0; p < this._stockService.allProducts.length; p++) {
       this.productArr.push(this._stockService.allProducts[p].productName)
     }
 
-    let callInvoiceBtnVal: string = $('#callInvoiceBtn').html()
+    let callInvoiceBtnVal: string = $('#callInvoiceBtn').html();
     this.invoiceInpArry = [];
     this.ivoiceItemesForEdit = [];
     // to add 5 fildes
@@ -435,9 +481,12 @@ export class AddToStockPermissionComponent implements OnInit {
     }
 
     if (callInvoiceBtnVal == "فاتورة جديدة") {
+      let currentDate = new Date()
+      this.makeTime_date(currentDate);
       $('#callInvoice').hide();
       $('#addInvoiceForm').show();
-      $('#addNewInvoicetBtn').html("تسجيل")
+      $('#addNewInvoicetBtn').html("تسجيل");
+      $('#deleteAddInvoice').hide();
       $('#stockTransactionId').val('')
       this.resetAddinvoiceValu()
       this.inptDisabled = true;
@@ -445,11 +494,11 @@ export class AddToStockPermissionComponent implements OnInit {
     } else if (callInvoiceBtnVal == "بحث") {
       // add fildes if the inputArry < invoiceArry
       $('#addNewInvoicetBtn').html("تعديل الفاتورة")
+      $('#deleteAddInvoice').show();
       this.inptDisabled = false;
       //this.isAddInvVaild = true;
       for (let i = 0; i < this._stockService.makeInvoiceArry.length; i++) { // add fields if the invoice details > 7 inpts
         if (this._stockService.makeInvoiceArry[i].invoiceSearchVal == this.searchInVal) {
-          //console.log(this.invoiceInpArry.length);
           if (this._stockService.makeInvoiceArry[i].invoiceDetails.length > this.invoiceInpArry.length) {
             let countDif: number = this._stockService.makeInvoiceArry[i].invoiceDetails.length - this.invoiceInpArry.length;
             for (let c = 0; c < countDif; c++) {
@@ -463,7 +512,6 @@ export class AddToStockPermissionComponent implements OnInit {
       for (let i = 0; i < this._stockService.makeInvoiceArry.length; i++) {
 
         if (this._stockService.makeInvoiceArry[i].invoiceSearchVal == this.searchInVal) {
-          console.log(this._stockService.makeInvoiceArry[i].stockTransactionId)
           $('#stockTransactionId').val(this._stockService.makeInvoiceArry[i].stockTransactionId)
           for (let d = 0; d < this._stockService.makeInvoiceArry[i].invoiceDetails.length; d++) {
             this.ivoiceItemesForEdit.push(this._stockService.makeInvoiceArry[i].invoiceDetails[d])
@@ -471,24 +519,44 @@ export class AddToStockPermissionComponent implements OnInit {
             this.invoiceInpArry[d].product = this._stockService.makeInvoiceArry[i].invoiceDetails[d].productName;
             this.invoiceInpArry[d].price = this._stockService.makeInvoiceArry[i].invoiceDetails[d].price;
             this.invoiceInpArry[d].qty = this._stockService.makeInvoiceArry[i].invoiceDetails[d].Qty;
-            $('#stockNameForAdd').val(this._stockService.makeInvoiceArry[i].stockName);
-            $('#customerNameForAdd').val(this._stockService.makeInvoiceArry[i].customerName);
-            $('#addInvoiceNote').val(this._stockService.makeInvoiceArry[i].notes);
           }
+          this.date_time = this._stockService.makeInvoiceArry[i].invoiceDetails[0].date_time;
+          $('#stockNameForAdd').val(this._stockService.makeInvoiceArry[i].stockName);
+          $('#customerNameForAdd').val(this._stockService.makeInvoiceArry[i].customerName);
+          $('#addInvoiceNote').val(this._stockService.makeInvoiceArry[i].notes);
         }
       }
-      $('#callInvoice').hide();
-      $('#addInvoiceForm').show();
       this.calcTotals();
-
+      this.deleteInvBtnDisabled = false;
     }
+    $('#callInvoice').hide();
+    $('#addInvoiceForm').show();
 
   } // showAddNewInvoice
 
+  showDeleteAddInvoice() {
+    $('#fadeLayerAP').show(0);
+    $('.askForDelete').addClass('animate');
+  }
+
+  deleteAddInvoice() {
+    $('#fadeLayerAP').hide();
+    let stockTransId = $('#stockTransactionId').val();
+    for (let i = 0; this.invoiceInpArry.length; i++) {
+      if (this.invoiceInpArry[i].stockTransactionDetailsId == undefined) {
+        break
+      }
+      if (this.invoiceInpArry[i].stockTransactionDetailsId != undefined) {
+        this._stockService.deleteStockTransactionDetails(this.invoiceInpArry[i].stockTransactionDetailsId).subscribe();
+      }
+    }
+    this._stockService.deleteStockTransaction(stockTransId).subscribe();
+    this.editStockQtys();
+    location.reload();
+  }
 
 
   testBtn() {
-
   }
 
 } // end
