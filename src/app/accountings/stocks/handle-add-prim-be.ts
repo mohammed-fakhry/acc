@@ -1,5 +1,6 @@
 export class HandleAddPrimBE {
     stockTransactionId: number; // the main table id
+    invNumber:number;
     stockTransactionDetailsId: number; // the forign table id
     productId: number; // frm products table
     productName: string; // frm products table

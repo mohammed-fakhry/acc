@@ -33,7 +33,9 @@ export class CustomerComponent implements OnInit {
     this.logService.logStart(); this.logService.reternlog();
 
     this._custService.getCustomer().subscribe((data: Customer[]) => {
+      data.shift();
       this.customers = data;
+      console.log(this.customers)
     })
 
     this._stockService.getHandleAddtoStockPrimList().subscribe((data: HandleAddPrimBE[]) => { // get the details to make customerInvArry
@@ -60,7 +62,7 @@ export class CustomerComponent implements OnInit {
       $('.askForDelete').removeClass('animate').hide()
     })
 
-    $(".fadeLayer").click(function () {
+    $("#hideInvDet").click(function () {
       $(".fadeLayer").hide();
       $('.askForDelete').removeClass('animate').hide();
       $('#customerInvDetail').hide();
@@ -86,12 +88,14 @@ export class CustomerComponent implements OnInit {
   makeCustomerInvArry() {
     this.customerInvArry = []
 
+    console.log(this._stockService.stockTransactionArr)
     for (let i = 0; i < this._stockService.stockTransactionArr.length; i++) {
 
       if (this._stockService.stockTransactionArr[i].customerId == this.customerData.value.customerId) {
 
         let customerInvDetail: any = {
           stockTransactionId: 0,
+          invoiceNum:0,
           invoiceKind: '',
           transactionType: 0,
           invoiceTotalMin: 0,
@@ -101,18 +105,20 @@ export class CustomerComponent implements OnInit {
 
         customerInvDetail.stockTransactionId = this._stockService.stockTransactionArr[i].stockTransactionId;
         customerInvDetail.transactionType = this._stockService.stockTransactionArr[i].transactionType;
+        customerInvDetail.invoiceNum = this._stockService.stockTransactionArr[i].invNumber;
         customerInvDetail.date_time = this._stockService.stockTransactionArr[i].date_time;
         //date_time
         if (this._stockService.stockTransactionArr[i].transactionType == 1) {
           customerInvDetail.invoiceTotalAdd = this._stockService.stockTransactionArr[i].invoiceTotal;
           customerInvDetail.invoiceKind = 'فاتورة شراء'
           customerInvDetail.invoiceTotalMin = 0;
+          customerInvDetail.invKindColor = 'text-dark'
         } else if (this._stockService.stockTransactionArr[i].transactionType == 2) {
           customerInvDetail.invoiceTotalMin = this._stockService.stockTransactionArr[i].invoiceTotal;
           customerInvDetail.invoiceKind = 'فاتورة بيع'
           customerInvDetail.invoiceTotalAdd = 0;
+          customerInvDetail.invKindColor = 'text-danger'
         }
-
         this.customerInvArry.push(customerInvDetail)
       };
     };
@@ -123,8 +129,18 @@ export class CustomerComponent implements OnInit {
 
       if (c == 0) {
         this.customerInvArry[c].netTotal = parseInt(this.customerInvArry[c].invoiceTotalMin) - parseInt(this.customerInvArry[c].invoiceTotalAdd);
+        if (this.customerInvArry[c].netTotal < 0) {
+          this.customerInvArry[c].netTotalColor = 'text-danger'
+        } else {
+          this.customerInvArry[c].netTotalColor = 'text-dark'
+        }
       } else {
         this.customerInvArry[c].netTotal = parseInt(this.customerInvArry[c - 1].netTotal) - parseInt(this.customerInvArry[c].invoiceTotalAdd) + parseInt(this.customerInvArry[c].invoiceTotalMin)
+        if (this.customerInvArry[c].netTotal < 0) {
+          this.customerInvArry[c].netTotalColor = 'text-danger'
+        } else {
+          this.customerInvArry[c].netTotalColor = 'text-dark'
+        }
       }
     }
 
@@ -132,8 +148,8 @@ export class CustomerComponent implements OnInit {
 
   showCustomerInvoice(invoice) {
 
-    let sectionPosition = $("#customerInvDetail").offset().top;
-    $("html , body").animate({ scrollTop: sectionPosition }, 150);
+    //let sectionPosition = $("#customerInvDetail").offset().top;
+    //$("html , body").animate({ scrollTop: sectionPosition }, 150);
 
     this._custService.customerInv = [];
 
@@ -157,7 +173,7 @@ export class CustomerComponent implements OnInit {
     }
     this._custService.invoiceKind = invoice.invoiceKind;
     this._custService.date_time = invoice.date_time
-
+    this._custService.invoiceNum = invoice.invoiceNum
     console.log(invoice)
 
     $('.fadeLayer').show(0);

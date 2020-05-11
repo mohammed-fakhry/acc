@@ -32,7 +32,7 @@ export class StocTrancePremComponent implements OnInit {
   sndStockNameVaild: boolean;
 
   deleteInvTranceBtnDisabled: boolean;
-
+/*
   dateNow: any;
   day: any;
   month: any;
@@ -41,7 +41,7 @@ export class StocTrancePremComponent implements OnInit {
   hour: any;
   minutes: any;
   fullTime: any;
-  date_time: any;
+  date_time: any;*/
 
 
   constructor(public _stockService: StocksService, public formBuilder: FormBuilder,
@@ -290,7 +290,7 @@ export class StocTrancePremComponent implements OnInit {
       this.invoiceInpArry[i].total = 0;
     }
   }
-
+/*
   makeTime_date(currentDate) {
     this.dateNow = currentDate // new Date();
     this.day = this.dateNow.getDate();
@@ -303,7 +303,8 @@ export class StocTrancePremComponent implements OnInit {
     this.fullDate.toString();
     this.fullTime.toString()
     this.date_time = this.fullDate + ' ' + this.fullTime
-  }
+  }*/
+  invNumTrance: number;
 
   showNewTranceInvoice() {
 
@@ -336,8 +337,10 @@ export class StocTrancePremComponent implements OnInit {
     }
 
     if (callInvoiceBtnVal == "فاتورة جديدة") {
-      let currentDate = new Date()
-      this.makeTime_date(currentDate);
+      let currentDateNow = Date.now() //new Date()
+      let currentDate = new Date(currentDateNow)
+      this._service.makeTime_date(currentDate);
+      $('#invNumTrance').hide();
       $('#callTranceInvoice').hide();
       $('#tranceInvoiceForm').show();
       $('#newTranceInvoicetBtn').html("تسجيل");
@@ -350,7 +353,7 @@ export class StocTrancePremComponent implements OnInit {
       // add fildes if the inputArry < invoiceArry
       $('#newTranceInvoicetBtn').html("تعديل الفاتورة");
       this.inptDisabled = false;
-
+      $('#invNumTrance').show();
       for (let i = 0; i < this._stockService.makeInvoiceArry.length; i++) { // add fields if the invoice details > 7 inpts
         if (this._stockService.makeInvoiceArry[i].invoiceSearchVal == this.searchInVal) {
           if (this._stockService.makeInvoiceArry[i].invoiceDetails.length > this.invoiceInpArry.length) {
@@ -370,6 +373,8 @@ export class StocTrancePremComponent implements OnInit {
           $('#fstStockNameForTrance').val(this._stockService.makeInvoiceArry[i].stockName);
           $('#sndStockNameForTrance').val(this._stockService.makeInvoiceArry[i].sndStockName);
           $('#tranceInvoiceNote').val(this._stockService.makeInvoiceArry[i].notes);
+          this._service.date_time = this._stockService.makeInvoiceArry[i].invoiceDetails[0].date_time;
+          this.invNumTrance = this._stockService.makeInvoiceArry[i].invoiceDetails[0].invNumber;
           for (let d = 0; d < this._stockService.makeInvoiceArry[i].invoiceDetails.length; d++) {
             this.ivoiceItemesForEdit.push(this._stockService.makeInvoiceArry[i].invoiceDetails[d]);
             this.invoiceInpArry[d].stockTransactionDetailsId = this._stockService.makeInvoiceArry[i].invoiceDetails[d].stockTransactionDetailsId;
@@ -495,12 +500,13 @@ export class StocTrancePremComponent implements OnInit {
     // mainTable
     let stockTransaction: StockTransaction = {
       stockTransactionId: Date.now().toString(),
+      invNumber: this._theStockComp.newTranceInvNumber,
       stockId: this.theFstStockId,
       sndStockId: this.theSndStockId,
-      customerId: 14,
+      customerId: 1,
       transactionType: 3,
       invoiceTotal: parseInt(this.invoiceTotal),
-      date_time: this.date_time,
+      date_time: this._service.date_time,
       notes: this.theNote,
     }
 
@@ -595,7 +601,7 @@ export class StocTrancePremComponent implements OnInit {
   tranceFrmStockPrem() {
     this.makeTranceStockPremArry();
     this.resetTranceinvoiceValu();
-    location.reload();
+    //location.reload();
   }
 
   testBtn() {

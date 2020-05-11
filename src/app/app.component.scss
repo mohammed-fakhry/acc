@@ -1,7 +1,7 @@
 body {
     position: relative;    
 }
-
+/*
 #app-side-bar {
     background-color: rgb(241, 242, 246);
     position: fixed;
@@ -10,9 +10,10 @@ body {
     //height: 100%;
     top: 0;
     bottom: 0;
+    z-index: 1000000;
 }
 
-/*
+
 #app-side-bar {
     position: absolute;
     top:0;
@@ -22,6 +23,7 @@ body {
     background-color: yellowgreen;
 }
 
+/*
 #router-outlet {
     background-color: yellow;
     position: absolute;

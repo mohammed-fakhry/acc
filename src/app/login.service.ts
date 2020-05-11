@@ -35,8 +35,10 @@ export class LoginService {
     if (this.isUser == true) {
       $('#sideBar').removeClass('d-none');
       $('#logOut').show();
+      $('#sidebarToggle').show().addClass('pFixed sticky-top');
     } else {
-      $('#sideBar').addClass('d-none');
+      $('#app-side-bar').addClass('d-none');
+      $('#sidebarToggle').hide()
     }
   }
 

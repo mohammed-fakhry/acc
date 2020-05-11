@@ -6,26 +6,44 @@
 }
 body {
     background-color: rgb(241, 242, 246);
-    
+    position: relative;
     //background-color: white;
 }
 
 .fadeLayer {
-    position: absolute;
+    position: fixed;
     display: none;
     top: 0;
     bottom: 0;
     left: 0;
     right: 0;
     background-color: rgba(0, 0, 0, 0.342);
-    z-index: 500;
+    z-index: 90009999999999 //500;
 }
+
+.navbar h1 {
+  margin-right: 30px;
+  color: white;// teal;
+}
+
+.navHeader {
+  background-color: rgb(62, 154, 180)// last one : rgb(93, 158, 176); //rgb(2, 107, 121); //rgb(53, 58, 64);
+}
+
+.btn-info {
+  background-color:rgb(2, 107, 121);
+}
+
+.darkBg {
+  background-color: rgb(2, 107, 121);
+}
+
 .cardHeader {
-    color: rgb(8, 151, 170);
+    color:rgb(8, 151, 170);
     font-weight: bold;
 }
 .card {
-    border: solid 1px teal;
+    border: solid 1px rgb(2, 107, 121);;
 }
 .tableBody {
     overflow-y: auto;
@@ -92,8 +110,8 @@ body {
     position: absolute;
     top: 5;
     bottom: 5;
-    left: 5%;
-    right: 3;
+    left: 0;
+    right: 0;
     //z-index: 900000;
   }
 

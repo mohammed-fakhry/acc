@@ -12,10 +12,10 @@
     </div>
 </div>
 <!--header-->
-<div class="container-fluid  p-3 card cardHeader mt-3 sticky-top bg-light">
-    <nav class="navbar navbar-dark">
+<div class="container-fluid  p-3 card navHeader mt-3 sticky-top">
+    <nav class="navbar">
         <div class="form-inline">
-            <h1 class="px-2" style="font-weight: bold;">العاملين</h1>
+            <h1 class="px-2 cardHeader" style="font-weight: bold;">العاملين</h1>
             <div class="headerLeftBorder"></div>
             <button class="btn btn-info mx-2" style="height: 70px;" id="showAddWorkerBtn"
                 (click)="ShowAddNewWorker()">اضافة</button>
@@ -140,10 +140,9 @@
 </div>
 <!--workerEnquiry-->
 <div class="container-fluid card  mt-3 p-5 workerClass" id="workerEnquiry">
-
     <div class="panel-body panel-flex-table">
         <table class="flex-table table table-hover">
-            <thead class="bg-dark text-light">
+            <thead class="navHeader text-light">
                 <tr>
                     <th>الاسم</th>
                     <th>تليفون</th>
@@ -173,7 +172,6 @@
             </tbody>
         </table>
     </div>
-
 </div>
 <!--salaryCount-->
 <div class="container-fluid card  mt-3 workerClass" id="salaryCount" style="overflow-y: auto;">
@@ -187,7 +185,7 @@
         </div>
         <hr class="text-center">
         <table class="table table-hover mt-3">
-            <thead class="bg-dark text-light">
+            <thead class="navHeader text-light">
                 <tr>
                     <th>بيان</th>
                     <th>الاحد</th>
@@ -264,7 +262,7 @@
     </div>
 
     <table class="table table-hover mt-3">
-        <thead class="bg-dark text-light">
+        <thead class="navHeader text-light">
             <tr>
                 <th>اجمالى تأخير</th>
                 <th>اجمالى اضافى</th>
@@ -272,7 +270,7 @@
                 <th>اجمالى غياب</th>
                 <th id="discOrOver">اجمالى خصم</th>
                 <th>اجمالى مستحق</th>
-                <th class="bg-secondary text-light font-weight-bolder">صافى راتب</th>
+                <th class="darkBg text-light font-weight-bolder">صافى راتب</th>
             </tr>
         </thead>
         <tbody>
@@ -283,7 +281,7 @@
                 <td>{{counter}}</td>
                 <td>{{totalDisc}}</td>
                 <td>{{total}}</td>
-                <td class="bg-secondary text-light font-weight-bolder" style="font-size: 1.2em;">{{netSalary}}</td>
+                <td class="darkBg text-light font-weight-bolder" style="font-size: 1.2em;">{{netSalary}}</td>
             </tr>
         </tbody>
     </table>
@@ -438,7 +436,6 @@
             <div class="pt-4 mt-3" style="border-top: solid 1.5px teal;">
                 <button class="btn btn-primary ml-2" type="submit" id="saveSettingBtn">حفظ الاعدادات</button>
             </div>
-
         </form>
     </div>
 </div>

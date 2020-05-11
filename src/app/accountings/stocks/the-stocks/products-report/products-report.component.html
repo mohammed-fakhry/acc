@@ -1,0 +1,62 @@
+<div class="container-fluid card inpCard  mt-3 p-3" id="headerProductReport">
+    <h2 class="cardHeader">تقرير حركة صنف</h2>
+    <hr class="text-center">
+    <div class="d-flex justify-content-arround">
+        <div>
+            <label for="productInpt">الصنف</label>
+            <input type="search" class="form-control mdb-autocomplete" list="datalist1" (change)="isProductNameVaild()"
+                id="productInpt">
+            <datalist id="datalist1">
+                <option *ngFor="let product of _stockService.allProducts">{{product.productName}}</option>
+            </datalist>
+            <div *ngIf='productNameVaild' class="text-danger">خطأ فى اسم الصنف</div>
+        </div>
+        <div class="mr-3">
+            <label for="stockNameForProdRep">اسم المخزن</label>
+            <select (change)='isStockNameValid()' class="form-control p-1" id="stockNameForProdRep">
+                <option *ngFor="let stock of _stockService.stocks">{{stock.stockName}}</option>
+            </select>
+            <div *ngIf='stockNameVaild' class="text-danger">يجب ادخال المخزن</div>
+        </div>
+        <div class="mr-3">
+            <label for="fromDate">من تاريخ</label>
+            <input class="form-control p-1" type="date" id="fromDate">
+        </div>
+        <div class="mr-3">
+            <label for="toDate">الى تاريخ</label>
+            <input class="form-control p-1" type="date" id="toDate">
+        </div>
+    </div>
+    <div class="mt-3">
+        <button [disabled]='prodRepFormInvaild' class="btn btn-success" (click)='showProductReport()'>التقرير</button>
+    </div>
+    <hr class="text-center">
+    <div id="prodDetTable" style="display: none;">
+        <div class="panel-body panel-flex-table">
+            <table class="flex-table table table-hover">
+                <thead class="navHeader text-light">
+                    <tr>
+                        <th>التاريخ</th>
+                        <th>الاذن</th>
+                        <th>السعر</th>
+                        <th>كمية مخصومة</th>
+                        <th>كمية مضافة</th>
+                        <th>رصيد باقى</th>
+                    </tr>
+                </thead>
+                <tbody class=" mt-3 tableBody">
+                    <tr *ngFor='let product of filteredProducts; let i = index'>
+                        <td>
+                            <input disabled value="{{product.date_time}}" type="datetime-local">
+                        </td>
+                        <td id="transactionName{{i}}" class="{{product.color}}">{{product.transactionName}} ( {{product.invNumber}} )</td>
+                        <td>{{product.price}}</td>
+                        <td class="{{product.color}}">{{product.minQty}}</td>
+                        <td>{{product.addQty}}</td>
+                        <td class="bg-dark text-light">{{product.netQty}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

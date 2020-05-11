@@ -13,33 +13,47 @@
     </div>
 </div>
 <!--header-->
-<div class="container-fluid  p-3 card bg-light mt-3 sticky-top" id="mainStockHeader">
-    <nav class="navbar navbar-light bg-light">
+<div class="container-fluid p-3 navHeader card mt-3 sticky-top" id="mainStockHeader">
+    <nav class="navbar">
         <div class="form-inline">
             <h1 class="px-2" style="font-weight: bold;">المخازن</h1>
             <div class="headerLeftBorder"></div>
             <!--stocks-->
             <div class="dropdown">
                 <button class="btn btn-light dropdown-toggle mx-2" type="button" id="stockBtn"
-                    style="height: 70px; font-size: 1.5em;" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    style="height: 70px; font-size: 1.5em;" data-toggle="dropdown" aria-haspopup="true"
+                    aria-expanded="false">
                     بيانات المخازن
                 </button>
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    <button class="dropdown-item btn-light" id="showStocksEnquiry" (click)="showStocksEnquiry()">استعلام</button>
-                    <button class="dropdown-item" id="showAddNewStock" (click)="showAddNewStock()">اضافة مخزن</button>
-                    <button class="dropdown-item" id="showAddNewProduct" (click)="showAddNewProduct()">اضافة صنف</button>
+                    <div style="border-bottom: solid 1px black ;">
+                        <button class="dropdown-item text-right btn-light" id="showStocksEnquiry"
+                            (click)="showStocksEnquiry()">جرد مخازن</button>
+                        <button class="dropdown-item text-right btn-light" id="showAddNewStock" (click)="showAddNewStock()">اضافة
+                            مخزن</button>
+                    </div>
+                    <!--products-->
+                    <div>
+                        <button class="dropdown-item text-right btn-light" id="showAddNewProduct"
+                            (click)="showAddNewProduct()">اضافة صنف</button>
+                        <button class="dropdown-item text-right btn-light" id="showProductsReport"
+                            (click)="showProductsReport()">تقرير حركة صنف</button>
+                    </div>
                 </div>
             </div>
             <!--premissionInvoice-->
             <div class="dropdown">
-                <button class="btn btn-info dropdown-toggle mx-2" type="button" id="premissionBtn"
-                    style="height: 70px;" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <button class="btn btn-info dropdown-toggle mx-2" type="button" id="premissionBtn" style="height: 70px;"
+                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     فواتير
                 </button>
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    <button class="dropdown-item btn-light" id="showAddToStockPrem" (click)="showAddToStockPrem()">فاتورة شراء</button>
-                    <button class="dropdown-item text-danger" id="showMinToStockPrem" (click)="showMinToStockPrem()">فاتور بيع</button>
-                    <button class="dropdown-item" id="showTranceStockPrem"  (click)="showTranceStockPrem()">اذن نقل</button>
+                    <button class="dropdown-item text-right btn-light btn-light" id="showAddToStockPrem"
+                        (click)="showAddToStockPrem()">فاتورة شراء</button>
+                    <button class="dropdown-item text-right text-danger btn-light" id="showMinToStockPrem"
+                        (click)="showMinToStockPrem()">فاتور بيع</button>
+                    <button class="dropdown-item text-right btn-light" id="showTranceStockPrem"
+                        (click)="showTranceStockPrem()">اذن نقل</button>
                 </div>
             </div>
             <button class="btn btn-success mx-2 d-none" id="testBtn" (click)='testbtn()'>test</button>
@@ -55,6 +69,8 @@
 <app-add-stocks class="stocksClass" id="addNewStock"></app-add-stocks>
 <!--addNewProduct-->
 <app-add-products class="stocksClass" id="addNewProduct"></app-add-products>
+<!--productsReport-->
+<app-products-report class="stocksClass" id="productsReport"></app-products-report>
 <!--stockDtails-->
 <app-stock-details class="stocksClass" id="stockDtails"></app-stock-details>
 <!--addToStockPrem-->

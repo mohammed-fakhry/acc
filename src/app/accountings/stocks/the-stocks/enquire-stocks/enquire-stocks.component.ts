@@ -11,7 +11,7 @@ import { TheStocksComponent } from '../the-stocks.component';
 export class EnquireStocksComponent implements OnInit {
 
   constructor(public _stockService: StocksService,
-    public _theStocksComponent:TheStocksComponent) { }
+    public _theStocksComponent: TheStocksComponent) { }
 
   ngOnInit() {
     // hide Fade layer
@@ -63,7 +63,7 @@ export class EnquireStocksComponent implements OnInit {
     $('#premissionBtn').removeClass('btn-light').addClass('btn-info').animate({ fontSize: '1em' }, 50);
     // get the data
     this._theStocksComponent.testBackend();
-    for (let i=0 ; i < this._stockService.makeStockArry.length ; i++) {
+    for (let i = 0; i < this._stockService.makeStockArry.length; i++) {
       if (stock.stockId == this._stockService.makeStockArry[i].stockId) {
         this._stockService.makeStockArryView = this._stockService.makeStockArry[i]
         this._stockService.productsFromStockArryView = this._stockService.makeStockArry[i].stockProducts;
@@ -73,11 +73,22 @@ export class EnquireStocksComponent implements OnInit {
       }
     }
     let total = 0
-    for (let s = 0 ; s < this._stockService.productsFromStockArryView.length; s++ ) {
-      this._stockService.totalProductsValuInStock = this._stockService.totalProductsValuInStock +  parseInt(this._stockService.productsFromStockArryView[s].productQty) * parseInt(this._stockService.productsFromStockArryView[s].productCost)
+    let TotalForSum:any[] = [];
+    let count = 0;
+    for (let s = 0; s < this._stockService.productsFromStockArryView.length; s++) {
+      //this._stockService.totalProductsValuInStock = this._stockService.totalProductsValuInStock +
+      total = parseInt(this._stockService.productsFromStockArryView[s].productQty) * parseInt(this._stockService.productsFromStockArryView[s].productCost)
+      TotalForSum.push(total)
+      count ++
+      console.log(count)
+
     }
+    //this._stockService.makeInvoiceArry()
+    //console.log(this._stockService.makeInvoiceArry())
+    this._stockService.totalProductsValuInStock = this.sumArry(TotalForSum)
+    console.log(this._stockService.productsFromStockArryView)
 
     //console.log(this.totalProductsValu)
   }
-  
+
 }

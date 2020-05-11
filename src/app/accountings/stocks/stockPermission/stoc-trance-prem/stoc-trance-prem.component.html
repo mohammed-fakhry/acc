@@ -19,15 +19,15 @@
         <div class="headerLeftBorder mr-2"></div>
         <!--<input [(ngModel)]="searchTxt" placeholder="بحث" class="form-control mx-3" id="addInvoiceSearch">-->
         <input type="search" name="searchTxt" [(ngModel)]="searchTxt" class="form-control mdb-autocomplete mx-3"
-            list="datalistInvoiceSearch" id="invoiceTranceSearch" (change)="changTranceInvoiceBtn()">
-        <datalist id="datalistInvoiceSearch">
+            list="datalistTranceInvoiceSearch" id="invoiceTranceSearch" (change)="changTranceInvoiceBtn()">
+        <datalist id="datalistTranceInvoiceSearch">
             <option *ngFor="let invoice of _theStockComp.tranceInvArry" value="{{invoice.invoiceSearchVal}}">
             </option>
         </datalist>
         <button class="btn btn-info ml-2" type="submit" id="callTranceInvoiceBtn"
             (click)="showNewTranceInvoice()">فاتورة
             جديدة</button>
-        
+
     </div>
 
     <div id="tranceInvoiceForm" style="display: none;">
@@ -36,39 +36,42 @@
             <button id="deleteTranceInvoice" style="display: none;" class="btn btn-danger"
                 [disabled]='deleteInvTranceBtnDisabled' (click)="showDeleteTranceInvoice()">حذف
                 الفاتورة</button>
-            <div>{{date_time}}</div>
+            <input disabled id="invNumTrance" class="text-center" type="text" value="رقم الفاتورة ( {{invNumTrance}} )">
+            <input disabled [(ngModel)]='_service.date_time' type="datetime-local">
         </div>
         <form (ngSubmit)="tranceFrmStockPrem()" class="pt-3">
             <div class="form-group">
-                <div class="form-row">
+                <div class="d-flex justify-content-between">
                     <input id="stockTransactionId" class="d-none">
                     <!--fstStockName-->
-                    <div class="col form-inline">
+                    <div class="col">
                         <label for="fstStockNameForTrance">من مخزن</label>
                         <select class="form-control mr-3 p-1" id="fstStockNameForTrance" (change)="stockChanged()">
                             <option *ngFor="let stock of _stockService.stocks">{{stock.stockName}}</option>
                         </select>
                         <div *ngIf="fstStockNameVaild" id="fstStockNameVaild" class="text-danger">{{fstVaildMsg}}</div>
                     </div>
-                    <div class="col form-inline">
+                    <div class="col">
                         <label for="sndStockNameForTrance">الى مخزن</label>
                         <select class="form-control mr-3 p-1" id="sndStockNameForTrance" (change)="stockChanged()">
                             <option *ngFor="let stock of _stockService.stocks">{{stock.stockName}}</option>
                         </select>
                         <div *ngIf="sndStockNameVaild" id="sndStockNameVaild" class="text-danger">{{sndVaildMsg}}</div>
                     </div>
-                    <div class="col form-inline">
+                    <div class="col">
                         <label for="tranceInvoiceNote">ملاحظات</label>
                         <input class="form-control mr-3 p-1" name="tranceInvoiceNote" id="tranceInvoiceNote">
                     </div>
-                    <div class="col form-inline m-2" id="printTrancePremBtn"><i class="fa fa-print btn btn-light" (click)='printThisTranceInv()'></i>
+                    <div class="col text-center" id="printTrancePremBtn">
+                        <i class="fa fa-print btn btn-light p-3 text-center" style="height: 100%;"
+                            (click)='printThisTranceInv()'></i>
                     </div>
                 </div>
             </div>
             <!--inpts-->
             <div class="panel-body panel-flex-table" style="height: 570px;" id="trancePrimTable">
                 <table class="flex-table table">
-                    <thead class="table-dark">
+                    <thead class="navHeader text-white">
                         <tr>
                             <th style="flex: none; width: 50px">م</th>
                             <th>اسم الصنف</th>
@@ -88,15 +91,17 @@
                                     <option *ngFor="let product of _stockService.allProducts"
                                         value="{{product.productName}}"></option>
                                 </datalist>
-                                <div *ngIf="inpt.inpVaild" class="text-danger vaildAlert">هذا الصنف لايوجد بقاعدة البيانات
+                                <div *ngIf="inpt.inpVaild" class="text-danger vaildAlert">هذا الصنف لايوجد بقاعدة
+                                    البيانات
                                 </div>
                             </td>
                             <td><input type="number" name="qty{{i}}" [(ngModel)]="inpt.qty" class="form-control"
                                     id="qty{{i}}" (change)="calcTotals()" [disabled]="inptDisabled">
-                                <div *ngIf="inpt.Qtyinvaild" class="text-danger vaildAlert">لا يوجد رصيد لهذا الصنف</div>
+                                <div *ngIf="inpt.Qtyinvaild" class="text-danger vaildAlert">لا يوجد رصيد لهذا الصنف
+                                </div>
                             </td>
-                            <td><input type="number" name="price{{i}}" [(ngModel)]="inpt.price" class="vaildAlert form-control"
-                                    (change)="calcTotals()" disabled>
+                            <td><input type="number" name="price{{i}}" [(ngModel)]="inpt.price"
+                                    class="vaildAlert form-control" (change)="calcTotals()" disabled>
                             </td>
                             <td class="text-center font-weight-bold">{{inpt.total}}</td>
                             <input name="stockTransactionDetailsId{{i}}" [(ngModel)]="inpt.stockTransactionDetailsId"
@@ -110,9 +115,9 @@
             <div class="d-flex justify-content-between">
                 <button [disabled]="isAddInvVaild" class="btn btn-primary mb-1 mt-3" type="submit"
                     id="newTranceInvoicetBtn"></button>
-                <div class="form-inline ml-5  mt-3 bg-dark text-light py-2 rounded">
-                    <h5 class="bg-dark text-light pr-3">اجمالى الفاتورة : </h5>
-                    <h5 class="bg-dark text-light mr-2 pl-3" id="invoiceTotal">{{invoiceTotal}}</h5>
+                <div class="form-inline ml-5 mt-3 darkBg text-light py-2 rounded">
+                    <h5 class="text-light pr-3">اجمالى الفاتورة : </h5>
+                    <h5 class="text-light mr-2 pl-3" id="invoiceTotal">{{invoiceTotal}}</h5>
                 </div>
             </div>
 

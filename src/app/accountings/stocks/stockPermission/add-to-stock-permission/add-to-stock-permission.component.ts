@@ -45,6 +45,7 @@ export class AddToStockPermissionComponent implements OnInit {
     })
 
     this._custService.getCustomer().subscribe((data: Customer[]) => {
+      data.shift();
       this.customers = data;
     })
 
@@ -100,8 +101,16 @@ export class AddToStockPermissionComponent implements OnInit {
       } else {
         this.isAddInvVaild = false;
       }
+     
+      if (this.invoiceInpArry[i].product == '') {
+        if (this.invoiceInpArry[i].price > 0 || this.invoiceInpArry[i].qty > 0) {
+          this.invoiceInpArry[i].price = null;
+          this.invoiceInpArry[i].qty = null;
+        }
+      }
     }
-  }
+
+  } // isAddNameVaild
 
   stockNameVaild: boolean;
   inptDisabled: boolean = true;
@@ -115,6 +124,38 @@ export class AddToStockPermissionComponent implements OnInit {
       this.stockNameVaild = false;
       this.inptDisabled = false;
     }
+  }
+
+  customerVaild: boolean;
+  custVaildMsg: string;
+  isCustomerVaild() {
+
+    let customerNameForAddVal = $('#customerNameForAdd').val()
+    if (this.customers.length == 0) {
+      this.customerVaild = true
+      this.custVaildMsg = "لا يوجد هذا الاسم"
+    } else {
+      for (let i = 0; i < this.customers.length; i++) {
+        if (customerNameForAddVal == this.customers[i].customerName) {
+          this.customerVaild = false;
+          break
+        } else {
+          this.customerVaild = true;
+          this.custVaildMsg = "لا يوجد هذا الاسم"
+          console.log('false')
+        }
+      }
+    }
+
+
+    if (this.customerVaild == false) {
+      this.isAddInvVaild = false;
+    } else {
+      this.isAddInvVaild = true;
+    }
+
+
+    console.log(customerNameForAddVal)
   }
 
   invoiceTotal: string = '0';
@@ -260,30 +301,6 @@ export class AddToStockPermissionComponent implements OnInit {
     }
   } // editStockQtys
 
-  dateNow: any;
-  day: any;
-  month: any;
-  year: any;
-  fullDate: any;
-  hour: any;
-  minutes: any;
-  fullTime: any;
-  date_time: any;
-
-  makeTime_date(currentDate) {
-    this.dateNow = currentDate // new Date();
-    this.day = this.dateNow.getDate();
-    this.month = this.dateNow.getMonth();
-    this.year = this.dateNow.getFullYear();
-    this.fullDate = this.day + '-' + this.month + '-' + this.year
-    this.hour = this.dateNow.getHours();
-    this.minutes = this.dateNow.getMinutes();
-    this.fullTime = this.hour + ':' + this.minutes
-    this.fullDate.toString();
-    this.fullTime.toString()
-    this.date_time = this.fullDate + ' ' + this.fullTime
-  }
-
   makeAddStockPremArry() {
 
     this.getTheStockId();
@@ -316,14 +333,18 @@ export class AddToStockPermissionComponent implements OnInit {
     }
 
     // mainTable
+    if (this._theStockComp.newAddInvNumber == 0) {
+      this._theStockComp.newAddInvNumber = 1
+    }
     let stockTransaction: StockTransaction = {
       stockTransactionId: Date.now().toString(),
+      invNumber: this._theStockComp.newAddInvNumber,
       stockId: this.theStockId,
-      sndStockId: 11,
+      sndStockId: 1,
       customerId: this.theCustomerId,
       transactionType: 1,
       invoiceTotal: parseInt(this.invoiceTotal),
-      date_time: this.date_time,
+      date_time: this._service.date_time,
       notes: this.theNote,
     }
 
@@ -366,6 +387,7 @@ export class AddToStockPermissionComponent implements OnInit {
               this._stockService.creatStockTransactionDetails(stockTransactionD).subscribe() // for invoice DB 
 
               this.checkAllArry = 1; // reload
+              console.log('firstInvoice')
             }
             // for the first invoice *********************************************************************************************
 
@@ -459,6 +481,8 @@ export class AddToStockPermissionComponent implements OnInit {
     location.reload()
   }
 
+  invNum:number;
+
   showAddNewInvoice() {
 
     this._theStockComp.testBackend(); // to make stockArry
@@ -481,8 +505,11 @@ export class AddToStockPermissionComponent implements OnInit {
     }
 
     if (callInvoiceBtnVal == "فاتورة جديدة") {
-      let currentDate = new Date()
-      this.makeTime_date(currentDate);
+      let currentDateNow = Date.now() //new Date()
+      let currentDate = new Date(currentDateNow)
+      this._service.makeTime_date(currentDate);
+      $('#invNum').hide();
+      console.log(currentDate)
       $('#callInvoice').hide();
       $('#addInvoiceForm').show();
       $('#addNewInvoicetBtn').html("تسجيل");
@@ -495,6 +522,7 @@ export class AddToStockPermissionComponent implements OnInit {
       // add fildes if the inputArry < invoiceArry
       $('#addNewInvoicetBtn').html("تعديل الفاتورة")
       $('#deleteAddInvoice').show();
+      $('#invNum').show();
       this.inptDisabled = false;
       //this.isAddInvVaild = true;
       for (let i = 0; i < this._stockService.makeInvoiceArry.length; i++) { // add fields if the invoice details > 7 inpts
@@ -520,10 +548,11 @@ export class AddToStockPermissionComponent implements OnInit {
             this.invoiceInpArry[d].price = this._stockService.makeInvoiceArry[i].invoiceDetails[d].price;
             this.invoiceInpArry[d].qty = this._stockService.makeInvoiceArry[i].invoiceDetails[d].Qty;
           }
-          this.date_time = this._stockService.makeInvoiceArry[i].invoiceDetails[0].date_time;
+          this._service.date_time = this._stockService.makeInvoiceArry[i].invoiceDetails[0].date_time;
           $('#stockNameForAdd').val(this._stockService.makeInvoiceArry[i].stockName);
           $('#customerNameForAdd').val(this._stockService.makeInvoiceArry[i].customerName);
           $('#addInvoiceNote').val(this._stockService.makeInvoiceArry[i].notes);
+          this.invNum = this._stockService.makeInvoiceArry[i].invoiceDetails[0].invNumber;
         }
       }
       this.calcTotals();
@@ -554,7 +583,6 @@ export class AddToStockPermissionComponent implements OnInit {
     this.editStockQtys();
     location.reload();
   }
-
 
   testBtn() {
   }

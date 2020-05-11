@@ -2,7 +2,7 @@
 <div class="container-fluid card  mt-3 p-5">
     <div class="panel-body panel-flex-table">
         <table class="flex-table table table-hover">
-            <thead class="bg-dark text-light">
+            <thead class="navHeader text-light">
                 <tr>
                     <th>اسم المخزن</th>
                     <th>امين المخزن</th>
@@ -14,14 +14,14 @@
             </thead>
             <tbody class=" mt-3 tableBody">
                 <tr *ngFor="let stock of _stockService.stocks">
-                    <td *ngIf="stock.stockName != '-'">{{stock.stockName}}</td>
-                    <td *ngIf="stock.stockName != '-'">{{stock.stockEmployee}}</td>
-                    <td *ngIf="stock.stockName != '-'">{{stock.stockPlace}}</td>
-                    <td *ngIf="stock.stockName != '-'"><button class="btn btn-light ml-2" id="showStockDetails" (click)="showStockDetails(stock)"><i
+                    <td>{{stock.stockName}}</td>
+                    <td>{{stock.stockEmployee}}</td>
+                    <td>{{stock.stockPlace}}</td>
+                    <td><button class="btn btn-info ml-2" id="showStockDetails" (click)="showStockDetails(stock)"><i
                         class="fa fa-edit"></i></button></td>
-                    <td *ngIf="stock.stockName != '-'"><button class="btn btn-success ml-2" id="showUpdateStock" (click)="showUpdateStock(stock)"><i
+                    <td><button class="btn btn-success ml-2" id="showUpdateStock" (click)="showUpdateStock(stock)"><i
                         class="fa fa-edit"></i></button></td>
-                    <td *ngIf="stock.stockName != '-'"><button class="btn btn-danger ml-2" (click)="askForDelete(stock)"><i
+                    <td><button class="btn btn-danger ml-2" (click)="askForDelete(stock)"><i
                         class="fa fa-trash"></i></button></td>
                 </tr>
             </tbody>

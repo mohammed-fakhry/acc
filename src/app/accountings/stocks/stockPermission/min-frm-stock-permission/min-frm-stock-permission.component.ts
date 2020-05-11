@@ -26,16 +26,6 @@ export class MinFrmStockPermissionComponent implements OnInit {
   searchTxt: string;
   deleteMinInvBtnDisabled: boolean;
 
-  dateNow: any;
-  day: any;
-  month: any;
-  year: any;
-  fullDate: any;
-  hour: any;
-  minutes: any;
-  fullTime: any;
-  date_time: any;
-
   constructor(public _stockService: StocksService, public formBuilder: FormBuilder,
     public _service: ServicesService, public _custService: CustomerService, public _theStockComp: TheStocksComponent) { }
 
@@ -46,6 +36,7 @@ export class MinFrmStockPermissionComponent implements OnInit {
     })
 
     this._custService.getCustomer().subscribe((data: Customer[]) => {
+      data.shift();
       this.customers = data;
     })
 
@@ -149,37 +140,41 @@ export class MinFrmStockPermissionComponent implements OnInit {
   qtyIsOkArry: any[];
 
   isAddQtyVaild() {
+
     this.deleteMinInvBtnDisabled = true;
     let loopCount = 1;
+
     for (let i = 0; i < this.invoiceInpArry.length; i++) {
       if (this.invoiceInpArry[i].product != undefined) {
-
-        for (let t = 0; t < this.theStockProds.length; t++) {
-
-          if (this.invoiceInpArry[i].product == this.theStockProds[t].productName && this.invoiceInpArry[i].qty > this.theStockProds[t].productQty) {
-            if (this.qtyIsOkArry == undefined) {
-              this.invoiceInpArry[i].Qtyinvaild = true;
-              loopCount = 1;
-              break;
-            } else if (this.qtyIsOkArry[i] == null) {
-              this.invoiceInpArry[i].Qtyinvaild = true;
-              loopCount = 1;
-              break;
-            } else if (this.invoiceInpArry[i].qty <= this.qtyIsOkArry[i]) {
+        if (this.theStockProds == 0) {
+          this.invoiceInpArry[i].Qtyinvaild = true;
+        } else {
+          for (let t = 0; t < this.theStockProds.length; t++) {
+            if (this.invoiceInpArry[i].product == this.theStockProds[t].productName && this.invoiceInpArry[i].qty > this.theStockProds[t].productQty) {
+              if (this.qtyIsOkArry == undefined) {
+                this.invoiceInpArry[i].Qtyinvaild = true;
+                loopCount = 1;
+                break;
+              } else if (this.qtyIsOkArry[i] == null) {
+                this.invoiceInpArry[i].Qtyinvaild = true;
+                loopCount = 1;
+                break;
+              } else if (this.invoiceInpArry[i].qty <= this.qtyIsOkArry[i]) {
+                this.invoiceInpArry[i].Qtyinvaild = false;
+                loopCount = 1;
+                break;
+              }
+            } else if (this.invoiceInpArry[i].product == this.theStockProds[t].productName
+              && this.invoiceInpArry[i].qty <= this.theStockProds[t].productQty
+              && this.invoiceInpArry[i].inpVaild == false) {
               this.invoiceInpArry[i].Qtyinvaild = false;
               loopCount = 1;
-              break;
+              break
             }
-          } else if (this.invoiceInpArry[i].product == this.theStockProds[t].productName
-            && this.invoiceInpArry[i].qty <= this.theStockProds[t].productQty
-            && this.invoiceInpArry[i].inpVaild == false) {
-            this.invoiceInpArry[i].Qtyinvaild = false;
-            loopCount = 1;
-            break
-          }
-          loopCount++
-          if (loopCount > this.theStockProds.length) {
-            this.invoiceInpArry[i].Qtyinvaild = true;
+            loopCount++
+            if (loopCount > this.theStockProds.length) {
+              this.invoiceInpArry[i].Qtyinvaild = true;
+            }
           }
         }
       }
@@ -193,6 +188,26 @@ export class MinFrmStockPermissionComponent implements OnInit {
       }
     }
   } // isAddQtyVaild
+
+  custNameInvaild:boolean;
+  custVaildMsg: string;
+  isCustNameInvaild() {
+    let custName = $('#customerNameForMin').val()
+    for (let i = 0; i < this.customers.length; i++) {
+      if (custName == this.customers[i].customerName) {
+        this.custNameInvaild = false;
+        break
+      } else {
+        this.custNameInvaild = true;
+        this.custVaildMsg = 'لا يوجد هذا الاسم'
+      }
+    }
+    if (this.custNameInvaild == true) {
+      this.isMinInvInvaild = true;
+    } else {
+      this.isMinInvInvaild = false;
+    }
+  }
 
   invoiceTotal: string = '0';
   calcTotals() {
@@ -277,6 +292,8 @@ export class MinFrmStockPermissionComponent implements OnInit {
   }
   ];*/
 
+  invNumMin: number;
+
   ShowMinNewInvoice() {
 
     this.getTheStockId()
@@ -298,7 +315,8 @@ export class MinFrmStockPermissionComponent implements OnInit {
 
     if (callInvoiceBtnVal == "فاتورة جديدة") {
       let currentDate = new Date()
-      this.makeTime_date(currentDate);
+      this._service.makeTime_date(currentDate);
+      $('#invNumMin').hide();
       $('#minCallInvoice').hide();
       $('#minInvoiceForm').show();
       $('#minNewInvoicetBtn').html("تسجيل")
@@ -310,6 +328,7 @@ export class MinFrmStockPermissionComponent implements OnInit {
     } else if (callInvoiceBtnVal == "بحث") {
       $('#minNewInvoicetBtn').html("تعديل الفاتورة");
       $('#deleteMinInvoice').show();
+      $('#invNumMin').show();
       this.inputDisabled = false;
       //this.isMinInvInvaild = true;
       for (let i = 0; i < this._stockService.makeInvoiceArry.length; i++) {
@@ -334,12 +353,14 @@ export class MinFrmStockPermissionComponent implements OnInit {
             this.invoiceInpArry[d].price = this._stockService.makeInvoiceArry[i].invoiceDetails[d].price;
             this.invoiceInpArry[d].qty = this._stockService.makeInvoiceArry[i].invoiceDetails[d].Qty;
           }
-          this.date_time = this._stockService.makeInvoiceArry[i].invoiceDetails[0].date_time;
+          this._service.date_time = this._stockService.makeInvoiceArry[i].invoiceDetails[0].date_time;
           $('#stockNameForMin').val(this._stockService.makeInvoiceArry[i].stockName);
           $('#customerNameForMin').val(this._stockService.makeInvoiceArry[i].customerName);
           $('#minInvoiceNote').val(this._stockService.makeInvoiceArry[i].notes);
+          this.invNumMin =  this._stockService.makeInvoiceArry[i].invoiceDetails[0].invNumber;
         }
       }
+      
       this.makeTheStockProds()
       this.calcTotals();
       this.qtyIsOkArry = [];
@@ -351,6 +372,7 @@ export class MinFrmStockPermissionComponent implements OnInit {
         } else {
           this.qtyIsOkArry.push(null)
         }
+        console.log(this.qtyIsOkArry)
         //this.invoiceInpArry[v].Qtyinvaild = false;
       }
       this.isAddQtyVaild();
@@ -399,20 +421,6 @@ export class MinFrmStockPermissionComponent implements OnInit {
 
   } // editStockQtys
 
-  makeTime_date(currentDate) {
-    this.dateNow = currentDate // new Date();
-    this.day = this.dateNow.getDate();
-    this.month = this.dateNow.getMonth();
-    this.year = this.dateNow.getFullYear();
-    this.fullDate = this.day + '-' + this.month + '-' + this.year
-    this.hour = this.dateNow.getHours();
-    this.minutes = this.dateNow.getMinutes();
-    this.fullTime = this.hour + ':' + this.minutes
-    this.fullDate.toString();
-    this.fullTime.toString()
-    this.date_time = this.fullDate + ' ' + this.fullTime
-  }
-
   makeMinStockPremArry() {
     this.getTheStockId();
     this.getTheCustomerId();
@@ -446,12 +454,13 @@ export class MinFrmStockPermissionComponent implements OnInit {
     // mainTable
     let stockTransaction: StockTransaction = {
       stockTransactionId: Date.now().toString(),
+      invNumber: this._theStockComp.newMinInvNumber,
       stockId: this.theStockId,
-      sndStockId: 11,
+      sndStockId: 1,
       customerId: this.theCustomerId,
       transactionType: 2,
       invoiceTotal: parseInt(this.invoiceTotal),
-      date_time: this.date_time,
+      date_time: this._service.date_time,
       notes: this.theNote,
     }
 

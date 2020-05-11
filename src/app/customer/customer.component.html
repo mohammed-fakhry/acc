@@ -11,12 +11,17 @@
         </div>
     </div>
     <!--app-customer-inv-detail-->
-    <app-customer-inv-detail class="container p-3 card" id="customerInvDetail" style="display: none; margin-top: 10%;">
-    </app-customer-inv-detail>
+    <div class="container p-3 card sticky-top" id="customerInvDetail" style="display: none;">
+        <app-customer-inv-detail></app-customer-inv-detail>
+        <div>
+            <button class="btn btn-danger mt-2" id="hideInvDet">اخفاء</button>
+        </div>
+    </div>
+
 </div>
 <!--customerHeader-->
-<div class="container-fluid  p-3 card bg-light mt-3 sticky-top">
-    <nav class="navbar navbar-light bg-light">
+<div class="container-fluid  p-3 card navHeader mt-3 sticky-top">
+    <nav class="navbar">
         <div class="form-inline">
             <button class="btn btn-success d-none" (click)='makeCustomerInvArry()'>test</button>
             <h1 class="px-2" style="font-weight: bold;">العملاء</h1>
@@ -34,8 +39,8 @@
 <!--customerEnquiry-->
 <div class="container-fluid card  mt-3 p-5 customerClass" id="customerEnquiry">
     <div class="panel-body panel-flex-table">
-        <table class="flex-table table table-hover">
-            <thead class="bg-dark text-light">
+        <table class="flex-table  table table-hover">
+            <thead class="navHeader text-light">
                 <tr>
                     <th>الاسم</th>
                     <th>تليفون</th>
@@ -46,17 +51,17 @@
                     <th>حذف</th>
                 </tr>
             </thead>
-            <tbody class=" mt-3">
+            <tbody class="mt-3">
                 <tr *ngFor="let customer of customers|searchCustomer:searchCust; let i=index">
-                    <td *ngIf="customer.customerName != '-'">{{customer.customerName}}</td>
-                    <td *ngIf="customer.customerName != '-'">{{customer.customerTell}}</td>
-                    <td *ngIf="customer.customerName != '-'">{{customer.customerUnit}}</td>
-                    <td *ngIf="customer.customerName != '-'">{{customer.customerDateIN}}</td>
-                    <td *ngIf="customer.customerName != '-'"><button class="btn btn-light ml-2" id="showCustomerCard" (click)="showCustomerCard(customer)"><i
+                    <td>{{customer.customerName}}</td>
+                    <td>{{customer.customerTell}}</td>
+                    <td>{{customer.customerUnit}}</td>
+                    <td>{{customer.customerDateIN}}</td>
+                    <td><button class="btn btn-light ml-2" id="showCustomerCard" (click)="showCustomerCard(customer)"><i
                                 class="fa fa-id-card"></i></button></td>
-                    <td *ngIf="customer.customerName != '-'"><button class="btn btn-success ml-2" id="showUpdatecustomer"
+                    <td><button class="btn btn-success ml-2" id="showUpdatecustomer"
                             (click)="showUpdateCustomer(customer)"><i class="fa fa-edit"></i></button></td>
-                    <td *ngIf="customer.customerName != '-'"><button class="btn btn-danger ml-2" id="askDeletcustomerBtn" (click)="askForDelete(customer)"><i
+                    <td><button class="btn btn-danger ml-2" id="askDeletcustomerBtn" (click)="askForDelete(customer)"><i
                                 class="fa fa-trash"></i></button></td>
                 </tr>
             </tbody>
@@ -147,9 +152,10 @@
 <div class="container-fluid card  mt-3 p-5 customerClass" id="customerInvDetails" style="display: none;">
     <div class="panel-body panel-flex-table">
         <table class="flex-table table table-hover">
-            <thead class="bg-dark text-light">
+            <thead class="navHeader text-light">
                 <tr>
                     <th>تفاصيل الفاتورة</th>
+                    <th>رقم الفاتورة</th>
                     <th>دائن</th>
                     <th>مدين</th>
                     <th>صافى</th>
@@ -159,9 +165,10 @@
                 <tr *ngFor="let invoice of customerInvArry; let i=index">
                     <td class="mr-2"><button class="btn btn-light ml-2" id="showCustomerInvoice"
                             (click)="showCustomerInvoice(invoice)"><i class="fa fa-id-card"></i></button></td>
+                    <td id="invoiceNum{{i}}" class="{{invoice.invKindColor}}">{{invoice.invoiceKind}} رقم : {{invoice.invoiceNum}}</td>
                     <td id="invoiceTotalAdd{{i}}">{{invoice.invoiceTotalAdd}}</td>
                     <td id="invoiceTotalMin{{i}}">{{invoice.invoiceTotalMin}}</td>
-                    <td id="netTotal{{i}}">{{invoice.netTotal}}</td>
+                    <td id="netTotal{{i}}" class="{{invoice.netTotalColor}}">{{invoice.netTotal}}</td>
                 </tr>
             </tbody>
         </table>

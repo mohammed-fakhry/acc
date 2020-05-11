@@ -31,44 +31,40 @@ export class SideBarComponent implements OnInit {
     this.ind = this.currentUrl.lastIndexOf("/");
     this.url = this.currentUrl.slice(this.ind);
 
-    // main buttons
-    /*
-    $('#sideBar h3').hover(function () {
-      $(this).removeClass('btn-light').addClass('btn-info');
-      //$(this).animate({ fontSize: '1.3em' }, 100)
-    }, function () {
-      $(this).addClass('btn-light').removeClass('btn-info');
-      //$(this).animate({ fontSize: '1.2em' }, 100)
-    })*/
-    $("#sideBar h3").click(function () {
+    $(".mainBtns").click(function () {
+      console.log($('#sidebarBtns').height())
+      //$('#sidebar').animate({ height: `${sidebarBtnsHeight + 20}px` });
       $(this).removeClass('btn-light').addClass('btn-info')
       $(this).next().slideToggle(500);
-      $("#sideBar div").not($(this).next()).slideUp(500);
-      $('#sideBar h3').not($(this)).not('#logOut').not('#MainSettingBtn').removeClass('btn-info').addClass('btn-light')
-    })
+      $("#sidebar .secDiv").not($(this).next()).slideUp(500);
+      console.log($('#sidebarBtns').height())
+      $('#sidebar').css('height', 'auto')
+      $('.mainBtns').not($(this)).not('#logOut').not('#MainSettingBtn').removeClass('btn-info').addClass('btn-light')
+    });
+
     // make active button
     let customerBtn = $('#customersBtn'); let workersBtn = $('#workersBtn'); let unitesBtn = $('#unitesBtn');
-    let htmlDbItemsBtns: any[] = [ workersBtn, unitesBtn]
-    let dBUrls: any[] = [ '/workers', '/unites'] // dataBaseUrls
+    let htmlDbItemsBtns: any[] = [workersBtn, unitesBtn]
+    let dBUrls: any[] = ['/workers', '/unites'] // dataBaseUrls
 
     let stocksBtn = $('#stocksBtn')
-    let htmlAccItemsBtns: any[] = [customerBtn,stocksBtn]
-    let accUrls: any[] = ['/customers','/stocks']
+    let htmlAccItemsBtns: any[] = [customerBtn, stocksBtn]
+    let accUrls: any[] = ['/customers', '/stocks']
 
 
     if (dBUrls.includes(this.url)) {
       this.mainRoute = 'Db'
       $('#dbBtn').next().show()
       $('#dbBtn').removeClass('btn-light').addClass('btn-info')
-      $('#sideBar div').not($('#dbBtn').next()).hide()
+      $('#sidebar .secDiv').not($('#dbBtn').next()).hide()
     } else if (accUrls.includes(this.url)) {
       this.mainRoute = 'acc'
       $('#accBtn').next().show()
       $('#accBtn').removeClass('btn-light').addClass('btn-info')
-      $('#sideBar div').not($('#accBtn').next()).hide()
+      $('#sidebar .secDiv').not($('#accBtn').next()).hide()
     } else {
       this.mainRoute = 'false'
-      $('#sideBar div').hide();
+      $('#sidebar .secDiv').hide();
       $('#sidBar h3').not('#logOut').removeClass('btn-info').addClass('btn-light')
     }
 
@@ -81,21 +77,23 @@ export class SideBarComponent implements OnInit {
         htmlAccItemsBtns[i].removeClass('btn-light').addClass('btn-secondary');
       }
     }
-    
-    // hoverEffect
-    /*
-    $('#sideBar button').hover(function () {
-      $(this).animate({ fontSize: '1.05em' }, 100)
-    }, function () {
-      $(this).animate({ fontSize: '1em' }, 100)
-    })*/
-    // clickEffect
-    $("#sideBar button").click(function () {
-      $(this).removeClass('btn-light').addClass('btn-secondary')// .next().slideToggle(500);
-      $("#sideBar button").not(this).removeClass('btn-secondary').addClass('btn-light');
-    })
 
     this._sideBarEffect.sideBarEffect()
+
+    document.addEventListener('keydown', e => { // to open menu
+      if (e.keyCode === 113) {
+        this.sidebarToggle();
+      };
+    });
+
+  } // ngOnInit
+
+  secButtonClick() {
+    $("#sidebar .secButton").click(function () {
+      $(this).removeClass('btn-light').addClass('btn-secondary')// .next().slideToggle(500);
+      $("#sidebar .secButton").not(this).removeClass('btn-secondary').addClass('btn-light');
+    })
+    this.sidebarToggle()
   }
 
   logOut() {
@@ -105,8 +103,45 @@ export class SideBarComponent implements OnInit {
     this.router.navigate(['/logIn']);
     this.logService.checkIsUser();
     //this.logService.changeIsUser();
-    $('#logOut').hide()
+    $('#logOut').hide();
+    //$('#sidebarToggle').hide();
     console.log(this.logService.isUser)
     location.reload();
   }
-}
+  
+  // new effects
+  sidebarToggle() {
+    let sideBarHeight = $('#sidebar').height()
+    let sidebarBtnsHeight = $('#sidebarBtns').height()
+    let sidebarToggleLPosition = $('#sidebarToggle').position();
+    //let sidebarToggleLeft = sidebarToggleLPosition.left
+    let sidebarToggleHeight = sidebarToggleLPosition.top
+    //$('#sidebarToggle').removeClass('pFixed sticky-top');
+    $('#sidebar').css({
+      'marginTop': `${sidebarToggleHeight + 15}px`,
+      'marginRight': '15px' //`${sidebarToggleLeft + 50} px`
+    })
+    if (sideBarHeight == 0) { //open sideBar
+      $('#sidebar').animate({ height: `${sidebarBtnsHeight + 20}px` }).toggleClass('card');
+      $('#sidebarBtns').show()
+      $('#fadeEffect').fadeIn().css({
+        'height': `100%`,
+      })
+      $('#sidebarToggle').removeClass("fa-align-justify").addClass("fa-minus")
+    } else { //close sideBar
+      $('#sidebarBtns').hide()
+      $('#sidebar').css('height', '0').toggleClass('card'); //.animate({ height: '0px' }).toggleClass('card')
+      $('#fadeEffect').hide()
+      $('#sidebarToggle').removeClass("fa-minus").addClass("fa-align-justify")
+    }
+  }
+
+  fadeEffect() {
+    $('#sidebarBtns').hide()
+    $('#sidebar').removeClass("card").css('height', '0') //animate({ height: '0px' }, 200)
+    $('#fadeEffect').hide()
+    $('#sidebarToggle').removeClass("fa-minus").addClass("fa-align-justify")
+    //$('#sidebarToggle').addClass('pFixed sticky-top');
+  }
+
+} // end

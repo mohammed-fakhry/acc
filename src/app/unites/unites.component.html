@@ -12,12 +12,11 @@
     </div>
 </div>
 <!--header-class="fa fa-calculator-->
-<div class="container-fluid  p-3 card mt-3 sticky-top bg-light">
-
-    <nav class="navbar navbar-light bg-light">
+<div class="container-fluid p-3 card mt-3 navHeader cardHeader sticky-top">
+    <nav class="navbar">
         <div class="form-inline">
-            <h1 class="mb-3 px-2">الوحدات</h1>
-            <div style="width: 1px; background-color: black; height: 90px;"></div>
+            <h1 class="px-2">الوحدات</h1>
+            <div class="headerLeftBorder"></div>
             <button style="height: 70px;" class="btn btn-info ml-2 mx-2" id="showAddUnitBtn"
                 (click)="showAddUnit()">اضافة</button>
             <button style="height: 70px;font-size: 1.5em;" class="btn btn-light ml-2 mx-2" id="unitEnquirybtn"
@@ -81,7 +80,7 @@
 <div class="container-fluid card  mt-3 p-5 unitsClass" id="unitEnquiry">
     <div class="panel-body panel-flex-table">
         <table class="flex-table table table-hover">
-            <thead class="bg-dark text-light">
+            <thead class="navHeader text-light">
                 <tr>
                     <th>رقم الوحدة</th>
                     <th>العمارة</th>

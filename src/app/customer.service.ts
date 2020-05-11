@@ -7,9 +7,12 @@ import {Customer} from './customer'
 })
 export class CustomerService {
 
+  // customer invoice Details Vars
   customerInv: any[];
   invoiceKind: string;
   date_time: string;
+  invoiceNum: string;
+  invKindColor: string;
   //customerInvDetail: any;
 
   constructor(private http: HttpClient) { }

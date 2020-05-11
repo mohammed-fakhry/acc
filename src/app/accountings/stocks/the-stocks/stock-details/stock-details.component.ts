@@ -8,6 +8,8 @@ import { StocksService } from '../stocks.service';
 })
 export class StockDetailsComponent implements OnInit {
 
+  productSearchTxt:string;
+
   constructor(public _stockService: StocksService) {
 
    }
