@@ -3,8 +3,8 @@ export class Customer {
     customerName:string;
     customerTell:string;
     customerUnit:string;
-    customerPaid:string;
-    customerRemain:string;
+    customerPaid:number;
+    customerRemain:number;
     customerAdd:string;
     customerDateIN:string;
 }

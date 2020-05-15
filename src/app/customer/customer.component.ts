@@ -146,13 +146,14 @@ export class CustomerComponent implements OnInit {
 
   };
 
+
   showCustomerInvoice(invoice) {
 
     //let sectionPosition = $("#customerInvDetail").offset().top;
     //$("html , body").animate({ scrollTop: sectionPosition }, 150);
 
     this._custService.customerInv = [];
-
+    this._custService.invTotalArry = [];
     //console.log(invoice)
     for (let i = 0; i < this._stockService.HandleAddtoStockPrimArry.length; i++) {
 
@@ -169,13 +170,14 @@ export class CustomerComponent implements OnInit {
         customerInvDetail.Qty = this._stockService.HandleAddtoStockPrimArry[i].Qty;
         customerInvDetail.total = this._stockService.HandleAddtoStockPrimArry[i].Qty * this._stockService.HandleAddtoStockPrimArry[i].price;
         this._custService.customerInv.push(customerInvDetail)
+        this._custService.invTotalArry.push(customerInvDetail.total)
       }
     }
     this._custService.invoiceKind = invoice.invoiceKind;
     this._custService.date_time = invoice.date_time
     this._custService.invoiceNum = invoice.invoiceNum
-    console.log(invoice)
-
+    this._custService.invTotal = this._service.sumArry(this._custService.invTotalArry);
+    console.log(this._custService.invTotal)
     $('.fadeLayer').show(0);
     $('#customerInvDetail').show()
   }
@@ -225,16 +227,16 @@ export class CustomerComponent implements OnInit {
     this.putCustomerDataValue(customer);
     //this.customerDataView = customer;
     // console.log(customer, this.customerDataView);
-    $('#showAddCustomerBtn').removeClass('btn-light').addClass('btn-info').animate({ fontSize: '1em' }, 50);
-    $('#customerEnquirybtn').removeClass('btn-light').addClass('btn-info').animate({ fontSize: '1em' }, 50);
+    $('#showAddCustomerBtn').removeClass('btn-outline-secondary').addClass('btn-outline-info').animate({ fontSize: '1em' }, 50);
+    $('#customerEnquirybtn').removeClass('btn-outline-secondary').addClass('btn-outline-info').animate({ fontSize: '1em' }, 50);
   }
 
   showCustomerCard(customer: Customer) {
     this.putCustomerDataValue(customer);
     //this.customerDataView = customer;
     this.makeCustomerInvArry();
-    $('#showAddCustomerBtn').removeClass('btn-light').addClass('btn-info').animate({ fontSize: '1em' }, 50);
-    $('#customerEnquirybtn').removeClass('btn-light').addClass('btn-info').animate({ fontSize: '1em' }, 50);
+    $('#showAddCustomerBtn').removeClass('btn-outline-secondary').addClass('btn-outline-info').animate({ fontSize: '1em' }, 50);
+    $('#customerEnquirybtn').removeClass('btn-outline-secondary').addClass('btn-outline-info').animate({ fontSize: '1em' }, 50);
     $('.customerClass').not('#customerDetails').hide();
     $('#customerDetails').show();
     $('#customerInvDetails').show();
@@ -247,8 +249,8 @@ export class CustomerComponent implements OnInit {
     $('#addCustomer').show();
     $('#addNewCustomerBtn').html('اضافة');
     $('#addCustomer h2:first').html('اضافة بيانات عميل');
-    $('#showAddCustomerBtn').removeClass("btn-info").addClass("btn-light").animate({ fontSize: '1.5em' }, 50);
-    $('#customerEnquirybtn').removeClass('btn-light').addClass('btn-info').animate({ fontSize: '1em' }, 50);
+    $('#showAddCustomerBtn').removeClass("btn-outline-info").addClass("btn-outline-secondary").animate({ fontSize: '1.5em' }, 50);
+    $('#customerEnquirybtn').removeClass('btn-outline-secondary').addClass('btn-outline-info').animate({ fontSize: '1em' }, 50);
   };
 
   restValues() {
@@ -267,7 +269,7 @@ export class CustomerComponent implements OnInit {
   showCustomerEnquiry() {
     $('.customerClass').not('#customerEnquiry').hide();
     $('#customerEnquiry').show();
-    $('#customerEnquirybtn').removeClass("btn-info").addClass("btn-light").animate({ fontSize: '1.5em' }, 50);
-    $('#showAddCustomerBtn').removeClass('btn-light').addClass('btn-info').animate({ fontSize: '1em' }, 50);
+    $('#customerEnquirybtn').removeClass("btn-outline-info").addClass("btn-outline-secondary").animate({ fontSize: '1.5em' }, 50);
+    $('#showAddCustomerBtn').removeClass('btn-outline-secondary').addClass('btn-outline-info').animate({ fontSize: '1em' }, 50);
   };
 }

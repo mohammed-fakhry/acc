@@ -27,7 +27,21 @@ body {
 }
 
 .navHeader {
-  background-color: rgb(62, 154, 180)// last one : rgb(93, 158, 176); //rgb(2, 107, 121); //rgb(53, 58, 64);
+  color: white;
+  background-color: rgb(62, 154, 180)//rgb(4, 105, 133) // last one : rgb(93, 158, 176);
+}
+
+.navHeader .btn-outline-secondary {
+  background-color: white;
+  color: black;
+}
+.navHeader .btn-outline-info {
+  background-color: white;
+  color: teal;
+}
+
+.dropDownItemBorder {
+  border-bottom: solid 1px black ;
 }
 
 .btn-info {

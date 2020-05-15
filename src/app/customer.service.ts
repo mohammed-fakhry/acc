@@ -14,6 +14,8 @@ export class CustomerService {
   invoiceNum: string;
   invKindColor: string;
   //customerInvDetail: any;
+  invTotalArry: any[];
+  invTotal: number;
 
   constructor(private http: HttpClient) { }
   getCustomer() {

@@ -5,6 +5,7 @@ export class HandleAddPrimBE {
     productId: number; // frm products table
     productName: string; // frm products table
     customerName:string;
+    stockName: string;
     customerId:number;
     stockId:number; // frm stocks table
     sndStockId: number;
@@ -12,5 +13,6 @@ export class HandleAddPrimBE {
     price: number; // forign table
     Qty: number; // forign table
     invoiceTotal:number;
+    date_time: string;
     notes:string; // frm the Main table
 }

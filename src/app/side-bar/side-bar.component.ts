@@ -43,13 +43,17 @@ export class SideBarComponent implements OnInit {
     });
 
     // make active button
-    let customerBtn = $('#customersBtn'); let workersBtn = $('#workersBtn'); let unitesBtn = $('#unitesBtn');
+    let customerBtn = $('#customersBtn');
+    let workersBtn = $('#workersBtn');
+    let unitesBtn = $('#unitesBtn');
+    let safeAccBtn = $('#safeAcc');
+    //safeAcc
     let htmlDbItemsBtns: any[] = [workersBtn, unitesBtn]
     let dBUrls: any[] = ['/workers', '/unites'] // dataBaseUrls
 
-    let stocksBtn = $('#stocksBtn')
-    let htmlAccItemsBtns: any[] = [customerBtn, stocksBtn]
-    let accUrls: any[] = ['/customers', '/stocks']
+    let stocksBtn = $('#stocksBtn');
+    let htmlAccItemsBtns: any[] = [customerBtn, stocksBtn, safeAccBtn];
+    let accUrls: any[] = ['/customers', '/stocks', '/safe-acc'];
 
 
     if (dBUrls.includes(this.url)) {

@@ -1,0 +1,32 @@
+<!--fadeLayer-->
+<div class="fadeLayer" id="theSafeFadeLayer">
+    <div class="container p-3 card askForDelete">
+        <h3 class="p-3 bg-danger text-light">هل انت متأكد من حذف</h3>
+        <hr>
+        <!--<div class="d-flex flex-row-reverse">
+            <button class="btn btn-danger mr-2" id="deleteStock" (click)="deleteStock()">نعم</button>
+            <button class="btn btn-info" id="hideFadeLayer">الغاء</button>
+        </div>-->
+    </div>
+</div>
+<!--header-->
+<div class="container-fluid p-3 navHeader card mt-3 sticky-top" id="mainStockHeader">
+    <nav class="navbar">
+        <div class="form-inline">
+            <h1 class="px-2" style="font-weight: bold;">حساب خزنة</h1>
+            <div class="headerLeftBorder"></div>
+            <button style="height: 70px; font-size: 1.5em;" class="btn btn-outline-secondary ml-2 mx-2 headerMainBtn" id="showSafeBtn"
+                (click)="showSafeEnquir()">استعلام</button>
+            <button style="height: 70px;" class="btn btn-outline-info ml-2 mx-2 headerMainBtn" id="showAddSafeBtn"
+                (click)="showAddSafe()">اضافة خزنة</button>
+            <button style="height: 70px;" class="btn btn-outline-info ml-2 mx-2 headerMainBtn" id="showAddSafeReceipt"
+                (click)="showAddSafeReceipt()">ايصال نقدية</button>
+        </div>
+    </nav>
+</div>
+<!--addSafe-->
+<app-add-safe class="safeClass" id="addSafe"></app-add-safe>
+<!--enquireSafe-->
+<app-enquire-safe class="safeClass" id="enquireSafe" style="display: block;"></app-enquire-safe>
+<!--safeReceipt-->
+<app-safe-receipt class="safeClass" id="safeReceipt"></app-safe-receipt>

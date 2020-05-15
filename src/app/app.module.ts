@@ -28,6 +28,10 @@ import { CustomerInvDetailComponent } from './customer/customer-inv-detail/custo
 import { StocTrancePremComponent } from './accountings/stocks/stockPermission/stoc-trance-prem/stoc-trance-prem.component';
 import { ProductsReportComponent } from './accountings/stocks/the-stocks/products-report/products-report.component';
 import { ProductStockSearchPipe } from './product-stock-search.pipe';
+import { SafeAccComponent } from './accountings/safe-acc/safe-acc.component';
+import { AddSafeComponent } from './accountings/safe-acc/add-safe/add-safe.component';
+import { EnquireSafeComponent } from './accountings/safe-acc/enquire-safe/enquire-safe.component';
+import { SafeReceiptComponent } from './accountings/safe-acc/safe-receipt/safe-receipt.component';
 
 @NgModule({
   declarations: [
@@ -56,6 +60,10 @@ import { ProductStockSearchPipe } from './product-stock-search.pipe';
     StocTrancePremComponent,
     ProductsReportComponent,
     ProductStockSearchPipe,
+    SafeAccComponent,
+    AddSafeComponent,
+    EnquireSafeComponent,
+    SafeReceiptComponent,
   ],
   imports: [
     BrowserModule,

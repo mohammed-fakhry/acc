@@ -9,7 +9,7 @@
         <div class="d-flex flex-row-reverse">
             <button class="btn btn-danger mr-2" id="deleteMinPrem" (click)="deleteMinInvoice()">نعم</button>
 
-            <button class="btn btn-info" id="hideFadeLayerMP">الغاء</button>
+            <button class="btn btn-outline-info" id="hideFadeLayerMP">الغاء</button>
         </div>
     </div>
 </div>
@@ -25,7 +25,7 @@
             <option *ngFor="let invoice of _theStockComp.minInvArry" value="{{invoice.invoiceSearchVal}}">
             </option>
         </datalist>
-        <button class="btn btn-info ml-2" type="submit" id="minCallInvoiceBtn" (click)="ShowMinNewInvoice()">فاتورة
+        <button class="btn btn-outline-info ml-2" type="submit" id="minCallInvoiceBtn" (click)="ShowMinNewInvoice()">فاتورة
             جديدة</button>
     </div>
 
@@ -47,7 +47,7 @@
                     <!--stockName-->
                     <div class="col">
                         <label for="stockNameForMin">اسم المخزن</label>
-                        <select class="form-control mr-3 p-1" id="stockNameForMin" (change)="makeTheStockProds()">
+                        <select class="form-control p-1" id="stockNameForMin" (change)="makeTheStockProds()">
                             <option *ngFor="let stock of _stockService.stocks">{{stock.stockName}}</option>
                         </select>
                     </div>
@@ -57,7 +57,7 @@
                         <!--<select class="form-control text-center mr-3 p-1" id="customerNameForAdd">
                             <option *ngFor="let customer of customers">{{customer.customerName}}</option>
                         </select> name="product{{i}}"-->
-                        <input type="search" id="customerNameForMin" class="form-control mdb-autocomplete mr-3 p-1"
+                        <input type="search" id="customerNameForMin" class="form-control mdb-autocomplete p-1"
                             list="minDatalistCustomer" (change)='isCustNameInvaild()'>
                             <div *ngIf="custNameInvaild" class="text-danger">{{custVaildMsg}}</div>
                         <datalist id="minDatalistCustomer">
@@ -67,7 +67,7 @@
                     </div>
                     <div class="col">
                         <label for="minInvoiceNote">ملاحظات</label>
-                        <input class="form-control mr-3 p-1" name="addInvoiceNote" id="minInvoiceNote">
+                        <input class="form-control p-1" name="addInvoiceNote" id="minInvoiceNote">
                     </div>
                     <div class="col text-center" id="printMinPremBtn">
                         <i class="fa fa-print btn btn-light p-3 text-center" style="height: 100%;" (click)='printThisMin()'></i>
@@ -99,7 +99,7 @@
                                 <div *ngIf="inpt.inpVaild" class="text-danger vaildAlert">هذا الصنف لايوجد بقاعدة البيانات</div>
                             </td>
                             <td><input type="number" name="qty{{i}}" [(ngModel)]="inpt.qty" class="form-control"
-                                    (change)="calcTotals()" [disabled]="inputDisabled">
+                                    (keyup)="calcTotals()" [disabled]="inputDisabled">
                                 <div *ngIf="inpt.Qtyinvaild" class="text-danger vaildAlert">لا يوجد رصيد لهذا الصنف</div>
                             </td>
                             <td><input type="number" name="price{{i}}" [(ngModel)]="inpt.price" class="form-control"
@@ -116,7 +116,7 @@
                 </table>
             </div>
             <div class="d-flex justify-content-between">
-                <button [disabled]="isMinInvInvaild" class="btn btn-primary mb-1 mt-3" type="submit"
+                <button [disabled]="isMinInvInvaild" class="btn btn-outline-primary mb-1 mt-3" type="submit"
                     id="minNewInvoicetBtn"></button>
                 <div class="form-inline ml-5  mt-3 darkBg text-light py-2 rounded">
                     <h5 class="text-light pr-3">اجمالى الفاتورة : </h5>

@@ -21,7 +21,7 @@ export class EnquireStocksComponent implements OnInit {
       $('.askForDelete').removeClass('animate')
     })
 
-    //console.log(this._stockService.stocks)
+    ////console.log(this._stockService.stocks)
 
   } // ngOnInit
 
@@ -38,8 +38,8 @@ export class EnquireStocksComponent implements OnInit {
     $('#addNewStockBtn').html('تعديل');
     $('#addWorkerInside h2:first').html('تعديل بيانات مخزن');
     $('#stocksSearch').hide(100);
-    $('#stockBtn').removeClass("btn-info").addClass("btn-light").animate({ fontSize: '1.5em' }, 50);
-    $('#premissionBtn').removeClass('btn-light').addClass('btn-info').animate({ fontSize: '1em' }, 50);
+    $('#stockBtn').removeClass("btn-outline-info").addClass("btn-outline-secondary").animate({ fontSize: '1.5em' }, 50);
+    $('#premissionBtn').removeClass('btn-outline-secondary').addClass('btn-outline-info').animate({ fontSize: '1em' }, 50);
     this._stockService.stockDataView = stock;
   }
 
@@ -59,36 +59,50 @@ export class EnquireStocksComponent implements OnInit {
     $('.stocksClass').not('#stockDtails').hide();
     $('#stockDtails').show();
     $('#stocksSearch').hide(100);
-    $('#stockBtn').removeClass("btn-info").addClass("btn-light").animate({ fontSize: '1.5em' }, 50);
-    $('#premissionBtn').removeClass('btn-light').addClass('btn-info').animate({ fontSize: '1em' }, 50);
+    $('#stockBtn').removeClass("btn-outline-info").addClass("btn-outline-secondary").animate({ fontSize: '1.5em' }, 50);
+    $('#premissionBtn').removeClass('btn-outline-secondary').addClass('btn-outline-info').animate({ fontSize: '1em' }, 50);
     // get the data
     this._theStocksComponent.testBackend();
+    /*
     for (let i = 0; i < this._stockService.makeStockArry.length; i++) {
       if (stock.stockId == this._stockService.makeStockArry[i].stockId) {
         this._stockService.makeStockArryView = this._stockService.makeStockArry[i]
         this._stockService.productsFromStockArryView = this._stockService.makeStockArry[i].stockProducts;
         this._stockService.productsFromStockArryView.toLocaleString()
-        console.log(this._stockService.makeStockArry)
+        console.log(this._stockService.productsFromStockArryView)
+        this._stockService.productsFromStockArryView.filter(
+          product => product.productQty != 0
+        )
         break
       }
-    }
+    }*/
+    
+    let getStockProducts = this._stockService.makeStockArry.find(
+      stockArr => stockArr.stockId == stock.stockId
+    );
+    this._stockService.makeStockArryView = getStockProducts;
+
+    this._stockService.productsFromStockArryView = getStockProducts.stockProducts.filter(
+      p => p.productQty != 0
+    );
+
+    this._stockService.productsFromStockArryView.toLocaleString()
     let total = 0
-    let TotalForSum:any[] = [];
+    let TotalForSum: any[] = [];
     let count = 0;
     for (let s = 0; s < this._stockService.productsFromStockArryView.length; s++) {
       //this._stockService.totalProductsValuInStock = this._stockService.totalProductsValuInStock +
       total = parseInt(this._stockService.productsFromStockArryView[s].productQty) * parseInt(this._stockService.productsFromStockArryView[s].productCost)
       TotalForSum.push(total)
-      count ++
-      console.log(count)
-
+      count++
+      //console.log(count)
     }
     //this._stockService.makeInvoiceArry()
-    //console.log(this._stockService.makeInvoiceArry())
+    ////console.log(this._stockService.makeInvoiceArry())
     this._stockService.totalProductsValuInStock = this.sumArry(TotalForSum)
-    console.log(this._stockService.productsFromStockArryView)
+    //console.log(this._stockService.productsFromStockArryView)
 
-    //console.log(this.totalProductsValu)
+    ////console.log(this.totalProductsValu)
   }
 
 }

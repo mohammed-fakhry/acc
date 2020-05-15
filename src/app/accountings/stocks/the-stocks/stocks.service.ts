@@ -77,8 +77,6 @@ export class StocksService {
     return this.http.delete<Stock[]>('http://localhost/accounting/deleteStock.php?id=' + id)
   }
 
-  
-
   updateStockSer(stock: Stock) {
     return this.http.put('http://localhost/accounting/editeStock.php?id=' + stock.stockId, stock )
   }

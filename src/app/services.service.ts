@@ -4,6 +4,7 @@ import { Worker } from './worker'
 import { WorkerRules } from './worker-rules';
 import { Router } from '@angular/router';
 import { StocksService } from './accountings/stocks/the-stocks/stocks.service';
+import { OtherAcc } from './accountings/other-acc';
 
 @Injectable({
   providedIn: 'root'
@@ -49,6 +50,14 @@ export class ServicesService {
       );
     }
   }
+
+  sumArry(arr: any[]) {
+    let s = 0
+    for (let i = 0; i < arr.length; i++) {
+      s = s + arr[i]
+    }
+    return s
+  };
 
   makeTime_date(currentDate) {
     
@@ -127,6 +136,10 @@ export class ServicesService {
 
   getWorkerRules() {
     return this.http.get<WorkerRules[]>('http://localhost/accounting/workerRulesList.php');
+  }
+
+  getOtherAccSer() {
+    return this.http.get<OtherAcc[]>('http://localhost/accounting/otherAccountsList.php');
   }
 
 }

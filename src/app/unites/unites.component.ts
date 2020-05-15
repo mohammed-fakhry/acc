@@ -95,16 +95,16 @@ export class UnitesComponent implements OnInit {
     $('#unitSearch').hide(100);
     $('#addNewUnitBtn').html('اضافة');
     $('#addUnit h2:first').html('اضافة بيانات وحدة');
-    $('#showAddUnitBtn').removeClass("btn-info").addClass("btn-light").animate({ fontSize: '1.5em' }, 50);
-    $('#unitEnquirybtn').removeClass('btn-light').addClass('btn-info').animate({ fontSize: '1em' }, 50);
+    $('#showAddUnitBtn').removeClass("btn-outline-info").addClass("btn-outline-secondary").animate({ fontSize: '1.5em' }, 50);
+    $('#unitEnquirybtn').removeClass('btn-outline-secondary').addClass('btn-outline-info').animate({ fontSize: '1em' }, 50);
   }
 
   showUnitEnquiry() {
     $('.unitsClass').not('#unitEnquiry').hide();
     $('#unitEnquiry').show();
     $('#unitSearch').show(100);
-    $('#unitEnquirybtn').removeClass("btn-info").addClass("btn-light").animate({ fontSize: '1.5em' }, 50);
-    $('#showAddUnitBtn').removeClass('btn-light').addClass('btn-info').animate({ fontSize: '1em' }, 50);
+    $('#unitEnquirybtn').removeClass("btn-outline-info").addClass("btn-outline-secondary").animate({ fontSize: '1.5em' }, 50);
+    $('#showAddUnitBtn').removeClass('btn-outline-secondary').addClass('btn-outline-info').animate({ fontSize: '1em' }, 50);
   }
 
   showUpdateUnit(unit) {
@@ -114,8 +114,8 @@ export class UnitesComponent implements OnInit {
     $('#addNewUnitBtn').html('تعديل');
     $('#addUnit h2:first').html('تعديل بيانات وحدة');
     this.unitDataView = unit;
-    $('#showAddUnitBtn').removeClass('btn-light').addClass('btn-info').animate({ fontSize: '1em' }, 50);
-    $('#unitEnquirybtn').removeClass('btn-light').addClass('btn-info').animate({ fontSize: '1em' }, 50);
+    $('#showAddUnitBtn').removeClass('btn-outline-secondary').addClass('btn-outline-info').animate({ fontSize: '1em' }, 50);
+    $('#unitEnquirybtn').removeClass('btn-outline-secondary').addClass('btn-outline-info').animate({ fontSize: '1em' }, 50);
   }
 
 

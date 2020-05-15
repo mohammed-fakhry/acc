@@ -8,51 +8,51 @@
         <hr>
         <div class="d-flex flex-row-reverse">
             <button class="btn btn-danger mr-2" id="deleteStock" (click)="deleteStock()">نعم</button>
-            <button class="btn btn-info" id="hideFadeLayer">الغاء</button>
+            <button class="btn btn-outline-info" id="hideFadeLayer">الغاء</button>
         </div>
     </div>
 </div>
 <!--header-->
-<div class="container-fluid p-3 navHeader card mt-3 sticky-top" id="mainStockHeader">
+<div class="container-fluid p-3 card mt-3 navHeader sticky-top" id="mainStockHeader">
     <nav class="navbar">
         <div class="form-inline">
             <h1 class="px-2" style="font-weight: bold;">المخازن</h1>
             <div class="headerLeftBorder"></div>
             <!--stocks-->
             <div class="dropdown">
-                <button class="btn btn-light dropdown-toggle mx-2" type="button" id="stockBtn"
+                <button class="btn btn-outline-secondary dropdown-toggle mx-2" type="button" id="stockBtn"
                     style="height: 70px; font-size: 1.5em;" data-toggle="dropdown" aria-haspopup="true"
                     aria-expanded="false">
                     بيانات المخازن
                 </button>
-                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    <div style="border-bottom: solid 1px black ;">
-                        <button class="dropdown-item text-right btn-light" id="showStocksEnquiry"
+                <div class="dropdown-menu p-1" aria-labelledby="dropdownMenuButton">
+                    <div class="dropDownItemBorder">
+                        <button class="dropdown-item text-right btn-outline-secondary" id="showStocksEnquiry"
                             (click)="showStocksEnquiry()">جرد مخازن</button>
-                        <button class="dropdown-item text-right btn-light" id="showAddNewStock" (click)="showAddNewStock()">اضافة
+                        <button class="dropdown-item text-right btn-outline-secondary" id="showAddNewStock" (click)="showAddNewStock()">اضافة
                             مخزن</button>
                     </div>
                     <!--products-->
                     <div>
-                        <button class="dropdown-item text-right btn-light" id="showAddNewProduct"
+                        <button class="dropdown-item text-right btn-outline-secondary" id="showAddNewProduct"
                             (click)="showAddNewProduct()">اضافة صنف</button>
-                        <button class="dropdown-item text-right btn-light" id="showProductsReport"
+                        <button class="dropdown-item text-right btn-outline-secondary" id="showProductsReport"
                             (click)="showProductsReport()">تقرير حركة صنف</button>
                     </div>
                 </div>
             </div>
             <!--premissionInvoice-->
             <div class="dropdown">
-                <button class="btn btn-info dropdown-toggle mx-2" type="button" id="premissionBtn" style="height: 70px;"
+                <button class="btn btn-outline-info dropdown-toggle mx-2" type="button" id="premissionBtn" style="height: 70px;"
                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     فواتير
                 </button>
-                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    <button class="dropdown-item text-right btn-light btn-light" id="showAddToStockPrem"
+                <div class="dropdown-menu p-1" aria-labelledby="dropdownMenuButton">
+                    <button class="dropdown-item text-right btn-outline-secondary" id="showAddToStockPrem"
                         (click)="showAddToStockPrem()">فاتورة شراء</button>
-                    <button class="dropdown-item text-right text-danger btn-light" id="showMinToStockPrem"
+                    <button class="dropdown-item text-right btn-outline-secondary" id="showMinToStockPrem"
                         (click)="showMinToStockPrem()">فاتور بيع</button>
-                    <button class="dropdown-item text-right btn-light" id="showTranceStockPrem"
+                    <button class="dropdown-item text-right btn-outline-secondary" id="showTranceStockPrem"
                         (click)="showTranceStockPrem()">اذن نقل</button>
                 </div>
             </div>

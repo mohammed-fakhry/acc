@@ -106,12 +106,7 @@ export class WorkersComponent implements OnInit {
 
     this.logService.logStart(); this.logService.reternlog();
 
-    this._service.getWorker().subscribe((data: Worker[]) => {
-      this.workers = data;
-    })
-    this._service.getWorkerRules().subscribe((dataRules: WorkerRules[]) => {
-      this.rulesFromSql = dataRules;
-    })
+    this.getBackendData();
 
     this.workerData = new FormGroup({
       workerId: new FormControl(''),
@@ -134,6 +129,15 @@ export class WorkersComponent implements OnInit {
     })
 
   } // ngOnInit
+
+  getBackendData() {
+    this._service.getWorker().subscribe((data: Worker[]) => {
+      this.workers = data;
+    })
+    this._service.getWorkerRules().subscribe((dataRules: WorkerRules[]) => {
+      this.rulesFromSql = dataRules;
+    })
+  }
 
   putWorkerDataValue(worker: Worker) {
     this.workerData = new FormGroup({
@@ -215,21 +219,20 @@ export class WorkersComponent implements OnInit {
   // saveSalarySetting
   updateSetting() {
     this.showWorkerEnquiry()
-    this._service.updateWorkerRulesSer(this.WorkerRuleResult).subscribe(() => {
-      this.showWorkerEnquiry()
-      location.reload()
-    },
+    this._service.updateWorkerRulesSer(this.WorkerRuleResult).subscribe(() => { },
       error => {
         alert(error);
       });
+    this.showWorkerEnquiry()
+    this.getBackendData();
   }
 
   showWorkerSetting() {
     this._service.getWorkerRules().subscribe((dataRules: WorkerRules[]) => {
       this.rulesFromSql = dataRules;
     });
-    $('#showAddWorkerBtn').removeClass('btn-light').addClass('btn-info').animate({ fontSize: '1em' }, 50);
-    $('#workerEnquirybtn').removeClass('btn-light').addClass('btn-info').animate({ fontSize: '1em' }, 50);
+    $('#showAddWorkerBtn').removeClass('btn-outline-secondary').addClass('btn-outline-info').animate({ fontSize: '1em' }, 50);
+    $('#workerEnquirybtn').removeClass('btn-outline-secondary').addClass('btn-outline-info').animate({ fontSize: '1em' }, 50);
     $('.workerClass').not('#workerSetting').hide();
     $('#workerSetting').show();
     this.WorkerRuleResult = this.rulesFromSql[0];
@@ -274,15 +277,17 @@ export class WorkersComponent implements OnInit {
       this._service.creatEmployee(this.workerData.value)
         .subscribe()
       this._service.clearForm();
-      location.reload();
+      //location.reload();
+      this.getBackendData();
     } else if (this.addBtnVal == 'تعديل') {
       this._service.updateWorkerSer(this.workerData.value).subscribe(() => { //view
-        //this.showWorkerEnquiry()
-        location.reload();
+        this.showWorkerEnquiry()
+        //location.reload();
       },
         error => {
           alert(error);
         });
+      this.getBackendData();
     };
   };
 
@@ -298,8 +303,8 @@ export class WorkersComponent implements OnInit {
     $('#addNewWorkerBtn').html('تعديل');
     $('#addWorker h2:first').html('تعديل بيانات موظف');
     //this.workerDataView = worker;
-    $('#showAddWorkerBtn').removeClass('btn-light').addClass('btn-info').animate({ fontSize: '1em' }, 50);
-    $('#workerEnquirybtn').removeClass('btn-light').addClass('btn-info').animate({ fontSize: '1em' }, 50);
+    $('#showAddWorkerBtn').removeClass('btn-outline-secondary').addClass('btn-outline-info').animate({ fontSize: '1em' }, 50);
+    $('#workerEnquirybtn').removeClass('btn-outline-secondary').addClass('btn-outline-info').animate({ fontSize: '1em' }, 50);
     $('#workerSearch').hide(100)
     this.putWorkerDataValue(worker);
   };
@@ -317,8 +322,8 @@ export class WorkersComponent implements OnInit {
     this.resetValues();
     $('#addNewWorkerBtn').html('اضافة');
     $('#addWorker h2:first').html('اضافة بيانات موظف');
-    $('#showAddWorkerBtn').removeClass("btn-info").addClass("btn-light").animate({ fontSize: '1.5em' }, 50);
-    $('#workerEnquirybtn').removeClass('btn-light').addClass('btn-info').animate({ fontSize: '1em' }, 50);
+    $('#showAddWorkerBtn').removeClass("btn-outline-info").addClass("btn-outline-secondary").animate({ fontSize: '1.5em' }, 50);
+    $('#workerEnquirybtn').removeClass('btn-outline-secondary').addClass('btn-outline-info').animate({ fontSize: '1em' }, 50);
     $('.workerClass').not('#addWorker').hide();
     $('#addWorker').show();
     $('#workerSearch').hide(100);
@@ -327,8 +332,8 @@ export class WorkersComponent implements OnInit {
   showWorkerCard(worker: Worker) {
     this.putWorkerDataValue(worker);
     //this.workerDataView = worker;
-    $('#showAddWorkerBtn').removeClass('btn-light').addClass('btn-info').animate({ fontSize: '1em' }, 50);
-    $('#workerEnquirybtn').removeClass('btn-light').addClass('btn-info').animate({ fontSize: '1em' }, 50);
+    $('#showAddWorkerBtn').removeClass('btn-outline-secondary').addClass('btn-outline-info').animate({ fontSize: '1em' }, 50);
+    $('#workerEnquirybtn').removeClass('btn-outline-secondary').addClass('btn-outline-info').animate({ fontSize: '1em' }, 50);
     $('.workerClass').not('#workerDetails').hide();
     $('#workerDetails').show();
     $('#workerSearch').hide(100)
@@ -337,8 +342,8 @@ export class WorkersComponent implements OnInit {
   showWorkerEnquiry() {
     $('.workerClass').not('#workerEnquiry').hide();
     $('#workerEnquiry').show();
-    $('#workerEnquirybtn').removeClass("btn-info").addClass("btn-light").animate({ fontSize: '1.5em' }, 50);
-    $('#showAddWorkerBtn').removeClass('btn-light').addClass('btn-info').animate({ fontSize: '1em' }, 50);
+    $('#workerEnquirybtn').removeClass("btn-outline-info").addClass("btn-outline-secondary").animate({ fontSize: '1.5em' }, 50);
+    $('#showAddWorkerBtn').removeClass('btn-outline-secondary').addClass('btn-outline-info').animate({ fontSize: '1em' }, 50);
     $('#workerSearch').show(100);
   };
 
@@ -348,8 +353,8 @@ export class WorkersComponent implements OnInit {
     $('#salaryCount h4:first').val(worker.workerCheckIN);
     $('#salaryCount h4:first').next().val(worker.workerCheckOut);
     $('#salaryCount h4:first').next().next().val(worker.workerSalary);
-    $('#showAddWorkerBtn').removeClass('btn-light').addClass('btn-info').animate({ fontSize: '1em' }, 50);
-    $('#workerEnquirybtn').removeClass('btn-light').addClass('btn-info').animate({ fontSize: '1em' }, 50);
+    $('#showAddWorkerBtn').removeClass('btn-outline-secondary').addClass('btn-outline-info').animate({ fontSize: '1em' }, 50);
+    $('#workerEnquirybtn').removeClass('btn-outline-secondary').addClass('btn-outline-info').animate({ fontSize: '1em' }, 50);
     $('.workerClass').not('#salaryCount').hide();
     $('#salaryCount').show();
     $('#workerSearch').hide(100)

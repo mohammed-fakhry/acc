@@ -3,6 +3,7 @@ import { StocksService } from '../stocks.service';
 import { FormControl, FormGroup, FormBuilder } from '@angular/forms'
 import { Stock } from 'src/app/accountings/stock';
 import { ServicesService } from 'src/app/services.service';
+import { TheStocksComponent } from '../the-stocks.component';
 
 @Component({
   selector: 'app-add-stocks',
@@ -15,7 +16,7 @@ export class AddStocksComponent implements OnInit {
   stockDataView: Stock;
   addBtnVal: string;
   constructor(public _stockService: StocksService, public formBuilder: FormBuilder,
-    public _service: ServicesService) { }
+    public _service: ServicesService,public  _theStockComp: TheStocksComponent) { }
 
   ngOnInit() {
 
@@ -28,13 +29,22 @@ export class AddStocksComponent implements OnInit {
 
   } // ngOnInit
 
+  getStocksInfo() {
+    this._stockService.getStockes().subscribe((data: Stock[]) => {
+      data.shift()
+      this._stockService.stocks = data;
+      ////console.log(this._stockService.stocks)
+    });
+  }
+
   addNewStock() {
     this.addBtnVal = $('#addNewStockBtn').html();
     if (this.addBtnVal == 'اضافة') {
       this._stockService.creatStock(this.stockData.value)
         .subscribe();
       this._service.clearForm();
-      location.reload()
+      this.getStocksInfo();
+      this._theStockComp.showStocksEnquiry();
     } else if (this.addBtnVal == 'تعديل') {
       this._stockService.updateStockSer(this._stockService.stockDataView).subscribe(() => {
         // show stockEnquiry
@@ -43,7 +53,8 @@ export class AddStocksComponent implements OnInit {
         $('#stocksSearch').show(100);
         $('#stockBtn').removeClass("btn-info").addClass("btn-light").animate({ fontSize: '1.5em' }, 50);
         $('#premissionBtn').removeClass('btn-light').addClass('btn-info').animate({ fontSize: '1em' }, 50);
-        location.reload()
+        this.getStocksInfo();
+        this._theStockComp.showStocksEnquiry();
       },
         error => {
           alert(error);

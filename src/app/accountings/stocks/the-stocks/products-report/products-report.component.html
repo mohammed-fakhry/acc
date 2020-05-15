@@ -28,7 +28,7 @@
         </div>
     </div>
     <div class="mt-3">
-        <button [disabled]='prodRepFormInvaild' class="btn btn-success" (click)='showProductReport()'>التقرير</button>
+        <button [disabled]='prodRepFormInvaild' class="btn btn-outline-success" (click)='showProductReport()'>التقرير</button>
     </div>
     <hr class="text-center">
     <div id="prodDetTable" style="display: none;">
@@ -53,7 +53,7 @@
                         <td>{{product.price}}</td>
                         <td class="{{product.color}}">{{product.minQty}}</td>
                         <td>{{product.addQty}}</td>
-                        <td class="bg-dark text-light">{{product.netQty}}</td>
+                        <td class="darkBg text-light">{{product.netQty}}</td>
                     </tr>
                 </tbody>
             </table>

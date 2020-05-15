@@ -14,6 +14,7 @@ export class AddProductsComponent implements OnInit {
   
   productData: FormGroup;
   productNameAlert: string;
+  addProductFormVaild:boolean;
 
   constructor(public _stockService: StocksService, public formBuilder: FormBuilder,
     public _service: ServicesService, public _theStockComp: TheStocksComponent) { }
@@ -25,8 +26,6 @@ export class AddProductsComponent implements OnInit {
       productName: new FormControl(),
     });
 
-
-
     if (this._stockService.productDataView.productName == undefined) {
       this._theStockComp.productNameVaild = true;
     }
@@ -35,40 +34,35 @@ export class AddProductsComponent implements OnInit {
 
   isProductNameVaild() { // validation
     console.log(this._stockService.productDataView.productName)
+    const getProductName = this._stockService.allProducts.find(product => product.productName === this._stockService.productDataView.productName);
     if (this._stockService.productDataView.productName != '') {
-      //this._theStockComp.productNameVaild = true;
-      if(this._theStockComp.productNameArr.includes(this._stockService.productDataView.productName)) {
+      if (getProductName != undefined) {
         this._theStockComp.productNameVaild = true;
+        this.addProductFormVaild = true;
         this.productNameAlert = "لا يمكن تكرار نفس الصنف"
         $('#productName').removeClass('is-valid').addClass('is-invalid')
       } else {
         this._theStockComp.productNameVaild = false;
+        this.addProductFormVaild = false;
         $('#productName').addClass('is-valid').removeClass('is-invalid')
       }
-      /*for(let i = 0; i < this._stockService.allProducts.length; i++) {
-        if (this._stockService.productDataView.productName == this._stockService.allProducts[i].productName) {
-          this._theStockComp.productNameVaild = true;
-          this.productNameAlert = "لا يمكن تكرار نفس الصنف"
-          break;
-        }
-      }*/
     } else {
       this.productNameAlert = 'يجب ادخال اسم الصنف';
       this._theStockComp.productNameVaild = true;
+      this.addProductFormVaild = true;
       $('#productName').removeClass('is-valid').addClass('is-invalid')
     }
-    
-
-    console.log(this._theStockComp.productNameVaild)
-    console.log(this._stockService.allProducts)
   }
 
   addNewProduct() {
-    this._stockService.creatProduct(this.productData.value)
-    .subscribe();
+    this._stockService.creatProduct(this.productData.value).subscribe();
     this._service.clearForm();
-    location.reload();
-    //console.log(this.productData.value);
+    this._theStockComp.ngOnInit();
+    this._theStockComp.makeProductNameArr();
+    $('#productName').removeClass('is-valid is-invalid');
+    $('#productNameAlert').hide();
+    this.addProductFormVaild = true;
+    console.log(this._stockService.allProducts);
   }
 
 }

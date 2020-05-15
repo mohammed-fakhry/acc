@@ -71,7 +71,7 @@ export class ProductsReportComponent implements OnInit {
     } else {
       this.stockNameVaild = false;
       $('#prodDetTable').show();
-      console.log(this._stockService.HandleAddtoStockPrimArry)
+      ////console.log(this._stockService.HandleAddtoStockPrimArry)
       this.filteredProducts = [];
       this.filteredProducts = this._stockService.HandleAddtoStockPrimArry.filter((product) => {
         return product.productName === this.productInpt;
@@ -155,7 +155,7 @@ export class ProductsReportComponent implements OnInit {
     toDate.getTime();
 
     if (fromDate == 'Invalid Date' || toDate == 'Invalid Date') {
-      console.log('invaildDate')
+      //console.log('invaildDate')
     } else {
       this.filteredProducts = this.filteredProducts.filter((date) => {
         return date.theDate > fromDate && date.theDate < toDate

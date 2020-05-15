@@ -2,7 +2,7 @@
 <div class="container-fluid card  mt-3 p-5">
     <div class="panel-body panel-flex-table">
         <table class="flex-table table table-hover">
-            <thead class="navHeader text-light">
+            <thead class="navHeader">
                 <tr>
                     <th>اسم المخزن</th>
                     <th>امين المخزن</th>
@@ -17,9 +17,9 @@
                     <td>{{stock.stockName}}</td>
                     <td>{{stock.stockEmployee}}</td>
                     <td>{{stock.stockPlace}}</td>
-                    <td><button class="btn btn-info ml-2" id="showStockDetails" (click)="showStockDetails(stock)"><i
+                    <td><button class="btn btn-outline-info ml-2" id="showStockDetails" (click)="showStockDetails(stock)"><i
                         class="fa fa-edit"></i></button></td>
-                    <td><button class="btn btn-success ml-2" id="showUpdateStock" (click)="showUpdateStock(stock)"><i
+                    <td><button class="btn btn-outline-success ml-2" id="showUpdateStock" (click)="showUpdateStock(stock)"><i
                         class="fa fa-edit"></i></button></td>
                     <td><button class="btn btn-danger ml-2" (click)="askForDelete(stock)"><i
                         class="fa fa-trash"></i></button></td>

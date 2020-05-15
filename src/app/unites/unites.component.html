@@ -6,26 +6,26 @@
         <hr>
         <div class="d-flex flex-row-reverse">
             <button class="btn btn-danger mr-2" id="deletWorker" (click)="deletUnit()">نعم</button>
-            <button class="btn btn-info" id="hideFadeLayer">الغاء</button>
+            <button class="btn btn-outline-info" id="hideFadeLayer">الغاء</button>
         </div>
 
     </div>
 </div>
 <!--header-class="fa fa-calculator-->
-<div class="container-fluid p-3 card mt-3 navHeader cardHeader sticky-top">
+<div class="container-fluid p-3 navHeader card mt-3 cardHeader sticky-top">
     <nav class="navbar">
         <div class="form-inline">
             <h1 class="px-2">الوحدات</h1>
             <div class="headerLeftBorder"></div>
-            <button style="height: 70px;" class="btn btn-info ml-2 mx-2" id="showAddUnitBtn"
+            <button style="height: 70px;" class="btn btn-outline-info ml-2 mx-2" id="showAddUnitBtn"
                 (click)="showAddUnit()">اضافة</button>
-            <button style="height: 70px;font-size: 1.5em;" class="btn btn-light ml-2 mx-2" id="unitEnquirybtn"
+            <button style="height: 70px;font-size: 1.5em;" class="btn btn-outline-secondary ml-2 mx-2" id="unitEnquirybtn"
                 (click)="showUnitEnquiry()">استعلام</button>
             <div class="headerLeftBorder"></div>
             <input *ngIf="router.url === '/unites'" [(ngModel)]="searchTxt" placeholder="بحث" class="form-control mx-3"
                 id="unitSearch">
         </div>
-        <button class="btn btn-info ml-2 mx-2 p-3" id="showcalculatorBtn"
+        <button class="btn btn-outline-info ml-2 mx-2 p-3" id="showcalculatorBtn"
             (click)="showcalculator()"><i class="fa fa-calculator"></i></button>
     </nav>
 </div>
@@ -72,7 +72,7 @@
                         class="form-control">
                 </div>
             </div>
-            <button class="btn btn-primary ml-2" type="submit" id="addNewUnitBtn">اضافة</button>
+            <button class="btn btn-outline-primary ml-2" type="submit" id="addNewUnitBtn">اضافة</button>
         </form>
     </div>
 </div>
@@ -100,7 +100,7 @@
                     <td>{{unit.unitPrice}}</td>
                     <td>{{unit.unitCompany}}</td>
                     <td>{{unit.unitDate}}</td>
-                    <td><button class="btn btn-success ml-2" id="showUpdateUnit" (click)="showUpdateUnit(unit)"><i
+                    <td><button class="btn btn-outline-success ml-2" id="showUpdateUnit" (click)="showUpdateUnit(unit)"><i
                                 class="fa fa-edit"></i></button></td>
                     <td><button class="btn btn-danger ml-2" (click)="askForDeleteUnit(unit)"><i
                                 class="fa fa-trash"></i></button></td>
@@ -154,7 +154,7 @@
             </div>
         </div>
         <div class="mt-2">
-            <button class="btn btn-info" (click)='calcRemain()'>احسب</button>
+            <button class="btn btn-outline-info" (click)='calcRemain()'>احسب</button>
         </div>
         <table class="table mt-2 table-hover" style="width: 100%;">
             <thead class="bg-dark text-light">
