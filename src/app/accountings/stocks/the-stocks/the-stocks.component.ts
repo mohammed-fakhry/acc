@@ -112,6 +112,7 @@ export class TheStocksComponent implements OnInit {
         stockName: '',
         sndStockId: null,
         customerName: '',
+        invoiceTotal: 0,
         price: null,
         Qty: null,
         date_time: null,
@@ -151,6 +152,7 @@ export class TheStocksComponent implements OnInit {
       this._stockService.makeInvoiceArry[m].invoiceSearchVal = inVal;
       //this._stockService.makeInvoiceArry[m].stockName = this._stockService.makeInvoiceArry[m].invoiceDetails[0].stockName;
     }
+    //console.log(this._stockService.makeInvoiceArry)
 
   }; // CreateTheInvoiceArry
 

@@ -64,6 +64,13 @@ export class MinFrmStockPermissionComponent implements OnInit {
     this._theStockComp.showStocksEnquiry();
   }
 
+  getCustomerInfo(customerId) {
+    let customerInfo = this.customers.find(
+      customer => customer.customerId == customerId
+    )
+    return customerInfo
+  }
+
   sumArry(arr: any[]) {
     let s = 0
     for (let i = 0; i < arr.length; i++) {
@@ -401,6 +408,8 @@ export class MinFrmStockPermissionComponent implements OnInit {
     this.deleteMinInvBtnDisabled = false;
   } // ShowMinNewInvoice
 
+  theCustomerInfo: Customer;
+
   editStockQtys() {
 
     this._stockService.getHandleBackEnd().subscribe((data: HandleBackEnd[]) => {
@@ -420,6 +429,11 @@ export class MinFrmStockPermissionComponent implements OnInit {
     }
 
     if (BtnSubmitHtml == "تعديل الفاتورة") {
+
+      this.theCustomerInfo = this.getCustomerInfo(this.ivoiceItemesForEdit[0].customerId)
+      this.theCustomerInfo.customerRemain = this.theCustomerInfo.customerRemain + this.ivoiceItemesForEdit[0].invoiceTotal;
+      this._custService.updateCustomerSer(this.theCustomerInfo).subscribe();
+
       for (let v = 0; v < this.ivoiceItemesForEdit.length; v++) {
 
         let getProductsInfo = this._stockService.allProducts.find(
@@ -493,13 +507,17 @@ export class MinFrmStockPermissionComponent implements OnInit {
     // edit or add
     if (this.theStockTransactionId == '') {
       this._stockService.creatStockTransaction(stockTransaction).subscribe();
-      ////console.log(stockTransaction)
-      ////console.log('fst')
+
+      this.theCustomerInfo = this.getCustomerInfo(this.theCustomerId);
+      this.theCustomerInfo.customerRemain = this.theCustomerInfo.customerRemain + parseInt(this.invoiceTotal);
+      this._custService.updateCustomerSer(this.theCustomerInfo).subscribe();
+
     } else {
       stockTransaction.stockTransactionId = this.theStockTransactionId;
       this._stockService.UpdateStockTransaction(stockTransaction).subscribe();
-      ////console.log(stockTransaction)
-      ////console.log('snd')
+
+      this.theCustomerInfo.customerRemain = this.theCustomerInfo.customerRemain + parseInt(this.invoiceTotal);
+      this._custService.updateCustomerSer(this.theCustomerInfo).subscribe();
     }
 
     let BtnSubmitHtml = $('#minNewInvoicetBtn').html(); // to check if invoice for update or add

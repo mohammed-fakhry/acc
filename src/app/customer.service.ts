@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Customer} from './customer'
+import { CustomerInvArry } from './accountings/customer-inv-arry';
+import { CustomerReceipt } from './accountings/customer-receipt';
 
 @Injectable({
   providedIn: 'root'
@@ -33,6 +35,14 @@ export class CustomerService {
   updateCustomerSer(customer: Customer) {
     console.log(customer)
     return this.http.put('http://localhost/accounting/updateCustomer.php?id=' + customer.customerId, customer )
+  }
+
+  getCustomerInvArr() {
+    return this.http.get<CustomerInvArry[]>('http://localhost/accounting/customerInvArrList.php');
+  }
+
+  getCustomerReceipts() {
+    return this.http.get<CustomerReceipt[]>('http://localhost/accounting/getCustomerReceiptsList.php');
   }
 
 }

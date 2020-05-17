@@ -116,30 +116,38 @@ export class ServicesService {
 
   getWorker() {
     return this.http.get<Worker[]>('http://localhost/accounting/list.php');
-  }
+  };
 
   creatEmployee(employee: Worker) {
     return this.http.post('http://localhost/accounting/postEmployee.php', employee)
-  }
+  };
 
   deleteWorkerSer(id: number) {
     return this.http.delete<Worker[]>('http://localhost/accounting/deleteEmployee.php?id=' + id)
-  }
+  };
 
   updateWorkerSer(employee: Worker) {
     return this.http.put('http://localhost/accounting/updateEmployee.php?id=' + employee.workerId, employee)
-  }
+  };
 
   updateWorkerRulesSer(workerRules: WorkerRules) {
     return this.http.put('http://localhost/accounting/editWorkerRules.php?id=1', workerRules)
-  }
+  };
 
   getWorkerRules() {
     return this.http.get<WorkerRules[]>('http://localhost/accounting/workerRulesList.php');
-  }
+  };
 
   getOtherAccSer() {
     return this.http.get<OtherAcc[]>('http://localhost/accounting/otherAccountsList.php');
-  }
+  };
+
+  creatOtherAccSer(acc: OtherAcc) {
+    return this.http.post('http://localhost/accounting/postOtherAcc.php', acc)
+  };
+
+  updateOtherAccSer(acc: OtherAcc) {
+    return this.http.put('http://localhost/accounting/updateOtherAccounts.php?id=' + acc.accId, acc)
+  };
 
 }

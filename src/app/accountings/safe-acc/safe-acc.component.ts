@@ -23,45 +23,44 @@ export class SafeAccComponent implements OnInit {
   ngOnInit() {
 
     this.logService.logStart(); this.logService.reternlog();
-    this.getSafeInfoBEnd();
+    this.getBackendData_Receipt();
 
-  }
+  };
 
   getOtheAccInfo_backEnd() {
     this._service.getOtherAccSer().subscribe((data: OtherAcc[]) => {
       this.otherAcc = data;
-    })
-  }
+    });
+  };
 
-  getSafeInfoBEnd() {
+  getSafeInfo_backEnd() {
     this._safeDataService.getSafes().subscribe((data: SafeData[]) => {
       this._safeDataService.safeList = data;
-    })
-  }
+    });
+  };
 
   getCustomerData_backEnd() {
     this._custService.getCustomer().subscribe((data: Customer[]) => {
       data.shift();
       this.customers = data;
-    })
-  }
+    });
+  };
 
   getBackendData_Receipt() {
-    this._custService.getCustomer().subscribe((data: Customer[]) => {
-      data.shift();
-      this.customers = data;
-    })
-    this._safeDataService.getSafes().subscribe((data: SafeData[]) => {
-      this._safeDataService.safeList = data;
-    })
-  }
+    // getSafeCurrentVal
+    this.getSafeInfo_backEnd();
+    // getCustomerData_backEnd
+    this.getCustomerData_backEnd();
+    // getOtherAcc
+    this.getOtheAccInfo_backEnd()
+  };
 
   safeRecClearForm() {
     $('.clearForm').val('')
-  }
+  };
 
   showAddSafe() {
-    this.getSafeInfoBEnd();
+    this.getSafeInfo_backEnd();
     this._service.clearForm();
     $('#addSafeHeader').html('اضافة خزنة')
     $('#addNewSafeBtn').html('اضافة')
@@ -73,16 +72,18 @@ export class SafeAccComponent implements OnInit {
 
   showAddSafeReceipt() {
     this.safeRecClearForm();
+    this.getBackendData_Receipt();
     $('.safeClass').not('#safeReceipt').hide();
     $('#safeReceipt').show();
     $('#add_SafeReceiptInside').hide();
     $('#header_SafeRecipt').show();
     $('#showAddSafeReceipt').removeClass("btn-outline-info").addClass("btn-outline-secondary").animate({ fontSize: '1.5em' }, 50);
     $('.headerMainBtn').not('#showAddSafeReceipt').removeClass('btn-outline-secondary').addClass('btn-outline-info').animate({ fontSize: '1em' }, 50);
+    console.log(this._safeDataService.safeList[0].currentSafeVal)
   };
 
   showSafeEnquir() {
-    this.getSafeInfoBEnd();
+    this.getSafeInfo_backEnd();
     $('.safeClass').not('#enquireSafe').hide();
     $('#enquireSafe').show();
     $('#showSafeBtn').removeClass("btn-outline-info").addClass("btn-outline-secondary").animate({ fontSize: '1.5em' }, 50);

@@ -46,10 +46,7 @@ export class AddToStockPermissionComponent implements OnInit {
 
     this.getBackendData();
 
-    this._custService.getCustomer().subscribe((data: Customer[]) => {
-      data.shift();
-      this.customers = data;
-    })
+
 
     $('#hideFadeLayerAP').click(function () {
       $('#fadeLayerAP').hide();
@@ -61,6 +58,12 @@ export class AddToStockPermissionComponent implements OnInit {
   productArr: any[] = [];
 
   getBackendData() {
+
+    this._custService.getCustomer().subscribe((data: Customer[]) => {
+      data.shift();
+      this.customers = data;
+    })
+
     this._stockService.getStockTransactionList().subscribe((data: StockTransaction[]) => {
       this._stockService.stockTransactionArr = data;
     })
@@ -73,6 +76,15 @@ export class AddToStockPermissionComponent implements OnInit {
     this._theStockComp.ngOnInit();
     this.getBackendData();
     this._theStockComp.showStocksEnquiry();
+  }
+
+  theCustomerInfo: Customer;
+
+  getCustomerInfo(customerId) {
+    let customerInfo = this.customers.find(
+      customer => customer.customerId == customerId
+    )
+    return customerInfo
   }
 
   sumArry(arr: any[]) {
@@ -242,6 +254,7 @@ export class AddToStockPermissionComponent implements OnInit {
     productId: "",
     productName: "",
     stockId: "",
+    invoiceTotal:0,
     stockName: "",
     customerName: "",
     transactionType: "",
@@ -273,6 +286,10 @@ export class AddToStockPermissionComponent implements OnInit {
     let allProductQty: number;
 
     if (BtnSubmitHtml == "تعديل الفاتورة") {
+
+      this.theCustomerInfo = this.getCustomerInfo(this.ivoiceItemesForEdit[0].customerId)
+      this.theCustomerInfo.customerRemain = this.theCustomerInfo.customerRemain - this.ivoiceItemesForEdit[0].invoiceTotal;
+      this._custService.updateCustomerSer(this.theCustomerInfo).subscribe();
 
       for (let v = 0; v < this.ivoiceItemesForEdit.length; v++) {
 
@@ -355,14 +372,21 @@ export class AddToStockPermissionComponent implements OnInit {
       invoiceTotal: parseInt(this.invoiceTotal),
       date_time: this._service.date_time,
       notes: this.theNote,
-    }
+    };
 
     // edit or add
     if (this.theStockTransactionId == '') {
       this._stockService.creatStockTransaction(stockTransaction).subscribe();
+
+      this.theCustomerInfo = this.getCustomerInfo(this.theCustomerId);
+      this.theCustomerInfo.customerRemain = this.theCustomerInfo.customerRemain + parseInt(this.invoiceTotal);
+      this._custService.updateCustomerSer(this.theCustomerInfo).subscribe();
     } else {
       stockTransaction.stockTransactionId = this.theStockTransactionId;
       this._stockService.UpdateStockTransaction(stockTransaction).subscribe();
+
+      this.theCustomerInfo.customerRemain = this.theCustomerInfo.customerRemain + parseInt(this.invoiceTotal);
+      this._custService.updateCustomerSer(this.theCustomerInfo).subscribe();
     }
 
     let BtnSubmitHtml = $('#addNewInvoicetBtn').html(); // to check if invoice for update or add
@@ -558,7 +582,7 @@ export class AddToStockPermissionComponent implements OnInit {
           this._service.date_time = this._stockService.makeInvoiceArry[i].invoiceDetails[0].date_time;
           $('#stockNameForAdd').val(this._stockService.makeInvoiceArry[i].stockName);
           $('#customerNameForAdd').val(this._stockService.makeInvoiceArry[i].customerName);
-          $('#addInvoiceNote').val(this._stockService.makeInvoiceArry[i].notes);
+          $('#addInvoiceNote').val(this._stockService.makeInvoiceArry[0].notes);
           this.invNum = this._stockService.makeInvoiceArry[i].invoiceDetails[0].invNumber;
         }
       }

@@ -52,6 +52,11 @@ body {
   background-color: rgb(2, 107, 121);
 }
 
+.lightBg {
+  color: black;
+  background-color: rgba(214, 234, 241, 0.95);
+}
+
 .cardHeader {
     color:rgb(8, 151, 170);
     font-weight: bold;
@@ -98,12 +103,12 @@ body {
           }
         }
       }
-      /*
+      
       table.flex-widths {
         &.flex-table-aligned {
           thead > tr {
             overflow-y: scroll;
-            //overflow-x: hidden;
+            overflow-x: auto;
           }
         }
         tr {
@@ -116,9 +121,10 @@ body {
             }
           }
         }
-      }*/
+      }
     }
   }
+
 
   body .wideScreen {
     position: absolute;

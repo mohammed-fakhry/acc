@@ -98,7 +98,7 @@ export class AddSafeComponent implements OnInit {
 
   addNewSafe() {
 
-    this._safeAccComponent.getSafeInfoBEnd();
+    this._safeAccComponent.getOtheAccInfo_backEnd();
 
     let safeInfo = this._safeDataService.safeList.find(
       safe => safe.safeId == this._safeDataService.safeInpts.safeId
@@ -129,7 +129,7 @@ export class AddSafeComponent implements OnInit {
       //console.log(this.safeData.workerId)
     }
 
-    this._safeAccComponent.getSafeInfoBEnd();
+    this._safeAccComponent.getSafeInfo_backEnd();
     this._safeAccComponent.showSafeEnquir();
     this._service.clearForm();
     $('#safeEmployee').removeClass('is-valid').removeClass('is-invalid');

@@ -9,6 +9,8 @@ import { CustomerInvArry } from '../accountings/customer-inv-arry';
 import { StocksService } from '../accountings/stocks/the-stocks/stocks.service';
 import { HandleAddPrimBE } from '../accountings/stocks/handle-add-prim-be';
 import { StockTransaction } from '../accountings/stocks/stock-transaction';
+import { SafeDataService } from '../accountings/safe-acc/safe-data.service';
+import { CustomerReceipt } from '../accountings/customer-receipt';
 
 @Component({
   selector: 'app-customer',
@@ -23,28 +25,17 @@ export class CustomerComponent implements OnInit {
   customerInvArry: any[];
   searchCust: string;
   //customerInvDetail:CustomerInvArry;
-
+  customersInvoices: CustomerInvArry[];
+  customerReceiptArr: CustomerReceipt[];
 
   constructor(public formBuilder: FormBuilder, public _service: ServicesService, public _custService: CustomerService,
-    public router: Router, public logService: LoginService, public _stockService: StocksService) { }
+    public router: Router, public logService: LoginService, public _stockService: StocksService, public _safeDataService: SafeDataService) { }
 
   ngOnInit() {
 
     this.logService.logStart(); this.logService.reternlog();
 
-    this._custService.getCustomer().subscribe((data: Customer[]) => {
-      data.shift();
-      this.customers = data;
-      console.log(this.customers)
-    })
-
-    this._stockService.getHandleAddtoStockPrimList().subscribe((data: HandleAddPrimBE[]) => { // get the details to make customerInvArry
-      this._stockService.HandleAddtoStockPrimArry = data;
-    })
-
-    this._stockService.getStockTransactionList().subscribe((data: StockTransaction[]) => {
-      this._stockService.stockTransactionArr = data;
-    })
+    this.getCustomerData_BackEnd();
 
     this.customerData = new FormGroup({
       customerId: new FormControl(''),
@@ -70,6 +61,45 @@ export class CustomerComponent implements OnInit {
 
   }
 
+  getCustomerData_BackEnd() {
+
+    this._custService.getCustomer().subscribe((data: Customer[]) => {
+      data.shift();
+      this.customers = data;
+      console.log(this.customers)
+    })
+
+    /*this._stockService.getHandleAddtoStockPrimList().subscribe((data: HandleAddPrimBE[]) => { // get the details to make customerInvArry
+      this.customersInvoices = data;
+    })*/
+
+    this._stockService.getStockTransactionList().subscribe((data: StockTransaction[]) => {
+      this._stockService.stockTransactionArr = data;
+    })
+
+    this._custService.getCustomerInvArr().subscribe((data: CustomerInvArry[]) => {
+      this.customersInvoices = data
+    });
+
+    this._custService.getCustomerReceipts().subscribe((data: CustomerReceipt[]) => {
+      this.customerReceiptArr = data
+    })
+
+  };
+
+  printThis() {
+    let show = "#customerInvDetails";
+    let hide1 = '#customerDetails';
+    let hide2 = '#customerHeader';
+    let hide3 = '.custDet';
+    this._service.printThis(show, hide1, hide2, hide3);
+    $('#printCustomerInvArr').css(
+      { 'height': '100%' }
+    )
+    window.print()
+    location.reload()
+  }
+
   putCustomerDataValue(customer) {
     this.customerData = new FormGroup({
       customerId: new FormControl(customer.customerId),
@@ -83,30 +113,82 @@ export class CustomerComponent implements OnInit {
     });
   };
 
+  theCustomerInfo: Customer;
+  getCustomerInfo(customerId: number) {
+    let customerInfo = this.customers.find(
+      customer => customer.customerId == customerId
+    );
+    return customerInfo;
+  }
+
   customerRemain: number;
 
+  // replaced (stockTransactionArr to _stockService.stockTransactionArr)
+
   makeCustomerInvArry() {
+
     this.customerInvArry = []
 
     console.log(this._stockService.stockTransactionArr)
+
+    this.theCustomerInfo = this.getCustomerInfo(this.customerData.value.customerId)
+
+    if (this.theCustomerInfo.customerPaid < 0) {
+      let customerInvDetail: any = {
+        stockTransactionId: 0,
+        invoiceNum: 0,
+        invoiceKind: '',
+        transactionType: 0,
+        invoiceTotalMin: 0,
+        invoiceTotalAdd: 0,
+        netTotal: 0,
+        notes: ''
+      }
+      customerInvDetail.invoiceTotalAdd = this.theCustomerInfo.customerPaid;
+      customerInvDetail.invoiceKind = 'رصيد اول'
+      customerInvDetail.invoiceTotalMin = 0;
+      customerInvDetail.invKindColor = 'text-dark'
+
+      this.customerInvArry.push(customerInvDetail)
+    } else if (this.theCustomerInfo.customerPaid > 0) {
+      let customerInvDetail: any = {
+        stockTransactionId: 0,
+        invoiceNum: 0,
+        invoiceKind: '',
+        transactionType: 0,
+        invoiceTotalMin: 0,
+        invoiceTotalAdd: 0,
+        netTotal: 0,
+        notes: ''
+      }
+      customerInvDetail.invoiceTotalAdd = 0;
+      customerInvDetail.invoiceKind = 'رصيد اول'
+      customerInvDetail.invoiceTotalMin = this.theCustomerInfo.customerPaid;
+      customerInvDetail.invKindColor = 'text-danger'
+      this.customerInvArry.push(customerInvDetail)
+    }
+
+
     for (let i = 0; i < this._stockService.stockTransactionArr.length; i++) {
 
       if (this._stockService.stockTransactionArr[i].customerId == this.customerData.value.customerId) {
 
         let customerInvDetail: any = {
           stockTransactionId: 0,
-          invoiceNum:0,
+          invoiceNum: 0,
           invoiceKind: '',
           transactionType: 0,
           invoiceTotalMin: 0,
           invoiceTotalAdd: 0,
           netTotal: 0,
+          notes: ''
         }
 
         customerInvDetail.stockTransactionId = this._stockService.stockTransactionArr[i].stockTransactionId;
         customerInvDetail.transactionType = this._stockService.stockTransactionArr[i].transactionType;
         customerInvDetail.invoiceNum = this._stockService.stockTransactionArr[i].invNumber;
         customerInvDetail.date_time = this._stockService.stockTransactionArr[i].date_time;
+        customerInvDetail.notes = this._stockService.stockTransactionArr[i].notes
         //date_time
         if (this._stockService.stockTransactionArr[i].transactionType == 1) {
           customerInvDetail.invoiceTotalAdd = this._stockService.stockTransactionArr[i].invoiceTotal;
@@ -123,7 +205,42 @@ export class CustomerComponent implements OnInit {
       };
     };
 
-    console.log(this.customerInvArry)
+    for (let r = 0; r < this.customerReceiptArr.length; r++) {
+
+      if (this.customerReceiptArr[r].customerName == this.customerData.value.customerName) {
+
+        let customerInvDetail: any = {
+          stockTransactionId: 0,
+          invoiceNum: 0,
+          invoiceKind: '',
+          transactionType: 0,
+          invoiceTotalMin: 0,
+          invoiceTotalAdd: 0,
+          netTotal: 0,
+        };
+
+        customerInvDetail.date_time = this.customerReceiptArr[r].date_time;
+        customerInvDetail.invoiceNum = this.customerReceiptArr[r].safeReceiptId;
+        customerInvDetail.notes = this.customerReceiptArr[r].recieptNote;
+
+        if (this.customerReceiptArr[r].receiptKind == 'ايصال استلام نقدية') {
+          customerInvDetail.invoiceKind = `دفعة الى ${this.customerReceiptArr[r].safeName}`;
+          customerInvDetail.invoiceTotalAdd = this.customerReceiptArr[r].receiptVal;
+          customerInvDetail.invoiceTotalMin = 0;
+          customerInvDetail.invKindColor = 'text-dark';
+        } else {
+          customerInvDetail.invoiceKind = `دفعة من ${this.customerReceiptArr[r].safeName}`;
+          customerInvDetail.invoiceTotalMin = this.customerReceiptArr[r].receiptVal;
+          customerInvDetail.invoiceTotalAdd = 0;
+          customerInvDetail.invKindColor = 'text-danger';
+        }
+        this.customerInvArry.push(customerInvDetail);
+        console.log(this.customerData.value.customerName)
+      }
+    }
+
+    console.log(this.theCustomerInfo)
+    this.customerInvArry.sort(this._service.sortArry('date_time'))
 
     for (let c = 0; c < this.customerInvArry.length; c++) {
 
@@ -155,7 +272,7 @@ export class CustomerComponent implements OnInit {
     this._custService.customerInv = [];
     this._custService.invTotalArry = [];
     //console.log(invoice)
-    for (let i = 0; i < this._stockService.HandleAddtoStockPrimArry.length; i++) {
+    for (let i = 0; i < this.customersInvoices.length; i++) {
 
       let customerInvDetail = {
         productName: '',
@@ -164,20 +281,21 @@ export class CustomerComponent implements OnInit {
         total: 0
       }
 
-      if (this._stockService.HandleAddtoStockPrimArry[i].stockTransactionId == invoice.stockTransactionId) {
-        customerInvDetail.productName = this._stockService.HandleAddtoStockPrimArry[i].productName;
-        customerInvDetail.price = this._stockService.HandleAddtoStockPrimArry[i].price;
-        customerInvDetail.Qty = this._stockService.HandleAddtoStockPrimArry[i].Qty;
-        customerInvDetail.total = this._stockService.HandleAddtoStockPrimArry[i].Qty * this._stockService.HandleAddtoStockPrimArry[i].price;
-        this._custService.customerInv.push(customerInvDetail)
-        this._custService.invTotalArry.push(customerInvDetail.total)
+      if (this.customersInvoices[i].stockTransactionId == invoice.stockTransactionId) {
+        customerInvDetail.productName = this.customersInvoices[i].productName;
+        customerInvDetail.price = this.customersInvoices[i].price;
+        customerInvDetail.Qty = this.customersInvoices[i].Qty;
+        customerInvDetail.total = this.customersInvoices[i].Qty * this.customersInvoices[i].price;
+        this._custService.customerInv.push(customerInvDetail);
+        this._custService.invTotalArry.push(customerInvDetail.total);
       }
-    }
+    };
+
     this._custService.invoiceKind = invoice.invoiceKind;
     this._custService.date_time = invoice.date_time
     this._custService.invoiceNum = invoice.invoiceNum
     this._custService.invTotal = this._service.sumArry(this._custService.invTotalArry);
-    console.log(this._custService.invTotal)
+    console.log(invoice)
     $('.fadeLayer').show(0);
     $('#customerInvDetail').show()
   }
@@ -186,12 +304,17 @@ export class CustomerComponent implements OnInit {
   addNewCustomer() {
     let addBtnVal = $('#addNewCustomerBtn').html()
     if (addBtnVal == 'اضافة') {
+
+      this.customerData.value.customerRemain = this.customerData.value.customerPaid;
       this._custService.creatCustomer(this.customerData.value)
         .subscribe()
       console.log(this.customerData.value)
       this._service.clearForm();
       location.reload();
+
     } else if (addBtnVal == 'تعديل') {
+
+      this.customerData.value.customerRemain = this.customerData.value.customerPaid;
       this._custService.updateCustomerSer(this.customerData.value).subscribe(() => {
         console.log(this.customerData.value);
         this.showCustomerEnquiry();
@@ -265,7 +388,7 @@ export class CustomerComponent implements OnInit {
       customerDateIN: new FormControl('', [Validators.required]),
     });
   };
-
+  
   showCustomerEnquiry() {
     $('.customerClass').not('#customerEnquiry').hide();
     $('#customerEnquiry').show();

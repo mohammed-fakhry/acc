@@ -1,7 +1,8 @@
 export class SafeReceiptInpts {
     safeReceiptId: number;
     receiptKind: string;
-    safeRec_DateTime: string;
+    date_time: string;
+    //fst safe inpts
     safeName: string;
     currentSafeVal: number;
     // sec section

@@ -10,9 +10,10 @@ import { SafeReceiptInpts } from './safe-receipt-inpts';
 export class SafeDataService {
 
   safeList: SafeData[];
+  safeReceiptList: SafeReceiptInpts[];
 
   safeInpts: SafeInpts;
-  safeReceipt_inpts: SafeReceiptInpts;
+  //safeReceipt_inpts: SafeReceiptInpts;
 
   theWorkerId: number;
 
@@ -28,6 +29,10 @@ export class SafeDataService {
 
   updateSafeData(safe: SafeData) {
     return this.http.put('http://localhost/accounting/updateSafeData.php?id=' + safe.safeId, safe)
+  }
+
+  creatSafeReceipt(safeReceipt: SafeReceiptInpts) {
+    return this.http.post('http://localhost/accounting/postSafeReceipt.php', safeReceipt)
   }
 
 }

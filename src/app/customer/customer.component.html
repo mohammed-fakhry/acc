@@ -20,7 +20,7 @@
 
 </div>
 <!--customerHeader-->
-<div class="container-fluid navHeader p-3 card mt-3 sticky-top">
+<div class="container-fluid navHeader p-3 card mt-3 sticky-top" id="customerHeader">
     <nav class="navbar">
         <div class="form-inline">
             <button class="btn btn-outline-success d-none" (click)='makeCustomerInvArry()'>test</button>
@@ -28,8 +28,8 @@
             <div class="headerLeftBorder"></div>
             <button class="btn btn-outline-info mx-2" style="height: 70px;" id="showAddCustomerBtn"
                 (click)="ShowAddNewCustomer()">اضافة</button>
-            <button class="btn btn-outline-secondary mx-2" style="height: 70px; font-size: 1.5em;" id="customerEnquirybtn"
-                (click)="showCustomerEnquiry()">استعلام</button>
+            <button class="btn btn-outline-secondary mx-2" style="height: 70px; font-size: 1.5em;"
+                id="customerEnquirybtn" (click)="showCustomerEnquiry()">استعلام</button>
             <div class="headerLeftBorder"></div>
             <input *ngIf="router.url === '/customers'" [(ngModel)]="searchCust" placeholder="بحث"
                 class="form-control mx-3">
@@ -44,8 +44,9 @@
                 <tr>
                     <th>الاسم</th>
                     <th>تليفون</th>
-                    <th>الوحدة</th>
-                    <th>تاريخ التعاقد</th>
+                    <!--<th class="d-none">الوحدة</th>-->
+                    <!--<th class="d-none">تاريخ التعاقد</th>-->
+                    <th>حساب</th>
                     <th>بيانات</th>
                     <th>تعديل</th>
                     <th>حذف</th>
@@ -55,10 +56,11 @@
                 <tr *ngFor="let customer of customers|searchCustomer:searchCust; let i=index">
                     <td>{{customer.customerName}}</td>
                     <td>{{customer.customerTell}}</td>
-                    <td>{{customer.customerUnit}}</td>
-                    <td>{{customer.customerDateIN}}</td>
-                    <td><button class="btn btn-outline-secondary ml-2" id="showCustomerCard" (click)="showCustomerCard(customer)"><i
-                                class="fa fa-id-card"></i></button></td>
+                    <!--<td class="d-none">{{customer.customerUnit}}</td>-->
+                    <!--<td class="d-none">{{customer.customerDateIN}}</td>-->                    
+                    <td>{{customer.customerRemain}}</td>
+                    <td><button class="btn btn-outline-secondary ml-2" id="showCustomerCard"
+                            (click)="showCustomerCard(customer)"><i class="fa fa-id-card"></i></button></td>
                     <td><button class="btn btn-outline-success ml-2" id="showUpdatecustomer"
                             (click)="showUpdateCustomer(customer)"><i class="fa fa-edit"></i></button></td>
                     <td><button class="btn btn-danger ml-2" id="askDeletcustomerBtn" (click)="askForDelete(customer)"><i
@@ -86,10 +88,17 @@
                     <!--[(ngModel)]="customerDataView.customerTell"-->
                 </div>
             </div>
-            <div class="form-group">
-                <label>العنوان</label>
-                <input formControlName="customerAdd" id="customerAdd" class="form-control">
-                <!--[(ngModel)]="customerDataView.customerAdd"-->
+            <div class="row">
+                <div class="form-group col-md-6">
+                    <label>العنوان</label>
+                    <input formControlName="customerAdd" id="customerAdd" class="form-control">
+                    <!--[(ngModel)]="customerDataView.customerAdd"-->
+                </div>
+                <div class="form-group col-md-6">
+                    <label>تاريخ التعاقد</label>
+                    <input formControlName="customerDateIN" id="customerDateIN" class="form-control">
+                    <!--[(ngModel)]="customerDataView.customerDateIN"-->
+                </div>
             </div>
             <div class="row">
                 <div class="form-group col-md-6">
@@ -98,10 +107,11 @@
                     <!--[(ngModel)]="customerDataView.customerUnit"-->
                 </div>
                 <div class="form-group col-md-6">
-                    <label>تاريخ التعاقد</label>
-                    <input formControlName="customerDateIN" id="customerDateIN" class="form-control">
-                    <!--[(ngModel)]="customerDataView.customerDateIN"-->
+                    <label>رصيد اول</label>
+                    <input formControlName="customerPaid" id="customerPaid" class="form-control">
+                    <!--[(ngModel)]="customerDataView.customerUnit"-->
                 </div>
+
             </div>
             <button class="btn btn-outline-primary ml-2" type="submit" id="addNewCustomerBtn"></button>
         </form>
@@ -134,7 +144,7 @@
             </div>
             <div class="col-md-4">
                 <div class="form-inline">
-                    <h5 class="cardHeader">اجمالى مدفوعات : </h5>
+                    <h5 class="cardHeader">رصيد اول : </h5>
                     <h5 class="mr-2">{{customerData.value.customerPaid}}</h5>
                 </div>
             </div>
@@ -150,29 +160,40 @@
 </div>
 <!--customerInvDetails-->
 <div class="container-fluid card  mt-3 p-5 customerClass" id="customerInvDetails" style="display: none;">
-    <div class="panel-body panel-flex-table">
-        <table class="flex-table table table-hover">
-            <thead class="navHeader text-light">
+    <div class="row">
+        <div class="col">
+            <h3 class="card-title cardHeader">حساب {{customerData.value.customerName}}</h3>
+        </div>
+        <div class="col">
+            <i class="fa fa-print btn p-3 btn-light text-center" (click)='printThis()'></i>
+        </div>
+    </div>
+    <div class="panel-body panel-flex-table mt-2" id="printCustomerInvArr">
+        <table class="flex-table table table-hover text-center">
+            <thead class="navHeader text-light text-center">
                 <tr>
-                    <th>التاريخ</th>
-                    <th>تفاصيل الفاتورة</th>
-                    <th>رقم الفاتورة</th>
-                    <th>دائن</th>
-                    <th>مدين</th>
-                    <th>صافى</th>
+                    <th style="flex: none; width: 275px">التاريخ</th>
+                    <th class="custDet" style="flex: none; width: 100px">تفاصيل الفاتورة</th>
+                    <th style="flex: n; width: 100px">رقم الفاتورة</th>
+                    <th class="text-center">دائن</th>
+                    <th class="text-center">مدين</th>
+                    <th class="text-center">صافى</th>
+                    <th style="flex: 2">ملاحظات</th>
                 </tr>
             </thead>
-            <tbody class=" mt-3">
+            <tbody class=" mt-3 tableBody">
                 <tr *ngFor="let invoice of customerInvArry; let i=index">
-                    <td>
+                    <td style="flex: none; width: 275px">
                         <input disabled value="{{invoice.date_time}}" type="datetime-local">
                     </td>
-                    <td class="mr-2"><button class="btn btn-outline-secondary ml-2" id="showCustomerInvoice"
+                    <td class="text-center" style="flex: none; width: 100px" class="custDet"><button class="btn btn-outline-secondary" id="showCustomerInvoice"
                             (click)="showCustomerInvoice(invoice)"><i class="fa fa-id-card"></i></button></td>
-                    <td id="invoiceNum{{i}}" class="{{invoice.invKindColor}}">{{invoice.invoiceKind}} رقم : {{invoice.invoiceNum}}</td>
-                    <td id="invoiceTotalAdd{{i}}">{{invoice.invoiceTotalAdd}}</td>
-                    <td id="invoiceTotalMin{{i}}">{{invoice.invoiceTotalMin}}</td>
-                    <td id="netTotal{{i}}" class="{{invoice.netTotalColor}}">{{invoice.netTotal}}</td>
+                    <td style="flex: 1; width: 100px" id="invoiceNum{{i}}" class="{{invoice.invKindColor}}">{{invoice.invoiceKind}} رقم :
+                        {{invoice.invoiceNum}}</td>
+                    <td class="text-center"  id="invoiceTotalAdd{{i}}">{{invoice.invoiceTotalAdd}}</td>
+                    <td class="text-center" id="invoiceTotalMin{{i}}">{{invoice.invoiceTotalMin}}</td>
+                    <td id="netTotal{{i}}" class="{{invoice.netTotalColor}} lightBg text-center">{{invoice.netTotal}}</td>
+                    <td style="flex: 2" id="notes{{i}}" class="{{invoice.notes}}">{{invoice.notes}}</td>
                 </tr>
             </tbody>
         </table>
