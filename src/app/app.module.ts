@@ -32,6 +32,7 @@ import { SafeAccComponent } from './accountings/safe-acc/safe-acc.component';
 import { AddSafeComponent } from './accountings/safe-acc/add-safe/add-safe.component';
 import { EnquireSafeComponent } from './accountings/safe-acc/enquire-safe/enquire-safe.component';
 import { SafeReceiptComponent } from './accountings/safe-acc/safe-receipt/safe-receipt.component';
+import { SafeTransactionComponent } from './accountings/safe-acc/safe-transaction/safe-transaction.component';
 
 @NgModule({
   declarations: [
@@ -64,6 +65,7 @@ import { SafeReceiptComponent } from './accountings/safe-acc/safe-receipt/safe-r
     AddSafeComponent,
     EnquireSafeComponent,
     SafeReceiptComponent,
+    SafeTransactionComponent,
   ],
   imports: [
     BrowserModule,

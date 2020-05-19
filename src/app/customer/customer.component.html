@@ -31,39 +31,47 @@
             <button class="btn btn-outline-secondary mx-2" style="height: 70px; font-size: 1.5em;"
                 id="customerEnquirybtn" (click)="showCustomerEnquiry()">استعلام</button>
             <div class="headerLeftBorder"></div>
-            <input *ngIf="router.url === '/customers'" [(ngModel)]="searchCust" placeholder="بحث"
-                class="form-control mx-3">
+            <div class="col text-center" id="printCustomerList">
+                <input *ngIf="router.url === '/customers'" [(ngModel)]="searchCust" placeholder="بحث"
+                class="form-control mx-3" id="searchCust">
+                <i class="fa fa-print btn p-3 btn-light text-center" (click)='printThisCustomerList()'></i>
+            </div>
         </div>
     </nav>
 </div>
 <!--customerEnquiry-->
+<div style="display: none; position: fixed; top: 10px; right: 10px;" class="closeBtn fixed-top">
+    <button class="btn btn-outline-danger" id="reloadLoc" (click)='reloadLoc()'>X</button>
+    <button  class="btn btn-outline-secondary mr-2" (click)='openwindowPrint()'><i class="fa fa-print"></i></button>
+    
+</div>
 <div class="container-fluid card  mt-3 p-5 customerClass" id="customerEnquiry">
-    <div class="panel-body panel-flex-table">
+    <div class="panel-body panel-flex-table" id="customerListTable">
         <table class="flex-table  table table-hover">
             <thead class="navHeader text-light">
                 <tr>
                     <th>الاسم</th>
+                    <th>حساب</th>
                     <th>تليفون</th>
                     <!--<th class="d-none">الوحدة</th>-->
                     <!--<th class="d-none">تاريخ التعاقد</th>-->
-                    <th>حساب</th>
-                    <th>بيانات</th>
-                    <th>تعديل</th>
-                    <th>حذف</th>
+                    <th class="HideCol">بيانات</th>
+                    <th class="HideCol">تعديل</th>
+                    <th class="HideCol">حذف</th>
                 </tr>
             </thead>
             <tbody class="mt-3">
                 <tr *ngFor="let customer of customers|searchCustomer:searchCust; let i=index">
                     <td>{{customer.customerName}}</td>
+                    <td class="{{customerRemainColor}}">{{customer.customerRemain}}</td>
                     <td>{{customer.customerTell}}</td>
                     <!--<td class="d-none">{{customer.customerUnit}}</td>-->
-                    <!--<td class="d-none">{{customer.customerDateIN}}</td>-->                    
-                    <td>{{customer.customerRemain}}</td>
-                    <td><button class="btn btn-outline-secondary ml-2" id="showCustomerCard"
+                    <!--<td class="d-none">{{customer.customerDateIN}}</td>-->
+                    <td class="HideCol"><button class="btn btn-outline-secondary ml-2" id="showCustomerCard"
                             (click)="showCustomerCard(customer)"><i class="fa fa-id-card"></i></button></td>
-                    <td><button class="btn btn-outline-success ml-2" id="showUpdatecustomer"
+                    <td class="HideCol"><button class="btn btn-outline-success ml-2" id="showUpdatecustomer"
                             (click)="showUpdateCustomer(customer)"><i class="fa fa-edit"></i></button></td>
-                    <td><button class="btn btn-danger ml-2" id="askDeletcustomerBtn" (click)="askForDelete(customer)"><i
+                    <td class="HideCol"><button class="btn btn-danger ml-2" id="askDeletcustomerBtn" (click)="askForDelete(customer)"><i
                                 class="fa fa-trash"></i></button></td>
                 </tr>
             </tbody>
@@ -186,13 +194,16 @@
                     <td style="flex: none; width: 275px">
                         <input disabled value="{{invoice.date_time}}" type="datetime-local">
                     </td>
-                    <td class="text-center" style="flex: none; width: 100px" class="custDet"><button class="btn btn-outline-secondary" id="showCustomerInvoice"
+                    <td class="text-center" style="flex: none; width: 100px" class="custDet"><button
+                            class="btn btn-outline-secondary" id="showCustomerInvoice"
                             (click)="showCustomerInvoice(invoice)"><i class="fa fa-id-card"></i></button></td>
-                    <td style="flex: 1; width: 100px" id="invoiceNum{{i}}" class="{{invoice.invKindColor}}">{{invoice.invoiceKind}} رقم :
+                    <td style="flex: 1; width: 100px" id="invoiceNum{{i}}" class="{{invoice.invKindColor}}">
+                        {{invoice.invoiceKind}} رقم :
                         {{invoice.invoiceNum}}</td>
-                    <td class="text-center"  id="invoiceTotalAdd{{i}}">{{invoice.invoiceTotalAdd}}</td>
+                    <td class="text-center" id="invoiceTotalAdd{{i}}">{{invoice.invoiceTotalAdd}}</td>
                     <td class="text-center" id="invoiceTotalMin{{i}}">{{invoice.invoiceTotalMin}}</td>
-                    <td id="netTotal{{i}}" class="{{invoice.netTotalColor}} lightBg text-center">{{invoice.netTotal}}</td>
+                    <td id="netTotal{{i}}" class="{{invoice.netTotalColor}} lightBg text-center">{{invoice.netTotal}}
+                    </td>
                     <td style="flex: 2" id="notes{{i}}" class="{{invoice.notes}}">{{invoice.notes}}</td>
                 </tr>
             </tbody>

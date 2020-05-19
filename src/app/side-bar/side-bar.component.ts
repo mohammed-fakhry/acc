@@ -46,7 +46,7 @@ export class SideBarComponent implements OnInit {
     let customerBtn = $('#customersBtn');
     let workersBtn = $('#workersBtn');
     let unitesBtn = $('#unitesBtn');
-    let safeAccBtn = $('#safeAcc');
+    let safeAccBtn = $('#safeAccBtn');
     //safeAcc
     let htmlDbItemsBtns: any[] = [workersBtn, unitesBtn]
     let dBUrls: any[] = ['/workers', '/unites'] // dataBaseUrls
@@ -92,11 +92,10 @@ export class SideBarComponent implements OnInit {
 
   } // ngOnInit
 
-  secButtonClick() {
-    $("#sidebar .secButton").click(function () {
-      $(this).removeClass('btn-light').addClass('btn-secondary')// .next().slideToggle(500);
-      $("#sidebar .secButton").not(this).removeClass('btn-secondary').addClass('btn-light');
-    })
+  secButtonClick(btnId) {
+    //console.log(btnId)
+    $(`#${btnId}`).removeClass('btn-light').addClass('btn-secondary')// .next().slideToggle(500);
+    $("#sidebar .secButton").not(`#${btnId}`).removeClass('btn-secondary').addClass('btn-light');
     this.sidebarToggle()
   }
 
@@ -112,7 +111,7 @@ export class SideBarComponent implements OnInit {
     console.log(this.logService.isUser)
     location.reload();
   }
-  
+
   // new effects
   sidebarToggle() {
     let sideBarHeight = $('#sidebar').height()

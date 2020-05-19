@@ -14,10 +14,10 @@
                         <button class="btn btn-light py-2 ch3 mt-1 mainBtns" id="dbBtn"
                                 style="border: solid 1px teal;"><i class="fa fa-database pl-2"></i>البيانات</button>
                         <div class="my-1 secDiv">
-                                <button id="workersBtn" routerLink="/workers" (click)='secButtonClick()'
+                                <button id="workersBtn" routerLink="/workers" (click)='secButtonClick("workersBtn")'
                                         class="secButton btn btn-light text-right" style="font-size: 1em;"><i
                                                 class="fa fa-user fa-lg px-2"></i>العاملين</button>
-                                <button id="unitesBtn" routerLink="/unites" (click)='secButtonClick()'
+                                <button id="unitesBtn" routerLink="/unites" (click)='secButtonClick("unitesBtn")'
                                         class="secButton btn btn-light text-right" style="font-size: 1em;"><i
                                                 class="fa fa-building fa-lg px-2"></i>الوحدات</button>
                         </div>
@@ -26,13 +26,14 @@
                         <button class="btn btn-light py-2 ch3 mt-1 mainBtns" id="accBtn"
                                 style="border: solid 1px teal;"><i class="fa fa-calculator pl-2"></i>حسابات</button>
                         <div class="my-1 secDiv">
-                                <button id="stocksBtn" routerLink="/stocks" (click)='secButtonClick()'
+                                <button id="stocksBtn" routerLink="/stocks" (click)='secButtonClick("stocksBtn")'
                                         class="secButton btn btn-light text-right" style="font-size: 1em;"><i
                                                 class="fa fa-cubes fa-lg px-2"></i>المخازن</button>
-                                <button id="safeAcc" routerLink="/safe-acc" (click)='secButtonClick()'
+                                <button id="safeAccBtn" routerLink="/safe-acc" (click)='secButtonClick("safeAccBtn")'
                                         class="secButton btn btn-light text-right"><i class="fa fa-building fa-lg px-2"
                                                 style="font-size: 1 em;"></i>الخزنة</button>
-                                <button id="customersBtn" routerLink="/customers" (click)='secButtonClick()'
+                                <button id="customersBtn" routerLink="/customers"
+                                        (click)='secButtonClick("customersBtn")'
                                         class="secButton btn btn-light text-right" style="font-size: 1em;"><i
                                                 class="fa fa-users fa-lg px-2"></i>العملاء</button>
                         </div>

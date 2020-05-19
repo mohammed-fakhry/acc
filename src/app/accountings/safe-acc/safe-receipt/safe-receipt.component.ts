@@ -20,6 +20,8 @@ export class SafeReceiptComponent implements OnInit {
   isReceiptValid: boolean;
   //safeReceiptData: SafeReceiptInpts;
   safeReceipt_inpts: SafeReceiptInpts;
+  // for check val in edit
+  valIsOk: number;
 
   constructor(public _safeDataService: SafeDataService, public _stockService: StocksService,
     public _service: ServicesService, public _custService: CustomerService, public _safeAccComponent: SafeAccComponent) { }
@@ -66,9 +68,10 @@ export class SafeReceiptComponent implements OnInit {
     this.getCurrentDate();
     this.safeReceipt_inpts.date_time = this._service.date_time;
     this.safeReceipt_inpts.safeName = this._safeDataService.safeList[0].safeName;
+    this.safeReceipt_inpts.safeId = this._safeDataService.safeList[0].safeId;
     this.safeReceipt_inpts.currentSafeVal = this._safeDataService.safeList[0].currentSafeVal;
     this.safeChanged();
-    console.log(this._safeDataService.safeList[0].currentSafeVal)
+    //console.log(this._safeDataService.safeList[1].safeName)
     // receiptKind section
     this.safeReceipt_inpts.transactionAccKind = 'حساب'
     this.safeReceipt_inpts.receiptKind = 'ايصال استلام نقدية'
@@ -85,22 +88,70 @@ export class SafeReceiptComponent implements OnInit {
     this.checkReceiptValid();
     $('#receiptVal').removeClass('is-invalid').removeClass('is-valid');
     $('#AccName').removeClass('is-invalid').removeClass('is-valid');
+    //console.log(this._safeDataService.safeList)
+  }
+
+  searchSafeReceiptTxt: string;
+
+  changAddSafeReceiptBtn() {
+    if (this.searchSafeReceiptTxt == '') {
+      $('#call_SafeRecieptBtn').html('ايصال جديد')
+    } else {
+      $('#call_SafeRecieptBtn').html('بحث')
+    }
+    //console.log(this.searchSafeReceiptTxt)
+  }
+
+  getTheReceiptInfo(receiptId) {
+    let receiptInfo = this._safeDataService.safeReceiptList.find(
+      safeReceipt => safeReceipt.safeReceiptId == receiptId
+    )
+    return receiptInfo
+  }
+
+  theReceiptInfo: SafeReceiptInpts;
+
+  putValsForEdit(recInfo: SafeReceiptInpts) {
+    this.safeChanged();
+    if (recInfo.transactionAccKind == 'خزنة') {
+      this.secSafeNameChanged();
+    } else if (recInfo.transactionAccKind == 'عميل') {
+      this.isCustomerValid();
+    } else if (recInfo.transactionAccKind == 'حساب') {
+      this.accNameChanged();
+    }
   }
 
   showAddSafeReceipt() {
     // getBackendData_Receipt
     this._safeAccComponent.getBackendData_Receipt();
     //
+    let call_SafeRecieptBtn = $('#call_SafeRecieptBtn').html();
+
+    if (call_SafeRecieptBtn == 'ايصال جديد') {
+
+      this.makeDefultNewReceiptVals();
+      // Make receiptValValid false
+      $('#receiptVal').removeClass('is-invalid').removeClass('is-valid');
+      $('#AccName').removeClass('is-invalid').removeClass('is-valid');
+      this.validTests.receiptValValid = false;
+      this.safeReceipt_inpts.receiptVal = null;
+      $('#addNewSafeReceipt').html('حفظ الايصال')
+
+    } else {
+
+      this.theReceiptInfo = this.getTheReceiptInfo(this.searchSafeReceiptTxt)
+      this.safeReceipt_inpts = this.theReceiptInfo;
+      this.transactionAccKindChanged();
+      $('#addNewSafeReceipt').html('تعديل الايصال');
+      this.putValsForEdit(this.theReceiptInfo)
+      this.valIsOk = this.safeReceipt_inpts.currentSafeVal + this.theReceiptInfo.receiptVal;
+      this.receiptKindChanged();
+    }
     $('#add_SafeReceiptInside').show();
     $('#header_SafeRecipt').hide();
-    this.makeDefultNewReceiptVals();
-    // Make receiptValValid false
-    $('#receiptVal').removeClass('is-invalid').removeClass('is-valid');
-    $('#AccName').removeClass('is-invalid').removeClass('is-valid');
-    this.validTests.receiptValValid = false;
-    this.safeReceipt_inpts.receiptVal = null;
-    //
-    console.log(this._safeDataService.safeList[0].currentSafeVal)
+
+    //console.log(this._safeDataService.safeList[0].currentSafeVal)
   };
 
   validTests = {
@@ -124,6 +175,7 @@ export class SafeReceiptComponent implements OnInit {
   makeSndSafeNull() {
     // clear inputs
     this.safeReceipt_inpts.secSafeName = null;
+    this.safeReceipt_inpts.secSafeId = null;
     this.safeReceipt_inpts.current_SecSafeVal = null;
     // clear validation
     this.validTests.fstSafeinValid = false;
@@ -162,6 +214,7 @@ export class SafeReceiptComponent implements OnInit {
           this.isReceiptValid = false;
         }
       } else if (this.safeReceipt_inpts.transactionAccKind == 'خزنة') {
+        this.isReceiptValValid();
         if (this.safeReceipt_inpts.secSafeName == null) {
           this.isReceiptValid = true;
         } else {
@@ -196,8 +249,9 @@ export class SafeReceiptComponent implements OnInit {
       this.makeCustomerNull();
       this.makeAccNameNull();
       // set defult safe Name
-      this.safeReceipt_inpts.secSafeName = this._safeDataService.safeList[1].safeName
-      this.safeReceipt_inpts.current_SecSafeVal = this._safeDataService.safeList[1].currentSafeVal
+      this.safeReceipt_inpts.secSafeName = this._safeDataService.safeList[2].safeName
+      this.safeReceipt_inpts.secSafeId = this._safeDataService.safeList[2].safeId
+      this.safeReceipt_inpts.current_SecSafeVal = this._safeDataService.safeList[2].currentSafeVal
       this.secSafeNameChanged();
       // clear receiptVal validation
       $('#receiptVal').removeClass('is-invalid').removeClass('is-valid');
@@ -210,7 +264,7 @@ export class SafeReceiptComponent implements OnInit {
       $('#customerReceiptAcc').show();
     }
     // clear receiptVal and style
-    this.safeReceipt_inpts.receiptVal = null;
+    //this.safeReceipt_inpts.receiptVal = null;
     $('#receiptVal').removeClass('is-invalid').removeClass('is-valid');
     // check validation
     this.checkReceiptValid();
@@ -232,29 +286,56 @@ export class SafeReceiptComponent implements OnInit {
   theSnd_SafeInfo: SafeData;
 
   secSafeNameChanged() {
-    if (this.safeReceipt_inpts.secSafeName === this.safeReceipt_inpts.safeName) {
-      this.validTests.secSafeValidMsg = 'لا يمكن تكرار نفس الخزنة'
-      this.validTests.secSafeinValid = true;
-    } else {
-      this.validTests.secSafeinValid = false;
-      this.validTests.fstSafeinValid = false;
-    }
     this.theSnd_SafeInfo = this.getSafeInfo(this.safeReceipt_inpts.secSafeName);
-    this.safeReceipt_inpts.current_SecSafeVal = this.theSnd_SafeInfo.currentSafeVal;
+
+    if (this.theSnd_SafeInfo == undefined) {
+
+      this.validTests.secSafeValidMsg = 'اسم الخزنة غير صحيح'
+      $('#secSafeName').removeClass('is-valid').addClass('is-invalid');
+      this.validTests.secSafeinValid = true;
+      this.safeReceipt_inpts.current_SecSafeVal = null;
+
+    } else {
+
+      if (this.safeReceipt_inpts.secSafeName === this.safeReceipt_inpts.safeName) {
+        this.validTests.secSafeValidMsg = 'لا يمكن تكرار نفس الخزنة'
+        $('#secSafeName').removeClass('is-valid').addClass('is-invalid');
+        this.validTests.secSafeinValid = true;
+      } else {
+        $('#secSafeName').removeClass('is-invalid').addClass('is-valid');
+        this.validTests.secSafeinValid = false;
+        this.validTests.fstSafeinValid = false;
+      }
+
+      this.safeReceipt_inpts.current_SecSafeVal = this.theSnd_SafeInfo.currentSafeVal;
+    }
+
     this.isReceiptValValid();
     this.checkReceiptValid();
   }
 
   safeChanged() {
-    if (this.safeReceipt_inpts.secSafeName === this.safeReceipt_inpts.safeName) {
-      this.validTests.firstSafeValidMsg = 'لا يمكن تكرار نفس الخزنة';
-      this.validTests.fstSafeinValid = true;
-    } else {
-      this.validTests.fstSafeinValid = false;
-      this.validTests.secSafeinValid = false;
-    }
     this.theSafeInfo = this.getSafeInfo(this.safeReceipt_inpts.safeName);
-    this.safeReceipt_inpts.currentSafeVal = this.theSafeInfo.currentSafeVal
+
+    if (this.theSafeInfo == undefined) {
+      this.validTests.firstSafeValidMsg = 'اسم الخزنة غير صحيح';
+      $('#safeNameReceipt').removeClass('is-valid').addClass('is-invalid');
+      this.validTests.fstSafeinValid = true;
+      this.safeReceipt_inpts.currentSafeVal = null;
+    } else {
+      if (this.safeReceipt_inpts.secSafeName === this.safeReceipt_inpts.safeName) {
+        this.validTests.firstSafeValidMsg = 'لا يمكن تكرار نفس الخزنة';
+        $('#safeNameReceipt').removeClass('is-valid').addClass('is-invalid');
+        this.validTests.fstSafeinValid = true;
+      } else {
+        $('#safeNameReceipt').removeClass('is-invalid').addClass('is-valid');
+        this.validTests.fstSafeinValid = false;
+        this.validTests.secSafeinValid = false;
+      }
+
+      this.safeReceipt_inpts.currentSafeVal = this.theSafeInfo.currentSafeVal
+    }
+
     this.isReceiptValValid();
     this.checkReceiptValid();
   }
@@ -275,7 +356,7 @@ export class SafeReceiptComponent implements OnInit {
       this.safeReceipt_inpts.currentAccVal = this.theOtherAccInfo.currentAccVal;
     }
     this.checkReceiptValid();
-    console.log(this.safeReceipt_inpts.AccName)
+    //console.log(this.safeReceipt_inpts.AccName)
   }
 
   theCustomerId: number;
@@ -304,6 +385,7 @@ export class SafeReceiptComponent implements OnInit {
     }
 
   } // isCustomerValid
+
 
   isReceiptValValid() {
     if (this.safeReceipt_inpts.transactionAccKind == 'خزنة') {
@@ -336,13 +418,31 @@ export class SafeReceiptComponent implements OnInit {
 
       if (this.theReceiptKind == 'min') {
 
-        if (this.safeReceipt_inpts.receiptVal <= this.safeReceipt_inpts.currentSafeVal) {
-          $('#receiptVal').removeClass('is-invalid').addClass('is-valid');
-          this.validTests.receiptValValid = false;
+        //let valIsOk: Number;
+        let submBtn = $('#addNewSafeReceipt').html()
+
+        if (submBtn == 'تعديل الايصال') {
+          //console.log(submBtn)
+          if (this.valIsOk >= this.safeReceipt_inpts.receiptVal) {
+            $('#receiptVal').removeClass('is-invalid').addClass('is-valid');
+            this.validTests.receiptValValid = false;
+          } else {
+            $('#receiptVal').removeClass('is-valid').addClass('is-invalid');
+            this.validTests.receiptValValid = true;
+            this.validTests.receiptValValidMsg = 'الرصيد لا يسمح'
+          }
+
         } else {
-          $('#receiptVal').removeClass('is-valid').addClass('is-invalid');
-          this.validTests.receiptValValid = true;
-          this.validTests.receiptValValidMsg = 'الرصيد لا يسمح'
+
+          if (this.safeReceipt_inpts.receiptVal <= this.safeReceipt_inpts.currentSafeVal) {
+            $('#receiptVal').removeClass('is-invalid').addClass('is-valid');
+            this.validTests.receiptValValid = false;
+          } else {
+            $('#receiptVal').removeClass('is-valid').addClass('is-invalid');
+            this.validTests.receiptValValid = true;
+            this.validTests.receiptValValidMsg = 'الرصيد لا يسمح'
+          }
+
         }
 
       } else {
@@ -352,11 +452,14 @@ export class SafeReceiptComponent implements OnInit {
 
     }
 
-    if (this.safeReceipt_inpts.receiptVal == null) {
+    if (this.safeReceipt_inpts.receiptVal == null || this.safeReceipt_inpts.receiptVal == 0) {
       $('#receiptVal').removeClass('is-valid').addClass('is-invalid');
       this.validTests.receiptValValid = true;
       this.validTests.receiptValValidMsg = 'يجب ادخال القيمة'
     }
+
+    //console.log(this.valIsOk)
+    //console.log(this.safeReceipt_inpts.receiptVal)
     this.checkReceiptValid();
   }
 
@@ -383,7 +486,36 @@ export class SafeReceiptComponent implements OnInit {
     recieptNote: '',
   }*/
 
-  fstSafeVal_NewReceip: number;
+  editSafeVal() { // from old receipt
+    console.log(this.theReceiptInfo)
+  };
+  editSecSafeVal() { // from old receipt
+
+  }
+  editCustomerVal() { // from old receipt
+
+  };
+  editOtherAccVal() { // from old receipt
+
+  };
+
+  receiptTestBtn() {
+
+    let addNewSafeReceipt_Btn = $('#addNewSafeReceipt').html();
+
+    if (addNewSafeReceipt_Btn == "تعديل الايصال") {
+    // safe
+    this.editSafeVal();
+    // sec safe
+    this.editSecSafeVal();
+    // customer
+    this.editCustomerVal();
+    // other acc
+    this.editOtherAccVal();
+    }
+
+  }
+
   saveRecieptData() {
 
     let fstSafe_NewVal: number;
@@ -397,9 +529,12 @@ export class SafeReceiptComponent implements OnInit {
     let acc_NewVal: number;
     let acc_NewData: OtherAcc;
 
+    let isSndSafe: Boolean = false;
+    let isCustomer: boolean = false;
+
     if (this.safeReceipt_inpts.transactionAccKind == 'خزنة') { // safe modify
       //make defult customer Id
-      this.safeReceipt_inpts.customerId = 1;
+      isSndSafe = true;
 
       if (this.theReceiptKind == 'add') {
         fstSafe_NewVal = this.theSafeInfo.currentSafeVal + this.safeReceipt_inpts.receiptVal;
@@ -412,27 +547,31 @@ export class SafeReceiptComponent implements OnInit {
       fstSafe_NewData = { // first safe update in backend
         safeId: this.theSafeInfo.safeId,
         safeName: this.theSafeInfo.safeName,
+        opendVal: this.theSafeInfo.opendVal,
         safeEmployee: this.theSafeInfo.safeEmployee,
         workerId: this.theSafeInfo.workerId,
         currentSafeVal: fstSafe_NewVal, // the only changed val
       };
-      console.log(JSON.stringify(fstSafe_NewData) + ' : fstSafe_NewData');
+      //console.log(JSON.stringify(fstSafe_NewData) + ' : fstSafe_NewData');
       // save to backend
-      this._safeDataService.updateSafeData(fstSafe_NewData).subscribe;
-      this.fstSafeVal_NewReceip = fstSafe_NewVal;
+      this._safeDataService.updateSafeData(fstSafe_NewData).subscribe();
+      //this.fstSafeVal_NewReceip = fstSafe_NewVal;
 
       sndSafe_NewData = { // snd safe update in backend
         safeId: this.theSnd_SafeInfo.safeId,
         safeName: this.theSnd_SafeInfo.safeName,
+        opendVal: this.theSnd_SafeInfo.opendVal,
         safeEmployee: this.theSnd_SafeInfo.safeEmployee,
         workerId: this.theSnd_SafeInfo.workerId,
         currentSafeVal: sndSafe_NewVal, // the only changed val
       };
-      console.log(JSON.stringify(sndSafe_NewData) + ' : sndSafe_NewData');
+      //console.log(JSON.stringify(sndSafe_NewData) + ' : sndSafe_NewData');
       // save to backend
-      this._safeDataService.updateSafeData(sndSafe_NewData).subscribe;
+      this._safeDataService.updateSafeData(sndSafe_NewData).subscribe();
 
     } else if (this.safeReceipt_inpts.transactionAccKind == 'عميل') { // customer modify
+
+      isCustomer = true;
 
       if (this.theReceiptKind == 'add') {
         fstSafe_NewVal = this.theSafeInfo.currentSafeVal + this.safeReceipt_inpts.receiptVal;
@@ -445,14 +584,15 @@ export class SafeReceiptComponent implements OnInit {
       fstSafe_NewData = { // first safe update in backend
         safeId: this.theSafeInfo.safeId,
         safeName: this.theSafeInfo.safeName,
+        opendVal: this.theSafeInfo.opendVal,
         safeEmployee: this.theSafeInfo.safeEmployee,
         workerId: this.theSafeInfo.workerId,
         currentSafeVal: fstSafe_NewVal, // the only changed val
       };
-      console.log(JSON.stringify(fstSafe_NewData) + ' : fstSafe_NewData');
+      //console.log(JSON.stringify(fstSafe_NewData) + ' : fstSafe_NewData');
       // save to backend
-      this._safeDataService.updateSafeData(fstSafe_NewData).subscribe;
-      this.fstSafeVal_NewReceip = fstSafe_NewVal;
+      this._safeDataService.updateSafeData(fstSafe_NewData).subscribe();
+      //this.fstSafeVal_NewReceip = fstSafe_NewVal;
 
       customer_NewData = { // customer update in backend
         customerId: this.theCustomerInfo.customerId,
@@ -464,10 +604,10 @@ export class SafeReceiptComponent implements OnInit {
         customerUnit: this.theCustomerInfo.customerUnit,
         customerRemain: customer_NewVal // the only changed val
       };
-      
-      this.safeReceipt_inpts.customerId = this.theCustomerInfo.customerId;
 
-      console.log(JSON.stringify(customer_NewData) + ' : customer_NewData');
+      //this.safeReceipt_inpts.customerId = this.theCustomerInfo.customerId;
+
+      //console.log(JSON.stringify(customer_NewData) + ' : customer_NewData');
       // save to backend
       this._custService.updateCustomerSer(customer_NewData).subscribe();
 
@@ -484,37 +624,49 @@ export class SafeReceiptComponent implements OnInit {
       fstSafe_NewData = { // first safe update in backend
         safeId: this.theSafeInfo.safeId,
         safeName: this.theSafeInfo.safeName,
+        opendVal: this.theSafeInfo.opendVal,
         safeEmployee: this.theSafeInfo.safeEmployee,
         workerId: this.theSafeInfo.workerId,
         currentSafeVal: fstSafe_NewVal, // the only changed val
       };
-      console.log(JSON.stringify(fstSafe_NewData) + ' : fstSafe_NewData');
+      //console.log(JSON.stringify(fstSafe_NewData) + ' : fstSafe_NewData');
       // save to backend
       this._safeDataService.updateSafeData(fstSafe_NewData).subscribe();
-      this.fstSafeVal_NewReceip = fstSafe_NewVal;
+      //this.fstSafeVal_NewReceip = fstSafe_NewVal;
 
       acc_NewData = {
         accId: this.theOtherAccInfo.accId,
         AccName: this.theOtherAccInfo.AccName,
         currentAccVal: acc_NewVal // the only changed val
       };
-      console.log(JSON.stringify(acc_NewData) + ' : acc_NewData');
+      //console.log(JSON.stringify(acc_NewData) + ' : acc_NewData');
       // save to backend
       this._service.updateOtherAccSer(acc_NewData).subscribe();
     }
 
-    console.log(this.safeReceipt_inpts);
+    if (isSndSafe == true) {
+      this.safeReceipt_inpts.secSafeId = this.theSnd_SafeInfo.safeId
+    } else {
+      this.safeReceipt_inpts.secSafeId = 1
+    }
+
+    if (isCustomer == true) {
+      this.safeReceipt_inpts.customerId = this.theCustomerInfo.customerId;
+    } else {
+      this.safeReceipt_inpts.customerId = 1
+    }
+
+    this.safeReceipt_inpts.safeId = this.theSafeInfo.safeId;
+    //console.log(this.safeReceipt_inpts);
     this._safeDataService.creatSafeReceipt(this.safeReceipt_inpts).subscribe();
     // save to backend
 
-    //this._service.creatOtherAccSer(this.safeReceipt_inpts).subscribe()
   }
 
   addNewSafeReceipt() {
     this.saveRecieptData();
     this._safeAccComponent.getBackendData_Receipt();
-    this.makeDefultNewReceiptVals();
-    this.safeReceipt_inpts.currentSafeVal = this.fstSafeVal_NewReceip;
+    this._safeAccComponent.showAddSafeReceipt();
   };
 
 }

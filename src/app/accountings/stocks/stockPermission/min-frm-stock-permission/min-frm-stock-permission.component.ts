@@ -36,7 +36,6 @@ export class MinFrmStockPermissionComponent implements OnInit {
     });
 
     this._custService.getCustomer().subscribe((data: Customer[]) => {
-      data.shift();
       this.customers = data;
     });
 

@@ -6,6 +6,8 @@ import { SafeDataService } from './safe-data.service';
 import { CustomerService } from 'src/app/customer.service';
 import { Customer } from 'src/app/customer';
 import { OtherAcc } from '../other-acc';
+import { SafeTransaction } from './safe-transaction';
+import { SafeReceiptInpts } from './safe-receipt-inpts';
 
 @Component({
   selector: 'app-safe-acc',
@@ -41,10 +43,15 @@ export class SafeAccComponent implements OnInit {
 
   getCustomerData_backEnd() {
     this._custService.getCustomer().subscribe((data: Customer[]) => {
-      data.shift();
       this.customers = data;
     });
   };
+
+  getReceiptData_backEnd() {
+    this._safeDataService.getSafesReceipt().subscribe((data: SafeReceiptInpts[]) => {
+      this._safeDataService.safeReceiptList = data;
+    })
+  }
 
   getBackendData_Receipt() {
     // getSafeCurrentVal
@@ -52,7 +59,9 @@ export class SafeAccComponent implements OnInit {
     // getCustomerData_backEnd
     this.getCustomerData_backEnd();
     // getOtherAcc
-    this.getOtheAccInfo_backEnd()
+    this.getOtheAccInfo_backEnd();
+    // receipt data
+    this.getReceiptData_backEnd();
   };
 
   safeRecClearForm() {
@@ -73,6 +82,7 @@ export class SafeAccComponent implements OnInit {
   showAddSafeReceipt() {
     this.safeRecClearForm();
     this.getBackendData_Receipt();
+    $('#call_SafeRecieptBtn').html('ايصال جديد')
     $('.safeClass').not('#safeReceipt').hide();
     $('#safeReceipt').show();
     $('#add_SafeReceiptInside').hide();
@@ -84,6 +94,7 @@ export class SafeAccComponent implements OnInit {
 
   showSafeEnquir() {
     this.getSafeInfo_backEnd();
+    this.getReceiptData_backEnd()
     $('.safeClass').not('#enquireSafe').hide();
     $('#enquireSafe').show();
     $('#showSafeBtn').removeClass("btn-outline-info").addClass("btn-outline-secondary").animate({ fontSize: '1.5em' }, 50);

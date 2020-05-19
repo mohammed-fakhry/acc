@@ -33,6 +33,7 @@ export class AddSafeComponent implements OnInit {
       safeName: '',
       safeNameinvaild: false,
       safeEmployee: '',
+      opendVal: null,
       safeEmployeeInvaild: false,
     }
 
@@ -113,6 +114,7 @@ export class AddSafeComponent implements OnInit {
         safeName: this._safeDataService.safeInpts.safeName,
         workerId: this._safeDataService.theWorkerId,
         safeEmployee: this._safeDataService.safeInpts.safeEmployee,
+        opendVal: this._safeDataService.safeInpts.opendVal,
         currentSafeVal: safeInfo.currentSafeVal
       }
       this._safeDataService.updateSafeData(this.safeData).subscribe()
@@ -123,7 +125,8 @@ export class AddSafeComponent implements OnInit {
         safeName: this._safeDataService.safeInpts.safeName,
         workerId: this._safeDataService.theWorkerId,
         safeEmployee: this._safeDataService.safeInpts.safeEmployee,
-        currentSafeVal: null
+        opendVal: this._safeDataService.safeInpts.opendVal,
+        currentSafeVal: this._safeDataService.safeInpts.opendVal
       }
       this._safeDataService.creatSafe(this.safeData).subscribe();
       //console.log(this.safeData.workerId)

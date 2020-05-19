@@ -60,7 +60,6 @@ export class AddToStockPermissionComponent implements OnInit {
   getBackendData() {
 
     this._custService.getCustomer().subscribe((data: Customer[]) => {
-      data.shift();
       this.customers = data;
     })
 

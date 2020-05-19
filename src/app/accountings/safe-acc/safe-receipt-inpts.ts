@@ -5,6 +5,7 @@ export class SafeReceiptInpts {
     //fst safe inpts
     safeName: string;
     currentSafeVal: number;
+    safeId: number;
     // sec section
     transactionAccKind: string;
     // acc inpts
@@ -12,6 +13,7 @@ export class SafeReceiptInpts {
     currentAccVal: number;
     //safe inpts
     secSafeName: string;
+    secSafeId: number;
     current_SecSafeVal: number;
     // customer inpts
     customerId: number;

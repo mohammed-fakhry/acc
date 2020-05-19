@@ -3,5 +3,6 @@ export class SafeData {
     safeName: string;
     workerId: number;
     safeEmployee: string;
+    opendVal: number;
     currentSafeVal: number;
 }

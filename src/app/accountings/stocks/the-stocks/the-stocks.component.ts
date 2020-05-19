@@ -63,7 +63,6 @@ export class TheStocksComponent implements OnInit {
     this.getHandlePrimList();
 
     this._stockService.getStockes().subscribe((data: Stock[]) => {
-      data.shift()
       this._stockService.stocks = data;
       ////console.log(this._stockService.stocks)
     });

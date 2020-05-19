@@ -51,7 +51,9 @@ export class CustomerComponent implements OnInit {
     $('#hideFadeLayer').click(function () {
       $('.fadeLayer').hide();
       $('.askForDelete').removeClass('animate').hide()
-    })
+    });
+
+    $("#customerEnquirybtn").attr("disabled", 'true');
 
     $("#hideInvDet").click(function () {
       $(".fadeLayer").hide();
@@ -64,7 +66,6 @@ export class CustomerComponent implements OnInit {
   getCustomerData_BackEnd() {
 
     this._custService.getCustomer().subscribe((data: Customer[]) => {
-      data.shift();
       this.customers = data;
       console.log(this.customers)
     })
@@ -98,6 +99,41 @@ export class CustomerComponent implements OnInit {
     )
     window.print()
     location.reload()
+  }
+
+  printThisCustomerList() {
+    let Newcustomers = this.customers.filter((customer) => {
+      return customer.customerRemain != 0
+    })
+    let a:number;
+
+    Newcustomers.sort(function (a, b) {
+      return a.customerRemain - b.customerRemain;
+    });
+    this.customers = Newcustomers
+
+    let show = "#customerEnquiry";
+    let hide1 = '#customerHeader';
+    let hide2 = '.HideCol';
+    let hide3 = '';
+    this._service.printThis(show, hide1, hide2, hide3);
+    $('#customerListTable').css(
+      { 'height': '100%' }
+    );
+    $('.closeBtn').show();
+    //window.print();
+    //location.reload();
+    //this.customers.sort(this._service.sortArry('customerRemain'))
+  }
+
+  openwindowPrint() {
+    $('.closeBtn').hide();
+    window.print();
+    location.reload();
+  }
+
+  reloadLoc() {
+    location.reload();
   }
 
   putCustomerDataValue(customer) {
@@ -144,7 +180,7 @@ export class CustomerComponent implements OnInit {
         netTotal: 0,
         notes: ''
       }
-      customerInvDetail.invoiceTotalAdd = this.theCustomerInfo.customerPaid;
+      customerInvDetail.invoiceTotalAdd = -1 * this.theCustomerInfo.customerPaid;
       customerInvDetail.invoiceKind = 'رصيد اول'
       customerInvDetail.invoiceTotalMin = 0;
       customerInvDetail.invKindColor = 'text-dark'
@@ -300,6 +336,8 @@ export class CustomerComponent implements OnInit {
     $('#customerInvDetail').show()
   }
 
+  
+
   // CRUD Functions
   addNewCustomer() {
     let addBtnVal = $('#addNewCustomerBtn').html()
@@ -310,7 +348,7 @@ export class CustomerComponent implements OnInit {
         .subscribe()
       console.log(this.customerData.value)
       this._service.clearForm();
-      location.reload();
+      //location.reload();
 
     } else if (addBtnVal == 'تعديل') {
 
@@ -318,13 +356,14 @@ export class CustomerComponent implements OnInit {
       this._custService.updateCustomerSer(this.customerData.value).subscribe(() => {
         console.log(this.customerData.value);
         this.showCustomerEnquiry();
-        location.reload();
+        //location.reload();
       },
         error => {
           // alert(error);
           //console.log(this.customerDataView);
         });
     };
+
   };
 
   askForDelete(customer: Customer) {
@@ -343,6 +382,7 @@ export class CustomerComponent implements OnInit {
   }
 
   showUpdateCustomer(customer: Customer) {
+    $('#printCustomerList').slideToggle()
     $('.customerClass').not('#addCustomer').hide();
     $('#addCustomer').show();
     $('#addNewCustomerBtn').html('تعديل');
@@ -354,10 +394,23 @@ export class CustomerComponent implements OnInit {
     $('#customerEnquirybtn').removeClass('btn-outline-secondary').addClass('btn-outline-info').animate({ fontSize: '1em' }, 50);
   }
 
+  customerRemainColor:string
   showCustomerCard(customer: Customer) {
+    $("#customerEnquirybtn").attr({"disabled": false});
+    $("#showAddCustomerBtn").attr({"disabled": false});
+    $('#printCustomerList').slideToggle()
     this.putCustomerDataValue(customer);
     //this.customerDataView = customer;
     this.makeCustomerInvArry();
+    if(customer.customerRemain < 0) {
+      this.customerRemainColor = 'text-red'
+      //$('#customerRemainCard').css('color', 'red')
+    } else {
+      this.customerRemainColor = 'text-dark'
+      $('#customerRemainCard').css('color', 'black')
+      
+    }
+    console.log(this.customerRemainColor)
     $('#showAddCustomerBtn').removeClass('btn-outline-secondary').addClass('btn-outline-info').animate({ fontSize: '1em' }, 50);
     $('#customerEnquirybtn').removeClass('btn-outline-secondary').addClass('btn-outline-info').animate({ fontSize: '1em' }, 50);
     $('.customerClass').not('#customerDetails').hide();
@@ -366,7 +419,10 @@ export class CustomerComponent implements OnInit {
   }
 
   ShowAddNewCustomer() {
+    $("#showAddCustomerBtn").attr({"disabled": true});
+    $("#customerEnquirybtn").attr({"disabled": false});
     this._service.clearForm();
+    $('#printCustomerList').slideToggle()
     this.restValues()
     $('.customerClass').not('#addCustomer').hide();
     $('#addCustomer').show();
@@ -390,6 +446,11 @@ export class CustomerComponent implements OnInit {
   };
   
   showCustomerEnquiry() {
+    $("#customerEnquirybtn").attr({"disabled": true});
+    $("#showAddCustomerBtn").attr({"disabled": false});
+    this.searchCust = null;
+    this.getCustomerData_BackEnd();
+    $('#printCustomerList').slideToggle()
     $('.customerClass').not('#customerEnquiry').hide();
     $('#customerEnquiry').show();
     $('#customerEnquirybtn').removeClass("btn-outline-info").addClass("btn-outline-secondary").animate({ fontSize: '1.5em' }, 50);

@@ -3,6 +3,7 @@ import { SafeData } from './safe-data';
 import { HttpClient } from '@angular/common/http';
 import { SafeInpts } from './safe-inpts';
 import { SafeReceiptInpts } from './safe-receipt-inpts';
+import { SafeTransaction } from './safe-transaction';
 
 @Injectable({
   providedIn: 'root'
@@ -17,6 +18,9 @@ export class SafeDataService {
 
   theWorkerId: number;
 
+  // safe transaction
+  safeTransactionArr: SafeTransaction[];
+
   constructor(private http: HttpClient) { }
 
   creatSafe(safe: SafeData) {
@@ -29,6 +33,10 @@ export class SafeDataService {
 
   updateSafeData(safe: SafeData) {
     return this.http.put('http://localhost/accounting/updateSafeData.php?id=' + safe.safeId, safe)
+  }
+
+  getSafesReceipt() {
+    return this.http.get<SafeReceiptInpts[]>('http://localhost/accounting/safeReceiptList.php');
   }
 
   creatSafeReceipt(safeReceipt: SafeReceiptInpts) {

@@ -3,22 +3,29 @@
         <h2 class="pb-3 cardHeader" id="addSafeHeader">اضافة خزنة</h2>
         <form (ngSubmit)="addNewSafe()" class="pt-3">
             <div class="form-row">
-                <input id="safeId" [(ngModel)]='_safeDataService.safeInpts.safeId' name='safeId' class="form-control d-none">
+                <input id="safeId" [(ngModel)]='_safeDataService.safeInpts.safeId' name='safeId'
+                    class="form-control d-none">
                 <div class="col">
                     <label>اسم الخزنة</label>
-                    <input (keyup)='isSafeNameVaild()' id="safeName" [(ngModel)]='_safeDataService.safeInpts.safeName' name="safeName"
-                        class="form-control">
-                    <div *ngIf='_safeDataService.safeInpts.safeNameinvaild' class="text-danger">{{safeNameVaildMsg}}</div>
+                    <input (keyup)='isSafeNameVaild()' id="safeName" [(ngModel)]='_safeDataService.safeInpts.safeName'
+                        name="safeName" class="form-control">
+                    <div *ngIf='_safeDataService.safeInpts.safeNameinvaild' class="text-danger">{{safeNameVaildMsg}}
+                    </div>
                 </div>
                 <div class="col">
                     <label>امين المخزن</label>
                     <input (keyup)='isSafeEmployeeVaild()' type="search" id="safeEmployee"
-                        [(ngModel)]='_safeDataService.safeInpts.safeEmployee' name="safeEmployee" class="form-control mdb-autocomplete"
-                        list="datalist1">
+                        [(ngModel)]='_safeDataService.safeInpts.safeEmployee' name="safeEmployee"
+                        class="form-control mdb-autocomplete" list="datalist1">
                     <datalist id="datalist1">
                         <option *ngFor="let worker of workers" value="{{worker.workerName}}"></option>
                     </datalist>
                     <div *ngIf='_safeDataService.safeInpts.safeEmployeeInvaild' class="text-danger">موظف غير مسجل</div>
+                </div>
+                <div class="col">
+                    <label>رصيد اول</label>
+                    <input id="opendVal" type="number" [(ngModel)]='_safeDataService.safeInpts.opendVal' name="opendVal"
+                        class="form-control">
                 </div>
             </div>
             <button [disabled]='addSafeInvalid' class="btn btn-outline-info mt-3 ml-2" type="submit"

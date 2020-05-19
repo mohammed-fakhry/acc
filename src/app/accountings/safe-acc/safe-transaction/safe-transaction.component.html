@@ -1,0 +1,48 @@
+<div class="container-fluid card inpCard  mt-3 p-3" id="headerSafeReport">
+    <h2 class="cardHeader">تقرير حركة خزنة</h2>
+    <hr class="text-center">
+    <div class="d-flex justify-content-arround">
+        <div class="mr-3">
+            <label for="fromDateSafeRe">من تاريخ</label>
+            <input class="form-control p-1" type="date" id="fromDateSafeRe">
+        </div>
+        <div class="mr-3">
+            <label for="toDateSafeRe">الى تاريخ</label>
+            <input class="form-control p-1" type="date" id="toDateSafeRe">
+        </div>
+    </div>
+    <hr class="text-center">
+    <div id="SafeReportTable">
+        <div class="panel-body panel-flex-table">
+            <table class="flex-table table table-hover">
+                <thead class="navHeader text-light">
+                    <tr>
+                        <!---->
+                        <th style="flex: none; width: 260px">التاريخ</th>
+                        <th>الاذن</th>
+                        <th style="flex:2">نوع االحركة</th>
+                        <th style="flex:2">بيان الحركة</th>
+                        <th class="text-center">رصيد مضاف</th>
+                        <th class="text-center">رصيد مخصوم</th>
+                        <th class="text-center">رصيد باقى</th>
+                        <th style="flex:2">ملاحظات</th>
+                    </tr>
+                </thead>
+                <tbody class=" mt-3 tableBody">
+                    <tr *ngFor='let safeRep of _safeDataService.safeTransactionArr; let i = index'>
+                        <td style="flex: none; width: 260px">
+                            <input disabled value="{{safeRep.date_time}}" type="datetime-local">
+                        </td>
+                        <td>{{safeRep.safeReceiptId}}</td>
+                        <td style="flex:2" class="{{safeRep.receiptKind_color}}">{{safeRep.receiptKind}}</td>
+                        <td style="flex:2">{{safeRep.transactionExplain}}</td>
+                        <td class="text-center">{{safeRep.receiptValIn}}</td>
+                        <td class="{{safeRep.receiptKind_color}} text-center">{{safeRep.receiptValOut}}</td>
+                        <td class="lightBg text-center">{{safeRep.safeNet}}</td>
+                        <td style="flex:2">{{safeRep.recieptNote}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

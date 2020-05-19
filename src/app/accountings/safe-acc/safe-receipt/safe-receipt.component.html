@@ -17,12 +17,11 @@
     <div class="form-inline" id="callSafeReceipt">
         <h2 class="cardHeader">ايصال (استلام | صرف) نقدية</h2>
         <div class="headerLeftBorder mr-2"></div>
-        <input type="search" name="searchTxt" [(ngModel)]="searchTxt"
+        <input type="search" name="searchSafeReceiptTxt" [(ngModel)]="searchSafeReceiptTxt"
             class="form-control clearForm mdb-autocomplete mx-3" list="datalist_SafeReceiptSearch"
-            id="SafeReceiptSearch" (change)="changAddSafeReceiptBtn()">
+            id="SafeReceiptSearch" (keyup)="changAddSafeReceiptBtn()">
         <datalist id="datalist_SafeReceiptSearch">
-            <!-- *ngFor="let invoice of _theStockComp.addInvArry" value="{{invoice.invoiceSearchVal}}"-->
-            <option>
+            <option *ngFor="let safeReceipt of _safeDataService.safeReceiptList" value="{{safeReceipt.safeReceiptId}}">
             </option>
         </datalist>
         <button class="btn btn-outline-info ml-2" type="submit" id="call_SafeRecieptBtn"
@@ -31,17 +30,17 @@
     </div>
 </div>
 <!--add_SafeReceiptInside-->
-<div class="container-fluid  mt-3 card inpCard" style="display: none;"  id="add_SafeReceiptInside">
+<div class="container-fluid  mt-3 card inpCard" style="display: none;" id="add_SafeReceiptInside">
     <div class="p-4">
         <h2 class="pb-3 cardHeader">ايصال استلام نقدية</h2>
+        <button class="btn btn-success" (click)='receiptTestBtn()'>test</button>
         <form (ngSubmit)="addNewSafeReceipt()" class="pt-3">
             <!--firstSection-->
             <div class="row navHeader p-2">
                 <div class="form-inline col-md-4 col-lg-3 col-sm-6">
                     <label for="receiptKind">نوع الايصال</label>
-                    <select class="form-control p-1 mr-3" name="receiptKind"
-                        [(ngModel)]='safeReceipt_inpts.receiptKind' id="receiptKind"
-                        (change)="receiptKindChanged()">
+                    <select class="form-control p-1 mr-3" name="receiptKind" [(ngModel)]='safeReceipt_inpts.receiptKind'
+                        id="receiptKind" (change)="receiptKindChanged()">
                         <option>ايصال استلام نقدية</option>
                         <option class="lightBg">ايصال صرف نقدية</option>
                     </select>
@@ -66,11 +65,12 @@
             <div class="row mt-3">
                 <div class="col-md-4 col-lg-3 col-sm-6">
                     <label for="safeNameReceipt">اسم الخزنة</label>
-                    <select class="form-control p-1" name="safeName"
-                        [(ngModel)]='safeReceipt_inpts.safeName' id="safeNameReceipt"
-                        (change)="safeChanged()">
+                    <input class="form-control p-1 form-control mdb-autocomplete pr-5" name="safeName"
+                        [(ngModel)]='safeReceipt_inpts.safeName' id="safeNameReceipt" (keyup)="safeChanged()"
+                        list="datalistSafeName">
+                    <datalist id="datalistSafeName">
                         <option *ngFor="let safe of _safeDataService.safeList">{{safe.safeName}}</option>
-                    </select>
+                    </datalist>
                     <div *ngIf='validTests.fstSafeinValid' class="text-danger mt-2">{{validTests.firstSafeValidMsg}}
                     </div>
                 </div>
@@ -103,9 +103,9 @@
                         <div class="col-md-4 col-lg-3 col-sm-6">
                             <label for="AccName">اسم الحساب</label>
                             <!--*ngFor="let safe of _safeDataService.safeList"-->
-                            <input name="AccName" [(ngModel)]='safeReceipt_inpts.AccName'
-                                list="datalistAccName" class="form-control clearForm mdb-autocomplete p-1 pr-5"
-                                id="AccName" (keyup)="accNameChanged()">
+                            <input name="AccName" [(ngModel)]='safeReceipt_inpts.AccName' list="datalistAccName"
+                                class="form-control clearForm mdb-autocomplete p-1 pr-5" id="AccName"
+                                (keyup)="accNameChanged()">
                             <div *ngIf='validTests.accValid' class="text-danger mt-2">{{validTests.accValidMsg}}</div>
                             <datalist id="datalistAccName">
                                 <option *ngFor="let acc of _safeAccComponent.otherAcc" value="{{acc.AccName}}">
@@ -125,10 +125,11 @@
                     <div class="row">
                         <div class="col-md-4 col-lg-3 col-sm-6">
                             <label for="secSafeName">اسم الخزنة</label>
-                            <select name="secSafeName" [(ngModel)]='safeReceipt_inpts.secSafeName'
-                                class="form-control p-1" id="secSafeName" (change)="secSafeNameChanged()">
-                                <option *ngFor="let safe of _safeDataService.safeList">{{safe.safeName}}</option>
-                            </select>
+                            <input name="secSafeName" [(ngModel)]='safeReceipt_inpts.secSafeName'
+                                class="form-control p-1 clearForm mdb-autocomplete pr-5" list="datalistSecSafeName" id="secSafeName" (keyup)="secSafeNameChanged()">
+                                <datalist id="datalistSecSafeName">
+                                    <option *ngFor="let safe of _safeDataService.safeList">{{safe.safeName}}</option>
+                                </datalist>
                             <div *ngIf='validTests.secSafeinValid' class="text-danger mt-2">
                                 {{validTests.secSafeValidMsg}}
                             </div>
@@ -145,8 +146,8 @@
                     <div class="row">
                         <div class="col-md-4 col-lg-3 col-sm-6">
                             <label for="customerName_Receipt">اسم العميل</label>
-                            <input name="customerName" [(ngModel)]='safeReceipt_inpts.customerName'
-                                type="search" id="customerName_Receipt" (keyup)="isCustomerValid()"
+                            <input name="customerName" [(ngModel)]='safeReceipt_inpts.customerName' type="search"
+                                id="customerName_Receipt" (keyup)="isCustomerValid()"
                                 class="form-control clearForm mdb-autocomplete p-1 pr-5" list="datalistCustomer">
                             <div *ngIf="validTests.customerValid" class="text-danger mt-2">{{validTests.custValidMsg}}
                             </div>
@@ -176,12 +177,12 @@
                     </div>
                     <div class="col-md-4 col-lg-3 col-sm-6">
                         <label for="recieptNote">ملاحظات</label>
-                        <input id="recieptNote" name="recieptNote"
-                            [(ngModel)]='safeReceipt_inpts.recieptNote' class="form-control clearForm">
+                        <input id="recieptNote" name="recieptNote" [(ngModel)]='safeReceipt_inpts.recieptNote'
+                            class="form-control clearForm">
                     </div>
                 </div>
             </div>
-
+            <hr>
             <div class="form-inline">
                 <button [disabled]="isReceiptValid" class="btn btn-outline-primary mb-1 mt-3" type="submit"
                     id="addNewSafeReceipt">حفظ الايصال</button>

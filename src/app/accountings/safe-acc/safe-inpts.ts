@@ -3,5 +3,6 @@ export class SafeInpts {
     safeName: string;
     safeNameinvaild: boolean;
     safeEmployee: string;
+    opendVal:number;
     safeEmployeeInvaild: boolean;
 }
