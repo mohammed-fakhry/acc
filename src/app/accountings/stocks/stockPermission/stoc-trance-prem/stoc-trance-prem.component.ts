@@ -115,7 +115,7 @@ export class StocTrancePremComponent implements OnInit {
       { 'height': '100%' }
     );
     $('.closeBtn').show();
-    $('.form-control').attr({'disabled': true})
+    $('.form-control').attr({ 'disabled': true })
   }
   openwindowPrint() {
     $('.closeBtn').hide();
@@ -255,10 +255,15 @@ export class StocTrancePremComponent implements OnInit {
         this.invoiceInpArry[i].inpVaild = true;
       };
       if (this.invoiceInpArry[i].Qtyinvaild == true) {
-        this.invoiceInpArry[i].qty = '';
-        this.invoiceInpArry[i].price = '';
+        this.invoiceInpArry[i].qty = null;
+        this.invoiceInpArry[i].price = null;
         this.invoiceInpArry[i].Qtyinvaild = false;
       }
+      if (this.invoiceInpArry[i].price > 0 ) {
+        this.invoiceInpArry[i].qty = null;
+        this.invoiceInpArry[i].price = null;
+      }
+
       for (let p = 0; p < this.productNameIdArr.length; p++) {
         if (this.invoiceInpArry[i].product == this.productNameIdArr[p].productName) {
           theProductId = this.productNameIdArr[p].productId;
@@ -558,7 +563,7 @@ export class StocTrancePremComponent implements OnInit {
 
     for (let i = 0; i < this.invoiceInpArry.length; i++) {
 
-      if (this.invoiceInpArry[i].product != undefined) {
+      if (this.invoiceInpArry[i].product != undefined || this.invoiceInpArry[i].product != '') {
 
         this.findProduct(this.invoiceInpArry[i].product);
         theProductId = this.getProductInfo.productId;
@@ -646,10 +651,17 @@ export class StocTrancePremComponent implements OnInit {
     this._theStockComp.showTranceStockPrem();
   }
 
+
+  showInvoiceDone() {
+    this._theStockComp.ngOnInit();
+    this._theStockComp.showFade_newInvoice('fade_showTranceStockPrem');
+  };
+
   tranceFrmStockPrem() {
     this.makeTranceStockPremArry();
-    this.resetTranceinvoiceValu();
-    this.refreshData()
+    this.showInvoiceDone();
+    //this.resetTranceinvoiceValu();
+    //this.refreshData()
     //location.reload();
   }
 

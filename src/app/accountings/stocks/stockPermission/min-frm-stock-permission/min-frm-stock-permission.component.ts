@@ -658,10 +658,16 @@ export class MinFrmStockPermissionComponent implements OnInit {
 
   } // makeMinStockPremArry
 
+  showInvoiceDone() {
+    this._theStockComp.ngOnInit();
+    this._theStockComp.showFade_newInvoice('fade_minNewApBtn');
+  }
+
   minFrmStockPrem() {
     this.makeMinStockPremArry();
-    this.resetAddinvoiceValu();
-    this._theStockComp.showStocksEnquiry();
+    this.showInvoiceDone();
+    //this.resetAddinvoiceValu();
+    //this._theStockComp.showStocksEnquiry();
     //this._theStockComp.showMinToStockPrem();
     //this._theStockComp.CreateTheInvoiceArry();
     //consol.log(this._stockService.handleBackEnd)

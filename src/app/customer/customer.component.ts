@@ -154,7 +154,7 @@ export class CustomerComponent implements OnInit {
     $('.closeBtn').hide();
     //custDet
     $('.custDet').hide();
-    $(`.printable`).css('width', '100%')
+    $(`.printable`).css('width', '100%');
     window.print();
     location.reload();
   }
@@ -452,7 +452,7 @@ export class CustomerComponent implements OnInit {
     $("#showAddCustomerBtn").attr({"disabled": true});
     $("#customerEnquirybtn").attr({"disabled": false});
     this._service.clearForm();
-    $('#printCustomerList').slideToggle()
+    $('#printCustomerList').slideToggle(200)
     this.restValues()
     $('.customerClass').not('#addCustomer').hide();
     $('#addCustomer').show();
@@ -480,7 +480,7 @@ export class CustomerComponent implements OnInit {
     $("#showAddCustomerBtn").attr({"disabled": false});
     this.searchCust = null;
     this.getCustomerData_BackEnd();
-    $('#printCustomerList').slideToggle()
+    $('#printCustomerList').slideToggle(200)
     $('.customerClass').not('#customerEnquiry').hide();
     $('#customerEnquiry').show();
     $('#customerEnquirybtn').removeClass("btn-outline-info").addClass("btn-outline-secondary").animate({ fontSize: '1.5em' }, 50);

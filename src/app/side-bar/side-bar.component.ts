@@ -35,8 +35,8 @@ export class SideBarComponent implements OnInit {
       console.log($('#sidebarBtns').height())
       //$('#sidebar').animate({ height: `${sidebarBtnsHeight + 20}px` });
       $(this).removeClass('btn-light').addClass('btn-info')
-      $(this).next().slideToggle(500);
-      $("#sidebar .secDiv").not($(this).next()).slideUp(500);
+      $(this).next().slideToggle(100);
+      $("#sidebar .secDiv").not($(this).next()).slideUp(100);
       console.log($('#sidebarBtns').height())
       $('#sidebar').css('height', 'auto')
       $('.mainBtns').not($(this)).not('#logOut').not('#MainSettingBtn').removeClass('btn-info').addClass('btn-light')
@@ -125,7 +125,7 @@ export class SideBarComponent implements OnInit {
       'marginRight': '15px' //`${sidebarToggleLeft + 50} px`
     })
     if (sideBarHeight == 0) { //open sideBar
-      $('#sidebar').animate({ height: `${sidebarBtnsHeight + 20}px` }).toggleClass('card');
+      $('#sidebar').animate({ height: `${sidebarBtnsHeight + 20}px` },200).toggleClass('card');
       $('#sidebarBtns').show()
       $('#fadeEffect').fadeIn().css({
         'height': `100%`,
