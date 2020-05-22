@@ -1,20 +1,37 @@
+<!--PrintBtns-->
+<div style="display: none; position: fixed; top: 10px; right: 10px;" class="closeBtn fixed-top">
+    <button class="btn btn-outline-danger" id="reloadLoc" (click)='reloadLoc()'>X</button>
+    <button class="btn btn-outline-secondary mr-2" (click)='openwindowPrint()'><i class="fa fa-print"></i></button>
+</div>
+<!--headerSafeReport-->
 <div class="container-fluid card inpCard  mt-3 p-3" id="headerSafeReport">
-    <h2 class="cardHeader">تقرير حركة خزنة</h2>
-    <hr class="text-center">
-    <div class="d-flex justify-content-arround">
-        <div class="mr-3">
-            <label for="fromDateSafeRe">من تاريخ</label>
-            <input class="form-control p-1" type="date" id="fromDateSafeRe">
+    <div class="theHeader">
+        <div class="d-flex justify-content-between">
+            <h2 class="cardHeader">تقرير حركة خزنة</h2>
+            <i id="printSafeTrance" class="fa fa-print btn p-3 btn-outline-info text-center" (click)='printSafeTrance()'></i>
         </div>
-        <div class="mr-3">
-            <label for="toDateSafeRe">الى تاريخ</label>
-            <input class="form-control p-1" type="date" id="toDateSafeRe">
+        <hr class="text-center">
+        <div class="d-flex justify-content-arround">
+            <div class="mr-3">
+                <label for="fromDateSafeRe">من تاريخ</label>
+                <input class="form-control p-1" type="date" id="fromDateSafeRe">
+            </div>
+            <div class="mr-3">
+                <label for="toDateSafeRe">الى تاريخ</label>
+                <input class="form-control p-1" type="date" id="toDateSafeRe">
+            </div>
+            <div class="headerLeftBorder mr-3"></div>
+            <div class="mr-3">
+                <label for="searchSafeTrance">بحث</label>
+                <input [(ngModel)]="searchSafeTrance" name="searchSafeTrance" placeholder="بحث ببيان النقدية"
+                    class="form-control p-1" id="searchSafeTrance">
+            </div>
         </div>
+        <hr class="text-center">
     </div>
-    <hr class="text-center">
-    <div id="SafeReportTable">
-        <div class="panel-body panel-flex-table">
-            <table class="flex-table table table-hover">
+    <div>
+        <div class="panel-body panel-flex-table" id="SafeReportTable">
+            <table class="flex-table table table-hover" style="height: 100%;">
                 <thead class="navHeader text-light">
                     <tr>
                         <!---->
@@ -29,7 +46,8 @@
                     </tr>
                 </thead>
                 <tbody class=" mt-3 tableBody">
-                    <tr *ngFor='let safeRep of _safeDataService.safeTransactionArr; let i = index'>
+                    <tr
+                        *ngFor='let safeRep of _safeDataService.safeTransactionArr|safeTranceSearch:searchSafeTrance; let i = index'>
                         <td style="flex: none; width: 260px">
                             <input disabled value="{{safeRep.date_time}}" type="datetime-local">
                         </td>

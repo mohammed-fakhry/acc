@@ -1,6 +1,6 @@
 <!--fadeLayer-->
 <div class="fadeLayer" id="theStockFadeLayer">
-    <div class="container p-3 card askForDelete">
+    <div class="container p-3 card askForDelete" style="display: none;" id="askForDeleteStock">
         <h3 class="p-3 bg-danger text-light">هل انت متأكد من حذف</h3>
         <h4 class="mb-2">
             {{_stockService.stockDataView.stockName}}
@@ -9,6 +9,20 @@
         <div class="d-flex flex-row-reverse">
             <button class="btn btn-danger mr-2" id="deleteStock" (click)="deleteStock()">نعم</button>
             <button class="btn btn-outline-info" id="hideFadeLayer">الغاء</button>
+        </div>
+    </div>
+    <div class="container p-3 card askForDelete" style="display: none;" id="stockPerDone">
+        <h3>تم التسجيل بنجاح</h3>
+        <hr>
+        <div class="d-flex flex-row-reverse">
+            <!--fade_addNewApBtn-->
+            <button class="btn btn-outline-info mr-2 fadeBtns" id="fade_addNewApBtn" (click)="showAddToStockPrem_fade()">فاتورة شراء جديدة</button>
+            <!--fade_minNewApBtn-->
+            <button class="btn btn-outline-info mr-2 fadeBtns" id="fade_minNewApBtn" (click)="showMinToStockPrem()">فاتورة بيع جديدة</button>
+            <!--fade_showTranceStockPrem-->
+            <button class="btn btn-outline-info mr-2 fadeBtns" id="fade_showTranceStockPrem" (click)="showTranceStockPrem()">اذن نقل جديدة</button>
+            <!--backToTheStart-showTranceStockPrem-->
+            <button class="btn btn-outline-secondary" id="Hidefade_addNewApBtn" (click)='showStocksEnquiry_fade()'>الرئيسية</button>
         </div>
     </div>
 </div>

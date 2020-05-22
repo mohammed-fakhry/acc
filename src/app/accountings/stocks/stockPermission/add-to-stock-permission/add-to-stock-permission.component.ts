@@ -74,7 +74,7 @@ export class AddToStockPermissionComponent implements OnInit {
   refreshBackendData() {
     this._theStockComp.ngOnInit();
     this.getBackendData();
-    this._theStockComp.showStocksEnquiry();
+    this._theStockComp.showAddToStockPrem();
   }
 
   theCustomerInfo: Customer;
@@ -105,12 +105,43 @@ export class AddToStockPermissionComponent implements OnInit {
 
   isAddNameVaild() { // inputValidation
     this.deleteInvBtnDisabled = true;
+    let found: boolean;
+    let index: number;
+    let map = {};
+
     for (let i = 0; i < this.invoiceInpArry.length; i++) {
       let productinpt = $(`#product${i}`).val();
       if (this.productArr.includes(productinpt) || productinpt == '') {
         this.invoiceInpArry[i].inpVaild = false;
       } else {
         this.invoiceInpArry[i].inpVaild = true;
+        this.invoiceInpArry[i].productVaildMsg = 'اسم الصنف غير صحيح'
+      };
+
+      //map[this.invoiceInpArry[i]] = true;
+      let valueArr = this.invoiceInpArry.map((item) => { return item.product });
+      let filtert =  valueArr.filter((product) => {
+        return product != undefined
+      })
+      let isDublicate = filtert.some((item, indx) => {
+        console.log(indx + ' : indx')
+        index = indx
+        return valueArr.indexOf(item) != indx
+      })
+      if (isDublicate) {
+        found = true
+        break
+      }
+      //console.log(isDublicate)
+    }
+
+    //console.log(index)
+    if (index != null) {
+      if (found == true) {
+        this.invoiceInpArry[index].inpVaild = true;
+        this.invoiceInpArry[index].productVaildMsg = 'لا يمكن تكرار هذا الصنف'
+      } else {
+        this.invoiceInpArry[index].inpVaild = false;
       }
     }
 
@@ -128,6 +159,9 @@ export class AddToStockPermissionComponent implements OnInit {
           this.invoiceInpArry[i].qty = null;
         }
       }
+
+
+
     }
 
   } // isAddNameVaild
@@ -167,8 +201,17 @@ export class AddToStockPermissionComponent implements OnInit {
       }
     }
 
+
     if (this.customerVaild == false) {
-      this.isAddInvVaild = false;
+
+      if (this.invoiceInp[0] != undefined) {
+        if (this.invoiceInp[0].productName == undefined) {
+          this.isAddInvVaild = true;
+        } else {
+          this.isAddInvVaild = false;
+        }
+      }
+
     } else {
       this.isAddInvVaild = true;
     }
@@ -193,6 +236,7 @@ export class AddToStockPermissionComponent implements OnInit {
         this.invoiceInpArry[i].total = this.invoiceInpArry[i].qty * this.invoiceInpArry[i].price;
         this.totalInvoice.push(this.invoiceInpArry[i].total)
       }
+
     }
     let total: any = this.sumArry(this.totalInvoice)
     this.invoiceTotal = total;
@@ -298,11 +342,11 @@ export class AddToStockPermissionComponent implements OnInit {
         theProductId = getProductInfo.productId;
 
         let getHandleBackEndInfo = this._stockService.handleBackEnd.find(handleInfo =>
-          handleInfo.productId === theProductId && handleInfo.stockId === this.ivoiceItemesForEdit[v].stockId)
+          handleInfo.productId === theProductId && handleInfo.stockId === this.ivoiceItemesForEdit[v].stockId);
 
         let indx = this._stockService.handleBackEnd.findIndex(
           i => i.stockProductId === getHandleBackEndInfo.stockProductId
-        )
+        );
         //console.log(getHandleBackEndInfo)
         //console.log(this._stockService.handleBackEnd[indx])
 
@@ -317,7 +361,7 @@ export class AddToStockPermissionComponent implements OnInit {
             postStockPridgeObj.productCost = getHandleBackEndInfo.productCost;
           } else {
             postStockPridgeObj.productCost = Math.floor(productTotalsPriceAvr / allProductQty) // price avarage
-          }
+          };
           postStockPridgeObj.stockProductId = getHandleBackEndInfo.stockProductId;
           postStockPridgeObj.productQty = getHandleBackEndInfo.productQty - parseInt(this.ivoiceItemesForEdit[v].Qty);
 
@@ -325,10 +369,10 @@ export class AddToStockPermissionComponent implements OnInit {
           this._stockService.handleBackEnd[indx].productCost = postStockPridgeObj.productCost;
 
           this._stockService.updateStockPridge(postStockPridgeObj).subscribe() // for stocks DB
-        }
-      }
-    }
-  } // editStockQtys
+        };
+      };
+    };
+  }; // editStockQtys
 
   makeAddStockPremArry() {
 
@@ -378,13 +422,14 @@ export class AddToStockPermissionComponent implements OnInit {
       this._stockService.creatStockTransaction(stockTransaction).subscribe();
 
       this.theCustomerInfo = this.getCustomerInfo(this.theCustomerId);
-      this.theCustomerInfo.customerRemain = this.theCustomerInfo.customerRemain + parseInt(this.invoiceTotal);
+      this.theCustomerInfo.customerRemain = this.theCustomerInfo.customerRemain - parseInt(this.invoiceTotal);
       this._custService.updateCustomerSer(this.theCustomerInfo).subscribe();
+      //console.log(this.theCustomerInfo)
     } else {
       stockTransaction.stockTransactionId = this.theStockTransactionId;
       this._stockService.UpdateStockTransaction(stockTransaction).subscribe();
 
-      this.theCustomerInfo.customerRemain = this.theCustomerInfo.customerRemain + parseInt(this.invoiceTotal);
+      this.theCustomerInfo.customerRemain = this.theCustomerInfo.customerRemain - parseInt(this.invoiceTotal);
       this._custService.updateCustomerSer(this.theCustomerInfo).subscribe();
     }
 
@@ -426,8 +471,8 @@ export class AddToStockPermissionComponent implements OnInit {
 
         if (getHandleBackEndInfo != undefined) {
 
-          console.log(parseInt(this.invoiceInpArry[i].qty))
-          console.log(getHandleBackEndInfo.productQty)
+          //console.log(parseInt(this.invoiceInpArry[i].qty))
+          //console.log(getHandleBackEndInfo.productQty)
 
           postStockPridgeObj.productId = theProductId; // for edit and add
           postStockPridgeObj.stockId = this.theStockId; // for edit and add
@@ -489,11 +534,16 @@ export class AddToStockPermissionComponent implements OnInit {
     } // fst for invoiceInpArry
   }; // makeAddStockPremArry
 
+  showInvoiceDone() {
+    this._theStockComp.ngOnInit();
+    this._theStockComp.showFade_newInvoice('fade_addNewApBtn');
+  }
   addToStockPrem() { // the main function
     this.makeAddStockPremArry();
-    this.resetAddinvoiceValu();
-    this.refreshBackendData();
-    this._service.clearForm();
+    //this.resetAddinvoiceValu();
+    //this.refreshBackendData();
+    this.showInvoiceDone();
+    //this._service.clearForm();
     //location.reload();
   }
 
@@ -506,10 +556,24 @@ export class AddToStockPermissionComponent implements OnInit {
     this._service.printThis(show, hide1, hide2, hide3)
     $('#addPrimTable').css(
       { 'height': '100%' }
-    )
-    window.print()
-    location.reload()
+    );
+    $('.closeBtn').show();
+    $('#printAddPremBtn').hide(),
+      $('#addFilds').hide();
+    $('.form-control').attr({ 'disabled': true })
+    //window.print()
+    //location.reload()
   }
+
+  openwindowPrint() {
+    $('.closeBtn').hide();
+    window.print();
+    $('.closeBtn').show();
+  }
+
+  reloadLoc() {
+    location.reload();
+  };
 
   invNum: number;
 
@@ -546,6 +610,7 @@ export class AddToStockPermissionComponent implements OnInit {
       $('#deleteAddInvoice').hide();
       $('#stockTransactionId').val('')
       this.resetAddinvoiceValu()
+      this._service.clearForm();
       this.inptDisabled = true;
       this.isAddInvVaild = true;
     } else if (callInvoiceBtnVal == "بحث") {
@@ -590,7 +655,7 @@ export class AddToStockPermissionComponent implements OnInit {
     }
     $('#callInvoice').hide();
     $('#addInvoiceForm').show();
-    console.log(this.ivoiceItemesForEdit)
+    //console.log(this.ivoiceItemesForEdit)
 
   } // showAddNewInvoice
 

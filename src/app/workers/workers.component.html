@@ -20,7 +20,7 @@
             <button class="btn btn-outline-info mx-2" style="height: 70px;" id="showAddWorkerBtn"
                 (click)="ShowAddNewWorker()">اضافة</button>
             <button class="btn btn-outline-secondary mx-2" style="height: 70px;font-size: 1.5em;" id="workerEnquirybtn"
-                (click)="showWorkerEnquiry()">استعلام</button>
+                (click)="showWorkerEnquiry()" disabled>استعلام</button>
             <div class="headerLeftBorder"></div>
             <input *ngIf="router.url === '/workers'" [(ngModel)]="searchTxt" placeholder="بحث" class="form-control mx-3"
                 id="workerSearch">

@@ -35,6 +35,8 @@ export class CustomerComponent implements OnInit {
 
     this.logService.logStart(); this.logService.reternlog();
 
+    this.customers = []
+
     this.getCustomerData_BackEnd();
 
     this.customerData = new FormGroup({
@@ -67,8 +69,8 @@ export class CustomerComponent implements OnInit {
 
     this._custService.getCustomer().subscribe((data: Customer[]) => {
       this.customers = data;
-      console.log(this.customers)
-    })
+      //console.log(this.customers)
+    });
 
     /*this._stockService.getHandleAddtoStockPrimList().subscribe((data: HandleAddPrimBE[]) => { // get the details to make customerInvArry
       this.customersInvoices = data;
@@ -92,18 +94,34 @@ export class CustomerComponent implements OnInit {
     let show = "#customerInvDetails";
     let hide1 = '#customerDetails';
     let hide2 = '#customerHeader';
-    let hide3 = '.custDet';
+    let hide3 = '';
     this._service.printThis(show, hide1, hide2, hide3);
     $('#printCustomerInvArr').css(
       { 'height': '100%' }
-    )
-    window.print()
-    location.reload()
+    );
+    $('.navHeader').addClass('sticky-top');
+    $('.date_time').show();
+    $('.closeBtn').show();
+  }
+
+  getCurrentDate() {
+    let currentDateNow = Date.now() //new Date()
+    let currentDate = new Date(currentDateNow)
+    this._service.makeTime_date(currentDate);
   }
 
   printThisCustomerList() {
+
+    for (let i = 0 ; i < this.customers.length; i ++) {
+      if (this.customers[i].customerRemain < 0) {
+        $(`#remain${i}`).css('color', 'red');
+      } else {
+        $(`#remain${i}`).css('color', 'black');
+      }
+    };
+
     let Newcustomers = this.customers.filter((customer) => {
-      return customer.customerRemain != 0
+      return customer.customerRemain != 0 && customer.customerName != 'حساب المحل - حسام' && customer.customerName != 'تست'
     })
     let a:number;
 
@@ -114,20 +132,29 @@ export class CustomerComponent implements OnInit {
 
     let show = "#customerEnquiry";
     let hide1 = '#customerHeader';
-    let hide2 = '.HideCol';
+    let hide2 = '';
     let hide3 = '';
     this._service.printThis(show, hide1, hide2, hide3);
     $('#customerListTable').css(
       { 'height': '100%' }
     );
+    $('.date_time').show();
     $('.closeBtn').show();
+    $('.HideCol').hide();
+    $('.navHeader').addClass('sticky-top');
     //window.print();
+    this.getCurrentDate();
+
     //location.reload();
     //this.customers.sort(this._service.sortArry('customerRemain'))
   }
 
   openwindowPrint() {
+    document.documentElement.scrollTop = 0;
     $('.closeBtn').hide();
+    //custDet
+    $('.custDet').hide();
+    $(`.printable`).css('width', '100%')
     window.print();
     location.reload();
   }
@@ -165,7 +192,7 @@ export class CustomerComponent implements OnInit {
 
     this.customerInvArry = []
 
-    console.log(this._stockService.stockTransactionArr)
+    //console.log(this._stockService.stockTransactionArr)
 
     this.theCustomerInfo = this.getCustomerInfo(this.customerData.value.customerId)
 
@@ -174,6 +201,7 @@ export class CustomerComponent implements OnInit {
         stockTransactionId: 0,
         invoiceNum: 0,
         invoiceKind: '',
+        hideBtn: 'd-none',
         transactionType: 0,
         invoiceTotalMin: 0,
         invoiceTotalAdd: 0,
@@ -190,6 +218,7 @@ export class CustomerComponent implements OnInit {
       let customerInvDetail: any = {
         stockTransactionId: 0,
         invoiceNum: 0,
+        hideBtn: 'd-none',
         invoiceKind: '',
         transactionType: 0,
         invoiceTotalMin: 0,
@@ -213,6 +242,7 @@ export class CustomerComponent implements OnInit {
           stockTransactionId: 0,
           invoiceNum: 0,
           invoiceKind: '',
+          hideBtn: '',
           transactionType: 0,
           invoiceTotalMin: 0,
           invoiceTotalAdd: 0,
@@ -225,6 +255,7 @@ export class CustomerComponent implements OnInit {
         customerInvDetail.invoiceNum = this._stockService.stockTransactionArr[i].invNumber;
         customerInvDetail.date_time = this._stockService.stockTransactionArr[i].date_time;
         customerInvDetail.notes = this._stockService.stockTransactionArr[i].notes
+        //customerInvDetail.hideBtn = 'رصيد اول'
         //date_time
         if (this._stockService.stockTransactionArr[i].transactionType == 1) {
           customerInvDetail.invoiceTotalAdd = this._stockService.stockTransactionArr[i].invoiceTotal;
@@ -249,6 +280,7 @@ export class CustomerComponent implements OnInit {
           stockTransactionId: 0,
           invoiceNum: 0,
           invoiceKind: '',
+          hideBtn: 'd-none',
           transactionType: 0,
           invoiceTotalMin: 0,
           invoiceTotalAdd: 0,
@@ -271,11 +303,11 @@ export class CustomerComponent implements OnInit {
           customerInvDetail.invKindColor = 'text-danger';
         }
         this.customerInvArry.push(customerInvDetail);
-        console.log(this.customerData.value.customerName)
+        //console.log(this.customerData.value.customerName)
       }
     }
 
-    console.log(this.theCustomerInfo)
+    //console.log(this.theCustomerInfo)
     this.customerInvArry.sort(this._service.sortArry('date_time'))
 
     for (let c = 0; c < this.customerInvArry.length; c++) {
@@ -307,7 +339,7 @@ export class CustomerComponent implements OnInit {
 
     this._custService.customerInv = [];
     this._custService.invTotalArry = [];
-    //console.log(invoice)
+    ////console.log(invoice)
     for (let i = 0; i < this.customersInvoices.length; i++) {
 
       let customerInvDetail = {
@@ -331,7 +363,7 @@ export class CustomerComponent implements OnInit {
     this._custService.date_time = invoice.date_time
     this._custService.invoiceNum = invoice.invoiceNum
     this._custService.invTotal = this._service.sumArry(this._custService.invTotalArry);
-    console.log(invoice)
+    //console.log(invoice)
     $('.fadeLayer').show(0);
     $('#customerInvDetail').show()
   }
@@ -346,7 +378,7 @@ export class CustomerComponent implements OnInit {
       this.customerData.value.customerRemain = this.customerData.value.customerPaid;
       this._custService.creatCustomer(this.customerData.value)
         .subscribe()
-      console.log(this.customerData.value)
+      //console.log(this.customerData.value)
       this._service.clearForm();
       //location.reload();
 
@@ -354,13 +386,13 @@ export class CustomerComponent implements OnInit {
 
       this.customerData.value.customerRemain = this.customerData.value.customerPaid;
       this._custService.updateCustomerSer(this.customerData.value).subscribe(() => {
-        console.log(this.customerData.value);
+        //console.log(this.customerData.value);
         this.showCustomerEnquiry();
         //location.reload();
       },
         error => {
           // alert(error);
-          //console.log(this.customerDataView);
+          ////console.log(this.customerDataView);
         });
     };
 
@@ -371,7 +403,7 @@ export class CustomerComponent implements OnInit {
     $('.askForDelete').show().addClass('animate')
     this.putCustomerDataValue(customer);
     //this.customerDataView = customer;
-    //console.log(this.customerDataView)
+    ////console.log(this.customerDataView)
   }
   deletCustomer() {
     $('.fadeLayer').hide()
@@ -389,7 +421,7 @@ export class CustomerComponent implements OnInit {
     $('#addCustomer h2:first').html('تعديل بيانات عميل');
     this.putCustomerDataValue(customer);
     //this.customerDataView = customer;
-    // console.log(customer, this.customerDataView);
+    // //console.log(customer, this.customerDataView);
     $('#showAddCustomerBtn').removeClass('btn-outline-secondary').addClass('btn-outline-info').animate({ fontSize: '1em' }, 50);
     $('#customerEnquirybtn').removeClass('btn-outline-secondary').addClass('btn-outline-info').animate({ fontSize: '1em' }, 50);
   }
@@ -403,14 +435,12 @@ export class CustomerComponent implements OnInit {
     //this.customerDataView = customer;
     this.makeCustomerInvArry();
     if(customer.customerRemain < 0) {
-      this.customerRemainColor = 'text-red'
+      this.customerRemainColor = 'text-danger'
       //$('#customerRemainCard').css('color', 'red')
     } else {
       this.customerRemainColor = 'text-dark'
-      $('#customerRemainCard').css('color', 'black')
-      
     }
-    console.log(this.customerRemainColor)
+    //console.log(this.customerRemainColor)
     $('#showAddCustomerBtn').removeClass('btn-outline-secondary').addClass('btn-outline-info').animate({ fontSize: '1em' }, 50);
     $('#customerEnquirybtn').removeClass('btn-outline-secondary').addClass('btn-outline-info').animate({ fontSize: '1em' }, 50);
     $('.customerClass').not('#customerDetails').hide();
@@ -444,7 +474,7 @@ export class CustomerComponent implements OnInit {
       customerDateIN: new FormControl('', [Validators.required]),
     });
   };
-  
+
   showCustomerEnquiry() {
     $("#customerEnquirybtn").attr({"disabled": true});
     $("#showAddCustomerBtn").attr({"disabled": false});

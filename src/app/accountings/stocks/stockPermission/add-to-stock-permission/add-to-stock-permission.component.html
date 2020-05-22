@@ -12,6 +12,11 @@
         </div>
     </div>
 </div>
+<!--printBtns-->
+<div style="display: none; position: fixed; top: 10px; right: 10px;" class="closeBtn fixed-top">
+    <button class="btn btn-outline-danger" id="reloadLocAddPrem" (click)='reloadLoc()'>X</button>
+    <button class="btn btn-outline-secondary mr-2" (click)='openwindowPrint()'><i class="fa fa-print"></i></button>
+</div>
 <!--onlyForm-->
 <div class="container-fluid card inpCard  mt-3 p-3" id="headerAddInv">
     <div class="form-inline" id="callInvoice">
@@ -33,9 +38,9 @@
             <h2 class="cardHeader p-2">فاتورة شراء</h2>
             <!--<div>{{_service.date_time}}</div>-->
             <!--<div class="text-center">رقم الفاتورة ( {{invNum}} )</div>-->
-            
+
             <input disabled id="invNum" class="text-center" type="text" value="رقم الفاتورة ( {{invNum}} )">
-            <input disabled [(ngModel)]='_service.date_time' type="datetime-local">
+            <input [(ngModel)]='_service.date_time' type="datetime-local">
             <button id="deleteAddInvoice" style="display: none;" class="btn btn-danger"
                 [disabled]='deleteInvBtnDisabled' (click)="showDeleteAddInvoice()">حذف
                 الفاتورة</button>
@@ -69,7 +74,8 @@
                         <input class="form-control p-1" name="addInvoiceNote" id="addInvoiceNote">
                     </div>
                     <div class="col text-center" id="printAddPremBtn">
-                        <i class="fa fa-print btn p-3 btn-light text-center" style="height: 100%;" (click)='printThis()'></i>
+                        <i class="fa fa-print btn p-3 btn-light text-center" style="height: 100%;"
+                            (click)='printThis()'></i>
                     </div>
                 </div>
             </div>
@@ -96,9 +102,7 @@
                                     <option *ngFor="let product of _stockService.allProducts"
                                         value="{{product.productName}}"></option>
                                 </datalist>
-                                <div *ngIf="inpt.inpVaild" class="text-danger vaildAlert">هذا الصنف لايوجد بقاعدة
-                                    البيانات
-                                </div>
+                                <div *ngIf="inpt.inpVaild" class="text-danger vaildAlert">{{inpt.productVaildMsg}}</div>
                             </td>
                             <td><input type="number" name="qty{{i}}" [(ngModel)]="inpt.qty" class="form-control"
                                     id="qty{{i}}" (change)="calcTotals()" [disabled]="inptDisabled">
@@ -112,7 +116,7 @@
                             <input name="stockTransactionDetailsId{{i}}" [(ngModel)]="inpt.stockTransactionDetailsId"
                                 class="d-none">
                         </tr>
-                        <div class="btn btn-dark my-2 mr-1" style="width: 50px;" (click)="addFilds()" id="addFilds">+
+                        <div id="addFilds" class="btn btn-dark my-2 mr-1" style="width: 50px;" (click)="addFilds()">+
                         </div>
                     </tbody>
                 </table>

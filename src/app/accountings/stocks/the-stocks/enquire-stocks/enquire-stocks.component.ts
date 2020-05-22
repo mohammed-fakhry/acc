@@ -27,7 +27,8 @@ export class EnquireStocksComponent implements OnInit {
 
   askForDelete(stock: Stock) {
     //$('.fadeLayer').show(0);
-    $('#theStockFadeLayer').show(0)
+    $('#theStockFadeLayer').show(0);
+    $('#askForDeleteStock').show();
     $('.askForDelete').addClass('animate');
     this._stockService.stockDataView = stock;
   };

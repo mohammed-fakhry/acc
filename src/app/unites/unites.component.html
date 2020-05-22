@@ -20,7 +20,7 @@
             <button style="height: 70px;" class="btn btn-outline-info ml-2 mx-2" id="showAddUnitBtn"
                 (click)="showAddUnit()">اضافة</button>
             <button style="height: 70px;font-size: 1.5em;" class="btn btn-outline-secondary ml-2 mx-2" id="unitEnquirybtn"
-                (click)="showUnitEnquiry()">استعلام</button>
+                (click)="showUnitEnquiry()" disabled>استعلام</button>
             <div class="headerLeftBorder"></div>
             <input *ngIf="router.url === '/unites'" [(ngModel)]="searchTxt" placeholder="بحث" class="form-control mx-3"
                 id="unitSearch">

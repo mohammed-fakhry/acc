@@ -22,6 +22,8 @@ export class SafeReceiptComponent implements OnInit {
   safeReceipt_inpts: SafeReceiptInpts;
   // for check val in edit
   valIsOk: number;
+  // safeArry
+  theSafeList: SafeData[];
 
   constructor(public _safeDataService: SafeDataService, public _stockService: StocksService,
     public _service: ServicesService, public _custService: CustomerService, public _safeAccComponent: SafeAccComponent) { }
@@ -29,10 +31,17 @@ export class SafeReceiptComponent implements OnInit {
   ngOnInit() {
 
     this._safeAccComponent.getBackendData_Receipt();
+    this.getSafeInfo_backEnd();
     //this.checkReceiptValid();
     this.safeReceipt_inpts = new SafeReceiptInpts()
 
   }
+
+  getSafeInfo_backEnd() {
+    this._safeDataService.getSafes().subscribe((data: SafeData[]) => {
+      this.theSafeList = data;
+    });
+  };
 
   getCurrentDate() {
     let currentDateNow = Date.now() //new Date()
@@ -64,7 +73,7 @@ export class SafeReceiptComponent implements OnInit {
   theReceiptKind: string;
 
   makeDefultNewReceiptVals() {
-    //this._safeAccComponent.getBackendData_Receipt();
+    this._safeAccComponent.getBackendData_Receipt();
     this.getCurrentDate();
     this.safeReceipt_inpts.date_time = this._service.date_time;
     this.safeReceipt_inpts.safeName = this._safeDataService.safeList[0].safeName;
@@ -112,6 +121,8 @@ export class SafeReceiptComponent implements OnInit {
   theReceiptInfo: SafeReceiptInpts;
 
   putValsForEdit(recInfo: SafeReceiptInpts) {
+    this.safeReceipt_inpts = recInfo;
+    //$('#safeNameReceipt').val(recInfo.safeName)
     this.safeChanged();
     if (recInfo.transactionAccKind == 'خزنة') {
       this.secSafeNameChanged();
@@ -119,38 +130,46 @@ export class SafeReceiptComponent implements OnInit {
       this.isCustomerValid();
     } else if (recInfo.transactionAccKind == 'حساب') {
       this.accNameChanged();
-    }
-  }
+    };
+  };
 
-  showAddSafeReceipt() {
+  showAddNewSafeReceipt() {
     // getBackendData_Receipt
     this._safeAccComponent.getBackendData_Receipt();
     //
+    
     let call_SafeRecieptBtn = $('#call_SafeRecieptBtn').html();
 
     if (call_SafeRecieptBtn == 'ايصال جديد') {
-
+      //this._service.clearForm();
       this.makeDefultNewReceiptVals();
       // Make receiptValValid false
       $('#receiptVal').removeClass('is-invalid').removeClass('is-valid');
       $('#AccName').removeClass('is-invalid').removeClass('is-valid');
       this.validTests.receiptValValid = false;
       this.safeReceipt_inpts.receiptVal = null;
+      this.safeReceipt_inpts.safeReceiptId = null;
+      this.safeReceipt_inpts.recieptNote = null;
       $('#addNewSafeReceipt').html('حفظ الايصال')
 
     } else {
 
       this.theReceiptInfo = this.getTheReceiptInfo(this.searchSafeReceiptTxt)
-      this.safeReceipt_inpts = this.theReceiptInfo;
-      this.transactionAccKindChanged();
-      $('#addNewSafeReceipt').html('تعديل الايصال');
+      //this.safeReceipt_inpts = this.theReceiptInfo;
+      //$('#safeNameReceipt').val(this.theReceiptInfo.safeName);
+      //this.safeReceipt_inpts.safeName = this.theReceiptInfo.safeName;
       this.putValsForEdit(this.theReceiptInfo)
-      this.valIsOk = this.safeReceipt_inpts.currentSafeVal + this.theReceiptInfo.receiptVal;
+      this.transactionAccKindChanged();
       this.receiptKindChanged();
+      $('#addNewSafeReceipt').html('تعديل الايصال');
+      this.valIsOk = this.safeReceipt_inpts.currentSafeVal + this.theReceiptInfo.receiptVal;
+      
+      
     }
     $('#add_SafeReceiptInside').show();
     $('#header_SafeRecipt').hide();
 
+    console.log(this.safeReceipt_inpts)
     //console.log(this._safeDataService.safeList[0].currentSafeVal)
   };
 
@@ -187,6 +206,7 @@ export class SafeReceiptComponent implements OnInit {
     this.safeReceipt_inpts.customerId = 1;
     this.safeReceipt_inpts.customerName = null;
     this.safeReceipt_inpts.currentCustomerVal = null;
+    $('#customerName_Receipt').removeClass('is-invalid').removeClass('is-valid');
     // clear validation
     this.validTests.customerValid = false;
     this.checkReceiptValid();
@@ -279,7 +299,7 @@ export class SafeReceiptComponent implements OnInit {
       $('#secSection_safeReceipt').addClass('lightBg p-3');
     }
     this.isReceiptValValid();
-  }
+  };
 
   // safes information
   theSafeInfo: SafeData;
@@ -303,8 +323,10 @@ export class SafeReceiptComponent implements OnInit {
         this.validTests.secSafeinValid = true;
       } else {
         $('#secSafeName').removeClass('is-invalid').addClass('is-valid');
+        $('#safeNameReceipt').removeClass('is-invalid').addClass('is-valid');
         this.validTests.secSafeinValid = false;
         this.validTests.fstSafeinValid = false;
+        console.log(false)
       }
 
       this.safeReceipt_inpts.current_SecSafeVal = this.theSnd_SafeInfo.currentSafeVal;
@@ -329,6 +351,7 @@ export class SafeReceiptComponent implements OnInit {
         this.validTests.fstSafeinValid = true;
       } else {
         $('#safeNameReceipt').removeClass('is-invalid').addClass('is-valid');
+        $('#secSafeName').removeClass('is-invalid').addClass('is-valid');
         this.validTests.fstSafeinValid = false;
         this.validTests.secSafeinValid = false;
       }
@@ -501,6 +524,8 @@ export class SafeReceiptComponent implements OnInit {
 
   receiptTestBtn() {
 
+    this._safeAccComponent.showAddSafeReceipt_fade('showAddSafeReceipt_fade');
+    /*
     let addNewSafeReceipt_Btn = $('#addNewSafeReceipt').html();
 
     if (addNewSafeReceipt_Btn == "تعديل الايصال") {
@@ -513,6 +538,8 @@ export class SafeReceiptComponent implements OnInit {
     // other acc
     this.editOtherAccVal();
     }
+
+    console.log(this.safeReceipt_inpts)*/
 
   }
 
@@ -663,10 +690,17 @@ export class SafeReceiptComponent implements OnInit {
 
   }
 
+
+  showInvoiceDone() {
+    this._safeAccComponent.ngOnInit();
+    this._safeAccComponent.showAddSafeReceipt_fade('showAddSafeReceipt_fade');
+  }
+
   addNewSafeReceipt() {
     this.saveRecieptData();
-    this._safeAccComponent.getBackendData_Receipt();
-    this._safeAccComponent.showAddSafeReceipt();
+    this.showInvoiceDone();
+    //this._safeAccComponent.getBackendData_Receipt();
+    //this._safeAccComponent.showAddSafeReceipt();
   };
 
 }

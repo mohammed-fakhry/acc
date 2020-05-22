@@ -34,6 +34,7 @@ export class EnquireSafeComponent implements OnInit {
     $('#addSafe').show();
     $('#showAddSafeBtn').removeClass("btn-outline-info").addClass("btn-outline-secondary").animate({ fontSize: '1.5em' }, 50);
     $('.headerMainBtn').not('#showAddSafeBtn').removeClass('btn-outline-secondary').addClass('btn-outline-info').animate({ fontSize: '1em' }, 50);
+    $('.headerMainBtn').attr({'disabled': false});
   };
 
 
@@ -131,6 +132,7 @@ export class EnquireSafeComponent implements OnInit {
     console.log(safe)
     $('.safeClass').not('#safeTransaction').hide()
     $('#safeTransaction').show();
+    $('.headerMainBtn').attr({'disabled': false});
   }
 
 }

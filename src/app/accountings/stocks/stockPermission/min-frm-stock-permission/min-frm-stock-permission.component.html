@@ -13,6 +13,11 @@
         </div>
     </div>
 </div>
+<!--printBtns-->
+<div style="display: none; position: fixed; top: 10px; right: 10px;" class="closeBtn fixed-top">
+    <button class="btn btn-outline-danger" id="reloadLocMin" (click)='reloadLoc()'>X</button>
+    <button class="btn btn-outline-secondary mr-2" (click)='openwindowPrint()'><i class="fa fa-print"></i></button>
+</div>
 <!--onlyForm-->
 <div class="container-fluid card inpCard  mt-3 p-3" id="headerMinInv">
     <div class="form-inline" id="minCallInvoice">
@@ -25,7 +30,8 @@
             <option *ngFor="let invoice of _theStockComp.minInvArry" value="{{invoice.invoiceSearchVal}}">
             </option>
         </datalist>
-        <button class="btn btn-outline-info ml-2" type="submit" id="minCallInvoiceBtn" (click)="ShowMinNewInvoice()">فاتورة
+        <button class="btn btn-outline-info ml-2" type="submit" id="minCallInvoiceBtn"
+            (click)="ShowMinNewInvoice()">فاتورة
             جديدة</button>
     </div>
 
@@ -33,7 +39,7 @@
         <div class="d-flex justify-content-between">
             <h2 class="cardHeader text-danger">فاتورة بيع</h2>
             <input disabled id="invNumMin" class="text-center" type="text" value="رقم الفاتورة ( {{invNumMin}} )">
-            <input disabled [(ngModel)]='_service.date_time' type="datetime-local">
+            <input [(ngModel)]='_service.date_time' type="datetime-local">
             <button id="deleteMinInvoice" style="display: none;" class="btn btn-danger"
                 [disabled]='deleteMinInvBtnDisabled' (click)="showDeleteMinInvoice()">حذف
                 الفاتورة</button>
@@ -59,7 +65,7 @@
                         </select> name="product{{i}}"-->
                         <input type="search" id="customerNameForMin" class="form-control mdb-autocomplete p-1"
                             list="minDatalistCustomer" (change)='isCustNameInvaild()'>
-                            <div *ngIf="custNameInvaild" class="text-danger">{{custVaildMsg}}</div>
+                        <div *ngIf="custNameInvaild" class="text-danger">{{custVaildMsg}}</div>
                         <datalist id="minDatalistCustomer">
                             <option *ngFor="let customer of customers" value="{{customer.customerName}}">
                             </option>
@@ -70,7 +76,8 @@
                         <input class="form-control p-1" name="addInvoiceNote" id="minInvoiceNote">
                     </div>
                     <div class="col text-center" id="printMinPremBtn">
-                        <i class="fa fa-print btn btn-light p-3 text-center" style="height: 100%;" (click)='printThisMin()'></i>
+                        <i class="fa fa-print btn btn-light p-3 text-center" style="height: 100%;"
+                            (click)='printThisMin()'></i>
                     </div>
                 </div>
             </div>
@@ -96,11 +103,13 @@
                                     <option *ngFor="let product of _stockService.allProducts"
                                         value="{{product.productName}}"></option>
                                 </datalist>
-                                <div *ngIf="inpt.inpVaild" class="text-danger vaildAlert">هذا الصنف لايوجد بقاعدة البيانات</div>
+                                <div *ngIf="inpt.inpVaild" class="text-danger vaildAlert">هذا الصنف لايوجد بقاعدة
+                                    البيانات</div>
                             </td>
                             <td><input type="number" name="qty{{i}}" [(ngModel)]="inpt.qty" class="form-control"
                                     (keyup)="calcTotals()" [disabled]="inputDisabled">
-                                <div *ngIf="inpt.Qtyinvaild" class="text-danger vaildAlert">لا يوجد رصيد لهذا الصنف</div>
+                                <div *ngIf="inpt.Qtyinvaild" class="text-danger vaildAlert">لا يوجد رصيد لهذا الصنف
+                                </div>
                             </td>
                             <td><input type="number" name="price{{i}}" [(ngModel)]="inpt.price" class="form-control"
                                     (change)="calcTotals()" [disabled]="inputDisabled"></td>
@@ -108,8 +117,8 @@
                             <input name="stockTransactionDetailsId{{i}}" [(ngModel)]="inpt.stockTransactionDetailsId"
                                 class="d-none">
                         </tr>
-                        <div class="btn btn-dark my-2 mr-1" style="width: 50px;" (click)="minAddFilds()"
-                            id="minAddFilds">+
+                        <div id="minAddFilds" class="btn btn-dark my-2 mr-1" style="width: 50px;"
+                            (click)="minAddFilds()">+
                         </div>
                     </tbody>
 

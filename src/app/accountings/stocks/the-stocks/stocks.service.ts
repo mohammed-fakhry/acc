@@ -8,6 +8,7 @@ import { StockPridge } from '../stock-pridge';
 import { StockTransactionD } from '../stock-transaction-d';
 import { StockTransaction } from '../stock-transaction';
 import { HandleAddPrimBE } from '../handle-add-prim-be';
+import { StockTransactionList } from '../../stock-transaction-list';
 
 @Injectable({
   providedIn: 'root'
@@ -120,7 +121,7 @@ export class StocksService {
 
   // stockTransactionList
   getStockTransactionList() {
-    return this.http.get<StockTransaction[]>('http://localhost/accounting/stockTransactionList.php');
+    return this.http.get<StockTransactionList[]>('http://localhost/accounting/stockTransactionList.php');
   }
 
   UpdateStockTransactionDetails(stockTransactionDetails: StockTransactionD) {

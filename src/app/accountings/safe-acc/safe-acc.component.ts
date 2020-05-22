@@ -68,6 +68,26 @@ export class SafeAccComponent implements OnInit {
     $('.clearForm').val('')
   };
 
+  showAddSafeReceipt_fade(btnId: string) {
+    $('#theSafeFadeLayer').show();
+    $('#SafeReceiptDone').show();
+    $('.askForDelete').addClass('animate');
+    $('.fadeBtns').not(`#${btnId}`).hide();
+    $(`#${btnId}`).show();
+  };
+
+  showSafeEnquir_fade() {
+    this.showSafeEnquir();
+    $('#theSafeFadeLayer').hide();
+    $('.askForDelete').removeClass('animate').hide();
+  }
+
+  showAddNewRecipt_fade() {
+    this.showAddSafeReceipt();
+    $('#theSafeFadeLayer').hide();
+    $('.askForDelete').removeClass('animate').hide();
+  };
+
   showAddSafe() {
     this.getSafeInfo_backEnd();
     this._service.clearForm();
@@ -77,18 +97,22 @@ export class SafeAccComponent implements OnInit {
     $('#addSafe').show();
     $('#showAddSafeBtn').removeClass("btn-outline-info").addClass("btn-outline-secondary").animate({ fontSize: '1.5em' }, 50);
     $('.headerMainBtn').not('#showAddSafeBtn').removeClass('btn-outline-secondary').addClass('btn-outline-info').animate({ fontSize: '1em' }, 50);
+    $('.headerMainBtn').not('#showAddSafeBtn').attr({'disabled': false});
+    $('#showAddSafeBtn').attr({'disabled': true});
   };
 
   showAddSafeReceipt() {
-    this.safeRecClearForm();
     this.getBackendData_Receipt();
+    //this._service.clearForm();
     $('#call_SafeRecieptBtn').html('ايصال جديد')
     $('.safeClass').not('#safeReceipt').hide();
     $('#safeReceipt').show();
-    $('#add_SafeReceiptInside').hide();
-    $('#header_SafeRecipt').show();
+    $('#add_SafeReceiptInside').hide(); // first
+    $('#header_SafeRecipt').show(); // second
     $('#showAddSafeReceipt').removeClass("btn-outline-info").addClass("btn-outline-secondary").animate({ fontSize: '1.5em' }, 50);
     $('.headerMainBtn').not('#showAddSafeReceipt').removeClass('btn-outline-secondary').addClass('btn-outline-info').animate({ fontSize: '1em' }, 50);
+    $('.headerMainBtn').not('#showAddSafeReceipt').attr({'disabled': false});
+    $('#SafeReceiptSearch').val(null)
     console.log(this._safeDataService.safeList[0].currentSafeVal)
   };
 
@@ -99,6 +123,8 @@ export class SafeAccComponent implements OnInit {
     $('#enquireSafe').show();
     $('#showSafeBtn').removeClass("btn-outline-info").addClass("btn-outline-secondary").animate({ fontSize: '1.5em' }, 50);
     $('.headerMainBtn').not('#showSafeBtn').removeClass('btn-outline-secondary').addClass('btn-outline-info').animate({ fontSize: '1em' }, 50);
+    $('.headerMainBtn').not('#showSafeBtn').attr({'disabled': false});
+    $('#showSafeBtn').attr({'disabled': true});
   };
 
 } // end

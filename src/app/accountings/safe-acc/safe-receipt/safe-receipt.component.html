@@ -25,7 +25,7 @@
             </option>
         </datalist>
         <button class="btn btn-outline-info ml-2" type="submit" id="call_SafeRecieptBtn"
-            (click)="showAddSafeReceipt()">ايصال
+            (click)="showAddNewSafeReceipt()">ايصال
             جديد</button>
     </div>
 </div>
@@ -33,7 +33,7 @@
 <div class="container-fluid  mt-3 card inpCard" style="display: none;" id="add_SafeReceiptInside">
     <div class="p-4">
         <h2 class="pb-3 cardHeader">ايصال استلام نقدية</h2>
-        <button class="btn btn-success" (click)='receiptTestBtn()'>test</button>
+        <button class="btn btn-success d-none" (click)='receiptTestBtn()'>test</button>
         <form (ngSubmit)="addNewSafeReceipt()" class="pt-3">
             <!--firstSection-->
             <div class="row navHeader p-2">
@@ -57,20 +57,19 @@
             <div class="row mt-3">
                 <div class="form-inline col-md-4 col-lg-3 col-sm-6">
                     <label class="ml-2" for="date_time">تاريخ الايصال</label>
-                    <input disabled name="date_time" [(ngModel)]='safeReceipt_inpts.date_time' type="datetime-local"
+                    <input name="date_time" [(ngModel)]='safeReceipt_inpts.date_time' type="datetime-local"
                         id="date_time">
                 </div>
             </div>
             <!--line1-->
             <div class="row mt-3">
                 <div class="col-md-4 col-lg-3 col-sm-6">
+                    <!---->
                     <label for="safeNameReceipt">اسم الخزنة</label>
-                    <input class="form-control p-1 form-control mdb-autocomplete pr-5" name="safeName"
-                        [(ngModel)]='safeReceipt_inpts.safeName' id="safeNameReceipt" (keyup)="safeChanged()"
-                        list="datalistSafeName">
-                    <datalist id="datalistSafeName">
-                        <option *ngFor="let safe of _safeDataService.safeList">{{safe.safeName}}</option>
-                    </datalist>
+                    <select class="form-control p-1 pr-5" id="safeNameReceipt" (change)="safeChanged()"
+                        name="safeNameReceipt" [(ngModel)]='safeReceipt_inpts.safeName'>
+                        <option *ngFor="let safe of theSafeList">{{safe.safeName}}</option>
+                    </select>
                     <div *ngIf='validTests.fstSafeinValid' class="text-danger mt-2">{{validTests.firstSafeValidMsg}}
                     </div>
                 </div>
@@ -125,11 +124,11 @@
                     <div class="row">
                         <div class="col-md-4 col-lg-3 col-sm-6">
                             <label for="secSafeName">اسم الخزنة</label>
-                            <input name="secSafeName" [(ngModel)]='safeReceipt_inpts.secSafeName'
-                                class="form-control p-1 clearForm mdb-autocomplete pr-5" list="datalistSecSafeName" id="secSafeName" (keyup)="secSafeNameChanged()">
-                                <datalist id="datalistSecSafeName">
-                                    <option *ngFor="let safe of _safeDataService.safeList">{{safe.safeName}}</option>
-                                </datalist>
+                            <select name="secSafeName" [(ngModel)]='safeReceipt_inpts.secSafeName'
+                                class="form-control p-1 clearForm mdb-autocomplete pr-5" id="secSafeName"
+                                (change)="secSafeNameChanged()">
+                                <option *ngFor="let safe of _safeDataService.safeList">{{safe.safeName}}</option>
+                            </select>
                             <div *ngIf='validTests.secSafeinValid' class="text-danger mt-2">
                                 {{validTests.secSafeValidMsg}}
                             </div>

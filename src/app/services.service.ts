@@ -93,7 +93,7 @@ export class ServicesService {
 
   printThis(show: string, hide1: string, hide2: string, hide3: string) {
 
-    $(show).addClass('wideScreen container');
+    $(show).addClass('wideScreen').css('width','85%');
     $('#app-side-bar').hide();
     $('#sidebarToggle').hide();
     if (hide1 != '') {
@@ -111,7 +111,7 @@ export class ServicesService {
   }
 
   clearForm() {
-    $('.form-control').val('')
+    $('.form-control').val(null)
   };
 
   getWorker() {

@@ -7,7 +7,7 @@
                 <label>اسم الصنف</label>
                 <input formControlName="productName" [(ngModel)]="_stockService.productDataView.productName"
                     id="productName" class="form-control" (keyup)='isProductNameVaild()'>
-                <div id="productNameAlert" *ngIf='_theStockComp.productNameVaild' class="text-danger">
+                <div id="productNameAlert" *ngIf='_theStockComp.productNameVaild' class="text-danger pt-2">
                     {{productNameAlert}}</div>
             </div>
         </div>
