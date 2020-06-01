@@ -3,6 +3,7 @@ import { SafeDataService } from '../safe-data.service';
 import { SafeAccComponent } from '../safe-acc.component';
 import { SafeData } from '../safe-data';
 import { SafeTransaction } from '../safe-transaction';
+import { ServicesService } from 'src/app/services.service';
 
 @Component({
   selector: 'app-enquire-safe',
@@ -11,7 +12,7 @@ import { SafeTransaction } from '../safe-transaction';
 })
 export class EnquireSafeComponent implements OnInit {
 
-  constructor(public _safeDataService: SafeDataService, public _safeAccComponent: SafeAccComponent) { }
+  constructor(public _safeDataService: SafeDataService, public _safeAccComponent: SafeAccComponent, public _service: ServicesService) { }
 
   ngOnInit() {
 
@@ -27,7 +28,7 @@ export class EnquireSafeComponent implements OnInit {
 
   showEditSafe(safe) {
     this.fillData(safe);
-    console.log(safe)
+    //console.log(safe)
     $('#addSafeHeader').html('تعديل بيانات خزنة')
     $('#addNewSafeBtn').html('تعديل')
     $('.safeClass').not('#addSafe').hide();
@@ -105,15 +106,16 @@ export class EnquireSafeComponent implements OnInit {
         }
 
         this._safeDataService.safeTransactionArr.push(theSafeRecipt)
-        //console.log(JSON.stringify( theSafeRecipt))
+        ////console.log(JSON.stringify( theSafeRecipt))
       }
     }
 
-    let sortTrans =  this._safeDataService.safeTransactionArr.sort((a,b) => {
+   /* this._safeDataService.safeTransactionArr.sort((a,b) => {
       return a.safeReceiptId - b.safeReceiptId
-    })
-
-    this._safeDataService.safeTransactionArr = sortTrans;
+    }) */
+    
+    this._safeDataService.safeTransactionArr.sort(this._service.sortArry('date_time'))
+    // this._safeDataService.safeTransactionArr = sortTrans;
 
     for (let s = 0; s < this._safeDataService.safeTransactionArr.length; s++) {
       if (this._safeDataService.safeTransactionArr[s -1] == undefined) {
@@ -122,17 +124,21 @@ export class EnquireSafeComponent implements OnInit {
         this._safeDataService.safeTransactionArr[s].safeNet = this._safeDataService.safeTransactionArr[s-1].safeNet + this._safeDataService.safeTransactionArr[s].receiptValIn - this._safeDataService.safeTransactionArr[s].receiptValOut;
       }
     }
-    //console.log(this._safeDataService.safeTransactionArr)
-    //console.log(theSafeRecipt);
+     
+    ////console.log(this._safeDataService.safeTransactionArr)
+    ////console.log(theSafeRecipt);
   }
 
   showSafeTranaction(safe: SafeData) {
     this.makeSafeTransaction(safe);
-    console.log(JSON.stringify(this._safeDataService.safeTransactionArr))
-    console.log(safe)
-    $('.safeClass').not('#safeTransaction').hide()
+    //console.log(JSON.stringify(this._safeDataService.safeTransactionArr))
+    //console.log(safe)
+    $('.safeClass').not('#safeTransaction').hide();
+    $('#SafeReportTable').hide();
     $('#safeTransaction').show();
     $('.headerMainBtn').attr({'disabled': false});
+    //$('#showAddSafeBtn').removeClass("btn-outline-info").addClass("btn-outline-secondary").animate({ fontSize: '1.5em' }, 50);
+    $('.headerMainBtn').removeClass('btn-outline-secondary').addClass('btn-outline-info').animate({ fontSize: '1em' }, 50);
   }
 
 }

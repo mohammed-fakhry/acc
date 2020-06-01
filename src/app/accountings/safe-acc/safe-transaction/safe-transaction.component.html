@@ -3,34 +3,42 @@
     <button class="btn btn-outline-danger" id="reloadLoc" (click)='reloadLoc()'>X</button>
     <button class="btn btn-outline-secondary mr-2" (click)='openwindowPrint()'><i class="fa fa-print"></i></button>
 </div>
+<!--scrollTop-->
+<i class="fa fa-chevron-circle-up text-primary" id="topArr"></i>
+<i class="fa fa-chevron-circle-down text-primary" id="btmArr" (click)='toBottom()'></i>
 <!--headerSafeReport-->
-<div class="container-fluid card inpCard  mt-3 p-3" id="headerSafeReport">
+<div class="container-fluid card mt-3 p-3" id="headerSafeReport">
     <div class="theHeader">
         <div class="d-flex justify-content-between">
             <h2 class="cardHeader">تقرير حركة خزنة</h2>
-            <i id="printSafeTrance" class="fa fa-print btn p-3 btn-outline-info text-center" (click)='printSafeTrance()'></i>
+            <i id="printSafeTrance" class="fa fa-expand btn p-3 btn-outline-info text-center" (click)='printSafeTrance()'></i>
         </div>
         <hr class="text-center">
         <div class="d-flex justify-content-arround">
             <div class="mr-3">
                 <label for="fromDateSafeRe">من تاريخ</label>
                 <input class="form-control p-1" type="date" id="fromDateSafeRe">
+                <div *ngIf='fstDateInvalid' class="text-danger pt-1">يجب ادخال تاريخ صحيح</div>
             </div>
             <div class="mr-3">
                 <label for="toDateSafeRe">الى تاريخ</label>
                 <input class="form-control p-1" type="date" id="toDateSafeRe">
+                <div *ngIf='sndDateInvalid' class="text-danger pt-1">يجب ادخال تاريخ صحيح</div>
+            </div>
+            <div class="text-center mr-3">
+                <button style="height: 100%;" (click)='filterByDate()' class="btn btn-outline-info text-center"><i class="fa fa-filter"></i></button>
             </div>
             <div class="headerLeftBorder mr-3"></div>
             <div class="mr-3">
                 <label for="searchSafeTrance">بحث</label>
-                <input [(ngModel)]="searchSafeTrance" name="searchSafeTrance" placeholder="بحث ببيان النقدية"
+                <input disabled [(ngModel)]="searchSafeTrance" name="searchSafeTrance" placeholder="بحث ببيان الحركة"
                     class="form-control p-1" id="searchSafeTrance">
             </div>
         </div>
         <hr class="text-center">
     </div>
-    <div>
-        <div class="panel-body panel-flex-table" id="SafeReportTable">
+    <div class="mt-3">
+        <div class="panel-body panel-flex-table" id="SafeReportTable" style="display: none;">
             <table class="flex-table table table-hover" style="height: 100%;">
                 <thead class="navHeader text-light">
                     <tr>
@@ -39,15 +47,15 @@
                         <th>الاذن</th>
                         <th style="flex:2">نوع االحركة</th>
                         <th style="flex:2">بيان الحركة</th>
-                        <th class="text-center">رصيد مضاف</th>
-                        <th class="text-center">رصيد مخصوم</th>
-                        <th class="text-center">رصيد باقى</th>
+                        <th class="text-center">مدين</th>
+                        <th class="text-center">دائن</th>
+                        <th class="text-center">رصيد</th>
                         <th style="flex:2">ملاحظات</th>
                     </tr>
                 </thead>
                 <tbody class=" mt-3 tableBody">
                     <tr
-                        *ngFor='let safeRep of _safeDataService.safeTransactionArr|safeTranceSearch:searchSafeTrance; let i = index'>
+                        *ngFor='let safeRep of filterdArr|safeTranceSearch:searchSafeTrance; let i = index'>
                         <td style="flex: none; width: 260px">
                             <input disabled value="{{safeRep.date_time}}" type="datetime-local">
                         </td>

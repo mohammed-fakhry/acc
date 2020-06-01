@@ -137,7 +137,7 @@ export class SafeReceiptComponent implements OnInit {
     // getBackendData_Receipt
     this._safeAccComponent.getBackendData_Receipt();
     //
-    
+
     let call_SafeRecieptBtn = $('#call_SafeRecieptBtn').html();
 
     if (call_SafeRecieptBtn == 'ايصال جديد') {
@@ -163,13 +163,11 @@ export class SafeReceiptComponent implements OnInit {
       this.receiptKindChanged();
       $('#addNewSafeReceipt').html('تعديل الايصال');
       this.valIsOk = this.safeReceipt_inpts.currentSafeVal + this.theReceiptInfo.receiptVal;
-      
-      
     }
     $('#add_SafeReceiptInside').show();
     $('#header_SafeRecipt').hide();
 
-    console.log(this.safeReceipt_inpts)
+    console.log(this.theReceiptInfo)
     //console.log(this._safeDataService.safeList[0].currentSafeVal)
   };
 
@@ -317,7 +315,7 @@ export class SafeReceiptComponent implements OnInit {
 
     } else {
 
-      if (this.safeReceipt_inpts.secSafeName === this.safeReceipt_inpts.safeName) {
+      if (this.safeReceipt_inpts.secSafeName == this.safeReceipt_inpts.safeName) {
         this.validTests.secSafeValidMsg = 'لا يمكن تكرار نفس الخزنة'
         $('#secSafeName').removeClass('is-valid').addClass('is-invalid');
         this.validTests.secSafeinValid = true;
@@ -326,7 +324,7 @@ export class SafeReceiptComponent implements OnInit {
         $('#safeNameReceipt').removeClass('is-invalid').addClass('is-valid');
         this.validTests.secSafeinValid = false;
         this.validTests.fstSafeinValid = false;
-        console.log(false)
+        //console.log(false)
       }
 
       this.safeReceipt_inpts.current_SecSafeVal = this.theSnd_SafeInfo.currentSafeVal;
@@ -345,7 +343,7 @@ export class SafeReceiptComponent implements OnInit {
       this.validTests.fstSafeinValid = true;
       this.safeReceipt_inpts.currentSafeVal = null;
     } else {
-      if (this.safeReceipt_inpts.secSafeName === this.safeReceipt_inpts.safeName) {
+      if (this.safeReceipt_inpts.secSafeName == this.safeReceipt_inpts.safeName) {
         this.validTests.firstSafeValidMsg = 'لا يمكن تكرار نفس الخزنة';
         $('#safeNameReceipt').removeClass('is-valid').addClass('is-invalid');
         this.validTests.fstSafeinValid = true;
@@ -406,6 +404,7 @@ export class SafeReceiptComponent implements OnInit {
         $('#currentCustomerVal').css('color', 'black')
       }
     }
+    this.checkReceiptValid();
 
   } // isCustomerValid
 
@@ -509,37 +508,72 @@ export class SafeReceiptComponent implements OnInit {
     recieptNote: '',
   }*/
 
-  editSafeVal() { // from old receipt
-    console.log(this.theReceiptInfo)
+
+  editSafeVal(receiptVal: number) { // from old receipt
+    // get the old safe information
+    let oldSafe = this._safeDataService.safeList.find(
+      safe => safe.safeId == this.theReceiptInfo.safeId
+    );
+    // the condition
+    if (this.theReceiptKind == 'add') {
+      oldSafe.currentSafeVal = oldSafe.currentSafeVal - receiptVal;
+    } else {
+      oldSafe.currentSafeVal = oldSafe.currentSafeVal + receiptVal;
+    };
+    this._safeDataService.updateSafeData(oldSafe).subscribe();
   };
-  editSecSafeVal() { // from old receipt
 
-  }
-  editCustomerVal() { // from old receipt
-
+  editSecSafeVal(receiptVal: number) { // from old receipt
+    // get the old safeVal
+    let oldSecSafe = this._safeDataService.safeList.find(
+      safe => safe.safeId == this.theReceiptInfo.secSafeId
+    );
+    // the condition
+    if (this.theReceiptInfo.secSafeName != null) {
+      if (this.theReceiptKind == 'add') {
+        oldSecSafe.currentSafeVal = oldSecSafe.currentSafeVal + receiptVal;
+      } else {
+        oldSecSafe.currentSafeVal = oldSecSafe.currentSafeVal - receiptVal;
+      };
+      this._safeDataService.updateSafeData(oldSecSafe).subscribe();
+    };
   };
-  editOtherAccVal() { // from old receipt
 
+  editCustomerVal(receiptVal: number) { // from old receipt
+    // get the old customer
+    let oldCustomer = this._safeAccComponent.customers.find(
+      customer => customer.customerId == this.theReceiptInfo.customerId
+    );
+    // the condition
+    if (this.theReceiptInfo.customerId != null) {
+      if (this.theReceiptKind == 'add') {
+        oldCustomer.customerRemain = oldCustomer.customerRemain + receiptVal;
+      } else {
+        oldCustomer.customerRemain = oldCustomer.customerRemain - receiptVal;
+      };
+      this._custService.updateCustomerSer(oldCustomer).subscribe();
+      //console.log(this.theCustomerInfo.customerRemain + ' : after_customer');
+    };
+    //console.log(this.theCustomerInfo.customerRemain + ' : after');
+  };
+
+  editOtherAccVal(receiptVal: number) { // from old receipt
+    // get the old acc information
+    let oldAcc = this._safeAccComponent.otherAcc.find(
+      acc => acc.AccName == this.theReceiptInfo.AccName
+    );
+    // the condition
+    if (this.theReceiptInfo.AccName != null) {
+      if (this.theReceiptKind == 'add') {
+        oldAcc.currentAccVal = oldAcc.currentAccVal + receiptVal;
+      } else {
+        oldAcc.currentAccVal = oldAcc.currentAccVal - receiptVal;
+      };
+      this._service.updateOtherAccSer(oldAcc).subscribe();
+    };
   };
 
   receiptTestBtn() {
-
-    this._safeAccComponent.showAddSafeReceipt_fade('showAddSafeReceipt_fade');
-    /*
-    let addNewSafeReceipt_Btn = $('#addNewSafeReceipt').html();
-
-    if (addNewSafeReceipt_Btn == "تعديل الايصال") {
-    // safe
-    this.editSafeVal();
-    // sec safe
-    this.editSecSafeVal();
-    // customer
-    this.editCustomerVal();
-    // other acc
-    this.editOtherAccVal();
-    }
-
-    console.log(this.safeReceipt_inpts)*/
 
   }
 
@@ -559,6 +593,22 @@ export class SafeReceiptComponent implements OnInit {
     let isSndSafe: Boolean = false;
     let isCustomer: boolean = false;
 
+    let addNewSafeReceipt_Btn = $('#addNewSafeReceipt').html();
+
+    if (addNewSafeReceipt_Btn == "تعديل الايصال") { // edite the old vals
+      // receiptVal
+      let theReceipt = this.getTheReceiptInfo(this.theReceiptInfo.safeReceiptId)
+      console.log(theReceipt)
+      // safe
+      this.editSafeVal(theReceipt.receiptVal);
+      // sec safe
+      this.editSecSafeVal(theReceipt.receiptVal);
+      // customer
+      this.editCustomerVal(theReceipt.receiptVal);
+      // other acc
+      this.editOtherAccVal(theReceipt.receiptVal);
+    };
+
     if (this.safeReceipt_inpts.transactionAccKind == 'خزنة') { // safe modify
       //make defult customer Id
       isSndSafe = true;
@@ -568,7 +618,7 @@ export class SafeReceiptComponent implements OnInit {
         sndSafe_NewVal = this.theSafeInfo.currentSafeVal - this.safeReceipt_inpts.receiptVal;
       } else { // if (this.theReceiptKind == 'min')
         fstSafe_NewVal = this.theSafeInfo.currentSafeVal - this.safeReceipt_inpts.receiptVal;
-        sndSafe_NewVal = this.theSafeInfo.currentSafeVal - this.safeReceipt_inpts.receiptVal;
+        sndSafe_NewVal = this.theSafeInfo.currentSafeVal + this.safeReceipt_inpts.receiptVal;
       }
 
       fstSafe_NewData = { // first safe update in backend
@@ -618,6 +668,7 @@ export class SafeReceiptComponent implements OnInit {
       };
       //console.log(JSON.stringify(fstSafe_NewData) + ' : fstSafe_NewData');
       // save to backend
+      console.log(fstSafe_NewData.currentSafeVal + ' : lastEdit');
       this._safeDataService.updateSafeData(fstSafe_NewData).subscribe();
       //this.fstSafeVal_NewReceip = fstSafe_NewVal;
 
@@ -685,11 +736,16 @@ export class SafeReceiptComponent implements OnInit {
 
     this.safeReceipt_inpts.safeId = this.theSafeInfo.safeId;
     //console.log(this.safeReceipt_inpts);
-    this._safeDataService.creatSafeReceipt(this.safeReceipt_inpts).subscribe();
+
+    if (addNewSafeReceipt_Btn == "تعديل الايصال") {
+      this._safeDataService.updateSafeReceipt(this.safeReceipt_inpts).subscribe();
+    } else {
+      this._safeDataService.creatSafeReceipt(this.safeReceipt_inpts).subscribe();
+    }
+
     // save to backend
 
   }
-
 
   showInvoiceDone() {
     this._safeAccComponent.ngOnInit();

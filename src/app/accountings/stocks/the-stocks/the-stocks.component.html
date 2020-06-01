@@ -12,15 +12,15 @@
         </div>
     </div>
     <div class="container p-3 card askForDelete" style="display: none;" id="stockPerDone">
-        <h3>تم التسجيل بنجاح</h3>
+        <h3 class="bg-info text-white p-3">تم التسجيل بنجاح</h3>
         <hr>
         <div class="d-flex flex-row-reverse">
             <!--fade_addNewApBtn-->
             <button class="btn btn-outline-info mr-2 fadeBtns" id="fade_addNewApBtn" (click)="showAddToStockPrem_fade()">فاتورة شراء جديدة</button>
             <!--fade_minNewApBtn-->
-            <button class="btn btn-outline-info mr-2 fadeBtns" id="fade_minNewApBtn" (click)="showMinToStockPrem()">فاتورة بيع جديدة</button>
+            <button class="btn btn-outline-info mr-2 fadeBtns" id="fade_minNewApBtn" (click)="showMinToStockPrem_fade()">فاتورة بيع جديدة</button>
             <!--fade_showTranceStockPrem-->
-            <button class="btn btn-outline-info mr-2 fadeBtns" id="fade_showTranceStockPrem" (click)="showTranceStockPrem()">اذن نقل جديدة</button>
+            <button class="btn btn-outline-info mr-2 fadeBtns" id="fade_showTranceStockPrem" (click)="showTranceStockPrem_fade()">اذن مخزن جديد</button>
             <!--backToTheStart-showTranceStockPrem-->
             <button class="btn btn-outline-secondary" id="Hidefade_addNewApBtn" (click)='showStocksEnquiry_fade()'>الرئيسية</button>
         </div>
@@ -41,16 +41,16 @@
                 </button>
                 <div class="dropdown-menu p-1" aria-labelledby="dropdownMenuButton">
                     <div class="dropDownItemBorder">
-                        <button class="dropdown-item text-right btn-outline-secondary" id="showStocksEnquiry"
+                        <button class="dropdown-item text-right" id="showStocksEnquiry"
                             (click)="showStocksEnquiry()">جرد مخازن</button>
-                        <button class="dropdown-item text-right btn-outline-secondary" id="showAddNewStock" (click)="showAddNewStock()">اضافة
+                        <button class="dropdown-item text-right" id="showAddNewStock" (click)="showAddNewStock()">اضافة
                             مخزن</button>
                     </div>
                     <!--products-->
                     <div>
-                        <button class="dropdown-item text-right btn-outline-secondary" id="showAddNewProduct"
+                        <button class="dropdown-item text-right" id="showAddNewProduct"
                             (click)="showAddNewProduct()">اضافة صنف</button>
-                        <button class="dropdown-item text-right btn-outline-secondary" id="showProductsReport"
+                        <button class="dropdown-item text-right" id="showProductsReport"
                             (click)="showProductsReport()">تقرير حركة صنف</button>
                     </div>
                 </div>
@@ -62,12 +62,12 @@
                     فواتير
                 </button>
                 <div class="dropdown-menu p-1" aria-labelledby="dropdownMenuButton">
-                    <button class="dropdown-item text-right btn-outline-secondary" id="showAddToStockPrem"
+                    <button class="dropdown-item text-right" id="showAddToStockPrem"
                         (click)="showAddToStockPrem()">فاتورة شراء</button>
-                    <button class="dropdown-item text-right btn-outline-secondary" id="showMinToStockPrem"
+                    <button class="dropdown-item text-right" id="showMinToStockPrem"
                         (click)="showMinToStockPrem()">فاتور بيع</button>
-                    <button class="dropdown-item text-right btn-outline-secondary" id="showTranceStockPrem"
-                        (click)="showTranceStockPrem()">اذن نقل</button>
+                    <button class="dropdown-item text-right" id="showTranceStockPrem"
+                        (click)="showTranceStockPrem()">اذن مخزن</button>
                 </div>
             </div>
             <button class="btn btn-success mx-2 d-none" id="testBtn" (click)='testbtn()'>test</button>

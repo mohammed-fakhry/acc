@@ -38,9 +38,8 @@
             <h2 class="cardHeader p-2">فاتورة شراء</h2>
             <!--<div>{{_service.date_time}}</div>-->
             <!--<div class="text-center">رقم الفاتورة ( {{invNum}} )</div>-->
-
             <input disabled id="invNum" class="text-center" type="text" value="رقم الفاتورة ( {{invNum}} )">
-            <input [(ngModel)]='_service.date_time' type="datetime-local">
+            <input [(ngModel)]='date_time' type="datetime-local">
             <button id="deleteAddInvoice" style="display: none;" class="btn btn-danger"
                 [disabled]='deleteInvBtnDisabled' (click)="showDeleteAddInvoice()">حذف
                 الفاتورة</button>
@@ -50,32 +49,33 @@
             <div class="form-group">
                 <div class="d-flex justify-content-between">
                     <input id="stockTransactionId" class="d-none">
-                    <!--stockName-->
-                    <div class="col m-2">
-                        <label for="stockNameForAdd">اسم المخزن</label>
-                        <select class="form-control p-1" id="stockNameForAdd" (change)="stockChanged()">
-                            <option *ngFor="let stock of _stockService.stocks">{{stock.stockName}}</option>
-                        </select>
-                        <div *ngIf="stockNameVaild" class="text-danger pr-1 vaildAlert">لايوجد هذا المخزن</div>
+                    <div class="form-row">
+                        <!--stockName-->
+                        <div class="col m-2">
+                            <label for="stockNameForAdd">اسم المخزن</label>
+                            <select class="form-control p-1" id="stockNameForAdd" (change)="stockChanged()">
+                                <option *ngFor="let stock of _stockService.stocks">{{stock.stockName}}</option>
+                            </select>
+                            <div *ngIf="stockNameVaild" class="text-danger pr-1 vaildAlert">لايوجد هذا المخزن</div>
+                        </div>
+                        <!--customerName-->
+                        <div class="col m-2">
+                            <label for="customerNameForAdd">اسم المورد</label>
+                            <input type="search" id="customerNameForAdd" (change)="isCustomerVaild()"
+                                class="form-control mdb-autocomplete p-1" list="datalistCustomer">
+                            <div *ngIf="customerVaild" class="text-danger">{{custVaildMsg}}</div>
+                            <datalist id="datalistCustomer">
+                                <option *ngFor="let customer of customers" value="{{customer.customerName}}">
+                                </option>
+                            </datalist>
+                        </div>
+                        <div class="col m-2">
+                            <label for="addInvoiceNote">ملاحظات</label>
+                            <input class="form-control p-1" name="addInvoiceNote" id="addInvoiceNote">
+                        </div>
                     </div>
-                    <!--customerName-->
-                    <div class="col m-2">
-                        <label for="customerNameForAdd">اسم المورد</label>
-                        <input type="search" id="customerNameForAdd" (change)="isCustomerVaild()"
-                            class="form-control mdb-autocomplete p-1" list="datalistCustomer">
-                        <div *ngIf="customerVaild" class="text-danger">{{custVaildMsg}}</div>
-                        <datalist id="datalistCustomer">
-                            <option *ngFor="let customer of customers" value="{{customer.customerName}}">
-                            </option>
-                        </datalist>
-                    </div>
-                    <div class="col m-2">
-                        <label for="addInvoiceNote">ملاحظات</label>
-                        <input class="form-control p-1" name="addInvoiceNote" id="addInvoiceNote">
-                    </div>
-                    <div class="col text-center" id="printAddPremBtn">
-                        <i class="fa fa-print btn p-3 btn-light text-center" style="height: 100%;"
-                            (click)='printThis()'></i>
+                    <div class="text-center m-2" id="printAddPremBtn">
+                        <i class="fa fa-expand btn p-3 btn-outline-info text-center" (click)='printThis()'></i>
                     </div>
                 </div>
             </div>
@@ -132,6 +132,6 @@
                 </div>
             </div>
         </form>
-        <button class="btn btn-success mx-2" id="testBtnP" (click)='testBtn()'>test</button>
+        <button class="btn btn-success mx-2 d-none" id="testBtnP" (click)='testBtn()'>test</button>
     </div>
 </div>

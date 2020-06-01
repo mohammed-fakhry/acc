@@ -35,6 +35,8 @@ export class AddToStockPermissionComponent implements OnInit {
 
   deleteInvBtnDisabled: boolean;
 
+  date_time: string;
+
   constructor(public _stockService: StocksService, public formBuilder: FormBuilder,
     public _service: ServicesService, public _custService: CustomerService, public _theStockComp: TheStocksComponent) { }
 
@@ -42,11 +44,9 @@ export class AddToStockPermissionComponent implements OnInit {
 
     this.addToStockPremData = this.formBuilder.group({
       stockName: [''],
-    })
+    });
 
     this.getBackendData();
-
-
 
     $('#hideFadeLayerAP').click(function () {
       $('#fadeLayerAP').hide();
@@ -61,15 +61,15 @@ export class AddToStockPermissionComponent implements OnInit {
 
     this._custService.getCustomer().subscribe((data: Customer[]) => {
       this.customers = data;
-    })
+    });
 
     this._stockService.getStockTransactionList().subscribe((data: StockTransaction[]) => {
       this._stockService.stockTransactionArr = data;
-    })
+    });
     this._stockService.getStockTransactionDetailsList().subscribe((data: StockTransactionD[]) => {
       this._stockService.stockTransactionDetailsArr = data;
-    })
-  }
+    });
+  };
 
   refreshBackendData() {
     this._theStockComp.ngOnInit();
@@ -107,7 +107,6 @@ export class AddToStockPermissionComponent implements OnInit {
     this.deleteInvBtnDisabled = true;
     let found: boolean;
     let index: number;
-    let map = {};
 
     for (let i = 0; i < this.invoiceInpArry.length; i++) {
       let productinpt = $(`#product${i}`).val();
@@ -115,16 +114,16 @@ export class AddToStockPermissionComponent implements OnInit {
         this.invoiceInpArry[i].inpVaild = false;
       } else {
         this.invoiceInpArry[i].inpVaild = true;
-        this.invoiceInpArry[i].productVaildMsg = 'اسم الصنف غير صحيح'
+        this.invoiceInpArry[i].productVaildMsg = 'خطأ فى اسم الصنف'
       };
 
       //map[this.invoiceInpArry[i]] = true;
       let valueArr = this.invoiceInpArry.map((item) => { return item.product });
-      let filtert =  valueArr.filter((product) => {
+      let filtert = valueArr.filter((product) => {
         return product != undefined
       })
       let isDublicate = filtert.some((item, indx) => {
-        console.log(indx + ' : indx')
+        //console.log(indx + ' : indx')
         index = indx
         return valueArr.indexOf(item) != indx
       })
@@ -140,10 +139,8 @@ export class AddToStockPermissionComponent implements OnInit {
       if (found == true) {
         this.invoiceInpArry[index].inpVaild = true;
         this.invoiceInpArry[index].productVaildMsg = 'لا يمكن تكرار هذا الصنف'
-      } else {
-        this.invoiceInpArry[index].inpVaild = false;
-      }
-    }
+      };
+    };
 
     for (let i = 0; i < this.invoiceInpArry.length; i++) {
       if (this.invoiceInpArry[i].inpVaild == true) {
@@ -151,18 +148,15 @@ export class AddToStockPermissionComponent implements OnInit {
         break
       } else {
         this.isAddInvVaild = false;
-      }
+      };
 
       if (this.invoiceInpArry[i].product == '') {
         if (this.invoiceInpArry[i].price > 0 || this.invoiceInpArry[i].qty > 0) {
           this.invoiceInpArry[i].price = null;
           this.invoiceInpArry[i].qty = null;
-        }
-      }
-
-
-
-    }
+        };
+      };
+    };
 
   } // isAddNameVaild
 
@@ -178,10 +172,11 @@ export class AddToStockPermissionComponent implements OnInit {
       this.stockNameVaild = false;
       this.inptDisabled = false;
     }
-  }
+  };
 
   customerVaild: boolean;
   custVaildMsg: string;
+
   isCustomerVaild() {
 
     let customerNameForAddVal = $('#customerNameForAdd').val()
@@ -197,10 +192,9 @@ export class AddToStockPermissionComponent implements OnInit {
           this.customerVaild = true;
           this.custVaildMsg = "لا يوجد هذا الاسم"
           //console.log('false')
-        }
-      }
-    }
-
+        };
+      };
+    };
 
     if (this.customerVaild == false) {
 
@@ -209,23 +203,22 @@ export class AddToStockPermissionComponent implements OnInit {
           this.isAddInvVaild = true;
         } else {
           this.isAddInvVaild = false;
-        }
-      }
+        };
+      };
 
     } else {
       this.isAddInvVaild = true;
-    }
-
+    };
 
     //console.log(customerNameForAddVal)
-  }
+  };
 
   invoiceTotal: string = '0';
   calcTotals() {
     this.deleteInvBtnDisabled = true;
     this.inptDisabled = false;
-    this.totalInvoice = []
-    this.invoiceTotal = '0'
+    this.totalInvoice = [];
+    this.invoiceTotal = '0';
     for (let i = 0; i < this.invoiceInpArry.length; i++) {
       // Qty change
       //$(`#qty${i}`)
@@ -235,13 +228,13 @@ export class AddToStockPermissionComponent implements OnInit {
       } else {
         this.invoiceInpArry[i].total = this.invoiceInpArry[i].qty * this.invoiceInpArry[i].price;
         this.totalInvoice.push(this.invoiceInpArry[i].total)
-      }
+      };
 
-    }
+    };
     let total: any = this.sumArry(this.totalInvoice)
     this.invoiceTotal = total;
     //$('#invoiceTotal').html(`اجمالى الفاتورة : ${total}`)
-  }
+  };
 
   theStockId: number;
   theCustomerId: number;
@@ -272,8 +265,8 @@ export class AddToStockPermissionComponent implements OnInit {
     //$('#invoiceTotal').html(`اجمالى الفاتورة : 0`);
     for (let i = 0; i < this.invoiceInpArry.length; i++) {
       this.invoiceInpArry[i].total = 0;
-    }
-  }
+    };
+  };
 
   checkAllArry: number;
 
@@ -282,36 +275,22 @@ export class AddToStockPermissionComponent implements OnInit {
   changAddInvoiceBtn() {
     this.searchInVal = $('#invoiceSearch').val();
     if (this.searchInVal == '') {
-      $('#callInvoiceBtn').html("فاتورة جديدة")
+      $('#callInvoiceBtn').html("فاتورة جديدة");
     } else {
-      $('#callInvoiceBtn').html("بحث")
+      $('#callInvoiceBtn').html("بحث");
     }
   };
 
   theNote: string;
   theStockTransactionId: string;
 
-  ivoiceItemesForEdit: any[]; /* = [{
-    stockTransactionId: '',
-    stockTransactionDetailsId: "",
-    productId: "",
-    productName: "",
-    stockId: "",
-    invoiceTotal:0,
-    stockName: "",
-    customerName: "",
-    transactionType: "",
-    price: 0,
-    Qty: 0,
-    notes: ""
-  }
-  ];*/
+  ivoiceItemesForEdit: any[];
 
   editStockQtys() {
 
     this._stockService.getHandleBackEnd().subscribe((data: HandleBackEnd[]) => {
       this._stockService.handleBackEnd = data;
-    })
+    });
 
     //this.getTheStockId();
     let BtnSubmitHtml = $('#addNewInvoicetBtn').html(); // to check if invoice for update or add
@@ -323,16 +302,18 @@ export class AddToStockPermissionComponent implements OnInit {
       productQty: 0, //
       productCost: 0, //
       productPrice: 0,
-    }
+    };
     let productTotalsPriceAvr: number;
-    let minOldTotal: number; // to get back the old priceAvr
     let allProductQty: number;
 
     if (BtnSubmitHtml == "تعديل الفاتورة") {
 
-      this.theCustomerInfo = this.getCustomerInfo(this.ivoiceItemesForEdit[0].customerId)
-      this.theCustomerInfo.customerRemain = this.theCustomerInfo.customerRemain - this.ivoiceItemesForEdit[0].invoiceTotal;
+      this.theCustomerInfo = this.getCustomerInfo(this.ivoiceItemesForEdit[0].customerId);
+
+      //console.log(this.theCustomerInfo.customerRemain + ' : befor')
+      this.theCustomerInfo.customerRemain = this.theCustomerInfo.customerRemain + this.ivoiceItemesForEdit[0].invoiceTotal;
       this._custService.updateCustomerSer(this.theCustomerInfo).subscribe();
+      //console.log(this.theCustomerInfo.customerRemain + ' : after')
 
       for (let v = 0; v < this.ivoiceItemesForEdit.length; v++) {
 
@@ -384,27 +365,12 @@ export class AddToStockPermissionComponent implements OnInit {
     this.checkAllArry = 1; // check after loop on the handleArry that the product not found
     this.theNote = $('#addInvoiceNote').val()
     this.theStockTransactionId = $('#stockTransactionId').val()
-    let postStockPridgeObj: StockPridge = {
-      stockProductId: null,
-      stockId: 0, //
-      productId: 0, //
-      productQty: 0, //
-      productCost: 0, //
-      productPrice: 0,
-    }
-
-    let stockTransactionD: StockTransactionD = {
-      stockTransactionDetailsId: 0,
-      stockTransactionId: '',
-      productId: 0,
-      price: 0,
-      Qty: 0,
-    }
 
     // mainTable
     if (this._theStockComp.newAddInvNumber == 0) {
       this._theStockComp.newAddInvNumber = 1
     }
+
     let stockTransaction: StockTransaction = {
       stockTransactionId: Date.now().toString(),
       invNumber: this._theStockComp.newAddInvNumber,
@@ -413,25 +379,30 @@ export class AddToStockPermissionComponent implements OnInit {
       customerId: this.theCustomerId,
       transactionType: 1,
       invoiceTotal: parseInt(this.invoiceTotal),
-      date_time: this._service.date_time,
+      date_time: this.date_time,
       notes: this.theNote,
     };
 
     // edit or add
+    
     if (this.theStockTransactionId == '') {
       this._stockService.creatStockTransaction(stockTransaction).subscribe();
-
+      
       this.theCustomerInfo = this.getCustomerInfo(this.theCustomerId);
       this.theCustomerInfo.customerRemain = this.theCustomerInfo.customerRemain - parseInt(this.invoiceTotal);
       this._custService.updateCustomerSer(this.theCustomerInfo).subscribe();
       //console.log(this.theCustomerInfo)
     } else {
+      //console.log(stockTransaction)
+      console.log(this.theStockTransactionId + ' : theStockTransactionId')
       stockTransaction.stockTransactionId = this.theStockTransactionId;
       this._stockService.UpdateStockTransaction(stockTransaction).subscribe();
 
       this.theCustomerInfo.customerRemain = this.theCustomerInfo.customerRemain - parseInt(this.invoiceTotal);
+
+      //console.log(this.theCustomerInfo.customerRemain + ' : new')
       this._custService.updateCustomerSer(this.theCustomerInfo).subscribe();
-    }
+    };
 
     let BtnSubmitHtml = $('#addNewInvoicetBtn').html(); // to check if invoice for update or add
     let allProductQty: number;
@@ -439,113 +410,139 @@ export class AddToStockPermissionComponent implements OnInit {
 
     for (let i = 0; i < this.invoiceInpArry.length; i++) {
 
+      let postStockPridgeObj = new StockPridge();
+      let stockTransactionD = new StockTransactionD();
+
       if (this.invoiceInpArry[i].product != undefined) {
 
         let getProductInfo = this._stockService.allProducts.find(product => product.productName === this.invoiceInpArry[i].product)
 
         if (this.invoiceInpArry[i].product != '') {
           theProductId = getProductInfo.productId
-        }
+        };
 
         // for the first invoice *********************************************************************************************
         if (this._stockService.handleBackEnd.length == 0) {
-          postStockPridgeObj.productId = theProductId;
-          postStockPridgeObj.stockId = this.theStockId;
-          postStockPridgeObj.productQty = parseInt(this.invoiceInpArry[i].qty);
-          postStockPridgeObj.productCost = parseInt(this.invoiceInpArry[i].price);
+          postStockPridgeObj = {
+            stockProductId: null,
+            productId: theProductId,
+            stockId: this.theStockId,
+            productQty: parseInt(this.invoiceInpArry[i].qty),
+            productCost: parseInt(this.invoiceInpArry[i].price),
+            productPrice: 0,
+          };
+
           this._stockService.postStockPridge(postStockPridgeObj).subscribe();
           // save stocktransactionDetails
-          stockTransactionD.stockTransactionId = stockTransaction.stockTransactionId;
-          stockTransactionD.productId = theProductId;
-          stockTransactionD.price = parseInt(this.invoiceInpArry[i].price);
-          stockTransactionD.Qty = parseInt(this.invoiceInpArry[i].qty);
+          stockTransactionD = {
+            stockTransactionDetailsId: null,
+            stockTransactionId: stockTransaction.stockTransactionId,
+            productId: theProductId,
+            price: parseInt(this.invoiceInpArry[i].price),
+            Qty: parseInt(this.invoiceInpArry[i].qty),
+          };
+
           this._stockService.creatStockTransactionDetails(stockTransactionD).subscribe() // for invoice DB
-          //console.log(stockTransactionD)
-          //console.log('first')
+
+          console.log(stockTransactionD)
+          console.log('first')
           this.checkAllArry = 1; // reload
           //console.log('firstInvoice')
-        }
+        };
         // for the first invoice *********************************************************************************************
+
         let getHandleBackEndInfo = this._stockService.handleBackEnd.find(handleInfo =>
           handleInfo.productId === theProductId && handleInfo.stockId === this.theStockId)
 
         if (getHandleBackEndInfo != undefined) {
 
-          //console.log(parseInt(this.invoiceInpArry[i].qty))
-          //console.log(getHandleBackEndInfo.productQty)
-
-          postStockPridgeObj.productId = theProductId; // for edit and add
-          postStockPridgeObj.stockId = this.theStockId; // for edit and add
           productTotalsPriceAvr = (getHandleBackEndInfo.productCost * getHandleBackEndInfo.productQty)
             + (parseInt(this.invoiceInpArry[i].price) * parseInt(this.invoiceInpArry[i].qty));
           allProductQty = getHandleBackEndInfo.productQty + parseInt(this.invoiceInpArry[i].qty);
-          postStockPridgeObj.productCost = Math.floor(productTotalsPriceAvr / allProductQty) // price avarage
-          postStockPridgeObj.productQty = parseInt(this.invoiceInpArry[i].qty) + getHandleBackEndInfo.productQty;
-          postStockPridgeObj.stockProductId = getHandleBackEndInfo.stockProductId;
+
+          postStockPridgeObj = {
+            productPrice: getHandleBackEndInfo.productPrice,
+            productId: theProductId,
+            stockId: this.theStockId,
+            productCost: Math.floor(productTotalsPriceAvr / allProductQty),
+            productQty: parseInt(this.invoiceInpArry[i].qty) + getHandleBackEndInfo.productQty,
+            stockProductId: getHandleBackEndInfo.stockProductId
+          }
 
           this._stockService.updateStockPridge(postStockPridgeObj).subscribe() // for stocks DB
           //console.log(postStockPridgeObj)
+
           // save stocktransactionDetails
-          stockTransactionD.stockTransactionId = stockTransaction.stockTransactionId;
-          stockTransactionD.productId = theProductId;
-          stockTransactionD.price = parseInt(this.invoiceInpArry[i].price);
-          stockTransactionD.Qty = parseInt(this.invoiceInpArry[i].qty);
+          stockTransactionD = {
+            stockTransactionDetailsId: null,
+            stockTransactionId: stockTransaction.stockTransactionId,
+            productId: theProductId,
+            price: parseInt(this.invoiceInpArry[i].price),
+            Qty: parseInt(this.invoiceInpArry[i].qty),
+          };
+
           // edite Or Add
           if (BtnSubmitHtml == "تعديل الفاتورة") {
             stockTransactionD.stockTransactionDetailsId = this.invoiceInpArry[i].stockTransactionDetailsId;
             this._stockService.UpdateStockTransactionDetails(stockTransactionD).subscribe();
-            //console.log(stockTransactionD)
-            //console.log('secound')
+            console.log(stockTransactionD)
+            console.log('secound')
             if (stockTransactionD.stockTransactionDetailsId == undefined) {
               this._stockService.creatStockTransactionDetails(stockTransactionD).subscribe(); // for invoice DB
-              //console.log(stockTransactionD)
-              //console.log('third')
+              console.log(stockTransactionD)
+              console.log('third')
             }
             // if not productName to delete stocktransactionDetail
             for (let d = 0; d < this.invoiceInpArry.length; d++) {
               if (this.invoiceInpArry[d].stockTransactionDetailsId !== undefined && this.invoiceInpArry[d].product == '') {
                 this._stockService.deleteStockTransactionDetails(this.invoiceInpArry[d].stockTransactionDetailsId).subscribe();
-                //console.log(stockTransactionD)
-                //console.log('fourth')
+                console.log(stockTransactionD)
+                console.log('fourth')
               }
             }
           } else if (BtnSubmitHtml == "تسجيل") {
             this._stockService.creatStockTransactionDetails(stockTransactionD).subscribe(); // for invoice DB
-            //console.log(stockTransactionD)
-            //console.log('fifth')
-          }
+            console.log(stockTransactionD)
+            console.log('fifth')
+          };
 
         } else {
-          postStockPridgeObj.productId = theProductId;
-          postStockPridgeObj.stockId = this.theStockId;
-          postStockPridgeObj.productQty = parseInt(this.invoiceInpArry[i].qty);
-          postStockPridgeObj.productCost = parseInt(this.invoiceInpArry[i].price);
+          postStockPridgeObj = {
+            stockProductId: null,
+            productPrice: null,
+            productId: theProductId,
+            stockId: this.theStockId,
+            productQty: parseInt(this.invoiceInpArry[i].qty),
+            productCost: parseInt(this.invoiceInpArry[i].price)
+          };
+
           // save stocktransactionDetails
-          stockTransactionD.stockTransactionId = stockTransaction.stockTransactionId;
-          stockTransactionD.productId = theProductId;
-          stockTransactionD.price = parseInt(this.invoiceInpArry[i].price);
-          stockTransactionD.Qty = parseInt(this.invoiceInpArry[i].qty);
+          stockTransactionD = {
+            stockTransactionDetailsId: null,
+            stockTransactionId: stockTransaction.stockTransactionId,
+            productId: theProductId,
+            price: parseInt(this.invoiceInpArry[i].price),
+            Qty: parseInt(this.invoiceInpArry[i].qty)
+          };
+
           this._stockService.postStockPridge(postStockPridgeObj).subscribe();
-          this._stockService.creatStockTransactionDetails(stockTransactionD).subscribe() // for invoice DB
-          //console.log(stockTransactionD)
-          //console.log('six')
-        }
-      }
-    } // fst for invoiceInpArry
+          this._stockService.creatStockTransactionDetails(stockTransactionD).subscribe(); // for invoice DB
+          console.log(stockTransactionD);
+          console.log('six');
+        };
+      };
+    }; // fst for invoiceInpArry
   }; // makeAddStockPremArry
 
   showInvoiceDone() {
     this._theStockComp.ngOnInit();
     this._theStockComp.showFade_newInvoice('fade_addNewApBtn');
-  }
+  };
+
   addToStockPrem() { // the main function
     this.makeAddStockPremArry();
-    //this.resetAddinvoiceValu();
-    //this.refreshBackendData();
     this.showInvoiceDone();
-    //this._service.clearForm();
-    //location.reload();
-  }
+  };
 
 
   printThis() {
@@ -566,9 +563,10 @@ export class AddToStockPermissionComponent implements OnInit {
   }
 
   openwindowPrint() {
+    $('#headerAddInv').css('width', '100%')
     $('.closeBtn').hide();
     window.print();
-    $('.closeBtn').show();
+    location.reload();
   }
 
   reloadLoc() {
@@ -582,16 +580,17 @@ export class AddToStockPermissionComponent implements OnInit {
     this._theStockComp.testBackend(); // to make stockArry
     this.productArr = []
     this.invoiceTotal = "0"
+
     for (let p = 0; p < this._stockService.allProducts.length; p++) {
       this.productArr.push(this._stockService.allProducts[p].productName)
-    }
+    };
 
     let callInvoiceBtnVal: string = $('#callInvoiceBtn').html();
     this.invoiceInpArry = [];
     this.ivoiceItemesForEdit = [];
     // to add 5 fildes
     for (let i = 0; i < 7; i++) {
-      this.invoiceInp = new InvoiceInp()
+      this.invoiceInp = new InvoiceInp();
       this.invoiceInp.total = 0;
       this.invoiceInp.inpVaild = false;
       this.invoiceInp.Qtyinvaild = false;
@@ -599,9 +598,12 @@ export class AddToStockPermissionComponent implements OnInit {
     }
 
     if (callInvoiceBtnVal == "فاتورة جديدة") {
+
       let currentDateNow = Date.now() //new Date()
       let currentDate = new Date(currentDateNow)
       this._service.makeTime_date(currentDate);
+      this.date_time = this._service.date_time;
+      console.log(this.date_time)
       $('#invNum').hide();
       //console.log(currentDate)
       $('#callInvoice').hide();
@@ -609,60 +611,67 @@ export class AddToStockPermissionComponent implements OnInit {
       $('#addNewInvoicetBtn').html("تسجيل");
       $('#deleteAddInvoice').hide();
       $('#stockTransactionId').val('')
+
       this.resetAddinvoiceValu()
       this._service.clearForm();
       this.inptDisabled = true;
       this.isAddInvVaild = true;
+
     } else if (callInvoiceBtnVal == "بحث") {
       // add fildes if the inputArry < invoiceArry
-      $('#addNewInvoicetBtn').html("تعديل الفاتورة")
+      $('#addNewInvoicetBtn').html("تعديل الفاتورة");
+      //console.log(this._stockService.makeInvoiceArry)
       $('#deleteAddInvoice').show();
       $('#invNum').show();
       this.inptDisabled = false;
-      //this.isAddInvVaild = true;
+
       for (let i = 0; i < this._stockService.makeInvoiceArry.length; i++) { // add fields if the invoice details > 7 inpts
         if (this._stockService.makeInvoiceArry[i].invoiceSearchVal == this.searchInVal) {
           if (this._stockService.makeInvoiceArry[i].invoiceDetails.length > this.invoiceInpArry.length) {
             let countDif: number = this._stockService.makeInvoiceArry[i].invoiceDetails.length - this.invoiceInpArry.length;
             for (let c = 0; c < countDif; c++) {
               this.addFilds();
-            }
-          }
-        }
-      }
+            };
+          };
+        };
+      };
 
-      this.resetAddinvoiceValu()
-      for (let i = 0; i < this._stockService.makeInvoiceArry.length; i++) {
+      this.resetAddinvoiceValu();
 
-        if (this._stockService.makeInvoiceArry[i].invoiceSearchVal == this.searchInVal) {
-          $('#stockTransactionId').val(this._stockService.makeInvoiceArry[i].stockTransactionId)
-          for (let d = 0; d < this._stockService.makeInvoiceArry[i].invoiceDetails.length; d++) {
-            this.ivoiceItemesForEdit.push(this._stockService.makeInvoiceArry[i].invoiceDetails[d])
-            this.invoiceInpArry[d].stockTransactionDetailsId = this._stockService.makeInvoiceArry[i].invoiceDetails[d].stockTransactionDetailsId;
-            this.invoiceInpArry[d].product = this._stockService.makeInvoiceArry[i].invoiceDetails[d].productName;
-            this.invoiceInpArry[d].price = this._stockService.makeInvoiceArry[i].invoiceDetails[d].price;
-            this.invoiceInpArry[d].qty = this._stockService.makeInvoiceArry[i].invoiceDetails[d].Qty;
-          }
-          this._service.date_time = this._stockService.makeInvoiceArry[i].invoiceDetails[0].date_time;
-          $('#stockNameForAdd').val(this._stockService.makeInvoiceArry[i].stockName);
-          $('#customerNameForAdd').val(this._stockService.makeInvoiceArry[i].customerName);
-          $('#addInvoiceNote').val(this._stockService.makeInvoiceArry[0].notes);
-          this.invNum = this._stockService.makeInvoiceArry[i].invoiceDetails[0].invNumber;
-        }
-      }
+      let theInvoice = this._stockService.makeInvoiceArry.find(
+        invoice => invoice.invoiceSearchVal == this.searchInVal
+      );
+
+      $('#stockTransactionId').val(theInvoice.stockTransactionId)
+      $('#stockNameForAdd').val(theInvoice.stockName);
+      $('#customerNameForAdd').val(theInvoice.customerName);
+      $('#addInvoiceNote').val(theInvoice.notes);
+      //console.log(JSON.stringify( theInvoice) + ' : theInvoice')
+      this.invNum = theInvoice.invNumber;
+      this.ivoiceItemesForEdit = theInvoice.invoiceDetails;
+      this.date_time = theInvoice.date_time;
+
+      for (let d = 0; d < theInvoice.invoiceDetails.length; d++) {
+        this.invoiceInpArry[d].stockTransactionDetailsId = theInvoice.invoiceDetails[d].stockTransactionDetailsId;
+        this.invoiceInpArry[d].product = theInvoice.invoiceDetails[d].productName;
+        this.invoiceInpArry[d].price = theInvoice.invoiceDetails[d].price;
+        this.invoiceInpArry[d].qty = theInvoice.invoiceDetails[d].Qty;
+      };
+
       this.calcTotals();
       this.deleteInvBtnDisabled = false;
-    }
+      console.log(this.ivoiceItemesForEdit);
+    };
     $('#callInvoice').hide();
     $('#addInvoiceForm').show();
     //console.log(this.ivoiceItemesForEdit)
 
-  } // showAddNewInvoice
+  }; // showAddNewInvoice
 
   showDeleteAddInvoice() {
     $('#fadeLayerAP').show(0);
     $('.askForDelete').addClass('animate');
-  }
+  };
 
   deleteAddInvoice() {
     $('#fadeLayerAP').hide();
@@ -678,14 +687,15 @@ export class AddToStockPermissionComponent implements OnInit {
     this._stockService.deleteStockTransaction(stockTransId).subscribe();
     this.editStockQtys();
     //location.reload();
-    this.refreshBackendData();
-  }
+    this._theStockComp.showStocksEnquiry();
+    //this.refreshBackendData();
+  };
 
   testBtn() {
     this.makeAddStockPremArry();
-  }
+  };
 
-} // end
+}; // end
 
 // makeAddStockPremArry (oldMethod)
 /*

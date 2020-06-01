@@ -34,12 +34,12 @@ export class SideBarComponent implements OnInit {
     $(".mainBtns").click(function () {
       console.log($('#sidebarBtns').height())
       //$('#sidebar').animate({ height: `${sidebarBtnsHeight + 20}px` });
-      $(this).removeClass('btn-light').addClass('btn-info')
+      $(this).removeClass('btn-light').addClass('btn-primary')
       $(this).next().slideToggle(100);
       $("#sidebar .secDiv").not($(this).next()).slideUp(100);
       console.log($('#sidebarBtns').height())
       $('#sidebar').css('height', 'auto')
-      $('.mainBtns').not($(this)).not('#logOut').not('#MainSettingBtn').removeClass('btn-info').addClass('btn-light')
+      $('.mainBtns').not($(this)).not('#logOut').not('#MainSettingBtn').removeClass('btn-primary').addClass('btn-light')
     });
 
     // make active button
@@ -59,17 +59,17 @@ export class SideBarComponent implements OnInit {
     if (dBUrls.includes(this.url)) {
       this.mainRoute = 'Db'
       $('#dbBtn').next().show()
-      $('#dbBtn').removeClass('btn-light').addClass('btn-info')
+      $('#dbBtn').removeClass('btn-light').addClass('btn-primary')
       $('#sidebar .secDiv').not($('#dbBtn').next()).hide()
     } else if (accUrls.includes(this.url)) {
       this.mainRoute = 'acc'
       $('#accBtn').next().show()
-      $('#accBtn').removeClass('btn-light').addClass('btn-info')
+      $('#accBtn').removeClass('btn-light').addClass('btn-primary')
       $('#sidebar .secDiv').not($('#accBtn').next()).hide()
     } else {
       this.mainRoute = 'false'
       $('#sidebar .secDiv').hide();
-      $('#sidBar h3').not('#logOut').removeClass('btn-info').addClass('btn-light')
+      $('#sidBar h3').not('#logOut').removeClass('btn-primary').addClass('btn-light')
     }
 
     // active main btn

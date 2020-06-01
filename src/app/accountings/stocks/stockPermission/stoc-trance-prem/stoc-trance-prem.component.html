@@ -1,5 +1,5 @@
 <!--fadeLayer-->
-<div class="fadeLayer">
+<div class="fadeLayer" id="tranceFadeLayer">
     <div class="container p-3 card askForDelete">
         <h3 class="p-3 bg-danger text-light">هل انت متأكد من حذف</h3>
         <h4 class="mb-2">
@@ -15,7 +15,7 @@
 <!--printBtns-->
 <div style="display: none; position: fixed; top: 10px; right: 10px;" class="closeBtn fixed-top">
     <button class="btn btn-outline-danger" id="reloadLocTrance" (click)='reloadLoc()'>X</button>
-    <button  class="btn btn-outline-secondary mr-2" (click)='openwindowPrint()'><i class="fa fa-print"></i></button>
+    <button class="btn btn-outline-secondary mr-2" (click)='openwindowPrint()'><i class="fa fa-print"></i></button>
 </div>
 <!--onlyForm-->
 <div class="container-fluid card inpCard  mt-3 p-3" id="headerTranceInv">
@@ -30,8 +30,8 @@
             </option>
         </datalist>
         <button class="btn btn-outline-info ml-2" type="submit" id="callTranceInvoiceBtn"
-            (click)="showNewTranceInvoice()">فاتورة
-            جديدة</button>
+            (click)="showNewTranceInvoice()">اذن
+            جديد</button>
 
     </div>
 
@@ -42,34 +42,39 @@
                 [disabled]='deleteInvTranceBtnDisabled' (click)="showDeleteTranceInvoice()">حذف
                 الفاتورة</button>
             <input disabled id="invNumTrance" class="text-center" type="text" value="رقم الفاتورة ( {{invNumTrance}} )">
-            <input disabled [(ngModel)]='_service.date_time' type="datetime-local">
+            <input [(ngModel)]='_service.date_time' type="datetime-local">
         </div>
         <form (ngSubmit)="tranceFrmStockPrem()" class="pt-3">
             <div class="form-group">
                 <div class="d-flex justify-content-between">
-                    <input id="stockTransactionId" class="d-none">
-                    <!--fstStockName-->
-                    <div class="col">
-                        <label for="fstStockNameForTrance">من مخزن</label>
-                        <select class="form-control p-1" id="fstStockNameForTrance" (change)="stockChanged()">
-                            <option *ngFor="let stock of _stockService.stocks">{{stock.stockName}}</option>
-                        </select>
-                        <div *ngIf="fstStockNameVaild" id="fstStockNameVaild" class="text-danger">{{fstVaildMsg}}</div>
+                    <div class="form-row">
+                        <input id="tranceStockTransactionId" class="d-none">
+                        <!--fstStockName-->
+                        <div class="col m-2">
+                            <label for="fstStockNameForTrance">من</label>
+                            <select class="form-control p-1" id="fstStockNameForTrance" (change)="stockChanged()">
+                                <option class="bg-dark text-light">اذن اضافة</option>
+                                <option *ngFor="let stock of _stockService.stocks">{{stock.stockName}}</option>
+                            </select>
+                            <div *ngIf="fstStockNameVaild" id="fstStockNameVaild" class="text-danger">{{fstVaildMsg}}
+                            </div>
+                        </div>
+                        <div class="col m-2">
+                            <label for="sndStockNameForTrance">الى</label>
+                            <select class="form-control p-1" id="sndStockNameForTrance" (change)="stockChanged()">
+                                <option class="bg-dark text-light">اذن خصم</option>
+                                <option *ngFor="let stock of _stockService.stocks">{{stock.stockName}}</option>
+                            </select>
+                            <div *ngIf="sndStockNameVaild" id="sndStockNameVaild" class="text-danger">{{sndVaildMsg}}
+                            </div>
+                        </div>
+                        <div class="col m-2">
+                            <label for="tranceInvoiceNote">ملاحظات</label>
+                            <input class="form-control p-1" name="tranceInvoiceNote" id="tranceInvoiceNote">
+                        </div>
                     </div>
-                    <div class="col">
-                        <label for="sndStockNameForTrance">الى مخزن</label>
-                        <select class="form-control p-1" id="sndStockNameForTrance" (change)="stockChanged()">
-                            <option *ngFor="let stock of _stockService.stocks">{{stock.stockName}}</option>
-                        </select>
-                        <div *ngIf="sndStockNameVaild" id="sndStockNameVaild" class="text-danger">{{sndVaildMsg}}</div>
-                    </div>
-                    <div class="col">
-                        <label for="tranceInvoiceNote">ملاحظات</label>
-                        <input class="form-control p-1" name="tranceInvoiceNote" id="tranceInvoiceNote">
-                    </div>
-                    <div class="col text-center" id="printTrancePremBtn">
-                        <i class="fa fa-print btn btn-light p-3 text-center" style="height: 100%;"
-                            (click)='printThisTranceInv()'></i>
+                    <div class="text-center" id="printTrancePremBtn">
+                        <i class="fa fa-expand btn btn-outline-info p-3 text-center" (click)='printThisTranceInv()'></i>
                     </div>
                 </div>
             </div>
@@ -87,7 +92,10 @@
                     </thead>
                     <tbody class=" mt-3 tableBody">
                         <tr *ngFor="let inpt of invoiceInpArry; let i = index">
-                            <td style="flex: none; width: 50px;" class="pt-4">{{i + 1}}</td>
+                            <!--{{i + 1}}-->
+                            <td style="flex: none; width: 50px;">
+                                <button type="button" class="btn btn-outline-danger" (click)='deleteFilds(i)'>-</button>
+                            </td>
                             <td>
                                 <input type="search" name="product{{i}}" [(ngModel)]="inpt.product" id="product{{i}}"
                                     class="form-control mdb-autocomplete" list="datalist1"
@@ -96,23 +104,22 @@
                                     <option *ngFor="let product of _stockService.allProducts"
                                         value="{{product.productName}}"></option>
                                 </datalist>
-                                <div *ngIf="inpt.inpVaild" class="text-danger vaildAlert">هذا الصنف لايوجد بقاعدة
-                                    البيانات
-                                </div>
+                                <div *ngIf="inpt.inpVaild" class="text-danger vaildAlert">{{inpt.productVaildMsg}}</div>
                             </td>
                             <td><input type="number" name="qty{{i}}" [(ngModel)]="inpt.qty" class="form-control"
                                     id="qty{{i}}" (keyup)="calcTotals()" [disabled]="inptDisabled">
                                 <div *ngIf="inpt.Qtyinvaild" class="text-danger vaildAlert">لا يوجد رصيد لهذا الصنف
                                 </div>
                             </td>
-                            <td><input type="number" name="price{{i}}" [(ngModel)]="inpt.price"
-                                    class="form-control" (change)="calcTotals()" disabled>
+                            <td><input type="number" name="price{{i}}" [(ngModel)]="inpt.price" class="form-control"
+                                    (change)="calcTotals()">
                             </td>
                             <td class="text-center font-weight-bold">{{inpt.total}}</td>
                             <input name="stockTransactionDetailsId{{i}}" [(ngModel)]="inpt.stockTransactionDetailsId"
                                 class="d-none">
                         </tr>
-                        <div id="addFildsTrance" class="btn btn-dark my-2 mr-1" style="width: 50px;" (click)="addFilds()">+
+                        <div id="addFildsTrance" class="btn btn-dark my-2 mr-1" style="width: 50px;"
+                            (click)="addFilds()">+
                         </div>
                     </tbody>
                 </table>
@@ -129,3 +136,4 @@
         </form>
         <button class="btn btn-success mx-2 d-none" id="testBtnP" (click)='testBtn()'>test</button>
     </div>
+</div>

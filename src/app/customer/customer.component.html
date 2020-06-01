@@ -1,5 +1,5 @@
 <!--fadeLayer-->
-<div class="fadeLayer">
+<div class="fadeLayer" id="customerFadeLayer">
     <!--askForDelete-->
     <div class="container p-3 card askForDelete" style="display: none;">
         <h3 class="p-3 bg-danger text-light">هل انت متأكد من حذف</h3>
@@ -11,13 +11,13 @@
         </div>
     </div>
     <!--app-customer-inv-detail-->
-    <div class="container p-3 mt-5 card sticky-top" id="customerInvDetail" style="display: none;">
-        <app-customer-inv-detail></app-customer-inv-detail>
+    <div class="container p-3 mt-5 card" id="customerInvDetail" style="display: none;">
         <div>
-            <button class="btn btn-danger mt-2" id="hideInvDet">اخفاء</button>
+            <button class="btn btn-danger mr-2" id="hideInvDet">اخفاء</button>
         </div>
+        <hr>
+        <app-customer-inv-detail></app-customer-inv-detail>
     </div>
-
 </div>
 <!--customerHeader-->
 <div class="container-fluid navHeader p-3 card mt-3 sticky-top" id="customerHeader">
@@ -81,7 +81,7 @@
 <!--addCustomer-->
 <div class="container-fluid  mt-3 card inpCard customerClass" id="addCustomer" style="display: none;">
     <div class="p-3">
-        <h2 class="pb-3 cardHeader" style="border-bottom: solid 1.5px teal;">اضافة بيانات عميل</h2>
+        <h2 class="pb-3 cardHeader" style="border-bottom: solid 1.5px rgb(26, 51, 70);">اضافة بيانات عميل</h2>
         <form [formGroup]='customerData' (ngSubmit)="addNewCustomer()" class="pt-3">
             <div class="row">
                 <input formControlName="customerId" id="customerId" class="form-control d-none">
@@ -129,7 +129,7 @@
 <div class="container-fluid card mt-3 customerClass" id="customerDetails" style="display: none;">
     <div class="card-body">
         <h3 class="card-title cardHeader">{{customerData.value.customerName}}</h3>
-        <h5 class="card-text pb-3" style="border-bottom: solid 1.5px teal;">{{customerData.value.customerTell}}</h5>
+        <h5 class="card-text pb-3" style="border-bottom: solid 1.5px rgb(26, 51, 70);">{{customerData.value.customerTell}}</h5>
         <!---->
         <div class="form-inline mt-3">
             <h5 class="cardHeader">العنوان : </h5>
@@ -170,7 +170,7 @@
 <div class="container-fluid card  mt-3 p-5 customerClass printable" id="customerInvDetails" style="display: none;">
     <div class="d-flex justify-content-between">
         <h3 class="card-title cardHeader">حساب {{customerData.value.customerName}}</h3>
-        <i class="fa fa-expand btn p-3 btn-outline-secondary text-center" (click)='printThis()'></i>
+        <i class="fa fa-expand btn p-3 btn-outline-info text-center" (click)='printThis()'></i>
     </div>
     <div class="panel-body panel-flex-table mt-2" id="printCustomerInvArr">
         <table class="flex-table table table-hover text-center">

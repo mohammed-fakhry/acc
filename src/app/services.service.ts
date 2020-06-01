@@ -60,7 +60,7 @@ export class ServicesService {
   };
 
   makeTime_date(currentDate) {
-    
+
     this.dateNow = currentDate // new Date();
     this.day = this.dateNow.getDate();
     this.month = this.dateNow.getMonth() + 1;
@@ -76,7 +76,7 @@ export class ServicesService {
       this.minutes
     ]
 
-    for (let i = 0 ; i < dateTimeArry.length ; i++) {
+    for (let i = 0; i < dateTimeArry.length; i++) {
       if (dateTimeArry[i] < 10) {
         dateTimeArry[i] = '0' + dateTimeArry[i]
       }
@@ -87,26 +87,29 @@ export class ServicesService {
     this.fullDate.toString();
     this.fullTime.toString()
     this.date_time = this.fullDate + 'T' + this.fullTime // + ' ' + this.fullTime
-    
+
   }
-  
+
 
   printThis(show: string, hide1: string, hide2: string, hide3: string) {
 
-    $(show).addClass('wideScreen').css('width','85%');
+    $(show).animate({
+      'width': '85%',
+      'hight': '100%',
+    })//.addClass('wideScreen')
     $('#app-side-bar').hide();
     $('#sidebarToggle').hide();
     if (hide1 != '') {
-      $(hide1).hide();
+      $(hide1).slideUp(50)
     }
     if (hide2 != '') {
-      $(hide2).hide();
+      $(hide2).slideUp(50);
     }
     if (hide3 != '') {
-      $(hide3).hide();
+      $(hide3).slideUp(50)
     }
-    $('#mainStockHeader').hide();
-    $('.vaildAlert').hide();
+    $('#mainStockHeader').slideUp(75)
+    $('.vaildAlert').fadeOut();
 
   }
 
@@ -114,40 +117,43 @@ export class ServicesService {
     $('.form-control').val(null)
   };
 
+  // defult url
+  url: string = 'http://localhost/accounting/'
+
   getWorker() {
-    return this.http.get<Worker[]>('http://localhost/accounting/list.php');
+    return this.http.get<Worker[]>(`${this.url}list.php`);
   };
 
   creatEmployee(employee: Worker) {
-    return this.http.post('http://localhost/accounting/postEmployee.php', employee)
+    return this.http.post(`${this.url}postEmployee.php`, employee)
   };
 
   deleteWorkerSer(id: number) {
-    return this.http.delete<Worker[]>('http://localhost/accounting/deleteEmployee.php?id=' + id)
+    return this.http.delete<Worker[]>(`${this.url}deleteEmployee.php?id=` + id)
   };
 
   updateWorkerSer(employee: Worker) {
-    return this.http.put('http://localhost/accounting/updateEmployee.php?id=' + employee.workerId, employee)
+    return this.http.put(`${this.url}updateEmployee.php?id=` + employee.workerId, employee)
   };
 
   updateWorkerRulesSer(workerRules: WorkerRules) {
-    return this.http.put('http://localhost/accounting/editWorkerRules.php?id=1', workerRules)
+    return this.http.put(`${this.url}editWorkerRules.php?id=1`, workerRules)
   };
 
   getWorkerRules() {
-    return this.http.get<WorkerRules[]>('http://localhost/accounting/workerRulesList.php');
+    return this.http.get<WorkerRules[]>(`${this.url}workerRulesList.php`);
   };
 
   getOtherAccSer() {
-    return this.http.get<OtherAcc[]>('http://localhost/accounting/otherAccountsList.php');
+    return this.http.get<OtherAcc[]>(`${this.url}otherAccountsList.php`);
   };
 
   creatOtherAccSer(acc: OtherAcc) {
-    return this.http.post('http://localhost/accounting/postOtherAcc.php', acc)
+    return this.http.post(`${this.url}postOtherAcc.php`, acc)
   };
 
   updateOtherAccSer(acc: OtherAcc) {
-    return this.http.put('http://localhost/accounting/updateOtherAccounts.php?id=' + acc.accId, acc)
+    return this.http.put(`${this.url}updateOtherAccounts.php?id=` + acc.accId, acc)
   };
 
 }

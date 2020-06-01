@@ -1,6 +1,12 @@
+<!--printBtns-->
+<div style="display: none; position: fixed; top: 10px; right: 10px;" class="closeBtn fixed-top">
+    <button class="btn btn-outline-danger" id="reloadLoc" (click)='reloadLoc()'>X</button>
+    <button  class="btn btn-outline-secondary mr-2" (click)='openwindowPrint()'><i class="fa fa-print"></i></button>
+</div>
+<!---->
 <div class="container-fluid mt-3">
     <div class="row">
-        <div class="col-md-3">
+        <div class="col-md-3" id="stockDetHead">
             <div class="card ">
                 <div class="card-body">
                     <!---->
@@ -23,16 +29,16 @@
                     </div>
                 </div>
             </div>
-
         </div>
-        <div class="col-md-9">
+        <div class="col-md-9" id="stockDetail">
             <!--table-->
             <div class="container-fluid card  p-3">
                 <div class="d-flex justify-content-between">
                     <h3 class="col">جرد اصناف مخزن</h3>
                     <input placeholder="بحث صنف" class="form-control col" type="search" [(ngModel)]='productSearchTxt'>
+                    <i class="fa fa-expand btn btn-outline-secondary text-center mb-1 mr-2" (click)='expandThisstockDet()'></i>
                 </div>
-                <div class="panel-body panel-flex-table">
+                <div class="panel-body panel-flex-table" id="stockDetailtable">
                     <table class="flex-table table table-hover">
                         <thead class="navHeader text-light">
                             <tr>

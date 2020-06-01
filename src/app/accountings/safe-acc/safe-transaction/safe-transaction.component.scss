@@ -1,0 +1,30 @@
+
+#topArr {
+    display: none;
+    cursor: pointer;
+    opacity: .2;
+    position: fixed;
+    bottom: 150px;
+    right: 20px;
+    transition: .5s;
+    font-size: 45px;
+};
+#topArr:hover {
+    opacity: .75;
+    font-size: 50px;
+};
+
+#btmArr {
+    //display: none;
+    cursor: pointer;
+    opacity: .2;
+    position: fixed;
+    bottom: 100px;
+    right: 20px;
+    transition: .5s;
+    font-size: 45px;
+};
+#btmArr:hover {
+    opacity: .75;
+    font-size: 50px;
+};

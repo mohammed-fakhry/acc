@@ -5,6 +5,7 @@ export class InvoiceInp {
     productVaildMsg: string;
     qty:number;
     Qtyinvaild:boolean;
+    qtyMsg: string;
     price:number;
     total:number;
 }

@@ -58,7 +58,8 @@ export class CustomerComponent implements OnInit {
     $("#customerEnquirybtn").attr("disabled", 'true');
 
     $("#hideInvDet").click(function () {
-      $(".fadeLayer").hide();
+      $("#customerFadeLayer").hide();
+      $('.fadeLayer').hide();
       $('.askForDelete').removeClass('animate').hide();
       $('#customerInvDetail').hide();
     })
@@ -122,9 +123,8 @@ export class CustomerComponent implements OnInit {
 
     let Newcustomers = this.customers.filter((customer) => {
       return customer.customerRemain != 0 && customer.customerName != 'حساب المحل - حسام' && customer.customerName != 'تست'
-    })
-    let a:number;
-
+    });
+    
     Newcustomers.sort(function (a, b) {
       return a.customerRemain - b.customerRemain;
     });
@@ -161,7 +161,7 @@ export class CustomerComponent implements OnInit {
 
   reloadLoc() {
     location.reload();
-  }
+  };
 
   putCustomerDataValue(customer) {
     this.customerData = new FormGroup({
@@ -182,7 +182,7 @@ export class CustomerComponent implements OnInit {
       customer => customer.customerId == customerId
     );
     return customerInfo;
-  }
+  };
 
   customerRemain: number;
 
@@ -274,7 +274,7 @@ export class CustomerComponent implements OnInit {
 
     for (let r = 0; r < this.customerReceiptArr.length; r++) {
 
-      if (this.customerReceiptArr[r].customerName == this.customerData.value.customerName) {
+      if (this.customerReceiptArr[r].customerId == this.customerData.value.customerId) {
 
         let customerInvDetail: any = {
           stockTransactionId: 0,
@@ -364,7 +364,7 @@ export class CustomerComponent implements OnInit {
     this._custService.invoiceNum = invoice.invoiceNum
     this._custService.invTotal = this._service.sumArry(this._custService.invTotalArry);
     //console.log(invoice)
-    $('.fadeLayer').show(0);
+    $('#customerFadeLayer').show(0);
     $('#customerInvDetail').show()
   }
 
@@ -384,7 +384,7 @@ export class CustomerComponent implements OnInit {
 
     } else if (addBtnVal == 'تعديل') {
 
-      this.customerData.value.customerRemain = this.customerData.value.customerPaid;
+      //this.customerData.value.customerRemain = this.customerData.value.customerPaid;
       this._custService.updateCustomerSer(this.customerData.value).subscribe(() => {
         //console.log(this.customerData.value);
         this.showCustomerEnquiry();
@@ -414,7 +414,7 @@ export class CustomerComponent implements OnInit {
   }
 
   showUpdateCustomer(customer: Customer) {
-    $('#printCustomerList').slideToggle()
+    $('#printCustomerList').slideToggle(150)
     $('.customerClass').not('#addCustomer').hide();
     $('#addCustomer').show();
     $('#addNewCustomerBtn').html('تعديل');
@@ -430,7 +430,7 @@ export class CustomerComponent implements OnInit {
   showCustomerCard(customer: Customer) {
     $("#customerEnquirybtn").attr({"disabled": false});
     $("#showAddCustomerBtn").attr({"disabled": false});
-    $('#printCustomerList').slideToggle()
+    $('#printCustomerList').slideToggle(150)
     this.putCustomerDataValue(customer);
     //this.customerDataView = customer;
     this.makeCustomerInvArry();
@@ -452,7 +452,7 @@ export class CustomerComponent implements OnInit {
     $("#showAddCustomerBtn").attr({"disabled": true});
     $("#customerEnquirybtn").attr({"disabled": false});
     this._service.clearForm();
-    $('#printCustomerList').slideToggle(200)
+    $('#printCustomerList').slideToggle(150)
     this.restValues()
     $('.customerClass').not('#addCustomer').hide();
     $('#addCustomer').show();
@@ -480,7 +480,7 @@ export class CustomerComponent implements OnInit {
     $("#showAddCustomerBtn").attr({"disabled": false});
     this.searchCust = null;
     this.getCustomerData_BackEnd();
-    $('#printCustomerList').slideToggle(200)
+    $('#printCustomerList').slideToggle(150)
     $('.customerClass').not('#customerEnquiry').hide();
     $('#customerEnquiry').show();
     $('#customerEnquirybtn').removeClass("btn-outline-info").addClass("btn-outline-secondary").animate({ fontSize: '1.5em' }, 50);

@@ -23,24 +23,30 @@ export class SafeDataService {
 
   constructor(private http: HttpClient) { }
 
+  url: string = 'http://localhost/accounting/';
+
   creatSafe(safe: SafeData) {
-    return this.http.post('http://localhost/accounting/postSafe.php', safe)
-  }
+    return this.http.post(`${this.url}postSafe.php`, safe)
+  };
 
   getSafes() {
-    return this.http.get<SafeData[]>('http://localhost/accounting/getSafesList.php');
-  }
+    return this.http.get<SafeData[]>(`${this.url}getSafesList.php`);
+  };
 
   updateSafeData(safe: SafeData) {
-    return this.http.put('http://localhost/accounting/updateSafeData.php?id=' + safe.safeId, safe)
-  }
+    return this.http.put(`${this.url}updateSafeData.php?id=` + safe.safeId, safe)
+  };
 
   getSafesReceipt() {
-    return this.http.get<SafeReceiptInpts[]>('http://localhost/accounting/safeReceiptList.php');
-  }
+    return this.http.get<SafeReceiptInpts[]>(`${this.url}safeReceiptList.php`);
+  };
 
   creatSafeReceipt(safeReceipt: SafeReceiptInpts) {
-    return this.http.post('http://localhost/accounting/postSafeReceipt.php', safeReceipt)
-  }
+    return this.http.post(`${this.url}postSafeReceipt.php`, safeReceipt)
+  };
+
+  updateSafeReceipt(safeReceipt: SafeReceiptInpts) {
+    return this.http.put(`${this.url}updateSafeReceipt.php?id=` + safeReceipt.safeReceiptId, safeReceipt)
+  };
 
 }

@@ -71,6 +71,22 @@ export class StocTrancePremComponent implements OnInit {
     this.invoiceInp = new InvoiceInp();
     this.invoiceInp.total = 0;
     this.invoiceInpArry.push(this.invoiceInp);
+  };
+
+  deleteFilds(i) {
+    let BtnSubmitHtml = $('#newTranceInvoicetBtn').html();
+
+    if (BtnSubmitHtml = 'تعديل الاذن') {
+
+      if (this.invoiceInpArry[i].stockTransactionDetailsId != undefined) {
+        console.log(this.invoiceInpArry[i].stockTransactionDetailsId);
+        //$('#')
+      } else {
+        console.log('undifined - test')
+      };
+
+    };
+    //this.invoiceInpArry.splice(i,1)
   }
 
   theFstStockId: number;
@@ -82,19 +98,28 @@ export class StocTrancePremComponent implements OnInit {
     let theStock = $('#fstStockNameForTrance').val();
     let sndStock = $('#sndStockNameForTrance').val();
 
-    for (let i = 0; i < this._stockService.stocks.length; i++) {
-      if (theStock == this._stockService.stocks[i].stockName) {
-        this.theFstStockId = this._stockService.stocks[i].stockId;
-        break
-      };
+    if (theStock == 'اذن اضافة') {
+      this.theFstStockId = 1
+    } else {
+      let stockInfo = this._stockService.stocks.find(
+        stock => stock.stockName == theStock
+      );
+      this.theFstStockId = stockInfo.stockId;
     };
 
-    for (let i = 0; i < this._stockService.stocks.length; i++) {
-      if (sndStock == this._stockService.stocks[i].stockName) {
-        this.theSndStockId = this._stockService.stocks[i].stockId;
-        break
-      };
+    if (sndStock == 'اذن خصم') {
+      this.theSndStockId = 1
+    } else if (sndStock == undefined) {
+      console.log('undifined')
+    } else {
+      let sndStockInfo = this._stockService.stocks.find(
+        stock => stock.stockName == sndStock
+      );
+      this.theSndStockId = sndStockInfo.stockId;
     };
+
+    console.log(theStock, sndStock)
+
   };
 
   sumArry(arr: any[]) {
@@ -118,10 +143,10 @@ export class StocTrancePremComponent implements OnInit {
     $('.form-control').attr({ 'disabled': true })
   }
   openwindowPrint() {
+    $('#headerTranceInv').css('width', '100%')
     $('.closeBtn').hide();
     window.print();
-    $('.closeBtn').show();
-    //location.reload()
+    location.reload();
   }
 
   reloadLoc() {
@@ -157,53 +182,93 @@ export class StocTrancePremComponent implements OnInit {
   qtyIsOkArry: any[];
 
   isAddQtyVaild() {
-    let loopCount = 1;
-    for (let i = 0; i < this.invoiceInpArry.length; i++) {
-      if (this.invoiceInpArry[i].product != undefined) {
 
-        let theProductQtyInfo = this.theStockProds.find(
-          product => product.productName == this.invoiceInpArry[i].product
-        );
+    let fstStockNameForTrance = $('#fstStockNameForTrance').val();
 
-        if (theProductQtyInfo != undefined) {
-          if (this.invoiceInpArry[i].product == theProductQtyInfo.productName && this.invoiceInpArry[i].qty > theProductQtyInfo.productQty) {
-            if (this.qtyIsOkArry == undefined) {
-              this.invoiceInpArry[i].Qtyinvaild = true;
-            } else if (this.qtyIsOkArry[i] == null) {
-              this.invoiceInpArry[i].Qtyinvaild = true;
-            } else if (this.invoiceInpArry[i].qty <= this.qtyIsOkArry[i]) {
+    if (fstStockNameForTrance != 'اذن اضافة') {
+
+      for (let i = 0; i < this.invoiceInpArry.length; i++) {
+        if (this.invoiceInpArry[i].product != undefined) {
+
+          let theProductQtyInfo = this.theStockProds.find(
+            product => product.productName == this.invoiceInpArry[i].product
+          );
+
+          if (theProductQtyInfo != undefined) {
+            if (this.invoiceInpArry[i].product == theProductQtyInfo.productName && this.invoiceInpArry[i].qty > theProductQtyInfo.productQty) {
+              if (this.qtyIsOkArry == undefined) {
+                this.invoiceInpArry[i].Qtyinvaild = true;
+              } else if (this.qtyIsOkArry[i] == null) {
+                this.invoiceInpArry[i].Qtyinvaild = true;
+              } else if (this.invoiceInpArry[i].qty <= this.qtyIsOkArry[i]) {
+                this.invoiceInpArry[i].Qtyinvaild = false;
+              }
+
+            } else if (this.invoiceInpArry[i].product == theProductQtyInfo.productName
+              && this.invoiceInpArry[i].qty <= theProductQtyInfo.productQty
+              && this.invoiceInpArry[i].inpVaild == false) {
               this.invoiceInpArry[i].Qtyinvaild = false;
             }
 
-          } else if (this.invoiceInpArry[i].product == theProductQtyInfo.productName
-            && this.invoiceInpArry[i].qty <= theProductQtyInfo.productQty
-            && this.invoiceInpArry[i].inpVaild == false) {
-            this.invoiceInpArry[i].Qtyinvaild = false;
+          } else {
+            this.invoiceInpArry[i].Qtyinvaild = true;
           }
-
-        } else {
-          this.invoiceInpArry[i].Qtyinvaild = true;
         }
       }
-    }
-    for (let i = 0; i < this.invoiceInpArry.length; i++) {
-      if (this.invoiceInpArry[i].Qtyinvaild == true) {
-        this.isAddInvVaild = true;
-        break
-      } else {
-        this.isAddInvVaild = false;
+      for (let i = 0; i < this.invoiceInpArry.length; i++) {
+        if (this.invoiceInpArry[i].Qtyinvaild == true) {
+          this.isAddInvVaild = true;
+          break
+        } else {
+          this.isAddInvVaild = false;
+        }
       }
+
     }
+
   }  // isAddQtyVaild
 
   fstVaildMsg: string;
   sndVaildMsg: string;
 
   stockChanged() {
-    this.getTheStockId();
-    this.makeTheStockProds();
+
     this.sndStockNameVaild = false;
     this.fstStockNameVaild = false;
+
+    let fstStockNameForTrance = $('#fstStockNameForTrance').val();
+    let sndStockNameForTrance = $('#sndStockNameForTrance').val();
+
+    this.getTheStockId();
+
+    if (fstStockNameForTrance == 'اذن اضافة') {
+      this.fstStockNameVaild = false;
+
+      if (fstStockNameForTrance == 'اذن اضافة' && sndStockNameForTrance == 'اذن خصم') {
+        this.sndStockNameVaild = true;
+        this.fstStockNameVaild = true;
+        this.fstVaildMsg = 'لا يمكن تنفيذ هذا الامر'
+        this.sndVaildMsg = 'لا يمكن تنفيذ هذا الامر'
+      } else {
+        this.sndStockNameVaild = false;
+        this.fstStockNameVaild = false;
+      }
+
+    } else {
+
+      this.makeTheStockProds();
+
+      if (this.theFstStockId == this.theSndStockId) {
+        this.sndStockNameVaild = true;
+        this.fstStockNameVaild = true;
+        this.fstVaildMsg = 'لا يمكن تكرار نفس المخزن'
+        this.sndVaildMsg = 'لا يمكن تكرار نفس المخزن'
+      } else {
+        this.sndStockNameVaild = false;
+        this.fstStockNameVaild = false;
+      }
+    }
+
     if (this.theFstStockId != undefined && this.theSndStockId != undefined
       && this.theFstStockId != this.theSndStockId) {
       this.inptDisabled = false;
@@ -211,35 +276,8 @@ export class StocTrancePremComponent implements OnInit {
       this.inptDisabled = true;
     }
 
-    let fstStockNameForTrance = $('#fstStockNameForTrance').val();
-    let sndStockNameForTrance = $('#sndStockNameForTrance').val();
-
-    if (this.theFstStockId == this.theSndStockId) {
-      this.sndStockNameVaild = true;
-      this.fstStockNameVaild = true;
-      this.fstVaildMsg = 'لا يمكن تكرار نفس المخزن'
-      this.sndVaildMsg = 'لا يمكن تكرار نفس المخزن'
-    } else {
-      this.sndStockNameVaild = false;
-      this.fstStockNameVaild = false;
-    }
-    if (fstStockNameForTrance == '-') {
-      this.fstStockNameVaild = true;
-      this.fstVaildMsg = 'لا يوجد هذا المخزن'
-      this.inptDisabled = true;
-      this.isAddInvVaild = true;
-    } else {
-      this.isAddInvVaild = false;
-    }
-    if (sndStockNameForTrance == '-') {
-      this.sndStockNameVaild = true;
-      this.sndVaildMsg = 'لا يوجد هذا المخزن'
-      this.inptDisabled = true;
-      this.isAddInvVaild = true;
-    } else {
-      this.isAddInvVaild = false;
-    }
-
+    console.log(this.theFstStockId + ' : fstStock');
+    console.log(this.theSndStockId + ' : sndStock');
   }
 
   productNameIdArr: any[];
@@ -247,22 +285,26 @@ export class StocTrancePremComponent implements OnInit {
   isTranceNameVaild() {
 
     let theProductId: number;
+    let index: number;
+    let found: boolean;
+
     for (let i = 0; i < this.invoiceInpArry.length; i++) {
       let productinpt = $(`#product${i}`).val();
       if (this.productArr.includes(productinpt) || productinpt == '') {
         this.invoiceInpArry[i].inpVaild = false;
       } else {
         this.invoiceInpArry[i].inpVaild = true;
+        this.invoiceInpArry[i].productVaildMsg = 'خطأ فى اسم الصنف'
       };
       if (this.invoiceInpArry[i].Qtyinvaild == true) {
         this.invoiceInpArry[i].qty = null;
         this.invoiceInpArry[i].price = null;
         this.invoiceInpArry[i].Qtyinvaild = false;
       }
-      if (this.invoiceInpArry[i].price > 0 ) {
+      /*if (this.invoiceInpArry[i].price > 0) {
         this.invoiceInpArry[i].qty = null;
         this.invoiceInpArry[i].price = null;
-      }
+      }*/
 
       for (let p = 0; p < this.productNameIdArr.length; p++) {
         if (this.invoiceInpArry[i].product == this.productNameIdArr[p].productName) {
@@ -275,7 +317,29 @@ export class StocTrancePremComponent implements OnInit {
           }
         }
       }
+
+      // if productName dublicated
+      let valueArr = this.invoiceInpArry.map((item) => { return item.product });
+      let filtert = valueArr.filter((product) => {
+        return product != undefined
+      })
+      let isDublicate = filtert.some((item, indx) => {
+        //console.log(indx + ' : indx')
+        index = indx
+        return valueArr.indexOf(item) != indx
+      })
+      if (isDublicate) {
+        found = true
+        break
+      }
     } // *********************************** I stopped Here
+
+    if (index != null) {
+      if (found == true) {
+        this.invoiceInpArry[index].inpVaild = true;
+        this.invoiceInpArry[index].productVaildMsg = 'لا يمكن تكرار هذا الصنف'
+      }
+    }
 
     for (let i = 0; i < this.invoiceInpArry.length; i++) {
       if (this.invoiceInpArry[i].inpVaild == true) {
@@ -308,7 +372,7 @@ export class StocTrancePremComponent implements OnInit {
 
   resetTranceinvoiceValu() {
     this._service.clearForm();
-    //$('#invoiceTotal').html(`اجمالى الفاتورة : 0`);
+    //$('#invoiceTotal').html(`اجمالى الاذن : 0`);
     for (let i = 0; i < this.invoiceInpArry.length; i++) {
       this.invoiceInpArry[i].total = 0;
     }
@@ -346,7 +410,7 @@ export class StocTrancePremComponent implements OnInit {
       this.invoiceInpArry.push(this.invoiceInp);
     }
 
-    if (callInvoiceBtnVal == "فاتورة جديدة") {
+    if (callInvoiceBtnVal == "اذن جديد") {
       let currentDateNow = Date.now() //new Date()
       let currentDate = new Date(currentDateNow)
       this._service.makeTime_date(currentDate);
@@ -354,7 +418,7 @@ export class StocTrancePremComponent implements OnInit {
       $('#callTranceInvoice').hide();
       $('#tranceInvoiceForm').show();
       $('#newTranceInvoicetBtn').html("تسجيل");
-      $('#stockTransactionId').val('');
+      $('#tranceStockTransactionId').val('');
       this._service.clearForm();
       this.resetTranceinvoiceValu();
       this.inptDisabled = true;
@@ -362,7 +426,7 @@ export class StocTrancePremComponent implements OnInit {
     } else if (callInvoiceBtnVal == "بحث") {
 
       // add fildes if the inputArry < invoiceArry
-      $('#newTranceInvoicetBtn').html("تعديل الفاتورة");
+      $('#newTranceInvoicetBtn').html("تعديل الاذن");
       this.inptDisabled = false;
       $('#invNumTrance').show();
       for (let i = 0; i < this._stockService.makeInvoiceArry.length; i++) { // add fields if the invoice details > 7 inpts
@@ -371,16 +435,16 @@ export class StocTrancePremComponent implements OnInit {
             let countDif: number = this._stockService.makeInvoiceArry[i].invoiceDetails.length - this.invoiceInpArry.length;
             for (let c = 0; c < countDif; c++) {
               this.addFilds();
-            }
-          }
-        }
-      }
+            };
+          };
+        };
+      };
 
       this.resetTranceinvoiceValu();
 
       for (let i = 0; i < this._stockService.makeInvoiceArry.length; i++) {
         if (this._stockService.makeInvoiceArry[i].invoiceSearchVal == this.searchInVal) {
-          $('#stockTransactionId').val(this._stockService.makeInvoiceArry[i].stockTransactionId);
+          $('#tranceStockTransactionId').val(this._stockService.makeInvoiceArry[i].stockTransactionId);
           $('#fstStockNameForTrance').val(this._stockService.makeInvoiceArry[i].stockName);
           $('#sndStockNameForTrance').val(this._stockService.makeInvoiceArry[i].sndStockName);
           $('#tranceInvoiceNote').val(this._stockService.makeInvoiceArry[i].notes);
@@ -421,7 +485,7 @@ export class StocTrancePremComponent implements OnInit {
   changTranceInvoiceBtn() {
     this.searchInVal = $('#invoiceTranceSearch').val();
     if (this.searchInVal == '') {
-      $('#callTranceInvoiceBtn').html("فاتورة جديدة");
+      $('#callTranceInvoiceBtn').html("اذن جديد");
     } else {
       $('#callTranceInvoiceBtn').html("بحث");
     }
@@ -436,7 +500,7 @@ export class StocTrancePremComponent implements OnInit {
   findProduct(productName: string) {
     this.getProductInfo = this._stockService.allProducts.find(
       product => product.productName == productName
-    )
+    );
   };
 
   getHandleInfo: HandleBackEnd;
@@ -445,7 +509,7 @@ export class StocTrancePremComponent implements OnInit {
       handleInfo => handleInfo.productId == theProductId &&
         handleInfo.stockId == stockId
     );
-  }
+  };
 
   editStockQtys() {
 
@@ -465,7 +529,10 @@ export class StocTrancePremComponent implements OnInit {
       productPrice: 0,
     }
 
-    if (BtnSubmitHtml == "تعديل الفاتورة") {
+    let fstStockNameForTrance = $('#fstStockNameForTrance').val();
+    let sndStockNameForTrance = $('#sndStockNameForTrance').val();
+
+    if (BtnSubmitHtml == "تعديل الاذن") {
       for (let v = 0; v < this.ivoiceItemesForEdit.length; v++) {
 
         this.findProduct(this.ivoiceItemesForEdit[v].productName)
@@ -473,33 +540,35 @@ export class StocTrancePremComponent implements OnInit {
         postStockPridgeObj.productId = theProductId;
 
         // for first stock
-        this.findHandle(theProductId, this.ivoiceItemesForEdit[v].stockId)
-        let indx = this._stockService.handleBackEnd.findIndex(
-          i => i.stockProductId === this.getHandleInfo.stockProductId
-        );
+        if (fstStockNameForTrance != 'اذن اضافة') {
+          this.findHandle(theProductId, this.ivoiceItemesForEdit[v].stockId)
+          let indx = this._stockService.handleBackEnd.findIndex(
+            i => i.stockProductId === this.getHandleInfo.stockProductId
+          );
 
-        postStockPridgeObj.stockId = this.ivoiceItemesForEdit[v].stockId;
-        postStockPridgeObj.stockProductId = this.getHandleInfo.stockProductId;
-        postStockPridgeObj.productQty = this.getHandleInfo.productQty + parseInt(this.ivoiceItemesForEdit[v].Qty);
-        postStockPridgeObj.productCost = this.getHandleInfo.productCost;
-        this._stockService.handleBackEnd[indx].productQty = postStockPridgeObj.productQty;
-        this._stockService.updateStockPridge(postStockPridgeObj).subscribe() // for stocks DB
+          postStockPridgeObj.stockId = this.ivoiceItemesForEdit[v].stockId;
+          postStockPridgeObj.stockProductId = this.getHandleInfo.stockProductId;
+          postStockPridgeObj.productQty = this.getHandleInfo.productQty + parseInt(this.ivoiceItemesForEdit[v].Qty);
+          postStockPridgeObj.productCost = this.getHandleInfo.productCost;
+          this._stockService.handleBackEnd[indx].productQty = postStockPridgeObj.productQty;
+          this._stockService.updateStockPridge(postStockPridgeObj).subscribe() // for stocks DB
+        }
 
         // for snd stock
-        this.findHandle(theProductId, this.ivoiceItemesForEdit[v].sndStockId);
-        indx = this._stockService.handleBackEnd.findIndex(
-          i => i.stockProductId === this.getHandleInfo.stockProductId
-        );
+        if (sndStockNameForTrance != 'اذن خصم') {
+          this.findHandle(theProductId, this.ivoiceItemesForEdit[v].sndStockId);
+          let sndIndx = this._stockService.handleBackEnd.findIndex(
+            i => i.stockProductId === this.getHandleInfo.stockProductId
+          );
 
-        postStockPridgeObj.stockId = this.ivoiceItemesForEdit[v].sndStockId;
-        postStockPridgeObj.stockProductId = this.getHandleInfo.stockProductId;
-        postStockPridgeObj.productQty = this.getHandleInfo.productQty - parseInt(this.ivoiceItemesForEdit[v].Qty);
-        postStockPridgeObj.productCost = this.getHandleInfo.productCost;
-        this._stockService.handleBackEnd[indx].productQty = postStockPridgeObj.productQty;
-        this._stockService.updateStockPridge(postStockPridgeObj).subscribe() // for stocks DB
-
+          postStockPridgeObj.stockId = this.ivoiceItemesForEdit[v].sndStockId;
+          postStockPridgeObj.stockProductId = this.getHandleInfo.stockProductId;
+          postStockPridgeObj.productQty = this.getHandleInfo.productQty - parseInt(this.ivoiceItemesForEdit[v].Qty);
+          postStockPridgeObj.productCost = this.getHandleInfo.productCost;
+          this._stockService.handleBackEnd[sndIndx].productQty = postStockPridgeObj.productQty;
+          this._stockService.updateStockPridge(postStockPridgeObj).subscribe() // for stocks DB
+        }
       }
-
     }
   }
 
@@ -516,7 +585,7 @@ export class StocTrancePremComponent implements OnInit {
       this.theNote = null;
     }
 
-    this.theStockTransactionId = $('#stockTransactionId').val();
+    this.theStockTransactionId = $('#tranceStockTransactionId').val();
     let postStockPridgeObj: StockPridge = {
       stockProductId: null,
       stockId: 0, //
@@ -546,41 +615,43 @@ export class StocTrancePremComponent implements OnInit {
       date_time: this._service.date_time,
       notes: this.theNote,
     }
+    console.log(stockTransaction)
 
     // edit or add
     if (this.theStockTransactionId == '') {
       this._stockService.creatStockTransaction(stockTransaction).subscribe();
-      console.log(stockTransaction)
-      console.log('fst')
+      //console.log(stockTransaction)
+      //console.log('fst')
     } else {
       stockTransaction.stockTransactionId = this.theStockTransactionId;
       this._stockService.UpdateStockTransaction(stockTransaction).subscribe();
-      console.log(stockTransaction)
-      console.log('fst')
+      //console.log(stockTransaction)
+      //console.log('fst')
     }
 
     let BtnSubmitHtml = $('#newTranceInvoicetBtn').html(); // to check if invoice for update or add
 
     for (let i = 0; i < this.invoiceInpArry.length; i++) {
 
-      if (this.invoiceInpArry[i].product != undefined || this.invoiceInpArry[i].product != '') {
+      if (this.invoiceInpArry[i].product != undefined) {
 
         this.findProduct(this.invoiceInpArry[i].product);
         theProductId = this.getProductInfo.productId;
 
         this.findHandle(theProductId, this.theSndStockId);
-        console.log(this.getHandleInfo + ' : fstHandle')
+        //console.log(this.getHandleInfo + ' : fstHandle')
 
         if (this.getHandleInfo != undefined) {
 
           postStockPridgeObj.productId = theProductId; // for edit and add
           postStockPridgeObj.stockId = this.theSndStockId; // for edit and add
           postStockPridgeObj.productCost = this.getHandleInfo.productCost;
+          postStockPridgeObj.productCost = 0;
           postStockPridgeObj.productQty = parseInt(this.invoiceInpArry[i].qty) + this.getHandleInfo.productQty;
           postStockPridgeObj.stockProductId = this.getHandleInfo.stockProductId;
           this._stockService.updateStockPridge(postStockPridgeObj).subscribe() // for stocks DB
-          console.log(postStockPridgeObj)
-          console.log('snd')
+          //console.log(postStockPridgeObj)
+          //console.log('snd')
           // save stocktransactionDetails
           stockTransactionD.stockTransactionId = stockTransaction.stockTransactionId;
           stockTransactionD.productId = theProductId;
@@ -588,41 +659,43 @@ export class StocTrancePremComponent implements OnInit {
           stockTransactionD.Qty = parseInt(this.invoiceInpArry[i].qty);
 
           // edite Or Add
-          if (BtnSubmitHtml == "تعديل الفاتورة") {
+          if (BtnSubmitHtml == "تعديل الاذن") {
             stockTransactionD.stockTransactionDetailsId = this.invoiceInpArry[i].stockTransactionDetailsId;
             this._stockService.UpdateStockTransactionDetails(stockTransactionD).subscribe();
-            console.log(stockTransactionD)
-            console.log('thrd')
+            //console.log(stockTransactionD)
+            //console.log('thrd')
             if (stockTransactionD.stockTransactionDetailsId == undefined) {
               this._stockService.creatStockTransactionDetails(stockTransactionD).subscribe(); // for invoice DB
-              console.log(stockTransactionD)
-              console.log('fourth')
+              //console.log(stockTransactionD)
+              //console.log('fourth')
             }
             // if not productName to delete stocktransactionDetail
             for (let d = 0; d < this.invoiceInpArry.length; d++) {
-              if (this.invoiceInpArry[d].stockTransactionDetailsId !== undefined && this.invoiceInpArry[d].product == '') {
+              if (this.invoiceInpArry[d].stockTransactionDetailsId != undefined && this.invoiceInpArry[d].product == '') {
                 this._stockService.deleteStockTransactionDetails(this.invoiceInpArry[d].stockTransactionDetailsId).subscribe();
-                console.log(this.invoiceInpArry[d].stockTransactionDetailsId)
-                console.log('fifth')
-              }
-            }
+                //console.log(this.invoiceInpArry[d].stockTransactionDetailsId)
+                //console.log('fifth')
+              };
+            };
 
           } else if (BtnSubmitHtml == "تسجيل") {
             this._stockService.creatStockTransactionDetails(stockTransactionD).subscribe(); // for invoice DB
-            console.log(stockTransactionD)
-            console.log('six')
-          }
+            //console.log(stockTransactionD)
+            //console.log('six')
+          };
 
           this.findHandle(theProductId, this.theFstStockId); // for the first stock (minQtys)
-          console.log(this.getHandleInfo + ' : sndHndle')
-          postStockPridgeObj.productId = theProductId; // for edit and add
-          postStockPridgeObj.stockId = this.theFstStockId; // for edit and add
-          postStockPridgeObj.productCost = this.getHandleInfo.productCost;
-          postStockPridgeObj.productQty = this.getHandleInfo.productQty - parseInt(this.invoiceInpArry[i].qty);
-          postStockPridgeObj.stockProductId = this.getHandleInfo.stockProductId;
-          this._stockService.updateStockPridge(postStockPridgeObj).subscribe() // for stocks DB
-          console.log(postStockPridgeObj)
-          console.log('seven')
+          //console.log(this.getHandleInfo + ' : sndHndle')          
+          if (this.getHandleInfo != undefined) {
+            postStockPridgeObj.productId = theProductId; // for edit and add
+            postStockPridgeObj.stockId = this.theFstStockId; // for edit and add
+            postStockPridgeObj.productCost = this.getHandleInfo.productCost;
+            postStockPridgeObj.productQty = this.getHandleInfo.productQty - parseInt(this.invoiceInpArry[i].qty);
+            postStockPridgeObj.stockProductId = this.getHandleInfo.stockProductId;
+            this._stockService.updateStockPridge(postStockPridgeObj).subscribe() // for stocks DB
+          }
+          //console.log(postStockPridgeObj)
+          //console.log('seven')
         } else {
           postStockPridgeObj.productId = theProductId;
           postStockPridgeObj.stockId = this.theSndStockId;
@@ -634,23 +707,22 @@ export class StocTrancePremComponent implements OnInit {
           stockTransactionD.price = parseInt(this.invoiceInpArry[i].price);
           stockTransactionD.Qty = parseInt(this.invoiceInpArry[i].qty);
           this._stockService.postStockPridge(postStockPridgeObj).subscribe();
-          console.log(postStockPridgeObj)
-          console.log('eight')
+          //console.log(postStockPridgeObj)
+          //console.log('eight')
           this._stockService.creatStockTransactionDetails(stockTransactionD).subscribe() // for invoice DB
-          console.log(stockTransactionD)
-          console.log('nine')
-        }
-      }
-    }
-  } // makeTranceStockPremArry
+          //console.log(stockTransactionD)
+          //console.log('nine')
+        };
+      };
+    };
+  }; // makeTranceStockPremArry
 
   refreshData() {
     this._theStockComp.ngOnInit();
     this.getBackendData();
     this._service.clearForm();
     this._theStockComp.showTranceStockPrem();
-  }
-
+  };
 
   showInvoiceDone() {
     this._theStockComp.ngOnInit();
@@ -663,7 +735,7 @@ export class StocTrancePremComponent implements OnInit {
     //this.resetTranceinvoiceValu();
     //this.refreshData()
     //location.reload();
-  }
+  };
 
   testBtn() {
   }
@@ -671,11 +743,11 @@ export class StocTrancePremComponent implements OnInit {
   showDeleteTranceInvoice() {
     $('.fadeLayer').show(0);
     $('.askForDelete').addClass('animate');
-  }
+  };
 
   deleteTranceInvoice() {
     $('.fadeLayer').hide();
-    let stockTransId = $('#stockTransactionId').val();
+    let stockTransId = $('#tranceStockTransactionId').val();
     for (let i = 0; this.invoiceInpArry.length; i++) {
       if (this.invoiceInpArry[i].stockTransactionDetailsId == undefined) {
         break
@@ -688,9 +760,9 @@ export class StocTrancePremComponent implements OnInit {
     this.editStockQtys();
     this.refreshData();
     //location.reload();
-  }
+  };
 
-} // End\
+}; // End\
 
 /* editStockQtys (oldMethod)
 for (let sE = 0; sE < this._stockService.allProducts.length; sE++) { *** Done
@@ -743,7 +815,7 @@ for (let s = 0; s < this._stockService.allProducts.length; s++) {
         stockTransactionD.Qty = parseInt(this.invoiceInpArry[i].qty); *** Done
 
         // edite Or Add
-        if (BtnSubmitHtml == "تعديل الفاتورة") { *** Done
+        if (BtnSubmitHtml == "تعديل الاذن") { *** Done
           stockTransactionD.stockTransactionDetailsId = this.invoiceInpArry[i].stockTransactionDetailsId; *** Done
           this._stockService.UpdateStockTransactionDetails(stockTransactionD).subscribe(); *** Done
           if (stockTransactionD.stockTransactionDetailsId == undefined) { *** Done

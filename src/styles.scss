@@ -17,8 +17,8 @@ body {
     bottom: 0;
     left: 0;
     right: 0;
-    background-color: rgba(0, 0, 0, 0.87); //rgba(0, 0, 0, 0.342);
-    z-index: 90009999999999 //500;
+    background-color: rgba(255, 255, 255, 0.144);
+    z-index: 99999999999999 //500;
 }
 
 .navbar h1 {
@@ -29,12 +29,12 @@ body {
 .navHeader {
   //box-shadow: 2 2 40px rgba(0, 0, 0, 0.16);
   color: white;
-  background-color: rgb(62, 154, 180)//rgb(4, 105, 133) // last one : rgb(93, 158, 176);
+  background-color: rgb(72, 143, 199) //rgb(62, 154, 180)//rgb(4, 105, 133) // last one : rgb(93, 158, 176);
 }
 
 .navHeader .btn-outline-secondary {
-  background-color: white;
-  color: black;
+  background-color: rgb(26, 51, 70); //rgb(1, 64, 73);
+  color: rgb(255, 255, 255);
 }
 .navHeader .btn-outline-info {
   background-color: white;
@@ -50,7 +50,7 @@ body {
 }
 
 .darkBg {
-  background-color: rgb(2, 107, 121);
+  background-color: rgb(26, 51, 70); //rgb(2, 107, 121);
 }
 
 .lightBg {
@@ -59,7 +59,7 @@ body {
 }
 
 .cardHeader {
-    color:rgb(8, 151, 170);
+    color: rgb(72, 143, 199); //rgb(8, 151, 170);
     font-weight: bold;
 }
 .card {

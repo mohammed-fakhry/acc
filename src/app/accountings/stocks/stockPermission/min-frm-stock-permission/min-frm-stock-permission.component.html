@@ -1,5 +1,5 @@
 <!--fadeLayer-->
-<div class="fadeLayer">
+<div class="fadeLayer" id="fadeLayerMP">
     <div class="container p-3 card askForDelete">
         <h3 class="p-3 bg-danger text-light">هل انت متأكد من حذف</h3>
         <h4 class="mb-2">
@@ -8,7 +8,6 @@
         <hr>
         <div class="d-flex flex-row-reverse">
             <button class="btn btn-danger mr-2" id="deleteMinPrem" (click)="deleteMinInvoice()">نعم</button>
-
             <button class="btn btn-outline-info" id="hideFadeLayerMP">الغاء</button>
         </div>
     </div>
@@ -44,40 +43,40 @@
                 [disabled]='deleteMinInvBtnDisabled' (click)="showDeleteMinInvoice()">حذف
                 الفاتورة</button>
         </div>
-
         <!--[formGroup]='addToStockPremData'-->
         <form (ngSubmit)="minFrmStockPrem()" class="pt-3">
             <div class="form-group">
                 <div class="d-flex justify-content-between">
                     <input id="minStockTransactionId" class="d-none">
                     <!--stockName-->
-                    <div class="col">
-                        <label for="stockNameForMin">اسم المخزن</label>
-                        <select class="form-control p-1" id="stockNameForMin" (change)="makeTheStockProds()">
-                            <option *ngFor="let stock of _stockService.stocks">{{stock.stockName}}</option>
-                        </select>
+                    <div class="form-row">
+                        <div class="col">
+                            <label for="stockNameForMin">اسم المخزن</label>
+                            <select class="form-control p-1" id="stockNameForMin" (change)="makeTheStockProds()">
+                                <option *ngFor="let stock of _stockService.stocks">{{stock.stockName}}</option>
+                            </select>
+                        </div>
+                        <!--customerName-->
+                        <div class="col">
+                            <label for="customerNameForMin">اسم العميل</label>
+                            <!--<select class="form-control text-center mr-3 p-1" id="customerNameForAdd">
+                                <option *ngFor="let customer of customers">{{customer.customerName}}</option>
+                            </select> name="product{{i}}"-->
+                            <input type="search" id="customerNameForMin" class="form-control mdb-autocomplete p-1"
+                                list="minDatalistCustomer" (change)='isCustNameInvaild()'>
+                            <div *ngIf="custNameInvaild" class="text-danger">{{custVaildMsg}}</div>
+                            <datalist id="minDatalistCustomer">
+                                <option *ngFor="let customer of customers" value="{{customer.customerName}}">
+                                </option>
+                            </datalist>
+                        </div>
+                        <div class="col">
+                            <label for="minInvoiceNote">ملاحظات</label>
+                            <input class="form-control p-1" name="addInvoiceNote" id="minInvoiceNote">
+                        </div>
                     </div>
-                    <!--customerName-->
-                    <div class="col">
-                        <label for="customerNameForMin">اسم العميل</label>
-                        <!--<select class="form-control text-center mr-3 p-1" id="customerNameForAdd">
-                            <option *ngFor="let customer of customers">{{customer.customerName}}</option>
-                        </select> name="product{{i}}"-->
-                        <input type="search" id="customerNameForMin" class="form-control mdb-autocomplete p-1"
-                            list="minDatalistCustomer" (change)='isCustNameInvaild()'>
-                        <div *ngIf="custNameInvaild" class="text-danger">{{custVaildMsg}}</div>
-                        <datalist id="minDatalistCustomer">
-                            <option *ngFor="let customer of customers" value="{{customer.customerName}}">
-                            </option>
-                        </datalist>
-                    </div>
-                    <div class="col">
-                        <label for="minInvoiceNote">ملاحظات</label>
-                        <input class="form-control p-1" name="addInvoiceNote" id="minInvoiceNote">
-                    </div>
-                    <div class="col text-center" id="printMinPremBtn">
-                        <i class="fa fa-print btn btn-light p-3 text-center" style="height: 100%;"
-                            (click)='printThisMin()'></i>
+                    <div class="text-center" id="printMinPremBtn">
+                        <i class="fa fa-expand btn btn-outline-info p-3 text-center" (click)='printThisMin()'></i>
                     </div>
                 </div>
             </div>
@@ -88,6 +87,7 @@
                             <th style="flex: none; width: 50px">م</th>
                             <th>اسم الصنف</th>
                             <th>العدد</th>
+                            <th>رصيد باقى</th>
                             <th>السعر</th>
                             <th class="text-center">الاجمالى</th>
                         </tr>
@@ -103,12 +103,11 @@
                                     <option *ngFor="let product of _stockService.allProducts"
                                         value="{{product.productName}}"></option>
                                 </datalist>
-                                <div *ngIf="inpt.inpVaild" class="text-danger vaildAlert">هذا الصنف لايوجد بقاعدة
-                                    البيانات</div>
+                                <div *ngIf="inpt.inpVaild" class="text-danger vaildAlert">{{inpt.productVaildMsg}}</div>
                             </td>
                             <td><input type="number" name="qty{{i}}" [(ngModel)]="inpt.qty" class="form-control"
                                     (keyup)="calcTotals()" [disabled]="inputDisabled">
-                                <div *ngIf="inpt.Qtyinvaild" class="text-danger vaildAlert">لا يوجد رصيد لهذا الصنف
+                                <div *ngIf="inpt.Qtyinvaild" class="text-danger vaildAlert">{{inpt.qtyMsg}}
                                 </div>
                             </td>
                             <td><input type="number" name="price{{i}}" [(ngModel)]="inpt.price" class="form-control"

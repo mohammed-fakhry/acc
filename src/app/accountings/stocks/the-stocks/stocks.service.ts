@@ -62,82 +62,85 @@ export class StocksService {
 
   HandleAddtoStockPrimArry: HandleAddPrimBE[];
 
+  // defult url
+  url: string = 'http://localhost/accounting/'
+
   stockDataViewVal() {
     return this.stockDataView;
   }
 
   getStockes() {
-    return this.http.get<Stock[]>('http://localhost/accounting/stocksList.php');
+    return this.http.get<Stock[]>(`${this.url}stocksList.php`);
   }
 
   creatStock(stock: Stock) {
-    return this.http.post('http://localhost/accounting/postStock.php', stock)
+    return this.http.post(`${this.url}postStock.php`, stock)
   }
 
   deleteStockSer(id: number) {
-    return this.http.delete<Stock[]>('http://localhost/accounting/deleteStock.php?id=' + id)
+    return this.http.delete<Stock[]>(`${this.url}deleteStock.php?id=` + id)
   }
 
   updateStockSer(stock: Stock) {
-    return this.http.put('http://localhost/accounting/editeStock.php?id=' + stock.stockId, stock )
+    return this.http.put(`${this.url}editeStock.php?id=` + stock.stockId, stock )
   }
 
   postStockPridge(stockPridge : StockPridge) {
-    return this.http.post('http://localhost/accounting/postProductPridge.php', stockPridge)
+    return this.http.post(`${this.url}postProductPridge.php`, stockPridge)
   }
 
   updateStockPridge(stockPridge: StockPridge) {
-    return this.http.put('http://localhost/accounting/updatePridgeList.php?id=' + stockPridge.stockProductId, stockPridge )
+    return this.http.put(`${this.url}updatePridgeList.php?id=` + stockPridge.stockProductId, stockPridge )
   }
   
   getHandleBackEnd() {
-    return this.http.get<HandleBackEnd[]>('http://localhost/accounting/pridgeList.php');
+    return this.http.get<HandleBackEnd[]>(`${this.url}pridgeList.php`);
   }
 
   creatProduct(product: ProductsClass) {
-    return this.http.post('http://localhost/accounting/postProduct.php', product)
+    return this.http.post(`${this.url}postProduct.php`, product)
   }
 
   getProducts() {
-    return this.http.get<ProductsClass[]>('http://localhost/accounting/productsList.php');
+    return this.http.get<ProductsClass[]>(`${this.url}productsList.php`);
   }
 
   creatStockTransactionDetails(StockTransactionD: StockTransactionD) {
-    return this.http.post('http://localhost/accounting/postStocktTransactionDetailsId.php', StockTransactionD)
+    return this.http.post(`${this.url}postStocktTransactionDetailsId.php`, StockTransactionD)
   };
 
   creatStockTransaction(StockTransaction: StockTransaction) {
-    return this.http.post('http://localhost/accounting/stockTransaction.php', StockTransaction)
+    return this.http.post(`${this.url}stockTransaction.php`, StockTransaction)
   }
 
   // for invoice search || edite
   getHandleAddtoStockPrimList() {
-    return this.http.get<HandleAddPrimBE[]>('http://localhost/accounting/addtoStockPrimList.php');
+    return this.http.get<HandleAddPrimBE[]>(`${this.url}addtoStockPrimList.php`);
   }
   // stockTransactionDetailsList
   getStockTransactionDetailsList() {
-    return this.http.get<StockTransactionD[]>('http://localhost/accounting/stockTransactionDetailsList.php');
+    return this.http.get<StockTransactionD[]>(`${this.url}stockTransactionDetailsList.php`);
   }
 
   // stockTransactionList
   getStockTransactionList() {
-    return this.http.get<StockTransactionList[]>('http://localhost/accounting/stockTransactionList.php');
+    return this.http.get<StockTransactionList[]>(`${this.url}stockTransactionList.php`);
   }
 
   UpdateStockTransactionDetails(stockTransactionDetails: StockTransactionD) {
-    return this.http.put('http://localhost/accounting/updatestocktransactiondetails.php?id=' + stockTransactionDetails.stockTransactionDetailsId, stockTransactionDetails )
+    return this.http.put(`${this.url}updatestocktransactiondetails.php?id=` + stockTransactionDetails.stockTransactionDetailsId, stockTransactionDetails )
   }
 
   deleteStockTransactionDetails(id: number) {
-    return this.http.delete<StockTransactionD[]>('http://localhost/accounting/deleteInvoiceDetails.php?id=' + id)
+    return this.http.delete<StockTransactionD[]>(`${this.url}deleteInvoiceDetails.php?id=` + id)
   }
 
   UpdateStockTransaction(stockTransaction: StockTransaction) {
-    return this.http.put('http://localhost/accounting/updateStocktransaction.php?id=' + stockTransaction.stockTransactionId, stockTransaction )
+    return this.http.put(`${this.url}updateStocktransaction.php?id=` + stockTransaction.stockTransactionId, stockTransaction )
   }
 
   deleteStockTransaction(id: number) {
-    return this.http.delete<StockTransactionD[]>('http://localhost/accounting/deleteInvoice.php?id=' + id)
+    return this.http.delete<StockTransactionD[]>(`${this.url}deleteInvoice.php?id=` + id)
   }
 
 }
