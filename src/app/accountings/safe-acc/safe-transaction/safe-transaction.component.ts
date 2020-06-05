@@ -17,7 +17,7 @@ export class SafeTransactionComponent implements OnInit {
 
   ngOnInit() {
 
-    /* $(window).scroll( () => {
+    $(window).scroll( () => {
 
       let scrolling = $(this).scrollTop();
 
@@ -27,7 +27,7 @@ export class SafeTransactionComponent implements OnInit {
         $("#topArr").fadeOut()
       };
 
-    }); */
+    })
 
     //topArrow
     $("#topArr").click(function () { // scrollTop Button
