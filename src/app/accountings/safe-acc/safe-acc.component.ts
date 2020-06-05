@@ -113,7 +113,6 @@ export class SafeAccComponent implements OnInit {
     $('.headerMainBtn').not('#showAddSafeReceipt').removeClass('btn-outline-secondary').addClass('btn-outline-info').animate({ fontSize: '1em' }, 50);
     $('.headerMainBtn').not('#showAddSafeReceipt').attr({'disabled': false});
     $('#SafeReceiptSearch').val(null)
-    console.log(this._safeDataService.safeList[0].currentSafeVal)
   };
 
   showSafeEnquir() {

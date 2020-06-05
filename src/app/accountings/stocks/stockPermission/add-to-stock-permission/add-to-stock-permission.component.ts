@@ -194,6 +194,7 @@ export class AddToStockPermissionComponent implements OnInit {
           //console.log('false')
         };
       };
+
     };
 
     if (this.customerVaild == false) {
@@ -219,18 +220,19 @@ export class AddToStockPermissionComponent implements OnInit {
     this.inptDisabled = false;
     this.totalInvoice = [];
     this.invoiceTotal = '0';
+
     for (let i = 0; i < this.invoiceInpArry.length; i++) {
       // Qty change
-      //$(`#qty${i}`)
       if (this.invoiceInpArry[i].qty == null || this.invoiceInpArry[i].price == null) {
         this.invoiceInpArry[i].total = 0;
-        this.totalInvoice.push(this.invoiceInpArry[i].total)
+        //this.totalInvoice.push(this.invoiceInpArry[i].total)
       } else {
         this.invoiceInpArry[i].total = this.invoiceInpArry[i].qty * this.invoiceInpArry[i].price;
-        this.totalInvoice.push(this.invoiceInpArry[i].total)
+        //this.totalInvoice.push(this.invoiceInpArry[i].total)
       };
-
     };
+    this.totalInvoice = this.invoiceInpArry.map(inv => inv.total);
+
     let total: any = this.sumArry(this.totalInvoice)
     this.invoiceTotal = total;
     //$('#invoiceTotal').html(`اجمالى الفاتورة : ${total}`)

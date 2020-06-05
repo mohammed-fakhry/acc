@@ -10,6 +10,7 @@ import { HandleBackEnd } from '../../../handle-back-end'
 import { ProductsClass } from '../products-class';
 import { HandleAddPrimBE } from '../handle-add-prim-be';
 import { StockTransaction } from '../stock-transaction';
+import { async } from 'rxjs/internal/scheduler/async';
 //import { AddToStockPermissionComponent } from '../stockPermission/add-to-stock-permission/add-to-stock-permission.component';
 @Component({
   selector: 'app-the-stocks',
@@ -23,9 +24,9 @@ export class TheStocksComponent implements OnInit {
   tranceInvArry: any[];
 
   searchTxt: string;
+
   constructor(public router: Router, public logService: LoginService,
     public _stockService: StocksService, public _service: ServicesService) { }
-  //, public _AddToStockPermissionComponent: AddToStockPermissionComponent
 
   productNameVaild: boolean;
 
@@ -50,10 +51,6 @@ export class TheStocksComponent implements OnInit {
       }] // stockProducts
     }]; // makeStockArry
 
-    //console.log('ngOnit')
-
-    //this.testBackend();
-    //console.log(this._stockService.stocks.length)
   } // ngOnInit
 
   getBackendData() {
@@ -74,8 +71,7 @@ export class TheStocksComponent implements OnInit {
     });
 
     this.getStockTransactionArr();
-
-  }
+  };
 
   getStockTransactionArr() {
     this._stockService.getStockTransactionList().subscribe((data: StockTransaction[]) => {
@@ -89,32 +85,6 @@ export class TheStocksComponent implements OnInit {
     });
   };
 
-
-  // make InvoiceArry
-  /*this._stockService.makeInvoiceArry =  [{
-    invoiceId: null,
-    invoiceSearchVal: null,
-    stockTransactionId: null,
-    stockId: null,
-    stockName: '',
-    sndStockName: '',
-    customerName: '',
-    transactionType: null,
-    notes: null,
-    invoiceDetails: [{
-      stockTransactionId: null,
-      productName: null,
-      stockName: '',
-      sndStockId: null,
-      customerName: '',
-      invoiceTotal: 0,
-      price: null,
-      Qty: null,
-      date_time: null,
-      notes: null,
-    }]
-  }]*/
-
   showFade_newInvoice(btnId: string) {
     $('#theStockFadeLayer').show();
     $('#stockPerDone').show();
@@ -126,22 +96,22 @@ export class TheStocksComponent implements OnInit {
   closeFade() {
     $('#theStockFadeLayer').hide();
     $('.askForDelete').removeClass('animate').hide();
-  }
+  };
 
   showAddToStockPrem_fade() {
     this.showAddToStockPrem();
     this.closeFade()
-  }
+  };
 
   showTranceStockPrem_fade() {
     this.showTranceStockPrem();
     this.closeFade();
-  }
+  };
 
   showMinToStockPrem_fade() {
     this.showMinToStockPrem();
     this.closeFade();
-  }
+  };
 
   showStocksEnquiry_fade() {
     this.showStocksEnquiry();
@@ -151,9 +121,10 @@ export class TheStocksComponent implements OnInit {
 
   CreateTheInvoiceArry(type: number) {
 
-    this.getStockTransactionArr();
-    this.getHandlePrimList();
     // getHandleAddtoStockPrimList from Db
+    this.getStockTransactionArr(); // stockTransactionArr
+    this.getHandlePrimList(); // HandleAddtoStockPrimArry
+
     this._stockService.makeInvoiceArry = [];
 
     for (let i = 0; i < this._stockService.stockTransactionArr.length; i++) {
@@ -177,7 +148,6 @@ export class TheStocksComponent implements OnInit {
       this._stockService.makeInvoiceArry[m].invoiceSearchVal = inVal;
     };
 
-    //console.log(JSON.stringify( this._stockService.makeInvoiceArry) + ' : makeInvoiceArry')
     this._stockService.makeInvoiceArry.sort((a, b) => {
       return a.invNumber - b.invNumber
     });
@@ -185,19 +155,26 @@ export class TheStocksComponent implements OnInit {
   }; // CreateTheInvoiceArry
 
   makeMinInvArry() {
+
     this.CreateTheInvoiceArry(2);
+
     this.minInvArry = this._stockService.makeInvoiceArry
   }
 
   makeAddInvArry() {
+
     this.CreateTheInvoiceArry(1);
+
     this.addInvArry = this._stockService.makeInvoiceArry
   }
 
   makeTranceInvArry() {
+
     this.CreateTheInvoiceArry(3);
+
     this.tranceInvArry = this._stockService.makeInvoiceArry;
     for (let i = 0; i < this.tranceInvArry.length; i++) {
+
       let sndStock = this._stockService.stocks.find(
         stock => stock.stockId == this.tranceInvArry[i].sndStockId
       );
@@ -209,25 +186,11 @@ export class TheStocksComponent implements OnInit {
       } else if (this.tranceInvArry[i].sndStockId == 1) {
         this.tranceInvArry[i].sndStockName = 'اذن خصم'
       };
+
       let inVal = `${this.tranceInvArry[i].invNumber} - ${this.tranceInvArry[i].stockName} - ${this.tranceInvArry[i].sndStockName}`
       this._stockService.makeInvoiceArry[i].invoiceSearchVal = inVal;
-    }
-    /*
-    for (let i = 0; i < this._stockService.makeInvoiceArry.length; i++) {
-      if (this._stockService.makeInvoiceArry[i].transactionType == 3) {
-        for (let s = 0; s < this._stockService.stocks.length; s++) {
-          if (this._stockService.makeInvoiceArry[i].sndStockId == this._stockService.stocks[s].stockId) {
-            this._stockService.makeInvoiceArry[i].sndStockName = this._stockService.stocks[s].stockName;
-            break
-          }
-        }
-        let inVal = `${this._stockService.makeInvoiceArry[i].invNumber} - ${this._stockService.makeInvoiceArry[i].stockName} - ${this._stockService.makeInvoiceArry[i].sndStockName}`
-        this._stockService.makeInvoiceArry[i].invoiceSearchVal = inVal;
-        this.tranceInvArry.push(this._stockService.makeInvoiceArry[i]);
-      }
-    }*/
-    console.log(this.tranceInvArry)
-  }
+    };
+  };
 
   testBackend() {
     //
@@ -247,7 +210,6 @@ export class TheStocksComponent implements OnInit {
 
     for (let i = 0; i < this._stockService.stocks.length; i++) {
       this._stockService.makeStockArry.push(this._stockService.stocks[i]);
-      //console.log(this._stockService.makeStockArry)
     };
     for (let m = 0; m < this._stockService.makeStockArry.length; m++) {
       this._stockService.makeStockArry[m].stockProducts = [];
@@ -256,16 +218,19 @@ export class TheStocksComponent implements OnInit {
       for (let s = 0; s < this._stockService.makeStockArry.length; s++) {
         if (this._stockService.handleBackEnd[h].stockId == this._stockService.makeStockArry[s].stockId) {
           this._stockService.makeStockArry[s].stockProducts.push(this._stockService.handleBackEnd[h]);
-          //console.log(this._stockService.makeStockArry[s].stockProducts)
         };
       };
     };
   };
 
+
+
   randomId: number;
   // testBtn
   testbtn() {
-    this.getBackendData();
+
+
+    //this.getBackendData();
   }
 
   showStocksEnquiry() {
@@ -275,8 +240,6 @@ export class TheStocksComponent implements OnInit {
     $('#stocksSearch').fadeIn(100);
     $('#stockBtn').removeClass("btn-outline-info").addClass("btn-outline-secondary").animate({ fontSize: '1.5em' }, 50);
     $('#premissionBtn').removeClass('btn-outline-secondary').addClass('btn-outline-info').animate({ fontSize: '1em' }, 50);
-    //location.reload();
-    //console.log(this._stockService.productsFromStockArryView)
   };
 
   showProductsReport() {
@@ -301,31 +264,37 @@ export class TheStocksComponent implements OnInit {
   productNameArr: any[];
 
   makeProductNameArr() {
+
     this._stockService.getProducts().subscribe((data: ProductsClass[]) => {
       this._stockService.allProducts = data;
     });
+
     this.productNameArr = [];
-    for (let i = 0; i < this._stockService.allProducts.length; i++) {
-      this.productNameArr.push(this._stockService.allProducts[i].productName);
-    };
+
+    this.productNameArr = this._stockService.allProducts.map(product => product.productName)
+
     //console.log(this.productNameArr + ' : stock')
   };
 
   showAddNewProduct() {
+
     this.makeProductNameArr();
     this.productNameVaild = true;
+
     $('.stocksClass').not('#addNewProduct').hide();
     $('#productName').removeClass('is-valid').removeClass('is-invalid');
     $('#addNewProduct').show();
     $('#stocksSearch').hide(100);
     $('#stockBtn').removeClass("btn-outline-info").addClass("btn-outline-secondary").animate({ fontSize: '1.5em' }, 50);
     $('#premissionBtn').removeClass('btn-outline-secondary').addClass('btn-outline-info').animate({ fontSize: '1em' }, 50);
-  }
+  };
 
   newAddInvNumber: number;
 
   showAddToStockPrem() {
+
     this.makeAddInvArry();
+
     $('.stocksClass').not('#addToStockPrem').hide();
     $('#addToStockPrem').show();
     $('#stocksSearch').hide(100);
@@ -335,20 +304,23 @@ export class TheStocksComponent implements OnInit {
     $('#callInvoice').show();
     $('#addInvoiceForm').hide();
     $('#callInvoiceBtn').html("فاتورة جديدة");
+
     this._service.clearForm()
     if (this.addInvArry.length == 0) {
       this.newAddInvNumber = 1
     } else {
       let lastArrIndx: number = this.addInvArry.length - 1
       this.newAddInvNumber = this.addInvArry[lastArrIndx].invNumber + 1
-    }
+    };
     this._service.clearForm();
     //console.log(this.addInvArry)
-  }
+  };
 
   newTranceInvNumber: number;
   showTranceStockPrem() {
+
     this.makeTranceInvArry();
+
     $('.stocksClass').not('#tranceFrmStockPrem').hide();
     $('#tranceFrmStockPrem').show();
     $('#stocksSearch').hide(100);
@@ -357,13 +329,16 @@ export class TheStocksComponent implements OnInit {
     $('#callTranceInvoice').show();
     $('#tranceInvoiceForm').hide();
     $('#callTranceInvoiceBtn').html("اذن جديد");
+
     this._service.clearForm();
+
     if (this.tranceInvArry.length == 0) {
       this.newTranceInvNumber = 1
     } else {
       let lastArrIndx: number = this.tranceInvArry.length - 1
       this.newTranceInvNumber = this.tranceInvArry[lastArrIndx].invNumber + 1
     };
+
   };
 
   newMinInvNumber: number;
@@ -395,4 +370,4 @@ export class TheStocksComponent implements OnInit {
       });
   };
 
-} // End
+}; // End

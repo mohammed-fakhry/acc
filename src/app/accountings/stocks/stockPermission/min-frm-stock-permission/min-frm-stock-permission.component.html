@@ -52,18 +52,18 @@
                     <div class="form-row">
                         <div class="col">
                             <label for="stockNameForMin">اسم المخزن</label>
-                            <select class="form-control p-1" id="stockNameForMin" (change)="makeTheStockProds()">
+                            <select class="form-control p-1" id="stockNameForMin" (change)="makeTheStockProds()" name="stockNameInpt" [(ngModel)]='stockNameInpt'>
                                 <option *ngFor="let stock of _stockService.stocks">{{stock.stockName}}</option>
                             </select>
                         </div>
                         <!--customerName-->
                         <div class="col">
-                            <label for="customerNameForMin">اسم العميل</label>
+                            <label for="customerNameForMin" >اسم العميل</label>
                             <!--<select class="form-control text-center mr-3 p-1" id="customerNameForAdd">
                                 <option *ngFor="let customer of customers">{{customer.customerName}}</option>
                             </select> name="product{{i}}"-->
                             <input type="search" id="customerNameForMin" class="form-control mdb-autocomplete p-1"
-                                list="minDatalistCustomer" (change)='isCustNameInvaild()'>
+                                list="minDatalistCustomer" (change)='isCustNameInvaild()' name="custNameInpt" [(ngModel)]='custNameInpt'>
                             <div *ngIf="custNameInvaild" class="text-danger">{{custVaildMsg}}</div>
                             <datalist id="minDatalistCustomer">
                                 <option *ngFor="let customer of customers" value="{{customer.customerName}}">
@@ -107,7 +107,7 @@
                             </td>
                             <td><input type="number" name="qty{{i}}" [(ngModel)]="inpt.qty" class="form-control"
                                     (keyup)="calcTotals()" [disabled]="inputDisabled">
-                                <div *ngIf="inpt.Qtyinvaild" class="text-danger vaildAlert">{{inpt.qtyMsg}}
+                                <div *ngIf="inpt.Qtyinvaild" class="text-danger vaildAlert pt-1">{{inpt.qtyMsg}}
                                 </div>
                             </td>
                             <td><input type="number" name="price{{i}}" [(ngModel)]="inpt.price" class="form-control"

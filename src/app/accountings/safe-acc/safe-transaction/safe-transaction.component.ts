@@ -18,20 +18,24 @@ export class SafeTransactionComponent implements OnInit {
   ngOnInit() {
 
     /* $(window).scroll( () => {
+
       let scrolling = $(this).scrollTop();
+
       if (scrolling >= 50) {
         $("#topArr").fadeIn();
       } else {
         $("#topArr").fadeOut()
       };
-      // console.log(scrolling + ' : scrolling');
-      // console.log(document.body.scrollHeight + " : body");
+
     }); */
+
     //topArrow
     $("#topArr").click(function () { // scrollTop Button
+
       let navPosition = $(".navbar").offset().top;
       $("html , body").animate({ scrollTop: 0 }, 100);
-      console.log(navPosition)
+      $(this).hide();
+
     });
 
   };
@@ -39,24 +43,24 @@ export class SafeTransactionComponent implements OnInit {
   toBottom() {
     window.scrollTo(0, document.body.scrollHeight);
     $("#topArr").fadeIn();
-    //this.windowPosCheck();
-  }
-  /* toBottom() {
-
-  } */
+  };
 
   printSafeTrance() {
+
     let show = '#headerSafeReport';
     let hide1 = '';
     let hide2 = '';
     let hide3 = '';
     this._service.printThis(show, hide1, hide2, hide3);
+
     $('.closeBtn').show()
     $('#SafeReportTable').animate(
       { 'height': '100%' }
     );
+
     $('.navHeader').addClass('sticky-top');
     $('#printSafeTrance').hide();
+
   };
 
   openwindowPrint() {
@@ -66,11 +70,11 @@ export class SafeTransactionComponent implements OnInit {
     document.documentElement.scrollTop = 0;
     window.print();
     location.reload();
-  }
+  };
 
   reloadLoc() {
     location.reload();
-  }
+  };
 
   fstDateInvalid: boolean;
   sndDateInvalid: boolean;
@@ -115,10 +119,7 @@ export class SafeTransactionComponent implements OnInit {
         });
         
       };
-
     };
   };
-
-
 
 } // end
