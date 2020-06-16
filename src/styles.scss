@@ -1,163 +1,297 @@
 /* You can add global styles to this file, and also import other style files */
 * {
-    font-family: 'Droid Arabic Kufi', sans-serif;
-    text-align: right;
-    direction: rtl;
+  font-family: 'Droid Arabic Kufi', sans-serif;
+  text-align: right;
+  direction: rtl;
 }
 body {
-    background-color: rgb(241, 242, 246);
-    position: relative;
-    //background-color: white;
+  background-color: rgb(228, 230, 235); //rgb(36, 36, 36);  //rgb(204, 206, 218); //rgb(241, 242, 246);
+  position: relative;
+  //background-color: white;
 }
 
 .fadeLayer {
-    position: fixed;
-    display: none;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background-color: rgba(255, 255, 255, 0.144);
-    z-index: 99999999999999 //500;
+  position: fixed;
+  display: none;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba(0, 0, 0, 0.950); //rgba(255, 255, 255, 0.144);
+  z-index: 99999999999999; //500;
+};
+
+h5 {
+line-height: 1.75;
 }
 
 .navbar h1 {
-  margin-right: 30px;
-  color: white;// teal;
+margin-right: 30px;
+color: white;// teal;
 }
 
 .navHeader {
-  //box-shadow: 2 2 40px rgba(0, 0, 0, 0.16);
-  color: white;
-  background-color: rgb(72, 143, 199) //rgb(62, 154, 180)//rgb(4, 105, 133) // last one : rgb(93, 158, 176);
+//box-shadow: 2 2 40px rgba(0, 0, 0, 0.16);
+color: white;
+background-color: rgb(72, 143, 199); //rgb(62, 154, 180)//rgb(4, 105, 133) // last one : rgb(93, 158, 176);
+
+//margin-bottom: 20px;
+//width: auto;
+}
+
+.theNav {
+z-index: 2;
+position: sticky;
+padding-right: 10px;
+top: 0px;
+};
+
+.mainContainer {
+  padding: 0px 20px;
 }
 
 .navHeader .btn-outline-secondary {
-  background-color: rgb(26, 51, 70); //rgb(1, 64, 73);
-  color: rgb(255, 255, 255);
+background-color: rgb(26, 51, 70); //rgb(1, 64, 73);
+color: rgb(255, 255, 255);
 }
 .navHeader .btn-outline-info {
-  background-color: white;
-  color: teal;
+background-color: white;
+color: teal;
 }
 
 .dropDownItemBorder {
-  border-bottom: solid 1px black ;
+border-bottom: solid 1px black ;
 }
 
 .btn-info {
-  background-color:rgb(2, 107, 121);
+background-color:rgb(2, 107, 121);
 }
 
 .darkBg {
-  background-color: rgb(26, 51, 70); //rgb(2, 107, 121);
+background-color: rgb(22, 76, 117); //rgba(0, 7, 7, 0.95); //rgb(26, 51, 70); //rgb(2, 107, 121);
 }
 
 .lightBg {
-  color: black;
-  background-color: rgba(214, 234, 241, 0.95);
+color: black;
+background-color: rgba(214, 234, 241, 0.95);
 }
 
 .cardHeader {
-    color: rgb(72, 143, 199); //rgb(8, 151, 170);
-    font-weight: bold;
+  color: rgb(72, 143, 199); //rgb(8, 151, 170);
+  font-weight: bold;
+  padding-right: 10px;
 }
 .card {
-    border: solid 1px rgb(2, 107, 121);;
+  border: none;//solid 1px rgb(2, 107, 121);
+  padding-top: 20px;
+  // margin-right: 20px;
+  // margin-left: 20px;
 }
+
+
 .tableBody {
-    overflow-y: auto;
-    height: 450px;
+  overflow-y: auto;
+  height: 450px;
 }
 .headerLeftBorder {
-    width: 1px;
-    background-color: black;
-    height: 70px;
+  width: 2px;
+  background-color: rgb(26, 51, 70);
+  height: 60px;
+};
+
+.printBtns {
+  direction: ltr;
+  //background-color: white;
+  width: auto;
+  display: none;
+  position: fixed;
+  top: 10px;
+  left: 10px;
+  padding: 5px;
+};
+
+.printBtns button {
+  text-align: center;
+  margin-bottom: 7px;
+  width: 40px;
+};
+
+.stickyInp {
+  position: sticky;
+  top: 100px;
 }
+
 // scrolltable
-.container-fluid {
-    .panel-body {
-      height: 700px;
-      padding: 0px; 
-      table.flex-table {
+.card {
+  .panel-body {
+    height: 840px;
+    padding: 0px; 
+    table.flex-table {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      thead,
+      tbody {
+        display: block;
+      }
+      thead {
+        margin-right: 0px; //margin to align correctly to scrollbar in table body
+      }
+      tbody {
+        flex: 1; //variable height
+        overflow-y: scroll;
+      }
+      tr {
+        width: 100% ;
         display: flex;
-        flex-direction: column;
-        height: 100%;
-        thead,
-        tbody {
+        td,
+        th {
           display: block;
-        }
-        thead {
-          margin-right: 0px; //margin to align correctly to scrollbar in table body
-        }
-        tbody {
-          flex: 1; //variable height
-          overflow-y: scroll;
-        }
-        tr {
-          width: 100% ;
-          display: flex;
-          td,
-          th {
-            display: block;
-            flex: 1;
-          }
+          flex: 1;
         }
       }
-      
-      table.flex-widths {
-        &.flex-table-aligned {
-          thead > tr {
-            overflow-y: scroll;
-            overflow-x: auto;
-          }
+    }
+    
+    table.flex-widths {
+      &.flex-table-aligned {
+        thead > tr {
+          overflow-y: scroll;
+          overflow-x: auto;
         }
-        tr {
-          td, th {
-            &:nth-child(2) {
-              flex: 3;
-            }
-            &:nth-child(4) {
-              flex: 2;
-            }
+      }
+      tr {
+        td, th {
+          &:nth-child(2) {
+            flex: 3;
+          }
+          &:nth-child(4) {
+            flex: 2;
           }
         }
       }
     }
   }
+}
 
+.mdFlex {
+  flex: 2;
+}
 
-  body .wideScreen {
-    position: absolute;
-    top: 5;
-    bottom: 5;
-    left: 0;
-    right: 0;
-    //z-index: 900000;
-  }
+.nonFlex {
+  flex: none;
+}
 
-  .askForDelete {
-    // display: none;
-     width: 30%;
-     margin-top: 10%;
-     z-index: 1000;
-     background-color: white;
-     transform: scale(.75);
-     transition: .09s;
- }
- .askForDelete.animate {
-     transform: scale(1);
- }
+body .wideScreen {
+  position: absolute;
+  top: 5;
+  bottom: 5;
+  left: 0;
+  right: 0;
+  //z-index: 900000;
+}
 
- .inpCard {
-   background-color: whitesmoke;
- }
+.askForDelete {
+  // display: none;
+   width: 30%;
+   margin-top: 10%;
+   z-index: 1000;
+   background-color: white;
+   transform: scale(.75);
+   transition: .09s;
+}
+.askForDelete.animate {
+   transform: scale(1);
+}
 
- .settinLable {
-   font-weight: bold;
- }
+.inpCard {
+ background-color: whitesmoke;
+ margin-right: 20px;
+ margin-left: 20px;
+ box-shadow: 0 15px 30px rgba(0, 0, 0, 0.486);
+}
 
- .bigNum {
-  letter-spacing: 3px
- }
+.settinLable {
+ font-weight: bold;
+}
 
+.bigNum {
+letter-spacing: 3px
+}
+
+#containerLoader {
+  display: none;
+};
+
+.squareLoader {
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: rgba(0, 7, 7, 0.95); //#242f3f;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1;
+};
+
+.loader {
+display: inline-block;
+width: 30px;
+height: 30px;
+position: relative;
+border: 4px solid #Fff;
+animation: loader 2s infinite ease;
+}
+
+.loader-inner {
+vertical-align: top;
+display: inline-block;
+width: 100%;
+background-color: #fff;
+animation: loader-inner 2s infinite ease-in;
+}
+
+@keyframes loader {
+0% {
+  transform: rotate(0deg);
+}
+
+25% {
+  transform: rotate(180deg);
+}
+
+50% {
+  transform: rotate(180deg);
+}
+
+75% {
+  transform: rotate(360deg);
+}
+
+100% {
+  transform: rotate(360deg);
+}
+}
+
+@keyframes loader-inner {
+0% {
+  height: 0%;
+}
+
+25% {
+  height: 0%;
+}
+
+50% {
+  height: 100%;
+}
+
+75% {
+  height: 100%;
+}
+
+100% {
+  height: 0%;
+}
+}

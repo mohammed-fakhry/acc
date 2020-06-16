@@ -34,12 +34,14 @@ export class SideBarComponent implements OnInit {
     $(".mainBtns").click(function () {
       console.log($('#sidebarBtns').height())
       //$('#sidebar').animate({ height: `${sidebarBtnsHeight + 20}px` });
-      $(this).removeClass('btn-light').addClass('btn-primary')
+      $(this).removeClass('btn-light').addClass('navHeader')
       $(this).next().slideToggle(100);
       $("#sidebar .secDiv").not($(this).next()).slideUp(100);
       console.log($('#sidebarBtns').height())
       $('#sidebar').css('height', 'auto')
-      $('.mainBtns').not($(this)).not('#logOut').not('#MainSettingBtn').removeClass('btn-primary').addClass('btn-light')
+      $('.mainBtns').not($(this)).not('#logOut').not('#MainSettingBtn').removeClass('navHeader').addClass('btn-light');
+      
+      
     });
 
     // make active button
@@ -59,18 +61,18 @@ export class SideBarComponent implements OnInit {
     if (dBUrls.includes(this.url)) {
       this.mainRoute = 'Db'
       $('#dbBtn').next().show()
-      $('#dbBtn').removeClass('btn-light').addClass('btn-primary')
+      $('#dbBtn').removeClass('btn-light').addClass('navHeader')
       $('#sidebar .secDiv').not($('#dbBtn').next()).hide()
     } else if (accUrls.includes(this.url)) {
       this.mainRoute = 'acc'
       $('#accBtn').next().show()
-      $('#accBtn').removeClass('btn-light').addClass('btn-primary')
+      $('#accBtn').removeClass('btn-light').addClass('navHeader')
       $('#sidebar .secDiv').not($('#accBtn').next()).hide()
     } else {
       this.mainRoute = 'false'
       $('#sidebar .secDiv').hide();
-      $('#sidBar h3').not('#logOut').removeClass('btn-primary').addClass('btn-light')
-    }
+      $('#sidBar h3').not('#logOut').removeClass('navHeader').addClass('btn-light')
+    };
 
     // active main btn
     //console.log(this.mainRoute)
@@ -90,13 +92,13 @@ export class SideBarComponent implements OnInit {
       };
     });
 
-  } // ngOnInit
+  }; // ngOnInit
 
   secButtonClick(btnId) {
     //console.log(btnId)
     $(`#${btnId}`).removeClass('btn-light').addClass('btn-secondary')// .next().slideToggle(500);
     $("#sidebar .secButton").not(`#${btnId}`).removeClass('btn-secondary').addClass('btn-light');
-    this.sidebarToggle()
+    this.sidebarToggle();
   }
 
   logOut() {
@@ -110,7 +112,7 @@ export class SideBarComponent implements OnInit {
     //$('#sidebarToggle').hide();
     console.log(this.logService.isUser)
     location.reload();
-  }
+  };
 
   // new effects
   sidebarToggle() {
@@ -130,12 +132,12 @@ export class SideBarComponent implements OnInit {
       $('#fadeEffect').fadeIn().css({
         'height': `100%`,
       })
-      $('#sidebarToggle').removeClass("fa-align-justify").addClass("fa-minus")
+      $('#sidebarToggle').hide(); // removeClass("fa-align-justify").addClass("fa-minus")
     } else { //close sideBar
       $('#sidebarBtns').hide()
       $('#sidebar').css('height', '0').toggleClass('card'); //.animate({ height: '0px' }).toggleClass('card')
       $('#fadeEffect').hide()
-      $('#sidebarToggle').removeClass("fa-minus").addClass("fa-align-justify")
+      $('#sidebarToggle').show(); //removeClass("fa-minus").addClass("fa-align-justify")
     }
   }
 
@@ -143,7 +145,7 @@ export class SideBarComponent implements OnInit {
     $('#sidebarBtns').hide()
     $('#sidebar').removeClass("card").css('height', '0') //animate({ height: '0px' }, 200)
     $('#fadeEffect').hide()
-    $('#sidebarToggle').removeClass("fa-minus").addClass("fa-align-justify")
+    $('#sidebarToggle').show() //removeClass("fa-minus").addClass("fa-align-justify")
     //$('#sidebarToggle').addClass('pFixed sticky-top');
   }
 

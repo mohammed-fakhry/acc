@@ -225,14 +225,23 @@ export class WorkersComponent implements OnInit {
       });
     this.showWorkerEnquiry()
     this.getBackendData();
-  }
+  };
+
+  buttonEffect(max: string, min: string) {
+    $(max).removeClass("btn-outline-info").addClass("btn-outline-secondary").animate({ fontSize: '1.5em' }, 50);
+    $(max).attr({'disabled' : true});
+
+    $(min).removeClass('btn-outline-secondary').addClass('btn-outline-info').animate({ fontSize: '1em' }, 50);
+    $(min).attr({'disabled' : false});
+  };
 
   showWorkerSetting() {
     this._service.getWorkerRules().subscribe((dataRules: WorkerRules[]) => {
       this.rulesFromSql = dataRules;
     });
-    $('#showAddWorkerBtn').removeClass('btn-outline-secondary').addClass('btn-outline-info').animate({ fontSize: '1em' }, 50);
-    $('#workerEnquirybtn').removeClass('btn-outline-secondary').addClass('btn-outline-info').animate({ fontSize: '1em' }, 50);
+    this.buttonEffect('#showAddWorkerBtn','#workerEnquirybtn');
+    // $('#showAddWorkerBtn').removeClass('btn-outline-secondary').addClass('btn-outline-info').animate({ fontSize: '1em' }, 50);
+    // $('#workerEnquirybtn').removeClass('btn-outline-secondary').addClass('btn-outline-info').animate({ fontSize: '1em' }, 50);
     $('.workerClass').not('#workerSetting').hide();
     $('#workerSetting').show();
     this.WorkerRuleResult = this.rulesFromSql[0];
@@ -303,8 +312,9 @@ export class WorkersComponent implements OnInit {
     $('#addNewWorkerBtn').html('تعديل');
     $('#addWorker h2:first').html('تعديل بيانات موظف');
     //this.workerDataView = worker;
-    $('#showAddWorkerBtn').removeClass('btn-outline-secondary').addClass('btn-outline-info').animate({ fontSize: '1em' }, 50);
-    $('#workerEnquirybtn').removeClass('btn-outline-secondary').addClass('btn-outline-info').animate({ fontSize: '1em' }, 50);
+    this.buttonEffect('#showAddWorkerBtn','#workerEnquirybtn');
+    // $('#showAddWorkerBtn').removeClass('btn-outline-secondary').addClass('btn-outline-info').animate({ fontSize: '1em' }, 50);
+    // $('#workerEnquirybtn').removeClass('btn-outline-secondary').addClass('btn-outline-info').animate({ fontSize: '1em' }, 50);
     $('#workerSearch').hide(100)
     this.putWorkerDataValue(worker);
   };
@@ -322,10 +332,11 @@ export class WorkersComponent implements OnInit {
     this.resetValues();
     $('#addNewWorkerBtn').html('اضافة');
     $('#addWorker h2:first').html('اضافة بيانات موظف');
-    $('#showAddWorkerBtn').removeClass("btn-outline-info").addClass("btn-outline-secondary").animate({ fontSize: '1.5em' }, 50);
-    $('#showAddWorkerBtn').attr({'disabled' : true})
-    $('#workerEnquirybtn').removeClass('btn-outline-secondary').addClass('btn-outline-info').animate({ fontSize: '1em' }, 50);
-    $('#workerEnquirybtn').attr({'disabled' : false})
+    this.buttonEffect('#showAddWorkerBtn','#workerEnquirybtn');
+    // $('#showAddWorkerBtn').removeClass("btn-outline-info").addClass("btn-outline-secondary").animate({ fontSize: '1.5em' }, 50);
+    // $('#showAddWorkerBtn').attr({'disabled' : true});
+    // $('#workerEnquirybtn').removeClass('btn-outline-secondary').addClass('btn-outline-info').animate({ fontSize: '1em' }, 50);
+    // $('#workerEnquirybtn').attr({'disabled' : false});
     $('.workerClass').not('#addWorker').hide();
     $('#addWorker').show();
     $('#workerSearch').hide(100);
@@ -334,10 +345,13 @@ export class WorkersComponent implements OnInit {
   showWorkerCard(worker: Worker) {
     this.putWorkerDataValue(worker);
     //this.workerDataView = worker;
+    // this.buttonEffect('#showAddWorkerBtn','#workerEnquirybtn');
+
     $('#showAddWorkerBtn').removeClass('btn-outline-secondary').addClass('btn-outline-info').animate({ fontSize: '1em' }, 50);
     $('#workerEnquirybtn').removeClass('btn-outline-secondary').addClass('btn-outline-info').animate({ fontSize: '1em' }, 50);
     $('#workerEnquirybtn').attr({'disabled' : false});
     $('#showAddWorkerBtn').attr({'disabled' : false});
+    
     $('.workerClass').not('#workerDetails').hide();
     $('#workerDetails').show();
     $('#workerSearch').hide(100)
@@ -346,10 +360,11 @@ export class WorkersComponent implements OnInit {
   showWorkerEnquiry() {
     $('.workerClass').not('#workerEnquiry').hide();
     $('#workerEnquiry').show();
-    $('#workerEnquirybtn').removeClass("btn-outline-info").addClass("btn-outline-secondary").animate({ fontSize: '1.5em' }, 50);
-    $('#showAddWorkerBtn').removeClass('btn-outline-secondary').addClass('btn-outline-info').animate({ fontSize: '1em' }, 50);
-    $('#workerEnquirybtn').attr({'disabled' : true});
-    $('#showAddWorkerBtn').attr({'disabled' : false});
+    this.buttonEffect('#workerEnquirybtn','#showAddWorkerBtn');
+    // $('#workerEnquirybtn').removeClass("btn-outline-info").addClass("btn-outline-secondary").animate({ fontSize: '1.5em' }, 50);
+    // $('#showAddWorkerBtn').removeClass('btn-outline-secondary').addClass('btn-outline-info').animate({ fontSize: '1em' }, 50);
+    // $('#workerEnquirybtn').attr({'disabled' : true});
+    // $('#showAddWorkerBtn').attr({'disabled' : false});
     $('#workerSearch').show(100);
   };
 
@@ -359,6 +374,7 @@ export class WorkersComponent implements OnInit {
     $('#salaryCount h4:first').val(worker.workerCheckIN);
     $('#salaryCount h4:first').next().val(worker.workerCheckOut);
     $('#salaryCount h4:first').next().next().val(worker.workerSalary);
+    //this.buttonEffect('#showAddWorkerBtn','#workerEnquirybtn');
     $('#showAddWorkerBtn').removeClass('btn-outline-secondary').addClass('btn-outline-info').animate({ fontSize: '1em' }, 50);
     $('#workerEnquirybtn').removeClass('btn-outline-secondary').addClass('btn-outline-info').animate({ fontSize: '1em' }, 50);
     $('#workerEnquirybtn').attr({'disabled' : false});

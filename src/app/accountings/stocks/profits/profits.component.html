@@ -1,0 +1,68 @@
+<!--table-->
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-2">
+            <div class="card">
+                <div class="panel-body panel-flex-table">
+                    <table class="flex-table table table-hover">
+                        <thead class="navHeader">
+                            <tr>
+                                <th class="text-center">اسم المخزن</th>
+                            </tr>
+                        </thead>
+                        <tbody class=" mt-3 tableBody">
+                            <tr *ngFor="let stock of _stockService.stocks; let i = index">
+                                <td class="btn btn-light chooseBtn" id="showStockProfits{{i}}" (click)="showStockProfits(stock,i)" style="flex: 3;">{{stock.stockName}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-10">
+            <div class="card" id="profitDetails">
+                <div class="d-flex justify-content-between">
+                    <div class="form-inline">
+                        <h3 class="cardHeader">اجمالى الارباح :</h3>
+                        <h4 class="mr-3 bg-dark p-2 text-light" style="border-radius: 5px;">{{totalProfit}}</h4>
+                        <h4 class="mr-3 bg-danger p-2 text-light" style="border-radius: 5px;">{{totalMin}}</h4>
+                        <h4 class="mr-3 bg-success p-2 text-light" style="border-radius: 5px;">{{totalAdd}}</h4>
+                    </div>
+                    <h3 class="cardHeader ml-3">"{{stockName}}"</h3>
+                </div>
+                
+                <hr>
+                <div class="panel-body panel-flex-table">
+                    <table class="flex-table table table-hover">
+                        <thead class="navHeader">
+                            <tr>
+                                <th>التاريخ</th>
+                                <th>رقم الفاتورة</th>
+                                <th style="flex: 2;">اسم العميل</th>
+                                <th style="flex: 2;">الصنف</th>
+                                <th>العدد</th>
+                                <th>شراء</th>
+                                <th>بيع</th>
+                                <th>ربح</th>
+                                <th>اجمالى ربح</th>
+                            </tr>
+                        </thead>
+                        <tbody class=" mt-3 tableBody">
+                            <tr *ngFor='let profit of profitArr; let i = index'>
+                                <td>{{profit.date}}</td>
+                                <td>{{profit.invNumber}}</td>
+                                <td style="flex: 2;">{{profit.customerName}}</td>
+                                <td style="flex: 2;">{{profit.productName}}</td>
+                                <td>{{profit.Qty}}</td>
+                                <td>{{profit.productCost}}</td>
+                                <td>{{profit.price}}</td>
+                                <td class="{{profit.color}}">{{profit.unitProfit}}</td>
+                                <td class="{{profit.colorTotal}}">{{profit.totalProfit}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -2,6 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { Stock } from '../../../stock';
 import { StocksService } from '../stocks.service';
 import { TheStocksComponent } from '../the-stocks.component';
+import { StockTransactionD } from '../../stock-transaction-d';
+import { trace } from 'console';
+import { ServicesService } from 'src/app/services.service';
 
 @Component({
   selector: 'app-enquire-stocks',
@@ -11,7 +14,7 @@ import { TheStocksComponent } from '../the-stocks.component';
 export class EnquireStocksComponent implements OnInit {
 
   constructor(public _stockService: StocksService,
-    public _theStocksComponent: TheStocksComponent) { }
+    public _theStocksComponent: TheStocksComponent, public _service: ServicesService) { }
 
   ngOnInit() {
     // hide Fade layer
@@ -54,7 +57,7 @@ export class EnquireStocksComponent implements OnInit {
 
   //totalProductsValuInStock: number ; // in stockDetails
   //totalProductsValuArry: any[];
-  showStockDetails(stock: Stock) {
+  showStockDetailsPre(stock: Stock) {
     this._stockService.totalProductsValuInStock = 0;
     //this.totalProductsValuArry = [];
     $('.stocksClass').not('#stockDtails').hide();
@@ -64,20 +67,7 @@ export class EnquireStocksComponent implements OnInit {
     $('#premissionBtn').removeClass('btn-outline-secondary').addClass('btn-outline-info').animate({ fontSize: '1em' }, 50);
     // get the data
     this._theStocksComponent.testBackend();
-    /*
-    for (let i = 0; i < this._stockService.makeStockArry.length; i++) {
-      if (stock.stockId == this._stockService.makeStockArry[i].stockId) {
-        this._stockService.makeStockArryView = this._stockService.makeStockArry[i]
-        this._stockService.productsFromStockArryView = this._stockService.makeStockArry[i].stockProducts;
-        this._stockService.productsFromStockArryView.toLocaleString()
-        console.log(this._stockService.productsFromStockArryView)
-        this._stockService.productsFromStockArryView.filter(
-          product => product.productQty != 0
-        )
-        break
-      }
-    }*/
-    
+
     let getStockProducts = this._stockService.makeStockArry.find(
       stockArr => stockArr.stockId == stock.stockId
     );
@@ -104,6 +94,95 @@ export class EnquireStocksComponent implements OnInit {
     //console.log(this._stockService.productsFromStockArryView)
 
     ////console.log(this.totalProductsValu)
-  }
+  };
+
+  stockProducts: any[];
+
+  showStockDetails(stock: Stock) {
+
+    //{"stockTransactionId":"1589724526163","productId":"12","price":"125","Qty":"50"}
+
+    /* Qty: 171
+    invNumber: "9"
+    price: 0
+    productId: "12"
+    productName: "بن ازرق"
+    sndStockId: "5"
+    stockId: "1"
+    stockName: null
+    stockTransactionId: "1590619524494"
+    transactionType: "3" */
+    $('#containerLoader').fadeIn();
+
+    let tranceArr = [];
+
+    const getTransDetails = new Promise((res) => {
+      this._stockService.allStockProductsTrans().subscribe((data) => {
+        tranceArr = data
+        res('getTransDetails')
+      });
+    });
+
+    const stockProdFactory = () => {
+
+      this.stockProducts = [];
+
+      let products = []
+
+      return new Promise((res) => {
+
+        let filterd = tranceArr.filter(trance => trance.stockId == stock.stockId || trance.sndStockId == stock.stockId);
+
+        for (let i = 0; i < this._stockService.allProducts.length; i++) {
+
+          let addProdArry =
+            filterd.filter(trance => trance.productId == this._stockService.allProducts[i].productId &&
+              trance.transactionType == 1).map(trance => trance.Qty)
+
+          let minProdArry =
+            filterd.filter(trance => trance.productId == this._stockService.allProducts[i].productId &&
+              trance.transactionType == 2).map(trance => trance.Qty);
+
+          let addTrance = filterd.filter(trance => trance.productId == this._stockService.allProducts[i].productId &&
+            trance.transactionType == 3 && trance.sndStockId == stock.stockId).map(trance => trance.Qty);
+
+          let minTrance = filterd.filter(trance => trance.productId == this._stockService.allProducts[i].productId &&
+            trance.transactionType == 3 && trance.sndStockId != stock.stockId).map(trance => trance.Qty);
+
+
+
+          let productDet = {
+            productName: this._stockService.allProducts[i].productName,
+            plus: this._service.sumArry(addProdArry),
+            min: this._service.sumArry(minProdArry),
+            plusTrance: this._service.sumArry(addTrance),
+            minTrance: this._service.sumArry(minTrance),
+            productQty: ((this._service.sumArry(addProdArry) + this._service.sumArry(addTrance)) - (this._service.sumArry(minProdArry) + this._service.sumArry(minTrance)))
+          };
+
+          products = [...products, productDet]
+
+        };
+
+        this._stockService.productsFromStockArryView = products.filter(product => product.productQty != 0);
+
+        console.log(this.stockProducts);
+        res('stockProdFactory');
+      })
+    }
+
+    getTransDetails.then(stockProdFactory).then(() => {
+      this._stockService.totalProductsValuInStock = 0;
+      //this.totalProductsValuArry = [];
+      $('.stocksClass').not('#stockDtails').hide();
+      $('#stockDtails').show();
+      $('#stocksSearch').hide(100);
+      $('#stockBtn').removeClass("btn-outline-info").addClass("btn-outline-secondary").animate({ fontSize: '1.5em' }, 50);
+      $('#premissionBtn').removeClass('btn-outline-secondary').addClass('btn-outline-info').animate({ fontSize: '1em' }, 50);
+
+      $('#containerLoader').fadeOut();
+    });
+
+  };
 
 }

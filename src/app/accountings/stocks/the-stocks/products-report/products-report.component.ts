@@ -5,6 +5,8 @@ import { StocksService } from '../stocks.service';
 import { CustomerService } from 'src/app/customer.service';
 import { FormBuilder } from '@angular/forms';
 import { from } from 'rxjs';
+import { HandleAddPrimBE } from '../../handle-add-prim-be';
+import { Stock } from 'src/app/accountings/stock';
 
 @Component({
   selector: 'app-products-report',
@@ -38,9 +40,9 @@ export class ProductsReportComponent implements OnInit {
       } else {
         this.prodRepFormInvaild = true;
         this.productNameVaild = true;
-      }
-    }
-  }
+      };
+    };
+  };
 
   isStockNameValid() {
     $('#prodDetTable').hide();
@@ -56,12 +58,16 @@ export class ProductsReportComponent implements OnInit {
     } else {
       this.stockNameVaild = false;
       $('#stockNameForProdRep').removeClass('is-invalid')
-    }
-  }
+    };
+  };
 
-  showProductReport() {
+  stockNameInp: string;
 
-    let stockNameForProdRep = $('#stockNameForProdRep').val();
+  showProductReportPre() {
+
+    console.log(this._stockService.HandleAddtoStockPrimArry)
+
+    let stockNameForProdRep = $('#stockNameForProdRep').val(); //
 
     if (stockNameForProdRep == undefined) {
       this.stockNameVaild = true;
@@ -82,23 +88,23 @@ export class ProductsReportComponent implements OnInit {
           if (this._stockService.stocks[s].stockId == this.filteredProducts[i].sndStockId) {
             this.filteredProducts[i].sndStockName = this._stockService.stocks[s].stockName;
             break
-          }
-        }
-      }
+          };
+        };
+      };
 
       this.filteredProducts = this.filteredProducts.filter((stock) => {
         return stock.stockName == stockNameForProdRep || stock.sndStockName == stockNameForProdRep
-      })
+      });
 
       for (let i = 0; i < this.filteredProducts.length; i++) {
 
         if (this.filteredProducts[i].transactionType == 1) {
-          this.filteredProducts[i].transactionName = 'فاتورة شراء'
+          this.filteredProducts[i].transactionName = 'فاتورة شراء';
           this.filteredProducts[i].color = 'text-dark';
           this.filteredProducts[i].minQty = 0;
           this.filteredProducts[i].addQty = this.filteredProducts[i].Qty;
           let date = new Date(this.filteredProducts[i].date_time)
-          let theDate = date.getTime() // date.getFullYear() + '-' + date.getMonth() + '-' + date.getDate(); // 
+          let theDate = date.getTime() // date.getFullYear() + '-' + date.getMonth() + '-' + date.getDate(); //
           this.filteredProducts[i].theDate = theDate;
 
         } else if (this.filteredProducts[i].transactionType == 2) {
@@ -127,7 +133,7 @@ export class ProductsReportComponent implements OnInit {
           let theDate = date.getTime()
           this.filteredProducts[i].theDate = theDate;
         }
-       
+
       }
 
       // singers.sort(compareValues('born', 'desc'));
@@ -161,6 +167,174 @@ export class ProductsReportComponent implements OnInit {
         return date.theDate > fromDate && date.theDate < toDate
       })
     }
+
+  }
+
+  /* 
+  Qty: 200
+  customerId: "11"
+  customerName: "زيزو ابوعبده - حسام"
+  date_time: "2020-05-22T18:24"
+  invNumber: 50
+  invoiceTotal: 26000
+  notes: ""
+  price: 130
+  productId: "12"
+  productName: "بن ازرق"
+  sndStockId: "1"
+  stockId: "3"
+  stockName: "محل حسام"
+  stockTransactionDetailsId: "158"
+  stockTransactionId: "1590164715252"
+  transactionType: "1" 
+  */
+
+
+  showProductReport() {
+
+    //$('#containerLoader').fadeIn();
+
+    const getHandle = new Promise((res, rej) => {
+      this._stockService.getHandleAddtoStockPrimList().subscribe((data: HandleAddPrimBE[]) => {
+        this._stockService.HandleAddtoStockPrimArry = data;
+        res('getHandle')
+      });
+    })
+
+    const theMetod = () => {
+
+      this.filteredProducts = [];
+
+      if (this.productInpt == undefined) {
+
+        this.stockNameVaild = true;
+        $('#stockNameForProdRep').addClass('is-invalid')
+        $('#prodDetTable').hide();
+        this.prodRepFormInvaild = true;
+
+        //rej('productInpt is undefined')
+      } else {
+
+        let mainArry: HandleAddPrimBE[] = [];
+        let theStockInfo: Stock = this._stockService.stocks.find(stock => stock.stockName == this.stockNameInp);
+
+        console.log(theStockInfo)
+
+        let theMainArry =
+          this._stockService.HandleAddtoStockPrimArry.filter((product) => {
+            return product.productName === this.productInpt;
+          })
+
+        mainArry = theMainArry.filter(product => product.stockId == theStockInfo.stockId || product.sndStockId == theStockInfo.stockId);
+
+        console.log(mainArry)
+
+        for (let i = 0; i < mainArry.length; i++) {
+
+          let d = new Date(mainArry[i].date_time)
+
+          let theObj = {
+            date_time: `${d.getFullYear()} / ${d.getMonth()} / ${d.getDate()}`,
+            invNumber: mainArry[i].invNumber,
+            price: mainArry[i].price,
+            customerName: mainArry[i].customerName,
+            transactionName: '',
+            color: '',
+            minQty: 0,
+            addQty: 0,
+            netQty: 0,
+            theDate: d.getTime(),
+          };
+
+          /* theObj
+            theObj
+            theObj
+            theObj */
+
+          if (mainArry[i].transactionType == 1) {
+
+            theObj.transactionName = 'فاتورة شراء';
+            theObj.color = 'text-dark';
+            theObj.minQty = 0;
+            theObj.addQty = mainArry[i].Qty;
+
+          } else if (mainArry[i].transactionType == 2) {
+
+            theObj.transactionName = 'فاتورة بيع'
+            theObj.color = 'text-danger';
+            theObj.minQty = mainArry[i].Qty;
+            theObj.addQty = 0;
+
+          } else if (mainArry[i].transactionType == 3) {
+
+            if (mainArry[i].stockId == theStockInfo.stockId) {
+
+              let sndStockInfo = this._stockService.stocks.find(stock => stock.stockId == mainArry[i].sndStockId)
+              
+              theObj.customerName = sndStockInfo.stockName;
+              theObj.transactionName = 'اذن نقل (خصم)'
+              theObj.color = 'text-danger';
+              theObj.minQty = mainArry[i].Qty;
+              theObj.addQty = 0;
+
+            } else if (mainArry[i].sndStockId == theStockInfo.stockId) {
+              theObj.customerName = theStockInfo.stockName;
+              theObj.transactionName = 'اذن نقل (اضافة)';
+              theObj.color = 'text-dark';
+              theObj.minQty = 0;
+              theObj.addQty = mainArry[i].Qty;
+            };
+
+          };
+
+          this.filteredProducts.push(theObj)
+        };
+
+        this.filteredProducts.sort(this._service.sortArry('theDate'))
+        console.log(this.filteredProducts)
+
+        for (let f = 0; f < this.filteredProducts.length; f++) {
+
+          if (f == 0) {
+            this.filteredProducts[f].netQty = this.filteredProducts[f].addQty - this.filteredProducts[f].minQty;
+          } else {
+            this.filteredProducts[f].netQty = this.filteredProducts[f - 1].netQty + this.filteredProducts[f].addQty - this.filteredProducts[f].minQty;
+          }
+
+        }
+
+        let fromDate = $('#fromDate').val();
+        let toDate = $('#toDate').val();
+
+        fromDate = fromDate + 'T00:00'
+        toDate = toDate + 'T23:59'
+
+        fromDate = new Date(fromDate)
+        toDate = new Date(toDate)
+        fromDate.getTime();
+        toDate.getTime();
+
+        if (fromDate == 'Invalid Date' || toDate == 'Invalid Date') {
+          //console.log('invaildDate')
+        } else {
+          this.filteredProducts = this.filteredProducts.filter((date) => {
+            return date.theDate > fromDate && date.theDate < toDate
+          })
+        }
+
+        //res('theMetoddone')
+      }; // else'
+
+      return Promise.resolve(this.filteredProducts)
+
+    }
+
+    getHandle.then(theMetod).then(() => {
+
+      //$('#containerLoader').fadeOut();
+      $('#prodDetTable').show();
+      
+    });
 
   }
 

@@ -16,60 +16,68 @@
         <hr>
         <div class="d-flex flex-row-reverse">
             <!--fade_addNewApBtn-->
-            <button class="btn btn-outline-info mr-2 fadeBtns" id="fade_addNewApBtn" (click)="showAddToStockPrem_fade()">فاتورة شراء جديدة</button>
+            <button class="btn btn-outline-info mr-2 fadeBtns" id="fade_addNewApBtn"
+                (click)="showAddToStockPrem_fade()">فاتورة شراء جديدة</button>
             <!--fade_minNewApBtn-->
-            <button class="btn btn-outline-info mr-2 fadeBtns" id="fade_minNewApBtn" (click)="showMinToStockPrem_fade()">فاتورة بيع جديدة</button>
+            <button class="btn btn-outline-info mr-2 fadeBtns" id="fade_minNewApBtn"
+                (click)="showMinToStockPrem_fade()">فاتورة بيع جديدة</button>
             <!--fade_showTranceStockPrem-->
-            <button class="btn btn-outline-info mr-2 fadeBtns" id="fade_showTranceStockPrem" (click)="showTranceStockPrem_fade()">اذن مخزن جديد</button>
+            <button class="btn btn-outline-info mr-2 fadeBtns" id="fade_showTranceStockPrem"
+                (click)="showTranceStockPrem_fade()">اذن مخزن جديد</button>
             <!--backToTheStart-showTranceStockPrem-->
-            <button class="btn btn-outline-secondary" id="Hidefade_addNewApBtn" (click)='showStocksEnquiry_fade()'>الرئيسية</button>
+            <button class="btn btn-outline-secondary" id="Hidefade_addNewApBtn"
+                (click)='showStocksEnquiry_fade()'>الرئيسية</button>
         </div>
     </div>
 </div>
 <!--header-->
-<div class="container-fluid p-3 card mt-3 navHeader sticky-top" id="mainStockHeader">
+<div class="navHeader theNav" id="mainStockHeader">
     <nav class="navbar">
         <div class="form-inline">
             <h1 class="px-2" style="font-weight: bold;">المخازن</h1>
             <div class="headerLeftBorder"></div>
             <!--stocks-->
+            <!-- height: 70px; -->
             <div class="dropdown">
-                <button class="btn btn-outline-secondary dropdown-toggle mx-2" type="button" id="stockBtn"
-                    style="height: 70px; font-size: 1.5em;" data-toggle="dropdown" aria-haspopup="true"
-                    aria-expanded="false">
+                <button class="btn btn-outline-secondary dropdown-toggle mx-2 headerMainBtn" type="button" id="stockBtn"
+                    style=" font-size: 1.5em;" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     بيانات المخازن
                 </button>
                 <div class="dropdown-menu p-1" aria-labelledby="dropdownMenuButton">
                     <div class="dropDownItemBorder">
-                        <button class="dropdown-item text-right" id="showStocksEnquiry"
+                        <button class="dropdown-item btn-secondary text-right" id="showStocksEnquiry"
                             (click)="showStocksEnquiry()">جرد مخازن</button>
-                        <button class="dropdown-item text-right" id="showAddNewStock" (click)="showAddNewStock()">اضافة
+                        <button class="dropdown-item btn-secondary text-right" id="showAddNewStock"
+                            (click)="showAddNewStock()">اضافة
                             مخزن</button>
                     </div>
                     <!--products-->
                     <div>
-                        <button class="dropdown-item text-right" id="showAddNewProduct"
+                        <button class="dropdown-item btn-secondary text-right" id="showAddNewProduct"
                             (click)="showAddNewProduct()">اضافة صنف</button>
-                        <button class="dropdown-item text-right" id="showProductsReport"
+                        <button class="dropdown-item btn-secondary text-right" id="showProductsReport"
                             (click)="showProductsReport()">تقرير حركة صنف</button>
                     </div>
                 </div>
+
             </div>
             <!--premissionInvoice-->
+            <!-- style="height: 70px;" -->
             <div class="dropdown">
-                <button class="btn btn-outline-info dropdown-toggle mx-2" type="button" id="premissionBtn" style="height: 70px;"
+                <button class="btn btn-outline-info dropdown-toggle mx-2 headerMainBtn" type="button" id="premissionBtn"
                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     فواتير
                 </button>
                 <div class="dropdown-menu p-1" aria-labelledby="dropdownMenuButton">
-                    <button class="dropdown-item text-right" id="showAddToStockPrem"
+                    <button class="dropdown-item btn-secondary text-right" id="showAddToStockPrem"
                         (click)="showAddToStockPrem()">فاتورة شراء</button>
-                    <button class="dropdown-item text-right" id="showMinToStockPrem"
+                    <button class="dropdown-item btn-secondary text-right" id="showMinToStockPrem"
                         (click)="showMinToStockPrem()">فاتور بيع</button>
-                    <button class="dropdown-item text-right" id="showTranceStockPrem"
+                    <button class="dropdown-item btn-secondary text-right" id="showTranceStockPrem"
                         (click)="showTranceStockPrem()">اذن مخزن</button>
                 </div>
             </div>
+            <button class="btn btn-outline-info mx-2 headerMainBtn" id="showProfitsBtn" (click)="showProfits()">الارباح</button>
             <button class="btn btn-success mx-2 d-none" id="testBtn" (click)='testbtn()'>test</button>
             <div class="headerLeftBorder"></div>
             <input *ngIf="router.url === '/stocks'" [(ngModel)]="searchTxt" placeholder="بحث" class="form-control mx-3"
@@ -93,3 +101,5 @@
 <app-min-frm-stock-permission class="stocksClass" id="minFrmStockPrem"></app-min-frm-stock-permission>
 <!--tranceFrmStockPrem-->
 <app-stoc-trance-prem class="stocksClass" id="tranceFrmStockPrem"></app-stoc-trance-prem>
+<!-- profits -->
+<app-profits class="stocksClass" id="profits"></app-profits>

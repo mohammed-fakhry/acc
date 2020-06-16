@@ -12,430 +12,433 @@
     </div>
 </div>
 <!--header-->
-<div class="container-fluid p-3 navHeader card mt-3 sticky-top">
+<!-- style="height: 70px;" -->
+<div class="navHeader theNav">
     <nav class="navbar">
         <div class="form-inline">
             <h1 class="px-2 cardHeader" style="font-weight: bold;">العاملين</h1>
             <div class="headerLeftBorder"></div>
-            <button class="btn btn-outline-info mx-2" style="height: 70px;" id="showAddWorkerBtn"
-                (click)="ShowAddNewWorker()">اضافة</button>
-            <button class="btn btn-outline-secondary mx-2" style="height: 70px;font-size: 1.5em;" id="workerEnquirybtn"
+            <button class="btn btn-outline-info mx-2" id="showAddWorkerBtn" (click)="ShowAddNewWorker()">اضافة</button>
+            <button class="btn btn-outline-secondary mx-2" style="font-size: 1.5em;" id="workerEnquirybtn"
                 (click)="showWorkerEnquiry()" disabled>استعلام</button>
             <div class="headerLeftBorder"></div>
             <input *ngIf="router.url === '/workers'" [(ngModel)]="searchTxt" placeholder="بحث" class="form-control mx-3"
                 id="workerSearch">
         </div>
-
-        <button class="btn btn-outline-secondary mx-2 px-3 float-left text-info" style="font-size: 2em;"
+        <button class="btn btn-outline-secondary mx-2 float-left text-info" style="font-size: 2em;"
             (click)="showWorkerSetting()"><i class="fa fa-cog"></i></button>
     </nav>
 </div>
-<!--addWorker-->
-<div class="container-fluid  mt-3 card inpCard workerClass" id="addWorker">
-    <div class="p-4">
-        <h2 class="pb-3 cardHeader">اضافة بيانات موظف</h2>
-        <form [formGroup]='workerData' (ngSubmit)="addNewWorker()" class="pt-3">
-            <div class="row">
-                <input formControlName="workerId" id="workerId" class="form-control d-none">
+<div class="mainContainer">
+    <!--addWorker-->
+    <div class="mt-3 card inpCard workerClass" id="addWorker">
+        <div class="p-3">
+            <h2 class="pb-3 cardHeader">اضافة بيانات موظف</h2>
+            <form [formGroup]='workerData' (ngSubmit)="addNewWorker()" class="pt-3">
+                <div class="row">
+                    <input formControlName="workerId" id="workerId" class="form-control d-none">
 
-                <div class="form-group col-md-6">
-                    <label>الاسم</label>
-                    <input formControlName="workerName" id="workerName" class="form-control" (change)='isValid()'>
-                    <div *ngIf='workerData.controls.workerName.touched&&workerData.controls.workerName.errors!=null'
-                    class="text-danger">يجب ادخال على الاقل 5 احرف</div>
-                </div>
-                
-                <!---<h3 *ngIf="workerName.touched && workerName.hasError('required')">غير صحيح</h3>-[(ngModel)]="workerDataView.workerName"-->
+                    <div class="form-group col-md-6">
+                        <label>الاسم</label>
+                        <input formControlName="workerName" id="workerName" class="form-control" (change)='isValid()'>
+                        <div *ngIf='workerData.controls.workerName.touched&&workerData.controls.workerName.errors!=null'
+                            class="text-danger">يجب ادخال على الاقل 5 احرف</div>
+                    </div>
 
-                <div class="form-group col-md-6">
-                    <label>تليفون</label>
-                    <input formControlName="workerTell" id="workerTell" class="form-control">
-                    <div *ngIf='workerData.controls.workerTell.touched&&workerData.controls.workerTell.errors!=null'
-                        class="text-danger">رقم الهاتف مكون من 11 رقم</div>
-                    <!--[(ngModel)]="workerDataView.workerTell"-->
+                    <!---<h3 *ngIf="workerName.touched && workerName.hasError('required')">غير صحيح</h3>-[(ngModel)]="workerDataView.workerName"-->
+
+                    <div class="form-group col-md-6">
+                        <label>تليفون</label>
+                        <input formControlName="workerTell" id="workerTell" class="form-control">
+                        <div *ngIf='workerData.controls.workerTell.touched&&workerData.controls.workerTell.errors!=null'
+                            class="text-danger">رقم الهاتف مكون من 11 رقم</div>
+                        <!--[(ngModel)]="workerDataView.workerTell"-->
+                    </div>
                 </div>
-            </div>
-            <div class="form-group">
-                <label>العنوان</label>
-                <input formControlName="workerAdd" id="workerAdd" class="form-control">
-                <div *ngIf='workerData.controls.workerAdd.touched&&workerData.controls.workerAdd.errors!=null'
+                <div class="form-group">
+                    <label>العنوان</label>
+                    <input formControlName="workerAdd" id="workerAdd" class="form-control">
+                    <div *ngIf='workerData.controls.workerAdd.touched&&workerData.controls.workerAdd.errors!=null'
                         class="text-danger">يجب ادخال هذا الحقل</div>
-                <!--[(ngModel)]="workerDataView.workerAdd"-->
-            </div>
-            <div class="row">
-                <div class="form-group col-md-6">
-                    <label>الادارة</label>
-                    <input formControlName="workerJopCateg" id="workerJopCateg" class="form-control">
-                    <div *ngIf='workerData.controls.workerJopCateg.touched&&workerData.controls.workerJopCateg.errors!=null'
-                        class="text-danger">يجب ادخال هذا الحقل</div>
-                    <!--[(ngModel)]="workerDataView.workerJopCateg"-->
+                    <!--[(ngModel)]="workerDataView.workerAdd"-->
                 </div>
-                <div class="form-group col-md-6">
-                    <label>الوظيفة</label>
-                    <input formControlName="workerJop" id="workerJop" class="form-control">
-                    <div *ngIf='workerData.controls.workerJop.touched&&workerData.controls.workerJop.errors!=null'
-                        class="text-danger">يجب ادخال هذا الحقل</div>
-                    <!--[(ngModel)]="workerDataView.workerJop"-->
+                <div class="row">
+                    <div class="form-group col-md-6">
+                        <label>الادارة</label>
+                        <input formControlName="workerJopCateg" id="workerJopCateg" class="form-control">
+                        <div *ngIf='workerData.controls.workerJopCateg.touched&&workerData.controls.workerJopCateg.errors!=null'
+                            class="text-danger">يجب ادخال هذا الحقل</div>
+                        <!--[(ngModel)]="workerDataView.workerJopCateg"-->
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>الوظيفة</label>
+                        <input formControlName="workerJop" id="workerJop" class="form-control">
+                        <div *ngIf='workerData.controls.workerJop.touched&&workerData.controls.workerJop.errors!=null'
+                            class="text-danger">يجب ادخال هذا الحقل</div>
+                        <!--[(ngModel)]="workerDataView.workerJop"-->
+                    </div>
                 </div>
-            </div>
-            <div class="row">
-                <div class="form-group col-md-6">
-                    <label>كود البصمة</label>
-                    <input formControlName="workerFbCode" id="workerFbCode" class="form-control">
-                    <div *ngIf='workerData.controls.workerFbCode.touched&&workerData.controls.workerFbCode.errors!=null'
-                        class="text-danger">يجب ادخال هذا الحقل</div>
-                    <!--[(ngModel)]="workerDataView.workerFbCode"-->
-                </div>
-                <div class="form-group col-md-6">
-                    <label>تاريخ استلام العمل</label>
-                    <input formControlName="workerJopDate" id="workerJopDate" placeholder="dd-mm-yyyy"
-                        class="form-control">
+                <div class="row">
+                    <div class="form-group col-md-6">
+                        <label>كود البصمة</label>
+                        <input formControlName="workerFbCode" id="workerFbCode" class="form-control">
+                        <div *ngIf='workerData.controls.workerFbCode.touched&&workerData.controls.workerFbCode.errors!=null'
+                            class="text-danger">يجب ادخال هذا الحقل</div>
+                        <!--[(ngModel)]="workerDataView.workerFbCode"-->
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>تاريخ استلام العمل</label>
+                        <input formControlName="workerJopDate" id="workerJopDate" placeholder="dd-mm-yyyy"
+                            class="form-control">
                         <div *ngIf='workerData.controls.workerJopDate.touched&&workerData.controls.workerJopDate.errors!=null'
-                        class="text-danger">notVaild</div>
-                    <!--[(ngModel)]="workerDataView.workerJopDate"-->
-                    <!--type="date"-->
+                            class="text-danger">notVaild</div>
+                        <!--[(ngModel)]="workerDataView.workerJopDate"-->
+                        <!--type="date"-->
+                    </div>
                 </div>
-            </div>
-            <div class="row">
-                <div class="form-group col-md-6">
-                    <label>الراتب</label>
-                    <input formControlName="workerSalary" id="workerSalary" class="form-control">
-                    <div *ngIf='workerData.controls.workerSalary.touched&&workerData.controls.workerSalary.errors!=null'
-                        class="text-danger">يجب ادخال هذا الحقل</div>
-                    <!--[(ngModel)]="workerDataView.workerSalary"-->
+                <div class="row">
+                    <div class="form-group col-md-6">
+                        <label>الراتب</label>
+                        <input formControlName="workerSalary" id="workerSalary" class="form-control">
+                        <div *ngIf='workerData.controls.workerSalary.touched&&workerData.controls.workerSalary.errors!=null'
+                            class="text-danger">يجب ادخال هذا الحقل</div>
+                        <!--[(ngModel)]="workerDataView.workerSalary"-->
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>اجازة سنوية</label>
+                        <input formControlName="workerYearVacation" id="workerYearVacation" class="form-control">
+                        <div *ngIf='workerData.controls.workerYearVacation.touched&&workerData.controls.workerYearVacation.errors!=null'
+                            class="text-danger">notVaild</div>
+                        <!--[(ngModel)]="workerDataView.workerYearVacation"-->
+                    </div>
                 </div>
-                <div class="form-group col-md-6">
-                    <label>اجازة سنوية</label>
-                    <input formControlName="workerYearVacation" id="workerYearVacation" class="form-control">
-                    <div *ngIf='workerData.controls.workerYearVacation.touched&&workerData.controls.workerYearVacation.errors!=null'
-                        class="text-danger">notVaild</div>
-                    <!--[(ngModel)]="workerDataView.workerYearVacation"-->
-                </div>
-            </div>
-            <div class="row">
-                <div class="form-group col-md-6">
-                    <label>وقت الحضور</label>
-                    <input formControlName="workerCheckIN" id="workerCheckIN" type="time" placeholder="hh:mm"
-                        class="form-control">
+                <div class="row">
+                    <div class="form-group col-md-6">
+                        <label>وقت الحضور</label>
+                        <input formControlName="workerCheckIN" id="workerCheckIN" type="time" placeholder="hh:mm"
+                            class="form-control">
                         <div *ngIf='workerData.controls.workerCheckIN.touched&&workerData.controls.workerCheckIN.errors!=null'
-                        class="text-danger">يجب ادخال هذا الحقل</div>
-                    <!--[(ngModel)]="workerDataView.workerCheckIN"-->
-                    <!--type="time"-->
-                </div>
-                <div class="form-group col-md-6">
-                    <label>وقت الانصراف</label>
-                    <input formControlName="workerCheckOut" type="time" placeholder="hh:mm" id="workerCheckOut"
-                        class="form-control">
+                            class="text-danger">يجب ادخال هذا الحقل</div>
+                        <!--[(ngModel)]="workerDataView.workerCheckIN"-->
+                        <!--type="time"-->
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>وقت الانصراف</label>
+                        <input formControlName="workerCheckOut" type="time" placeholder="hh:mm" id="workerCheckOut"
+                            class="form-control">
                         <div *ngIf='workerData.controls.workerCheckOut.touched&&workerData.controls.workerCheckOut.errors!=null'
-                        class="text-danger">يجب ادخال هذا الحقل</div>
-                    <!--[(ngModel)]="workerDataView.workerCheckOut"-->
-                    <!--type="time"-->
+                            class="text-danger">يجب ادخال هذا الحقل</div>
+                        <!--[(ngModel)]="workerDataView.workerCheckOut"-->
+                        <!--type="time"-->
+                    </div>
                 </div>
-            </div>
-            <button class="btn btn-outline-primary ml-2" [disabled]="workerData.invalid" type="submit"
-                id="addNewWorkerBtn"></button>
-        </form>
+                <button class="btn btn-outline-primary ml-2" [disabled]="workerData.invalid" type="submit"
+                    id="addNewWorkerBtn"></button>
+            </form>
 
-    </div>
-</div>
-<!--workerEnquiry-->
-<div class="container-fluid card  mt-3 p-5 workerClass" id="workerEnquiry">
-    <div class="panel-body panel-flex-table">
-        <table class="flex-table table table-hover">
-            <thead class="navHeader text-light">
-                <tr>
-                    <th>الاسم</th>
-                    <th>تليفون</th>
-                    <th>الوظيفة</th>
-                    <th>العنوان</th>
-                    <th>بيانات</th>
-                    <th>حساب المرتب</th>
-                    <th>تعديل</th>
-                    <th>حذف</th>
-                </tr>
-            </thead>
-            <tbody class=" mt-3 tableBody">
-                <tr *ngFor="let worker of workers|search:searchTxt">
-                    <td>{{worker.workerName}}</td>
-                    <td>{{worker.workerTell}}</td>
-                    <td>{{worker.workerJop}}</td>
-                    <td>{{worker.workerAdd}}</td>
-                    <td><button class="btn btn-outline-secondary ml-2" id="showWorkerCard" (click)="showWorkerCard(worker)"><i
-                                class="fa fa-id-card"></i></button></td>
-                    <td><button class="btn btn-outline-info ml-2" id="showSalaryCountBtn" (click)="showSalaryCount(worker)"><i
-                                class="fa fa-calculator"></i></button></td>
-                    <td><button class="btn btn-outline-success ml-2" id="showUpdateWorker" (click)="showUpdateWorker(worker)"><i
-                                class="fa fa-edit"></i></button></td>
-                    <td><button class="btn btn-danger ml-2" (click)="askForDelete(worker)"><i
-                                class="fa fa-trash"></i></button></td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-</div>
-<!--salaryCount-->
-<div class="container-fluid card  mt-3 workerClass" id="salaryCount" style="overflow-y: auto;">
-    <input class="d-none" id="theIndx">
-    <div>
-        <h2 class="mt-3" style="text-align: center;">{{workerData.value.workerName}}</h2>
-        <div class="d-flex justify-content-center">
-            <h5 class="mr-3">(حضور : {{workerData.value.workerCheckIN}})</h5>
-            <h5 class="mr-3">(انصراف : {{workerData.value.workerCheckOut}})</h5>
-            <h5 class="mr-3">(راتب : {{workerData.value.workerSalary}})</h5>
         </div>
-        <hr class="text-center">
+    </div>
+    <!--workerEnquiry-->
+    <div class="card  mt-3 workerClass" id="workerEnquiry">
+        <div class="panel-body panel-flex-table">
+            <table class="flex-table table table-hover">
+                <thead class="navHeader text-light">
+                    <tr>
+                        <th>الاسم</th>
+                        <th>تليفون</th>
+                        <th>الوظيفة</th>
+                        <th>العنوان</th>
+                        <th>بيانات</th>
+                        <th>حساب المرتب</th>
+                        <th>تعديل</th>
+                        <th>حذف</th>
+                    </tr>
+                </thead>
+                <tbody class=" mt-3 tableBody">
+                    <tr *ngFor="let worker of workers|search:searchTxt">
+                        <td>{{worker.workerName}}</td>
+                        <td>{{worker.workerTell}}</td>
+                        <td>{{worker.workerJop}}</td>
+                        <td>{{worker.workerAdd}}</td>
+                        <td><button class="btn btn-outline-secondary ml-2" id="showWorkerCard"
+                                (click)="showWorkerCard(worker)"><i class="fa fa-id-card"></i></button></td>
+                        <td><button class="btn btn-outline-info ml-2" id="showSalaryCountBtn"
+                                (click)="showSalaryCount(worker)"><i class="fa fa-calculator"></i></button></td>
+                        <td><button class="btn btn-outline-success ml-2" id="showUpdateWorker"
+                                (click)="showUpdateWorker(worker)"><i class="fa fa-edit"></i></button></td>
+                        <td><button class="btn btn-danger ml-2" (click)="askForDelete(worker)"><i
+                                    class="fa fa-trash"></i></button></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <!--salaryCount-->
+    <div class="card  mt-3 workerClass" id="salaryCount" style="overflow-y: auto;">
+        <input class="d-none" id="theIndx">
+        <div>
+            <h2 class="mt-3" style="text-align: center;">{{workerData.value.workerName}}</h2>
+            <div class="d-flex justify-content-center">
+                <h5 class="mr-3">(حضور : {{workerData.value.workerCheckIN}})</h5>
+                <h5 class="mr-3">(انصراف : {{workerData.value.workerCheckOut}})</h5>
+                <h5 class="mr-3">(راتب : {{workerData.value.workerSalary}})</h5>
+            </div>
+            <hr class="text-center">
+            <table class="table table-hover mt-3">
+                <thead class="navHeader text-light">
+                    <tr>
+                        <th>بيان</th>
+                        <th>الاحد</th>
+                        <th>الاثنين</th>
+                        <th>الثلاثاء</th>
+                        <th>الاربعاء</th>
+                        <th>الخميس</th>
+                        <th>الجمعة</th>
+                        <th>السبت</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>حضور</td>
+                        <td><input [(ngModel)]="fst" (change)="reCount()" type="time" class="form-control"></td>
+                        <td><input [(ngModel)]="snd" (change)="reCount()" type="time" class="form-control"></td>
+                        <td><input [(ngModel)]="thrd" (change)="reCount()" type="time" class="form-control"></td>
+                        <td><input [(ngModel)]="forth" (change)="reCount()" type="time" class="form-control"></td>
+                        <td><input [(ngModel)]="fif" (change)="reCount()" type="time" class="form-control"></td>
+                        <td><input [(ngModel)]="six" (change)="reCount()" type="time" class="form-control"></td>
+                        <td><input [(ngModel)]="sev" (change)="reCount()" type="time" class="form-control"></td>
+                    </tr>
+                    <tr>
+                        <td>انصراف</td>
+                        <td><input [(ngModel)]="fstO" (change)="reCount()" type="time" class="form-control"></td>
+                        <td><input [(ngModel)]="sndO" (change)="reCount()" type="time" class="form-control"></td>
+                        <td><input [(ngModel)]="thrdO" (change)="reCount()" type="time" class="form-control"></td>
+                        <td><input [(ngModel)]="forthO" (change)="reCount()" type="time" class="form-control"></td>
+                        <td><input [(ngModel)]="fifO" (change)="reCount()" type="time" class="form-control"></td>
+                        <td><input [(ngModel)]="sixO" (change)="reCount()" type="time" class="form-control"></td>
+                        <td><input [(ngModel)]="sevO" (change)="reCount()" type="time" class="form-control"></td>
+                    </tr>
+                    <tr style="border-top: solid 5px black;">
+                        <td>تأخير | غياب</td>
+                        <td>{{checkInDailyMinutes[0]}}</td>
+                        <td>{{checkInDailyMinutes[1]}}</td>
+                        <td>{{checkInDailyMinutes[2]}}</td>
+                        <td>{{checkInDailyMinutes[3]}}</td>
+                        <td>{{checkInDailyMinutes[4]}}</td>
+                        <td>{{checkInDailyMinutes[5]}}</td>
+                        <td>{{checkInDailyMinutes[6]}}</td>
+                    </tr>
+                    <tr>
+                        <td>وقت اضافى</td>
+                        <td>{{checkOutDailyMinutes[0]}}</td>
+                        <td>{{checkOutDailyMinutes[1]}}</td>
+                        <td>{{checkOutDailyMinutes[2]}}</td>
+                        <td>{{checkOutDailyMinutes[3]}}</td>
+                        <td>{{checkOutDailyMinutes[4]}}</td>
+                        <td>{{checkOutDailyMinutes[5]}}</td>
+                        <td>{{checkOutDailyMinutes[6]}}</td>
+                    </tr>
+                    <tr style="border-top: solid 2px black;">
+                        <td>صافى دقائق</td>
+                        <td>{{dailyResultDArry[0]}}</td>
+                        <td>{{dailyResultDArry[1]}}</td>
+                        <td>{{dailyResultDArry[2]}}</td>
+                        <td>{{dailyResultDArry[3]}}</td>
+                        <td>{{dailyResultDArry[4]}}</td>
+                        <td>{{dailyResultDArry[5]}}</td>
+                        <td>{{dailyResultDArry[6]}}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <hr>
+            <div class="form-inline ml-2">
+                <div class="form-group">
+                    <label class="ml-2">مسحوبات</label>
+                    <input class="form-control" [(ngModel)]="moneyOut">
+                </div>
+                <button class="btn btn-outline-success mr-3" type="submit"
+                    (click)="calc(workerData.value)">حساب</button>
+            </div>
+
+        </div>
+
         <table class="table table-hover mt-3">
             <thead class="navHeader text-light">
                 <tr>
-                    <th>بيان</th>
-                    <th>الاحد</th>
-                    <th>الاثنين</th>
-                    <th>الثلاثاء</th>
-                    <th>الاربعاء</th>
-                    <th>الخميس</th>
-                    <th>الجمعة</th>
-                    <th>السبت</th>
+                    <th>اجمالى تأخير</th>
+                    <th>اجمالى اضافى</th>
+                    <th>صافى/د</th>
+                    <th>اجمالى غياب</th>
+                    <th id="discOrOver">اجمالى خصم</th>
+                    <th>اجمالى مستحق</th>
+                    <th class="darkBg text-light font-weight-bolder">صافى راتب</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
-                    <td>حضور</td>
-                    <td><input [(ngModel)]="fst" (change)="reCount()" type="time" class="form-control"></td>
-                    <td><input [(ngModel)]="snd" (change)="reCount()" type="time" class="form-control"></td>
-                    <td><input [(ngModel)]="thrd" (change)="reCount()" type="time" class="form-control"></td>
-                    <td><input [(ngModel)]="forth" (change)="reCount()" type="time" class="form-control"></td>
-                    <td><input [(ngModel)]="fif" (change)="reCount()" type="time" class="form-control"></td>
-                    <td><input [(ngModel)]="six" (change)="reCount()" type="time" class="form-control"></td>
-                    <td><input [(ngModel)]="sev" (change)="reCount()" type="time" class="form-control"></td>
-                </tr>
-                <tr>
-                    <td>انصراف</td>
-                    <td><input [(ngModel)]="fstO" (change)="reCount()" type="time" class="form-control"></td>
-                    <td><input [(ngModel)]="sndO" (change)="reCount()" type="time" class="form-control"></td>
-                    <td><input [(ngModel)]="thrdO" (change)="reCount()" type="time" class="form-control"></td>
-                    <td><input [(ngModel)]="forthO" (change)="reCount()" type="time" class="form-control"></td>
-                    <td><input [(ngModel)]="fifO" (change)="reCount()" type="time" class="form-control"></td>
-                    <td><input [(ngModel)]="sixO" (change)="reCount()" type="time" class="form-control"></td>
-                    <td><input [(ngModel)]="sevO" (change)="reCount()" type="time" class="form-control"></td>
-                </tr>
-                <tr style="border-top: solid 5px black;">
-                    <td>تأخير | غياب</td>
-                    <td>{{checkInDailyMinutes[0]}}</td>
-                    <td>{{checkInDailyMinutes[1]}}</td>
-                    <td>{{checkInDailyMinutes[2]}}</td>
-                    <td>{{checkInDailyMinutes[3]}}</td>
-                    <td>{{checkInDailyMinutes[4]}}</td>
-                    <td>{{checkInDailyMinutes[5]}}</td>
-                    <td>{{checkInDailyMinutes[6]}}</td>
-                </tr>
-                <tr>
-                    <td>وقت اضافى</td>
-                    <td>{{checkOutDailyMinutes[0]}}</td>
-                    <td>{{checkOutDailyMinutes[1]}}</td>
-                    <td>{{checkOutDailyMinutes[2]}}</td>
-                    <td>{{checkOutDailyMinutes[3]}}</td>
-                    <td>{{checkOutDailyMinutes[4]}}</td>
-                    <td>{{checkOutDailyMinutes[5]}}</td>
-                    <td>{{checkOutDailyMinutes[6]}}</td>
-                </tr>
-                <tr style="border-top: solid 2px black;">
-                    <td>صافى دقائق</td>
-                    <td>{{dailyResultDArry[0]}}</td>
-                    <td>{{dailyResultDArry[1]}}</td>
-                    <td>{{dailyResultDArry[2]}}</td>
-                    <td>{{dailyResultDArry[3]}}</td>
-                    <td>{{dailyResultDArry[4]}}</td>
-                    <td>{{dailyResultDArry[5]}}</td>
-                    <td>{{dailyResultDArry[6]}}</td>
+                    <td>{{result}}</td>
+                    <td>{{resultO}}</td>
+                    <td>{{net}}</td>
+                    <td>{{counter}}</td>
+                    <td>{{totalDisc}}</td>
+                    <td>{{total}}</td>
+                    <td class="darkBg text-light font-weight-bolder" style="font-size: 1.2em;">{{netSalary}}</td>
                 </tr>
             </tbody>
         </table>
-        <hr>
-        <div class="form-inline ml-2">
-            <div class="form-group">
-                <label class="ml-2">مسحوبات</label>
-                <input class="form-control" [(ngModel)]="moneyOut">
-            </div>
-            <button class="btn btn-outline-success mr-3" type="submit" (click)="calc(workerData.value)">حساب</button>
-        </div>
-
     </div>
-
-    <table class="table table-hover mt-3">
-        <thead class="navHeader text-light">
-            <tr>
-                <th>اجمالى تأخير</th>
-                <th>اجمالى اضافى</th>
-                <th>صافى/د</th>
-                <th>اجمالى غياب</th>
-                <th id="discOrOver">اجمالى خصم</th>
-                <th>اجمالى مستحق</th>
-                <th class="darkBg text-light font-weight-bolder">صافى راتب</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>{{result}}</td>
-                <td>{{resultO}}</td>
-                <td>{{net}}</td>
-                <td>{{counter}}</td>
-                <td>{{totalDisc}}</td>
-                <td>{{total}}</td>
-                <td class="darkBg text-light font-weight-bolder" style="font-size: 1.2em;">{{netSalary}}</td>
-            </tr>
-        </tbody>
-    </table>
-</div>
-<!--workerDetails-->
-<div class="container-fluid mt-3 workerClass" id="workerDetails" style="display: none;">
-    <div class="row">
-        <div class="col-md-6">
-            <div class="card ">
-                <div class="card-body">
-                    <!---->
-                    <h3 class="card-title cardHeader">{{workerData.value.workerName}}</h3>
-                    <h5 class="card-text pb-3" style="border-bottom: solid 1.5px teal;">{{workerData.value.workerTell}}
-                    </h5>
-                    <!---->
-                    <div class="form-inline mt-3">
-                        <h5 class="cardHeader">العنوان : </h5>
-                        <h5 class="mr-2">{{workerData.value.workerAdd}}</h5>
+    <!--workerDetails-->
+    <div class="mt-3 workerClass" id="workerDetails" style="display: none;">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card ">
+                    <div class="card-body">
+                        <!---->
+                        <h3 class="card-title cardHeader">{{workerData.value.workerName}}</h3>
+                        <h5 class="card-text pb-3" style="border-bottom: solid 1.5px teal;">
+                            {{workerData.value.workerTell}}
+                        </h5>
+                        <!---->
+                        <div class="form-inline mt-3">
+                            <h5 class="cardHeader">العنوان : </h5>
+                            <h5 class="mr-2">{{workerData.value.workerAdd}}</h5>
+                        </div>
+                        <hr class="text-center">
+                        <!---->
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-inline">
+                                    <h5 class="cardHeader">الادارة : </h5>
+                                    <h5 class="mr-2">{{workerData.value.workerJopCateg}}</h5>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-inline">
+                                    <h5 class="cardHeader">الوظيفة : </h5>
+                                    <h5 class="mr-2">{{workerData.value.workerJop}}</h5>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-inline">
+                                    <h5 class="cardHeader">من تاريخ : </h5>
+                                    <h5 class="mr-2">{{workerData.value.workerJopDate}}</h5>
+                                </div>
+                            </div>
+                        </div>
+                        <!---->
                     </div>
-                    <hr class="text-center">
-                    <!---->
-                    <div class="row">
-                        <div class="col-md-4">
-                            <div class="form-inline">
-                                <h5 class="cardHeader">الادارة : </h5>
-                                <h5 class="mr-2">{{workerData.value.workerJopCateg}}</h5>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-inline">
-                                <h5 class="cardHeader">الوظيفة : </h5>
-                                <h5 class="mr-2">{{workerData.value.workerJop}}</h5>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-inline">
-                                <h5 class="cardHeader">من تاريخ : </h5>
-                                <h5 class="mr-2">{{workerData.value.workerJopDate}}</h5>
-                            </div>
-                        </div>
-                    </div>
-                    <!---->
                 </div>
-            </div>
 
-        </div>
-        <div class="col-md-6">
-            <div class="card ">
-                <div class="card-body">
-                    <!---->
-                    <div class="row">
-                        <div class="col-md-4">
-                            <div class="form-inline">
-                                <h5 class="cardHeader">راتب : </h5>
-                                <h5 class="mr-2">{{workerData.value.workerSalary}}</h5>
+            </div>
+            <div class="col-md-6">
+                <div class="card ">
+                    <div class="card-body">
+                        <!---->
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-inline">
+                                    <h5 class="cardHeader">راتب : </h5>
+                                    <h5 class="mr-2">{{workerData.value.workerSalary}}</h5>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-inline">
+                                    <h5 class="cardHeader">حضور : </h5>
+                                    <h5 class="mr-2">{{workerData.value.workerCheckIN}}</h5>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-inline">
+                                    <h5 class="cardHeader">انصراف : </h5>
+                                    <h5 class="mr-2">{{workerData.value.workerCheckOut}}</h5>
+                                </div>
                             </div>
                         </div>
-                        <div class="col-md-4">
-                            <div class="form-inline">
-                                <h5 class="cardHeader">حضور : </h5>
-                                <h5 class="mr-2">{{workerData.value.workerCheckIN}}</h5>
-                            </div>
+                        <!---->
+                        <hr class="text-center">
+                        <div class="form-inline">
+                            <h5 class="cardHeader">كود البصمة : </h5>
+                            <h5 class="mr-2">{{workerData.value.workerFbCode}}</h5>
                         </div>
-                        <div class="col-md-4">
-                            <div class="form-inline">
-                                <h5 class="cardHeader">انصراف : </h5>
-                                <h5 class="mr-2">{{workerData.value.workerCheckOut}}</h5>
-                            </div>
-                        </div>
+                        <!---->
                     </div>
-                    <!---->
-                    <hr class="text-center">
-                    <div class="form-inline">
-                        <h5 class="cardHeader">كود البصمة : </h5>
-                        <h5 class="mr-2">{{workerData.value.workerFbCode}}</h5>
-                    </div>
-                    <!---->
                 </div>
             </div>
         </div>
     </div>
-</div>
-<!--workerSetting-->
-<div class="container-fluid  mt-3 card inpCard workerClass" id="workerSetting" style="display: none;">
-    <div class="p-4">
-        <h2 class="pb-3 cardHeader" style="border-bottom: solid 1.5px teal;">الاعدادات</h2>
-        <form [formGroup]='workerRule' (ngSubmit)="updateSetting()" class="pt-3">
-            <div class="form-row">
-                <div class="form-group col d-none">
-                    <label class="p-2 settinLable">تأخير مسموح به</label>
-                    <div class="input-group-append">
-                        <span class="input-group-text">دقيقة</span>
-                    </div>
-                    <input type="number" formControlName="authDelayTime" class="form-control"
-                        [(ngModel)]="WorkerRuleResult.authDelayTime">
-                </div>
-                <!--1-->
-                <div class="form-group col">
-                    <label class="settinLable p-2">انصراف مبكر مسموح به</label>
-                    <div class="input-group">
+    <!--workerSetting-->
+    <div class="mt-3 card inpCard workerClass" id="workerSetting" style="display: none;">
+        <div class="p-3">
+            <h2 class="pb-3 cardHeader" style="border-bottom: solid 1.5px teal;">الاعدادات</h2>
+            <form [formGroup]='workerRule' (ngSubmit)="updateSetting()" class="pt-3">
+                <div class="form-row">
+                    <div class="form-group col d-none">
+                        <label class="p-2 settinLable">تأخير مسموح به</label>
                         <div class="input-group-append">
                             <span class="input-group-text">دقيقة</span>
                         </div>
-                        <input type="number" formControlName="outEarlyTime" id="outEarlyTime" class="form-control"
-                            [(ngModel)]="WorkerRuleResult.outEarlyTime">
+                        <input type="number" formControlName="authDelayTime" class="form-control"
+                            [(ngModel)]="WorkerRuleResult.authDelayTime">
                     </div>
-                </div>
-                <!--2-->
-                <div class="form-group col">
-                    <label class="settinLable p-2">خصم نصف يوم بعد تأخير</label>
-                    <div class="input-group">
-                        <div class="input-group-append">
-                            <span class="input-group-text">دقيقة</span>
+                    <!--1-->
+                    <div class="form-group col">
+                        <label class="settinLable p-2">انصراف مبكر مسموح به</label>
+                        <div class="input-group">
+                            <div class="input-group-append">
+                                <span class="input-group-text">دقيقة</span>
+                            </div>
+                            <input type="number" formControlName="outEarlyTime" id="outEarlyTime" class="form-control"
+                                [(ngModel)]="WorkerRuleResult.outEarlyTime">
                         </div>
-                        <input type="number" formControlName="halfDayDisc" id="halfDayDisc" class="form-control"
-                            [(ngModel)]="WorkerRuleResult.halfDayDisc">
+                    </div>
+                    <!--2-->
+                    <div class="form-group col">
+                        <label class="settinLable p-2">خصم نصف يوم بعد تأخير</label>
+                        <div class="input-group">
+                            <div class="input-group-append">
+                                <span class="input-group-text">دقيقة</span>
+                            </div>
+                            <input type="number" formControlName="halfDayDisc" id="halfDayDisc" class="form-control"
+                                [(ngModel)]="WorkerRuleResult.halfDayDisc">
+                        </div>
+                    </div>
+                    <!---->
+                    <div class="form-group col">
+                        <label class="settinLable p-2">خصم يوم كامل بعد تأخير</label>
+                        <div class="input-group">
+                            <div class="input-group-append">
+                                <span class="input-group-text">دقيقة</span>
+                            </div>
+                            <input type="number" formControlName="allDayDisc" id="allDayDisc" class="form-control"
+                                [(ngModel)]="WorkerRuleResult.allDayDisc">
+                        </div>
+                    </div>
+                    <!---->
+                    <div class="form-group col">
+                        <label class="settinLable p-2">حساب الاضافى بعد</label>
+                        <div class="input-group">
+                            <div class="input-group-append">
+                                <span class="input-group-text">دقيقة</span>
+                            </div>
+                            <input type="number" formControlName="authOverTime" id="authOverTime" class="form-control"
+                                [(ngModel)]="WorkerRuleResult.authOverTime">
+                        </div>
+                    </div>
+                    <div class="form-group col">
+                        <label class="settinLable p-2">الراتب</label>
+                        <select formControlName="salarytimeKind" class="custom-select" id="inputGroupSelect01"
+                            [(ngModel)]="WorkerRuleResult.salarytimeKind">
+                            <option selected>شهرى</option>
+                            <option value="يومى">يومى</option>
+                            <option value="اسبوعى">اسبوعى</option>
+                        </select>
                     </div>
                 </div>
                 <!---->
-                <div class="form-group col">
-                    <label class="settinLable p-2">خصم يوم كامل بعد تأخير</label>
-                    <div class="input-group">
-                        <div class="input-group-append">
-                            <span class="input-group-text">دقيقة</span>
-                        </div>
-                        <input type="number" formControlName="allDayDisc" id="allDayDisc" class="form-control"
-                            [(ngModel)]="WorkerRuleResult.allDayDisc">
-                    </div>
+                <div class="pt-4 mt-3" style="border-top: solid 1.5px teal;">
+                    <button class="btn btn-outline-info ml-2" type="submit" id="saveSettingBtn">حفظ الاعدادات</button>
                 </div>
-                <!---->
-                <div class="form-group col">
-                    <label class="settinLable p-2">حساب الاضافى بعد</label>
-                    <div class="input-group">
-                        <div class="input-group-append">
-                            <span class="input-group-text">دقيقة</span>
-                        </div>
-                        <input type="number" formControlName="authOverTime" id="authOverTime" class="form-control"
-                            [(ngModel)]="WorkerRuleResult.authOverTime">
-                    </div>
-                </div>
-                <div class="form-group col">
-                    <label class="settinLable p-2">الراتب</label>
-                    <select formControlName="salarytimeKind" class="custom-select" id="inputGroupSelect01"
-                        [(ngModel)]="WorkerRuleResult.salarytimeKind">
-                        <option selected>شهرى</option>
-                        <option value="يومى">يومى</option>
-                        <option value="اسبوعى">اسبوعى</option>
-                    </select>
-                </div>
-            </div>
-            <!---->
-            <div class="pt-4 mt-3" style="border-top: solid 1.5px teal;">
-                <button class="btn btn-outline-info ml-2" type="submit" id="saveSettingBtn">حفظ الاعدادات</button>
-            </div>
-        </form>
+            </form>
+        </div>
     </div>
 </div>

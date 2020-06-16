@@ -7,7 +7,6 @@ import { Router } from '@angular/router'
 import { LoginService } from '../login.service';
 import { CustomerInvArry } from '../accountings/customer-inv-arry';
 import { StocksService } from '../accountings/stocks/the-stocks/stocks.service';
-import { HandleAddPrimBE } from '../accountings/stocks/handle-add-prim-be';
 import { StockTransaction } from '../accountings/stocks/stock-transaction';
 import { SafeDataService } from '../accountings/safe-acc/safe-data.service';
 import { CustomerReceipt } from '../accountings/customer-receipt';
@@ -27,6 +26,7 @@ export class CustomerComponent implements OnInit {
   //customerInvDetail:CustomerInvArry;
   customersInvoices: CustomerInvArry[];
   customerReceiptArr: CustomerReceipt[];
+  custRemainArry: any[];
 
   constructor(public formBuilder: FormBuilder, public _service: ServicesService, public _custService: CustomerService,
     public router: Router, public logService: LoginService, public _stockService: StocksService, public _safeDataService: SafeDataService) { }
@@ -55,16 +55,18 @@ export class CustomerComponent implements OnInit {
       $('.askForDelete').removeClass('animate').hide()
     });
 
-    $("#customerEnquirybtn").attr("disabled", 'true');
+    //$("#customerEnquirybtn").attr("disabled", 'true');
 
     $("#hideInvDet").click(function () {
       $("#customerFadeLayer").hide();
       $('.fadeLayer').hide();
       $('.askForDelete').removeClass('animate').hide();
       $('#customerInvDetail').hide();
-    })
+    });
 
-  }
+    //this.setCustomerRemain()
+
+  };
 
   getCustomerData_BackEnd() {
 
@@ -113,7 +115,7 @@ export class CustomerComponent implements OnInit {
 
   printThisCustomerList() {
 
-    for (let i = 0 ; i < this.customers.length; i ++) {
+    for (let i = 0; i < this.customers.length; i++) {
       if (this.customers[i].customerRemain < 0) {
         $(`#remain${i}`).css('color', 'red');
       } else {
@@ -121,14 +123,14 @@ export class CustomerComponent implements OnInit {
       }
     };
 
-    let Newcustomers = this.customers.filter((customer) => {
+    let Newcustomers = this.custRemainArry.filter((customer) => {
       return customer.customerRemain != 0 && customer.customerName != 'حساب المحل - حسام' && customer.customerName != 'تست'
     });
-    
+
     Newcustomers.sort(function (a, b) {
-      return a.customerRemain - b.customerRemain;
+      return a.remain - b.remain;
     });
-    this.customers = Newcustomers
+    this.custRemainArry = Newcustomers
 
     let show = "#customerEnquiry";
     let hide1 = '#customerHeader';
@@ -332,14 +334,116 @@ export class CustomerComponent implements OnInit {
   };
 
 
-  showCustomerInvoice(invoice) {
+  setCustomerRemain() {
 
-    //let sectionPosition = $("#customerInvDetail").offset().top;
-    //$("html , body").animate({ scrollTop: sectionPosition }, 150);
+    $('#containerLoader').fadeIn();
+
+    let invoices: StockTransaction[];
+    let reciepts: CustomerReceipt[];
+    this.custRemainArry = [];
+
+    const getInvoices = new Promise((res, rej) => {
+      this._stockService.getStockTransactionList().subscribe((data: StockTransaction[]) => {
+        invoices = data;
+        res('done')
+      });
+    });
+
+    const getRecipts = new Promise((res) => {
+      this._custService.getCustomerReceipts().subscribe((data: CustomerReceipt[]) => {
+        reciepts = data
+        res('getRecipts')
+      })
+      //console.log(reciepts)
+
+    })
+
+    const makeCustRem = () => {
+      return new Promise((res) => {
+
+        for (let i = 0; i < this.customers.length; i++) {
+
+          let custInfo = this.getCustomerInfo(this.customers[i].customerId);
+
+          let fstPaid: number = 0;
+
+          if (custInfo.customerPaid != 0) { fstPaid = custInfo.customerPaid };
+
+          let cust = {
+            customerName: custInfo.customerName,
+            customerId: custInfo.customerId,
+            customerTell: custInfo.customerTell,
+            customerUnit: custInfo.customerUnit,
+            customerPaid: custInfo.customerPaid,
+            customerAdd: custInfo.customerAdd,
+            customerDateIN: custInfo.customerDateIN,
+            customerRemain: 0,
+            paid: fstPaid,
+            addValsInvoices: [],
+            minValsInvoices: [],
+            addValsReciept: [],
+            minValsReciept: [],
+            remain: 0,
+          };
+
+          let plusValInv = invoices
+            .filter(invoice => invoice.transactionType == 2 && invoice.customerId == custInfo.customerId)
+            .map(invoice => invoice.invoiceTotal);
+
+          let minValInv = invoices
+            .filter(invoice => invoice.transactionType == 1 && invoice.customerId == custInfo.customerId)
+            .map(invoice => invoice.invoiceTotal);
+
+          let plusValRec = reciepts
+            .filter(reciept => reciept.customerId == custInfo.customerId && reciept.receiptKind == 'ايصال صرف نقدية')
+            .map(reciept => reciept.receiptVal);
+
+          let minValRec = reciepts
+            .filter(reciept => reciept.customerId == custInfo.customerId && reciept.receiptKind == 'ايصال استلام نقدية')
+            .map(reciept => reciept.receiptVal);
+
+          //console.log(plusVal)
+          cust.addValsInvoices = plusValInv; //.push(plusVal);
+          cust.minValsInvoices = minValInv; //.push(minVal);
+          cust.addValsReciept = plusValRec;
+          cust.minValsReciept = minValRec;
+          cust.remain =
+            (this._service.sumArry(cust.addValsInvoices) + this._service.sumArry(cust.addValsReciept) + cust.paid) -
+              (this._service.sumArry(cust.minValsInvoices) + this._service.sumArry(cust.minValsReciept))
+            /* (this._service.sumArry(cust.addValsInvoices) - this._service.sumArry(cust.minValsInvoices)) +
+            (this._service.sumArry(cust.addValsReciept) - this._service.sumArry(cust.minValsReciept)); */
+          cust.customerRemain = cust.remain;
+
+          this.custRemainArry.push(cust);
+
+          custInfo.customerRemain = cust.remain;
+
+          //this.syncBackend(custInfo);
+        };
+
+        res('makeCustRem')
+      })
+
+    };
+
+    Promise.all([getInvoices, getRecipts]).then(makeCustRem).then(() => {
+      //console.log(this.custRemainArry);
+      $('#containerLoader').fadeOut();
+      this.showCustomerEnquiry();
+      //console.log(reciepts);
+    });
+
+  };
+
+  syncBackend(cust: Customer) {
+    this._custService.updateCustomerSer(cust).subscribe();
+  }
+
+  showCustomerInvoice(invoice) {
 
     this._custService.customerInv = [];
     this._custService.invTotalArry = [];
-    ////console.log(invoice)
+    //console.log(invoice)
     for (let i = 0; i < this.customersInvoices.length; i++) {
 
       let customerInvDetail = {
@@ -368,7 +472,7 @@ export class CustomerComponent implements OnInit {
     $('#customerInvDetail').show()
   }
 
-  
+
 
   // CRUD Functions
   addNewCustomer() {
@@ -392,7 +496,7 @@ export class CustomerComponent implements OnInit {
       },
         error => {
           // alert(error);
-          ////console.log(this.customerDataView);
+          //console.log(this.customerDataView);
         });
     };
 
@@ -403,7 +507,7 @@ export class CustomerComponent implements OnInit {
     $('.askForDelete').show().addClass('animate')
     this.putCustomerDataValue(customer);
     //this.customerDataView = customer;
-    ////console.log(this.customerDataView)
+    //console.log(this.customerDataView)
   }
   deletCustomer() {
     $('.fadeLayer').hide()
@@ -411,10 +515,18 @@ export class CustomerComponent implements OnInit {
       .subscribe(data => {
         this.customers = this.customers.filter(u => u !== this.customerData.value)
       });
-  }
+  };
+
+  buttonEffect(max: string, min: string) {
+    $(max).removeClass("btn-outline-info").addClass("btn-outline-secondary").animate({ fontSize: '1.5em' }, 50);
+    $(max).attr({ "disabled": true });
+
+    $(min).removeClass('btn-outline-secondary').addClass('btn-outline-info').animate({ fontSize: '1em' }, 50);
+    $(min).attr({ "disabled": false });
+  };
 
   showUpdateCustomer(customer: Customer) {
-    $('#printCustomerList').slideToggle(150)
+    $('#printCustomerList').hide(150)
     $('.customerClass').not('#addCustomer').hide();
     $('#addCustomer').show();
     $('#addNewCustomerBtn').html('تعديل');
@@ -422,44 +534,43 @@ export class CustomerComponent implements OnInit {
     this.putCustomerDataValue(customer);
     //this.customerDataView = customer;
     // //console.log(customer, this.customerDataView);
-    $('#showAddCustomerBtn').removeClass('btn-outline-secondary').addClass('btn-outline-info').animate({ fontSize: '1em' }, 50);
-    $('#customerEnquirybtn').removeClass('btn-outline-secondary').addClass('btn-outline-info').animate({ fontSize: '1em' }, 50);
-  }
+    this.buttonEffect('#showAddCustomerBtn', '#customerEnquirybtn');
+  };
 
-  customerRemainColor:string
+  customerRemainColor: string
   showCustomerCard(customer: Customer) {
-    $("#customerEnquirybtn").attr({"disabled": false});
-    $("#showAddCustomerBtn").attr({"disabled": false});
-    $('#printCustomerList').slideToggle(150)
+
+    $('#printCustomerList').hide(150)
     this.putCustomerDataValue(customer);
     //this.customerDataView = customer;
     this.makeCustomerInvArry();
-    if(customer.customerRemain < 0) {
+    if (customer.customerRemain < 0) {
       this.customerRemainColor = 'text-danger'
       //$('#customerRemainCard').css('color', 'red')
     } else {
       this.customerRemainColor = 'text-dark'
     }
     //console.log(this.customerRemainColor)
+    //this.buttonEffect('#showAddCustomerBtn','#customerEnquirybtn');
     $('#showAddCustomerBtn').removeClass('btn-outline-secondary').addClass('btn-outline-info').animate({ fontSize: '1em' }, 50);
     $('#customerEnquirybtn').removeClass('btn-outline-secondary').addClass('btn-outline-info').animate({ fontSize: '1em' }, 50);
+    $("#customerEnquirybtn").attr({ "disabled": false });
+    $("#showAddCustomerBtn").attr({ "disabled": false });
+
     $('.customerClass').not('#customerDetails').hide();
-    $('#customerDetails').show();
+    //$('#customerDetails').show();
     $('#customerInvDetails').show();
   }
 
   ShowAddNewCustomer() {
-    $("#showAddCustomerBtn").attr({"disabled": true});
-    $("#customerEnquirybtn").attr({"disabled": false});
     this._service.clearForm();
-    $('#printCustomerList').slideToggle(150)
+    $('#printCustomerList').hide(150)
     this.restValues()
     $('.customerClass').not('#addCustomer').hide();
     $('#addCustomer').show();
     $('#addNewCustomerBtn').html('اضافة');
     $('#addCustomer h2:first').html('اضافة بيانات عميل');
-    $('#showAddCustomerBtn').removeClass("btn-outline-info").addClass("btn-outline-secondary").animate({ fontSize: '1.5em' }, 50);
-    $('#customerEnquirybtn').removeClass('btn-outline-secondary').addClass('btn-outline-info').animate({ fontSize: '1em' }, 50);
+    this.buttonEffect('#showAddCustomerBtn', '#customerEnquirybtn');
   };
 
   restValues() {
@@ -476,14 +587,11 @@ export class CustomerComponent implements OnInit {
   };
 
   showCustomerEnquiry() {
-    $("#customerEnquirybtn").attr({"disabled": true});
-    $("#showAddCustomerBtn").attr({"disabled": false});
     this.searchCust = null;
-    this.getCustomerData_BackEnd();
-    $('#printCustomerList').slideToggle(150)
+    //this.getCustomerData_BackEnd();
+    $('#printCustomerList').show(150)
     $('.customerClass').not('#customerEnquiry').hide();
     $('#customerEnquiry').show();
-    $('#customerEnquirybtn').removeClass("btn-outline-info").addClass("btn-outline-secondary").animate({ fontSize: '1.5em' }, 50);
-    $('#showAddCustomerBtn').removeClass('btn-outline-secondary').addClass('btn-outline-info').animate({ fontSize: '1em' }, 50);
+    this.buttonEffect('#customerEnquirybtn', '#showAddCustomerBtn');
   };
 }

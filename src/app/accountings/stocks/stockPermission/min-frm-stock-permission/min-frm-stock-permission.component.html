@@ -13,12 +13,16 @@
     </div>
 </div>
 <!--printBtns-->
-<div style="display: none; position: fixed; top: 10px; right: 10px;" class="closeBtn fixed-top">
-    <button class="btn btn-outline-danger" id="reloadLocMin" (click)='reloadLoc()'>X</button>
-    <button class="btn btn-outline-secondary mr-2" (click)='openwindowPrint()'><i class="fa fa-print"></i></button>
+<div class="closeBtn printBtns">
+    <div>
+        <button class="btn btn-outline-danger" id="reloadLocMin" (click)='reloadLoc()'>X</button>
+    </div>
+    <div>
+        <button class="btn btn-outline-secondary" (click)='openwindowPrint()'><i class="fa fa-print"></i></button>
+    </div>
 </div>
 <!--onlyForm-->
-<div class="container-fluid card inpCard  mt-3 p-3" id="headerMinInv">
+<div class="card inpCard p-3" id="headerMinInv">
     <div class="form-inline" id="minCallInvoice">
         <h2 class="cardHeader text-danger">فاتورة بيع</h2>
         <div class="headerLeftBorder mr-2"></div>
@@ -43,8 +47,9 @@
                 [disabled]='deleteMinInvBtnDisabled' (click)="showDeleteMinInvoice()">حذف
                 الفاتورة</button>
         </div>
+        <hr>
         <!--[formGroup]='addToStockPremData'-->
-        <form (ngSubmit)="minFrmStockPrem()" class="pt-3">
+        <form (ngSubmit)="minFrmStockPrem()">
             <div class="form-group">
                 <div class="d-flex justify-content-between">
                     <input id="minStockTransactionId" class="d-none">
@@ -87,7 +92,6 @@
                             <th style="flex: none; width: 50px">م</th>
                             <th>اسم الصنف</th>
                             <th>العدد</th>
-                            <th>رصيد باقى</th>
                             <th>السعر</th>
                             <th class="text-center">الاجمالى</th>
                         </tr>

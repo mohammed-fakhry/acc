@@ -13,12 +13,14 @@
     </div>
 </div>
 <!--printBtns-->
-<div style="display: none; position: fixed; top: 10px; right: 10px;" class="closeBtn fixed-top">
-    <button class="btn btn-outline-danger" id="reloadLocAddPrem" (click)='reloadLoc()'>X</button>
-    <button class="btn btn-outline-secondary mr-2" (click)='openwindowPrint()'><i class="fa fa-print"></i></button>
+<div class="closeBtn printBtns">
+    <div><button class="btn btn-outline-danger" id="reloadLocAddPrem" (click)='reloadLoc()'>X</button></div>
+    <div>
+        <button class="btn btn-outline-secondary" (click)='openwindowPrint()'><i class="fa fa-print"></i></button>
+    </div>
 </div>
 <!--onlyForm-->
-<div class="container-fluid card inpCard  mt-3 p-3" id="headerAddInv">
+<div class="card inpCard p-3" id="headerAddInv">
     <div class="form-inline" id="callInvoice">
         <h2 class="cardHeader">فاتورة شراء</h2>
         <div class="headerLeftBorder mr-2"></div>
@@ -44,8 +46,9 @@
                 [disabled]='deleteInvBtnDisabled' (click)="showDeleteAddInvoice()">حذف
                 الفاتورة</button>
         </div>
+        <hr>
         <!--[formGroup]='addToStockPremData'-->
-        <form (ngSubmit)="addToStockPrem()" class="pt-3">
+        <form (ngSubmit)="addToStockPrem()">
             <div class="form-group">
                 <div class="d-flex justify-content-between">
                     <input id="stockTransactionId" class="d-none">

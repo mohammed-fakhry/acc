@@ -169,10 +169,10 @@ export class MinFrmStockPermissionComponent implements OnInit {
           this.invoiceInpArry[i].Qtyinvaild = false;
         };
 
-        if (this.invoiceInpArry[i].price > 0 || this.invoiceInpArry[i].qty > 0) {
+        /* if (this.invoiceInpArry[i].price > 0 || this.invoiceInpArry[i].qty > 0) {
           this.invoiceInpArry[i].price = null;
           this.invoiceInpArry[i].qty = null;
-        };
+        } */;
 
         let productInfo = this._stockService.handleBackEnd.find(prod => {
           prod.productName == this.invoiceInpArry[i].product &&
@@ -191,10 +191,10 @@ stockName: "محل حسام"
 stockProductId: "55"
          */
 
-        if (custInfo.customerName == 'حساب المحل - حسام') {
+        /* if (custInfo.customerName == 'حساب المحل - حسام') {
           this.invoiceInpArry[i].price = productInfo.productCost;
-        };
-
+        }; */
+        
       };
       /* let productinpt = $(`#product${i}`).val();
       if (this.productArr.includes(productinpt) || productinpt == '') {

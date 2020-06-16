@@ -8,35 +8,38 @@
             <button class="btn btn-info" id="hideFadeLayer">الغاء</button>
         </div>-->
     </div>
-    <div class="container p-3 card askForDelete" id="SafeReceiptDone">
+    <div class="container card askForDelete p-3" id="SafeReceiptDone">
         <h3 class="p-3 bg-info text-light">تم حفظ الايصال</h3>
         <hr>
         <div class="d-flex flex-row-reverse">
-            <button class="btn btn-outline-info mr-2 fadeBtns" id="showAddSafeReceipt_fade" (click)="showAddNewRecipt_fade()">ايصال جديد</button>
-            <button class="btn btn-outline-secondary" id="hideFadeLayer" (click)="showSafeEnquir_fade()">الرئيسية</button>
+            <button class="btn btn-outline-info mr-2 fadeBtns" id="showAddSafeReceipt_fade"
+                (click)="showAddNewRecipt_fade()">ايصال جديد</button>
+            <button class="btn btn-outline-secondary" id="hideFadeLayer"
+                (click)="showSafeEnquir_fade()">الرئيسية</button>
         </div>
     </div>
 </div>
 <!--header-->
-<div class="container-fluid p-3 navHeader card mt-3 sticky-top" id="mainStockHeader">
+<!-- height: 70px; -->
+<div class="navHeader theNav" id="mainStockHeader">
     <nav class="navbar">
         <div class="form-inline">
             <h1 class="px-2" style="font-weight: bold;">حساب خزنة</h1>
             <div class="headerLeftBorder"></div>
-            <button style="height: 70px; font-size: 1.5em;" class="btn btn-outline-secondary ml-2 mx-2 headerMainBtn"
-                id="showSafeBtn" (click)="showSafeEnquir()" disabled>استعلام</button>
-            <button style="height: 70px;" class="btn btn-outline-info ml-2 mx-2 headerMainBtn" id="showAddSafeBtn"
+            <button style="font-size: 1.5em;" class="btn btn-outline-secondary ml-2 mx-2 headerMainBtn" id="showSafeBtn"
+                (click)="showSafeEnquir()" disabled>استعلام</button>
+            <button class="btn btn-outline-info ml-2 mx-2 headerMainBtn" id="showAddSafeBtn"
                 (click)="showAddSafe()">اضافة خزنة</button>
-            <button style="height: 70px;" class="btn btn-outline-info ml-2 mx-2 headerMainBtn" id="showAddSafeReceipt"
+            <button class="btn btn-outline-info ml-2 mx-2 headerMainBtn" id="showAddSafeReceipt"
                 (click)="showAddSafeReceipt()">ايصال نقدية</button>
         </div>
     </nav>
 </div>
 <!--addSafe-->
-<app-add-safe class="safeClass" id="addSafe"></app-add-safe>
+<app-add-safe class="safeClass mainContainer" id="addSafe"></app-add-safe>
 <!--enquireSafe-->
-<app-enquire-safe class="safeClass" id="enquireSafe" style="display: block;"></app-enquire-safe>
+<app-enquire-safe class="safeClass mainContainer" id="enquireSafe" style="display: block;"></app-enquire-safe>
 <!--safeReceipt-->
-<app-safe-receipt class="safeClass" id="safeReceipt"></app-safe-receipt>
+<app-safe-receipt class="safeClass mainContainer" id="safeReceipt"></app-safe-receipt>
 <!--safeTransaction-->
-<app-safe-transaction class="safeClass" id="safeTransaction"></app-safe-transaction>
+<app-safe-transaction class="safeClass mainContainer" id="safeTransaction"></app-safe-transaction>

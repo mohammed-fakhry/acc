@@ -1,3 +1,5 @@
+$borderColor: rgba(0, 7, 7, 0.95); //white;
+
 body {
     position: relative;
 }
@@ -64,4 +66,24 @@ h3 {
     background-color: rgba(0, 7, 7, 0.95);
     //background-color: rgba(0, 0, 0, 0.938);
     z-index: 99999999999999;
+}
+//style=""
+#sidebarToggle {
+    cursor: pointer;
+    font-size: 35px;
+    // border-top: solid 1px $borderColor;
+    // border-bottom: solid 1px $borderColor;
+    // border-left: solid 1px $borderColor; //rgba(0, 7, 7, 0.95);
+    z-index: 99999999999999;
+    display: none;
+    color: rgb(72, 143, 199); //white; //rgb(1, 64, 73);
+    margin-top: 10px;
+    background-color: rgb(241, 242, 246);; //rgb(54, 107, 148); //rgba(0, 7, 7, 0.95);
+    right: 0;
+    padding: 10px;
+    //padding-right: 15px;
+};
+
+.card {
+    padding-top: 0px;
 }

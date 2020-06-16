@@ -67,11 +67,14 @@ export class EnquireSafeComponent implements OnInit {
 
       if (safe.safeId == this._safeDataService.safeReceiptList[i].safeId) {
 
+        let onlyDate = new Date(this._safeDataService.safeReceiptList[i].date_time)
+        
         theSafeRecipt = {
           safeReceiptId: this._safeDataService.safeReceiptList[i].safeReceiptId,
           receiptKind: this._safeDataService.safeReceiptList[i].receiptKind,
           receiptKind_color: '',
           date_time: this._safeDataService.safeReceiptList[i].date_time,
+          date: `${onlyDate.getDate()}-${onlyDate.getMonth()+1}-${onlyDate.getFullYear()}`,
           transactionAccKind: this._safeDataService.safeReceiptList[i].transactionAccKind,
           recieptNote: this._safeDataService.safeReceiptList[i].recieptNote,
           transactionExplain: null,

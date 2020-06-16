@@ -538,7 +538,7 @@ export class SafeReceiptComponent implements OnInit {
       i => i.safeId === oldSafe.safeId
     );
     
-    //this._safeDataService.updateSafeData(oldSafe).subscribe();
+    this._safeDataService.updateSafeData(oldSafe).subscribe();
     // pass new Value to edit
     this._safeDataService.safeList[indx].currentSafeVal = oldSafe.currentSafeVal;
   };
@@ -561,7 +561,7 @@ export class SafeReceiptComponent implements OnInit {
         i => i.safeId === oldSecSafe.safeId
       );
 
-      //this._safeDataService.updateSafeData(oldSecSafe).subscribe();
+      this._safeDataService.updateSafeData(oldSecSafe).subscribe();
       // pass new Value to edit
       this._safeDataService.safeList[indx].currentSafeVal = oldSecSafe.currentSafeVal;
     };
@@ -586,7 +586,7 @@ export class SafeReceiptComponent implements OnInit {
         i => i.customerId === oldCustomer.customerId
       );
 
-      //this._custService.updateCustomerSer(oldCustomer).subscribe();
+      this._custService.updateCustomerSer(oldCustomer).subscribe();
       // pass new Value to edit
       this._safeAccComponent.customers[indx].customerRemain = oldCustomer.customerRemain;
     };
@@ -612,7 +612,7 @@ export class SafeReceiptComponent implements OnInit {
         i => i.accId === oldAcc.accId
       );
 
-      //this._service.updateOtherAccSer(oldAcc).subscribe();
+      this._service.updateOtherAccSer(oldAcc).subscribe();
       // pass new Value to edit
       this._safeAccComponent.otherAcc[indx].currentAccVal = oldAcc.currentAccVal;
     };

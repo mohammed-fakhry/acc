@@ -31,11 +31,14 @@ export class UnitesComponent implements OnInit {
   addBtnVal:string;
 
   calcRemain() {
+    console.time('calc')
     this.totalPrice = this.metrPrice * this.apartWidth;
     this.preMoneyResult = (this.totalPrice * this.preMoney) / 100;
     this.remainPrice = this.totalPrice - this.preMoneyResult;
     this.remainPaid = Math.ceil(this.remainPrice / this.years / 12);
-  }
+    //this.remainPaid = this.remainPrice / this.years / 12
+    console.timeEnd('calc')
+  };
   constructor(public router: Router, public logService: LoginService,
      public formBuilder: FormBuilder , public unitService: UnitService,
      public _service: ServicesService) { }
@@ -86,6 +89,14 @@ export class UnitesComponent implements OnInit {
     })
   } // ngOnInit
 
+  buttonEffect(max: string, min: string) {
+    $(max).removeClass("btn-outline-info").addClass("btn-outline-secondary").animate({ fontSize: '1.5em' }, 50);
+    $(max).attr({'disabled' : true});
+
+    $(min).removeClass('btn-outline-secondary').addClass('btn-outline-info').animate({ fontSize: '1em' }, 50);
+    $(min).attr({'disabled' : false});
+  };
+
   // show Methods
   showAddUnit() {
     this._service.clearForm();
@@ -95,20 +106,22 @@ export class UnitesComponent implements OnInit {
     $('#unitSearch').hide(100);
     $('#addNewUnitBtn').html('اضافة');
     $('#addUnit h2:first').html('اضافة بيانات وحدة');
-    $('#showAddUnitBtn').removeClass("btn-outline-info").addClass("btn-outline-secondary").animate({ fontSize: '1.5em' }, 50);
-    $('#unitEnquirybtn').removeClass('btn-outline-secondary').addClass('btn-outline-info').animate({ fontSize: '1em' }, 50);
-    $('#showAddUnitBtn').attr({'disabled' : true});
-    $('#unitEnquirybtn').attr({'disabled' : false});
+    this.buttonEffect('#showAddUnitBtn','#unitEnquirybtn');
+    //$('#showAddUnitBtn').removeClass("btn-outline-info").addClass("btn-outline-secondary").animate({ fontSize: '1.5em' }, 50);
+    //$('#unitEnquirybtn').removeClass('btn-outline-secondary').addClass('btn-outline-info').animate({ fontSize: '1em' }, 50);
+    //$('#showAddUnitBtn').attr({'disabled' : true});
+    //$('#unitEnquirybtn').attr({'disabled' : false});
   }
 
   showUnitEnquiry() {
     $('.unitsClass').not('#unitEnquiry').hide();
     $('#unitEnquiry').show();
     $('#unitSearch').show(100);
-    $('#unitEnquirybtn').removeClass("btn-outline-info").addClass("btn-outline-secondary").animate({ fontSize: '1.5em' }, 50);
-    $('#showAddUnitBtn').removeClass('btn-outline-secondary').addClass('btn-outline-info').animate({ fontSize: '1em' }, 50);
-    $('#showAddUnitBtn').attr({'disabled' : false});
-    $('#unitEnquirybtn').attr({'disabled' : true});
+    this.buttonEffect('#unitEnquirybtn','#showAddUnitBtn');
+    // $('#unitEnquirybtn').removeClass("btn-outline-info").addClass("btn-outline-secondary").animate({ fontSize: '1.5em' }, 50);
+    // $('#showAddUnitBtn').removeClass('btn-outline-secondary').addClass('btn-outline-info').animate({ fontSize: '1em' }, 50);
+    // $('#showAddUnitBtn').attr({'disabled' : false});
+    // $('#unitEnquirybtn').attr({'disabled' : true});
   };
 
   showUpdateUnit(unit) {
@@ -118,10 +131,11 @@ export class UnitesComponent implements OnInit {
     $('#addNewUnitBtn').html('تعديل');
     $('#addUnit h2:first').html('تعديل بيانات وحدة');
     this.unitDataView = unit;
-    $('#showAddUnitBtn').removeClass('btn-outline-secondary').addClass('btn-outline-info').animate({ fontSize: '1em' }, 50);
-    $('#unitEnquirybtn').removeClass('btn-outline-secondary').addClass('btn-outline-info').animate({ fontSize: '1em' }, 50);
-    $('#showAddUnitBtn').attr({'disabled' : false});
-    $('#unitEnquirybtn').attr({'disabled' : false});
+    this.buttonEffect('#showAddUnitBtn','#unitEnquirybtn');
+    // $('#showAddUnitBtn').removeClass('btn-outline-secondary').addClass('btn-outline-info').animate({ fontSize: '1em' }, 50);
+    // $('#unitEnquirybtn').removeClass('btn-outline-secondary').addClass('btn-outline-info').animate({ fontSize: '1em' }, 50);
+    // $('#showAddUnitBtn').attr({'disabled' : false});
+    // $('#unitEnquirybtn').attr({'disabled' : false});
   };
 
 

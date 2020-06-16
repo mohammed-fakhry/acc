@@ -143,4 +143,8 @@ export class StocksService {
     return this.http.delete<StockTransactionD[]>(`${this.url}deleteInvoice.php?id=` + id)
   }
 
+  allStockProductsTrans() {
+    return this.http.get<any[]>(`${this.url}allStockProductsTrans.php`);
+  };
+
 }

@@ -17,7 +17,7 @@ export class SafeTransactionComponent implements OnInit {
 
   ngOnInit() {
 
-    $(window).scroll( () => {
+    /* $(window).scroll( () => {
 
       let scrolling = $(this).scrollTop();
 
@@ -27,7 +27,7 @@ export class SafeTransactionComponent implements OnInit {
         $("#topArr").fadeOut()
       };
 
-    })
+    }) */
 
     //topArrow
     $("#topArr").click(function () { // scrollTop Button
@@ -35,7 +35,7 @@ export class SafeTransactionComponent implements OnInit {
       let navPosition = $(".navbar").offset().top;
       $("html , body").animate({ scrollTop: 0 }, 100);
       $(this).hide();
-
+      $('#btmArr').fadeIn();
     });
 
   };
@@ -43,6 +43,7 @@ export class SafeTransactionComponent implements OnInit {
   toBottom() {
     window.scrollTo(0, document.body.scrollHeight);
     $("#topArr").fadeIn();
+    $('#btmArr').fadeOut();
   };
 
   printSafeTrance() {
@@ -60,7 +61,7 @@ export class SafeTransactionComponent implements OnInit {
 
     $('.navHeader').addClass('sticky-top');
     $('#printSafeTrance').hide();
-
+    $('#btmArr').fadeIn();
   };
 
   openwindowPrint() {
@@ -122,4 +123,4 @@ export class SafeTransactionComponent implements OnInit {
     };
   };
 
-} // end
+}; // end
