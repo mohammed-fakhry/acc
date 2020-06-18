@@ -144,6 +144,25 @@ export class TheStocksComponent implements OnInit {
     });
   });
 
+  getAllProducts = new Promise((res, rej) => {
+    this._stockService.getProducts().subscribe((data: ProductsClass[]) => {
+      if (data) {
+        this._stockService.allProducts = data;
+        res(data)
+      } else (
+        rej('nodata')
+      );
+    });
+  });
+
+  getStocks = new Promise((res, rej) => {
+    this._stockService.getStockes().subscribe((data: Stock[]) => {
+      this._stockService.stocks = data;
+      res(data)
+      //console.log(this._stockService.stocks)
+    });
+  });
+
   createTheInvoiceArry(type: number) {
 
     //getHandleAddtoStockPrimList from Db
@@ -249,15 +268,13 @@ export class TheStocksComponent implements OnInit {
 
   };
 
-
-
   randomId: number;
   // testBtn
   testbtn() {
 
 
     //this.getBackendData();
-  }
+  };
 
   buttonEffect(max: string) {
     $(max).removeClass("btn-outline-info").addClass("btn-outline-secondary").animate({ fontSize: '1.5em' }, 50);
@@ -265,11 +282,13 @@ export class TheStocksComponent implements OnInit {
   };
 
   showStocksEnquiry() {
-    this.getBackendData();
-    $('.stocksClass').not('#stocksEnquiry').hide();
-    $('#stocksEnquiry').css('display', 'block');
-    $('#stocksSearch').fadeIn(100);
-    this.buttonEffect('#stockBtn');
+    //this.getBackendData();
+    this.getStocks.then(() => {
+      $('.stocksClass').not('#stocksEnquiry').hide();
+      $('#stocksEnquiry').css('display', 'block');
+      $('#stocksSearch').fadeIn(100);
+      this.buttonEffect('#stockBtn');
+    });
   };
 
   showProductsReport() {
@@ -300,29 +319,20 @@ export class TheStocksComponent implements OnInit {
 
   productNameArr: any[];
 
-  makeProductNameArr() {
-
-    this._stockService.getProducts().subscribe((data: ProductsClass[]) => {
-      this._stockService.allProducts = data;
-    });
-
-    this.productNameArr = [];
-
-    this.productNameArr = this._stockService.allProducts.map(product => product.productName)
-
-    //console.log(this.productNameArr + ' : stock')
-  };
-
   showAddNewProduct() {
 
-    this.makeProductNameArr();
-    this.productNameVaild = true;
+    ///this.makeProductNameArr();
+    this.getAllProducts.then(() => {
+      this.productNameArr = [];
+      this.productNameArr = this._stockService.allProducts.map(product => product.productName);
+      this.productNameVaild = true;
+      $('.stocksClass').not('#addNewProduct').hide();
+      $('#productName').removeClass('is-valid').removeClass('is-invalid');
+      $('#addNewProduct').show();
+      $('#stocksSearch').hide(100);
+      this.buttonEffect('#stockBtn');
+    });
 
-    $('.stocksClass').not('#addNewProduct').hide();
-    $('#productName').removeClass('is-valid').removeClass('is-invalid');
-    $('#addNewProduct').show();
-    $('#stocksSearch').hide(100);
-    this.buttonEffect('#stockBtn');
   };
 
   newAddInvNumber: number;

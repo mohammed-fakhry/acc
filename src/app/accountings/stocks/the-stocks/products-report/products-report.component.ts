@@ -166,29 +166,9 @@ export class ProductsReportComponent implements OnInit {
       this.filteredProducts = this.filteredProducts.filter((date) => {
         return date.theDate > fromDate && date.theDate < toDate
       })
-    }
+    };
 
-  }
-
-  /* 
-  Qty: 200
-  customerId: "11"
-  customerName: "زيزو ابوعبده - حسام"
-  date_time: "2020-05-22T18:24"
-  invNumber: 50
-  invoiceTotal: 26000
-  notes: ""
-  price: 130
-  productId: "12"
-  productName: "بن ازرق"
-  sndStockId: "1"
-  stockId: "3"
-  stockName: "محل حسام"
-  stockTransactionDetailsId: "158"
-  stockTransactionId: "1590164715252"
-  transactionType: "1" 
-  */
-
+  };
 
   showProductReport() {
 
@@ -234,7 +214,7 @@ export class ProductsReportComponent implements OnInit {
           let d = new Date(mainArry[i].date_time)
 
           let theObj = {
-            date_time: `${d.getFullYear()} / ${d.getMonth()} / ${d.getDate()}`,
+            date_time: `${d.getFullYear()} / ${d.getMonth()} / ${d.getDate()} | ${d.getHours()}:${d.getMinutes()}`,
             invNumber: mainArry[i].invNumber,
             price: mainArry[i].price,
             customerName: mainArry[i].customerName,
@@ -243,13 +223,10 @@ export class ProductsReportComponent implements OnInit {
             minQty: 0,
             addQty: 0,
             netQty: 0,
+            netColor: 'darkBg',
             theDate: d.getTime(),
+            note: mainArry[i].notes,
           };
-
-          /* theObj
-            theObj
-            theObj
-            theObj */
 
           if (mainArry[i].transactionType == 1) {
 
@@ -270,7 +247,7 @@ export class ProductsReportComponent implements OnInit {
             if (mainArry[i].stockId == theStockInfo.stockId) {
 
               let sndStockInfo = this._stockService.stocks.find(stock => stock.stockId == mainArry[i].sndStockId)
-              
+
               theObj.customerName = sndStockInfo.stockName;
               theObj.transactionName = 'اذن نقل (خصم)'
               theObj.color = 'text-danger';
@@ -283,6 +260,7 @@ export class ProductsReportComponent implements OnInit {
               theObj.color = 'text-dark';
               theObj.minQty = 0;
               theObj.addQty = mainArry[i].Qty;
+
             };
 
           };
@@ -301,7 +279,9 @@ export class ProductsReportComponent implements OnInit {
             this.filteredProducts[f].netQty = this.filteredProducts[f - 1].netQty + this.filteredProducts[f].addQty - this.filteredProducts[f].minQty;
           }
 
-        }
+          if (this.filteredProducts[f].netQty < 0) {this.filteredProducts[f].netColor = 'bg-danger'}
+
+        };
 
         let fromDate = $('#fromDate').val();
         let toDate = $('#toDate').val();
@@ -319,10 +299,9 @@ export class ProductsReportComponent implements OnInit {
         } else {
           this.filteredProducts = this.filteredProducts.filter((date) => {
             return date.theDate > fromDate && date.theDate < toDate
-          })
-        }
+          });
+        };
 
-        //res('theMetoddone')
       }; // else'
 
       return Promise.resolve(this.filteredProducts)
@@ -331,7 +310,6 @@ export class ProductsReportComponent implements OnInit {
 
     getHandle.then(theMetod).then(() => {
 
-      //$('#containerLoader').fadeOut();
       $('#prodDetTable').show();
       
     });

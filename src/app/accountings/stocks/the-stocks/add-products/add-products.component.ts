@@ -11,10 +11,10 @@ import { TheStocksComponent } from '../the-stocks.component';
 })
 export class AddProductsComponent implements OnInit {
 
-  
+
   productData: FormGroup;
   productNameAlert: string;
-  addProductFormVaild:boolean;
+  addProductFormVaild: boolean;
 
   constructor(public _stockService: StocksService, public formBuilder: FormBuilder,
     public _service: ServicesService, public _theStockComp: TheStocksComponent) { }
@@ -59,10 +59,13 @@ export class AddProductsComponent implements OnInit {
     this._stockService.creatProduct(this.productData.value).subscribe();
     this._service.clearForm();
     this._theStockComp.ngOnInit();
-    this._theStockComp.makeProductNameArr();
-    $('#productName').removeClass('is-valid is-invalid');
-    $('#productNameAlert').hide();
-    this.addProductFormVaild = true;
+    //this._theStockComp.makeProductNameArr();
+    this._theStockComp.getAllProducts.then((data) => {
+      $('#productName').removeClass('is-valid is-invalid');
+      $('#productNameAlert').hide();
+      this.addProductFormVaild = true;
+    })
+
     ////console.log(this._stockService.allProducts);
   }
 

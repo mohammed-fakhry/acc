@@ -1,27 +1,183 @@
 <!--table-->
 <div class="container-fluid">
-    <div class="row">
-        <div class="col-md-2">
-            <div class="card">
-                <div class="panel-body panel-flex-table">
-                    <table class="flex-table table table-hover">
-                        <thead class="navHeader">
-                            <tr>
-                                <th class="text-center">اسم المخزن</th>
-                            </tr>
-                        </thead>
-                        <tbody class=" mt-3 tableBody">
-                            <tr *ngFor="let stock of _stockService.stocks; let i = index">
-                                <td class="btn btn-light chooseBtn" id="showStockProfits{{i}}" (click)="showStockProfits(stock,i)" style="flex: 3;">{{stock.stockName}}</td>
-                            </tr>
-                        </tbody>
-                    </table>
+    <div class="row" style="padding-left: 20px;">
+        <div class="col-md-3">
+            <div class="stickyInp">
+                <div class="card">
+                    <div class="panel-body panel-flex-table" style="height: fit-content;">
+                        <table class="flex-table table table-hover">
+                            <thead class="navHeader">
+                                <tr>
+                                    <th class="text-center">اسم المخزن</th>
+                                </tr>
+                            </thead>
+                            <tbody class=" mt-3 tableBody">
+                                <tr *ngFor="let stock of _stockService.stocks; let i = index">
+                                    <td class="btn btn-light chooseBtn" id="showStockProfits{{i}}"
+                                        (click)="showStockProfits(stock,i)" style="flex: 3;">{{stock.stockName}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="card mt-3" id="totalProfits" style="display: none;">
+                    <div class="p-2">
+                        <h5 class="mr-3 bg-dark p-2 text-light" style="border-radius: 5px;">صافى : {{totalProfit}}</h5>
+                        <h5 class="mr-3 bg-success p-2 text-light" style="border-radius: 5px;">ارباح : {{totalAdd}}</h5>
+                        <h5 class="mr-3 bg-danger p-2 text-light" style="border-radius: 5px;">خسائر : {{totalMin}}</h5>
+                    </div>
+                    <hr>
+                    <button class="btn btn-outline-info m-2" (click)='showStockProfitsPre(stockInfo)'>تفاصيل حركة البيع</button>
                 </div>
             </div>
         </div>
-        <div class="col-md-10">
+
+        <!-- newCode -->
+        <div class="col-md-9" style="overflow-y: hidden ;" id="productProfits">
+            <div id="profitDetails">
+                <div *ngFor='let product of profitArr; let i = index' class="row mt-3 bg-light"
+                    style="padding: 10px 0;">
+                    <div class="col-md-3">
+                        <div class="shadow card smokeBg">
+                            <div class="panel-body panel-flex-table"
+                                style="height: 100%; margin-top: 0px; margin-bottom: 5px;">
+                                <table class="flex-table table table-hover">
+                                    <thead class="navHeader">
+                                        <tr>
+                                            <th scope="col">{{product.name}}</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="tableBody" style="overflow-y: hidden;">
+                                        <div id="soldProds" style="border-bottom: solid 1px black;">
+                                            <tr class="text-success">
+                                                <th scope="row" class="text-dark">
+                                                    سعر شراء
+                                                </th>
+                                                <th>
+                                                    <i class="fa fa-caret-up pl-2"></i>
+                                                    اعلى
+                                                </th>
+                                                <td>{{product.in.maxPrice}}</td>
+                                            </tr>
+                                            <tr class="text-primary">
+                                                <th></th>
+                                                <th>
+                                                    <i class="fa fa-sort"></i>
+                                                    متوسط
+                                                </th>
+                                                <td>{{product.in.avr}}</td>
+                                            </tr>
+                                            <tr class="text-danger">
+                                                <th></th>
+                                                <th>
+                                                    <i class="fa fa-caret-down pl-2"></i>
+                                                    اقل
+                                                </th>
+                                                <td>{{product.in.minPrice}}</td>
+                                            </tr>
+                                        </div>
+                                        <div id="inProds">
+                                            <tr class="text-success">
+                                                <th scope="row" class="text-dark">
+                                                    سعر بيع
+                                                </th>
+                                                <th>
+                                                    <i class="fa fa-caret-up pl-2"></i>
+                                                    اعلى
+                                                </th>
+                                                <td>{{product.sold.maxPrice}}</td>
+                                            </tr>
+                                            <tr class="text-primary">
+                                                <th></th>
+                                                <th>
+                                                    <i class="fa fa-sort"></i>
+                                                    متوسط
+                                                </th>
+                                                <td>{{product.sold.avr}}</td>
+                                            </tr>
+                                            <tr class="text-danger">
+                                                <th></th>
+                                                <th>
+                                                    <i class="fa fa-caret-down pl-2"></i>
+                                                    اقل
+                                                </th>
+                                                <td>{{product.sold.minPrice}}</td>
+                                            </tr>
+                                        </div>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- secCard -->
+                    <div class="col-md-4">
+                        <div class="card shadow smokeBg">
+                            <div class="panel-body panel-flex-table"
+                                style="height: 100%; margin-top: 0px; margin-bottom: 5px;">
+                                <table class="flex-table table table-hover">
+                                    <thead class="navHeader">
+                                        <tr>
+                                            <th scope="col">بيان</th>
+                                            <th scope="col">كمية</th>
+                                            <th scope="col">قيمة</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="tableBody" style="overflow-y: hidden;">
+                                        <tr>
+                                            <th scope="row">شراء</th>
+                                            <td>{{product.in.qty}}</td>
+                                            <td>{{product.in.qtyVal}}</td>
+                                        </tr>
+                                        <tr class="bottomBorder">
+                                            <th scope="row">بيع</th>
+                                            <td>{{product.sold.qty}}</td>
+                                            <td>{{product.sold.qtyVal}}</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">متاح</th>
+                                            <td>{{product.qtyRemain}}</td>
+                                            <td>{{product.qtyRemainVal}}</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row" class="{{product.profitsColor}}">{{product.profitCond}}</th>
+                                            <td class="{{product.profitsColor}}">{{product.profits}}</td>
+                                            <td></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- thirdCard -->
+                    <!-- <div class="col-md-4">
+                        <div class="card shadow" style="background-color: whitesmoke;">
+                            <div class="panel-body panel-flex-table"
+                                style="height: 100%; margin-top: 0px; margin-bottom: 5px;">
+                                <table class="flex-table table table-hover">
+                                    <thead class="navHeader">
+                                        <tr>
+                                            <th scope="col">كمية</th>
+                                            <th scope="col">{{product.profitCond}}</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="tableBody" style="overflow-y: hidden;">
+                                        <tr>
+                                            <td>{{product.sold.qty}}</td>
+                                            <td class="{{product.profitsColor}}">{{product.profits}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div> -->
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-9" id='customersProfits' style="display: none;">
             <div class="card" id="profitDetails">
-                <div class="d-flex justify-content-between">
+                <!-- <div class="d-flex justify-content-between">
                     <div class="form-inline">
                         <h3 class="cardHeader">اجمالى الارباح :</h3>
                         <h4 class="mr-3 bg-dark p-2 text-light" style="border-radius: 5px;">{{totalProfit}}</h4>
@@ -30,8 +186,7 @@
                     </div>
                     <h3 class="cardHeader ml-3">"{{stockName}}"</h3>
                 </div>
-                
-                <hr>
+                <hr> -->
                 <div class="panel-body panel-flex-table">
                     <table class="flex-table table table-hover">
                         <thead class="navHeader">
@@ -48,7 +203,7 @@
                             </tr>
                         </thead>
                         <tbody class=" mt-3 tableBody">
-                            <tr *ngFor='let profit of profitArr; let i = index'>
+                            <tr *ngFor='let profit of profitArrCust; let i = index'>
                                 <td>{{profit.date}}</td>
                                 <td>{{profit.invNumber}}</td>
                                 <td style="flex: 2;">{{profit.customerName}}</td>
