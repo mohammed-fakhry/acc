@@ -198,6 +198,7 @@ body .wideScreen {
 .askForDelete {
   // display: none;
    width: 30%;
+   margin: auto;
    margin-top: 10%;
    z-index: 1000;
    background-color: white;
@@ -212,11 +213,11 @@ body .wideScreen {
   border-bottom: solid 1px black;
 }
 .inpCard {
- //background-color: whitesmoke;
- background-color: rgb(228, 228, 228);
+ background-color: whitesmoke;
+ //background-color: rgb(228, 228, 228);
  margin-right: 20px;
  margin-left: 20px;
- box-shadow: 0 15px 30px rgba(0, 0, 0, 0.486);
+ box-shadow: 0 .5rem 1rem rgba(0,0,0,.15) //0 15px 30px rgba(0, 0, 0, 0.486);
 }
 
 .settinLable {

@@ -124,7 +124,7 @@ export class CustomerComponent implements OnInit {
     };
 
     let Newcustomers = this.custRemainArry.filter((customer) => {
-      return customer.customerRemain != 0 && customer.customerName != 'حساب المحل - حسام' && customer.customerName != 'تست'
+      return customer.customerRemain != 0 && customer.customerName != 'تست'
     });
 
     Newcustomers.sort(function (a, b) {

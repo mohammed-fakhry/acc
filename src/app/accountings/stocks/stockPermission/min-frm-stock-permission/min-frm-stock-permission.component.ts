@@ -154,48 +154,54 @@ export class MinFrmStockPermissionComponent implements OnInit {
 
     for (let i = 0; i < this.invoiceInpArry.length; i++) {
 
-      if (this.invoiceInpArry[i].product != undefined) {
+      if (this.invoiceInpArry[i].price != undefined || this.invoiceInpArry[i].price != undefined) {
 
-        if (this.productArr.includes(this.invoiceInpArry[i].product)) {
-          this.invoiceInpArry[i].inpVaild = false;
-        } else {
-          this.invoiceInpArry[i].inpVaild = true;
-          this.invoiceInpArry[i].productVaildMsg = 'خطأ فى اسم الصنف'
-          //console.log('yes')
+        if (this.invoiceInpArry[i].product != undefined || this.invoiceInpArry[i].product != '') {
+
+          if (this.productArr.includes(this.invoiceInpArry[i].product)) {
+            this.invoiceInpArry[i].inpVaild = false;
+          } else {
+            this.invoiceInpArry[i].inpVaild = true;
+            this.invoiceInpArry[i].productVaildMsg = 'خطأ فى اسم الصنف'
+            //console.log('yes')
+          };
+  
+          if (this.invoiceInpArry[i].Qtyinvaild == true) {
+            this.invoiceInpArry[i].qty = '';
+            this.invoiceInpArry[i].Qtyinvaild = false;
+          };
+  
+          /* if (this.invoiceInpArry[i].price > 0 || this.invoiceInpArry[i].qty > 0) {
+            this.invoiceInpArry[i].price = null;
+            this.invoiceInpArry[i].qty = null;
+          } */;
+  
+          let productInfo = this._stockService.handleBackEnd.find(prod => {
+            prod.productName == this.invoiceInpArry[i].product &&
+              prod.stockId == stockInfo.stockId;
+          });
+  
+          console.log(this.invoiceInpArry[i].product)
+  
+          /**
+            productCost: 58
+            productId: "76"
+            productName: "لايك استريك"
+            productPrice: 0
+            productQty: 50
+            stockId: "3"
+            stockName: "محل حسام"
+            stockProductId: "55"
+           */
+  
+          /* if (custInfo.customerName == 'حساب المحل - حسام') {
+            this.invoiceInpArry[i].price = productInfo.productCost;
+          }; */
+          
         };
-
-        if (this.invoiceInpArry[i].Qtyinvaild == true) {
-          this.invoiceInpArry[i].qty = '';
-          this.invoiceInpArry[i].Qtyinvaild = false;
-        };
-
-        /* if (this.invoiceInpArry[i].price > 0 || this.invoiceInpArry[i].qty > 0) {
-          this.invoiceInpArry[i].price = null;
-          this.invoiceInpArry[i].qty = null;
-        } */;
-
-        let productInfo = this._stockService.handleBackEnd.find(prod => {
-          prod.productName == this.invoiceInpArry[i].product &&
-            prod.stockId == stockInfo.stockId;
-        });
-
-        console.log(this.invoiceInpArry[i].product)
-        /**
-         * productCost: 58
-productId: "76"
-productName: "لايك استريك"
-productPrice: 0
-productQty: 50
-stockId: "3"
-stockName: "محل حسام"
-stockProductId: "55"
-         */
-
-        /* if (custInfo.customerName == 'حساب المحل - حسام') {
-          this.invoiceInpArry[i].price = productInfo.productCost;
-        }; */
-        
       };
+
+      
       /* let productinpt = $(`#product${i}`).val();
       if (this.productArr.includes(productinpt) || productinpt == '') {
         this.invoiceInpArry[i].inpVaild = false;
@@ -597,7 +603,7 @@ stockProductId: "55"
       let postStockPridgeObj = new StockPridge();
       let stockTransactionD = new StockTransactionD();
 
-      if (this.invoiceInpArry[i].product !== undefined) {
+      if (this.invoiceInpArry[i].product !== undefined || this.invoiceInpArry[i].product !== '') {
 
         let getProductInfo = this._stockService.allProducts.find(
           product => product.productName === this.invoiceInpArry[i].product

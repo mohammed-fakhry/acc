@@ -115,7 +115,7 @@
                                 </div>
                             </td>
                             <td><input type="number" name="price{{i}}" [(ngModel)]="inpt.price" class="form-control"
-                                    (change)="calcTotals()" [disabled]="inputDisabled"></td>
+                                    (keyup)="calcTotals()" [disabled]="inputDisabled"></td>
                             <td class="text-center font-weight-bold">{{inpt.total}}</td>
                             <input name="stockTransactionDetailsId{{i}}" [(ngModel)]="inpt.stockTransactionDetailsId"
                                 class="d-none">

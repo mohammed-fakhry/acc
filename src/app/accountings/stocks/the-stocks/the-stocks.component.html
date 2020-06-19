@@ -11,7 +11,7 @@
             <button class="btn btn-outline-info" id="hideFadeLayer">الغاء</button>
         </div>
     </div>
-    <div class="container p-3 card askForDelete" style="display: none;" id="stockPerDone">
+    <div class="container card p-3 askForDelete" style="display: none;" id="stockPerDone">
         <h3 class="bg-info text-white p-3">تم التسجيل بنجاح</h3>
         <hr>
         <div class="d-flex flex-row-reverse">
@@ -77,7 +77,8 @@
                         (click)="showTranceStockPrem()">اذن مخزن</button>
                 </div>
             </div>
-            <button class="btn btn-outline-info mx-2 headerMainBtn" id="showProfitsBtn" (click)="showProfits()">الارباح</button>
+            <button class="btn btn-outline-info mx-2 headerMainBtn" id="showProfitsBtn"
+                (click)="showProfits()">الارباح</button>
             <button class="btn btn-success mx-2 d-none" id="testBtn" (click)='testbtn()'>test</button>
             <div class="headerLeftBorder"></div>
             <input *ngIf="router.url === '/stocks'" [(ngModel)]="searchTxt" placeholder="بحث" class="form-control mx-3"

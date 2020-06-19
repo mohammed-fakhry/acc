@@ -35,6 +35,7 @@ import { SafeReceiptComponent } from './accountings/safe-acc/safe-receipt/safe-r
 import { SafeTransactionComponent } from './accountings/safe-acc/safe-transaction/safe-transaction.component';
 import { SafeTranceSearchPipe } from './accountings/safe-trance-search.pipe';
 import { ProfitsComponent } from './accountings/stocks/profits/profits.component';
+import { SearchProdProfitPipe } from './search-prod-profit.pipe';
 
 @NgModule({
   declarations: [
@@ -70,6 +71,7 @@ import { ProfitsComponent } from './accountings/stocks/profits/profits.component
     SafeTransactionComponent,
     SafeTranceSearchPipe,
     ProfitsComponent,
+    SearchProdProfitPipe,
   ],
   imports: [
     BrowserModule,
