@@ -69,6 +69,7 @@ background-color:rgb(2, 107, 121);
 
 .darkBg {
 background-color: rgb(22, 76, 117); //rgba(0, 7, 7, 0.95); //rgb(26, 51, 70); //rgb(2, 107, 121);
+color: white;
 }
 
 .lightBg {
@@ -79,6 +80,11 @@ background-color: rgba(214, 234, 241, 0.95);
 .smokeBg {
   color: black;
   background-color: rgb(228, 228, 228);
+}
+
+.darkGrayBg {
+  background-color: rgb(211, 211, 211);
+  color: black;
 }
 
 .cardHeader {

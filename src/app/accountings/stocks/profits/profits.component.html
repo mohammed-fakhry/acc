@@ -1,8 +1,8 @@
 <!--table-->
 <div class="container-fluid">
     <div class="row" style="padding-left: 20px;">
-        <div class="col-md-2">
-            <div class="stickyInp">
+        <div class="col-md-2 ">
+            <div class="stickyInp darkBg py-1 card">
                 <div class="card">
                     <div class="panel-body panel-flex-table" style="height: fit-content;">
                         <table class="flex-table table table-hover">
@@ -25,7 +25,7 @@
                     <input [(ngModel)]="searchProd" placeholder="بحث باسم الصنف" class="form-control mb-2"
                         id="searchProd">
                     <div>
-                        <h5 class="darkBg p-2 text-light" style="border-radius: 5px;">صافى : {{totalProfit}}</h5>
+                        <h5 class="lightBg p-2" style="border-radius: 5px;">صافى : {{totalProfit}}</h5>
                         <h5 class="bg-success p-2 text-light" style="border-radius: 5px;">ارباح : {{totalAdd}}</h5>
                         <h5 class="bg-danger p-2 text-light" style="border-radius: 5px;">خسائر : {{totalMin}}</h5>
                     </div>
@@ -37,13 +37,14 @@
             </div>
         </div>
         <!-- |searchProdProfit:searchProd -->
-
         <!-- newCode -->
-        <div class="col-md-10 smokeBg" style="display: none;" id="productProfits">
-            <div id="profitDetails">
+        <div class="col-md-10"
+            style="display: none; height: 950px; overflow-y: auto; border-top: solid 3px rgb(22, 76, 117); border-bottom: solid 3px rgb(22, 76, 117);"
+            id="productProfits">
+            <div id="profitDetails" class="pt-1">
                 <div *ngFor='let product of profitArr|searchProdProfit:searchProd; let i = index'
                     class="row mb-3 bg-light" style="padding: 10px 0;">
-                    <div class="col-md-1 darkBg text-light shadow-lg" style="text-align: center; border-radius: 5px;">
+                    <div class="col-md-1 darkGrayBg shadow-lg" style="text-align: center; border-radius: 5px;">
                         <div class="text-center">
                             <h3 class="text-center pt-3">{{product.name}}</h3>
                         </div>
@@ -79,12 +80,12 @@
                                             </tr>
                                             <!--  -->
                                             <tr class="text-primary">
-                                                <th>
+                                                <th class="darkGrayBg">
                                                     <i class="fa fa-sort"></i>
                                                     متوسط
                                                 </th>
-                                                <td>{{product.in.avr}}</td>
-                                                <td>{{product.sold.avr}}</td>
+                                                <td class="darkGrayBg">{{product.in.avr}}</td>
+                                                <td class="darkGrayBg">{{product.sold.avr}}</td>
                                             </tr>
                                             <tr class="text-danger">
                                                 <th>
@@ -95,34 +96,6 @@
                                                 <td>{{product.sold.minPrice}}</td>
                                             </tr>
                                         </div>
-                                        <!-- <div id="inProds">
-                                            <tr class="text-success">
-                                                <th scope="row" class="text-dark">
-                                                    سعر بيع
-                                                </th>
-                                                <th>
-                                                    <i class="fa fa-caret-up pl-2"></i>
-                                                    اعلى
-                                                </th>
-                                                <td>{{product.sold.maxPrice}}</td>
-                                            </tr>
-                                            <tr class="text-primary">
-                                                <th></th>
-                                                <th>
-                                                    <i class="fa fa-sort"></i>
-                                                    متوسط
-                                                </th>
-                                                <td>{{product.sold.avr}}</td>
-                                            </tr>
-                                            <tr class="text-danger">
-                                                <th></th>
-                                                <th>
-                                                    <i class="fa fa-caret-down pl-2"></i>
-                                                    اقل
-                                                </th>
-                                                <td>{{product.sold.minPrice}}</td>
-                                            </tr>
-                                        </div> -->
                                     </tbody>
                                 </table>
                             </div>
@@ -158,9 +131,12 @@
                                             <td>{{product.qtyRemainVal}}</td>
                                         </tr>
                                         <tr>
-                                            <th scope="row" class="{{product.profitsColor}}">{{product.profitCond}}</th>
-                                            <td class="{{product.profitsColor}}">{{product.profits}}</td>
-                                            <td></td>
+                                            <th scope="row" class="{{product.profits.profitsColor()}}">
+                                                {{product.profits.profitCond()}}</th>
+                                            <td class="{{product.profits.profitsColor()}}">{{product.profits.profit}}
+                                            </td>
+                                            <td class="{{product.profits.profitsColor()}}">{{product.profits.perc()}}
+                                            </td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -169,71 +145,50 @@
                     </div>
                     <div class="col-md-5">
                         <div class="card shadow smokeBg">
+                            <h5 class="navHeader text-center p-2">ارباح رصيد باقى</h5>
                             <div class="panel-body panel-flex-table"
                                 style="height: 100%; margin-top: 0px; margin-bottom: 5px;">
-                                <table class="flex-table table table-hover">
-                                    <thead class="navHeader">
+                                <table class="flex-table table">
+                                    <thead class="bg-secondary text-white">
                                         <tr>
-                                            <th scope="col">بيان</th>
+                                            <th scope="col" style="flex: 2;">بيان</th>
                                             <th scope="col">سعر</th>
-                                            <th scope="col">{{product.profitLastPrice.desc()}}</th>
+                                            <th scope="col">متوقعة</th>
+                                            <th scope="col">ربحية</th>
+                                            <th scope="col">اجمالى ربح</th>
                                         </tr>
                                     </thead>
                                     <tbody class="tableBody" style="overflow-y: hidden;">
-                                        <tr>
-                                            <th scope="row">اخر سعر بيع</th>
+                                        <tr class="bottomBorder">
+                                            <th scope="row" style="flex: 2;">اخر سعر بيع</th>
                                             <td>{{product.sold.lastPrice()}}</td>
-                                            <td class="{{product.profitLastPrice.color()}}">{{product.profitLastPrice.val()}}</td>
+                                            <td class="{{product.profitLastPrice.color()}}">
+                                                {{product.profitLastPrice.val()}}</td>
+                                            <td class="{{product.profitLastPrice.color()}}">
+                                                {{product.profitLastPrice.percentage()}}</td>
+                                            <td class="{{product.profitLastPrice.total.color()}}">
+                                                {{product.profitLastPrice.total.val()}}</td>
                                         </tr>
-                                        <!-- <tr class="bottomBorder">
-                                            <th scope="row">بيع</th>
-                                            <td>{{product.sold.qty}}</td>
-                                            <td>{{product.sold.qtyVal}}</td>
+                                        <tr class="darkGrayBg">
+                                            <th scope="row" style="flex: 2;">سعر موصى به</th>
+                                            <td>{{product.recommendedPrice.price()}}</td>
+                                            <td>{{product.recommendedPrice.profit()}}</td>
+                                            <td>{{product.recommendedPrice.percentage()}}</td>
+                                            <td scope="col" class="{{product.recommendedPrice.total.color()}}">
+                                                {{product.recommendedPrice.total.val()}}</td>
                                         </tr>
-                                        <tr>
-                                            <th scope="row">متاح</th>
-                                            <td>{{product.qtyRemain}}</td>
-                                            <td>{{product.qtyRemainVal}}</td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row" class="{{product.profitsColor}}">{{product.profitCond}}</th>
-                                            <td class="{{product.profitsColor}}">{{product.profits}}</td>
-                                            <td></td>
-                                        </tr> -->
                                     </tbody>
                                 </table>
                             </div>
                         </div>
                     </div>
-                    <!-- thirdCard -->
-                    <!-- <div class="col-md-4">
-                        <div class="card shadow" style="background-color: whitesmoke;">
-                            <div class="panel-body panel-flex-table"
-                                style="height: 100%; margin-top: 0px; margin-bottom: 5px;">
-                                <table class="flex-table table table-hover">
-                                    <thead class="navHeader">
-                                        <tr>
-                                            <th scope="col">كمية</th>
-                                            <th scope="col">{{product.profitCond}}</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody class="tableBody" style="overflow-y: hidden;">
-                                        <tr>
-                                            <td>{{product.sold.qty}}</td>
-                                            <td class="{{product.profitsColor}}">{{product.profits}}</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div> -->
                 </div>
             </div>
         </div>
 
         <div class="col-md-10" id='customersProfits' style="display: none;">
             <div class="card" id="profitDetails">
-                <div class="panel-body panel-flex-table">
+                <div class="panel-body panel-flex-table" style="height: 950px;">
                     <table class="flex-table table table-hover">
                         <thead class="navHeader">
                             <tr>

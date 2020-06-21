@@ -114,20 +114,13 @@ export class MinFrmStockPermissionComponent implements OnInit {
   inputDisabled: boolean = true;
 
   makeTheStockProds() {
-    this.deleteMinInvBtnDisabled = true;
-    this._theStockComp.testBackend();
-    let theStock = $('#stockNameForMin').val();
-    this.theStockProds = [];
-    for (let m = 0; m < this._stockService.makeStockArry.length; m++) {
-      let stockObj = this._stockService.makeStockArry.find(
-        obj => obj.stockName == theStock
-      );
-      if (stockObj != undefined) {
-        this.theStockProds = stockObj.stockProducts;
-        //console.log(this.theStockProds)
-        break
-      }
-    }
+
+    let stockInfo: Stock = this._stockService.stocks.find(stock => stock.stockName == this.stockNameInpt);
+
+    this._theStockComp.getStockTrance.then((data: any[]) => {
+      this.theStockProds = this._theStockComp.stockProdFactory(stockInfo)
+      //console.log(this.theStockProds)
+    });
 
     this.inputDisabled = false;
   }
@@ -147,14 +140,15 @@ export class MinFrmStockPermissionComponent implements OnInit {
     let found: boolean;
 
     // let custName = $('#customerNameForMin').val();
-    let custInfo = this.customers.find(cust => cust.customerName == this.custNameInpt);
+    // let custInfo = this.customers.find(cust => cust.customerName == this.custNameInpt);
     let stockInfo = this._stockService.stocks.find(stock => stock.stockName == this.stockNameInpt);
 
-    console.log(custInfo)
+
+    ////console.log(this.stockNameInpt)
 
     for (let i = 0; i < this.invoiceInpArry.length; i++) {
 
-      if (this.invoiceInpArry[i].price != undefined || this.invoiceInpArry[i].price != undefined) {
+      if (this.invoiceInpArry[i].price != undefined || this.invoiceInpArry[i].qty != undefined) {
 
         if (this.invoiceInpArry[i].product != undefined || this.invoiceInpArry[i].product != '') {
 
@@ -165,61 +159,15 @@ export class MinFrmStockPermissionComponent implements OnInit {
             this.invoiceInpArry[i].productVaildMsg = 'خطأ فى اسم الصنف'
             //console.log('yes')
           };
-  
+
           if (this.invoiceInpArry[i].Qtyinvaild == true) {
             this.invoiceInpArry[i].qty = '';
             this.invoiceInpArry[i].Qtyinvaild = false;
           };
-  
-          /* if (this.invoiceInpArry[i].price > 0 || this.invoiceInpArry[i].qty > 0) {
-            this.invoiceInpArry[i].price = null;
-            this.invoiceInpArry[i].qty = null;
-          } */;
-  
-          let productInfo = this._stockService.handleBackEnd.find(prod => {
-            prod.productName == this.invoiceInpArry[i].product &&
-              prod.stockId == stockInfo.stockId;
-          });
-  
-          console.log(this.invoiceInpArry[i].product)
-  
-          /**
-            productCost: 58
-            productId: "76"
-            productName: "لايك استريك"
-            productPrice: 0
-            productQty: 50
-            stockId: "3"
-            stockName: "محل حسام"
-            stockProductId: "55"
-           */
-  
-          /* if (custInfo.customerName == 'حساب المحل - حسام') {
-            this.invoiceInpArry[i].price = productInfo.productCost;
-          }; */
-          
-        };
-      };
 
-      
-      /* let productinpt = $(`#product${i}`).val();
-      if (this.productArr.includes(productinpt) || productinpt == '') {
-        this.invoiceInpArry[i].inpVaild = false;
-      } else {
-        this.invoiceInpArry[i].inpVaild = true;
-        this.invoiceInpArry[i].productVaildMsg = 'خطأ فى اسم الصنف'
-        //console.log('yes')
-      };
-      if (this.invoiceInpArry[i].Qtyinvaild == true) {
-        this.invoiceInpArry[i].qty = '';
-        this.invoiceInpArry[i].Qtyinvaild = false;
-      }
-      if (this.invoiceInpArry[i].product == '') {
-        if (this.invoiceInpArry[i].price > 0 || this.invoiceInpArry[i].qty > 0) {
-          this.invoiceInpArry[i].price = null;
-          this.invoiceInpArry[i].qty = null;
         };
-      }; */
+
+      };
 
       // if productName dublicated
       let valueArr = this.invoiceInpArry.map((item) => { return item.product });
@@ -268,7 +216,6 @@ export class MinFrmStockPermissionComponent implements OnInit {
   isAddQtyVaild() {
 
     this.deleteMinInvBtnDisabled = true;
-    let loopCount = 1;
 
     for (let i = 0; i < this.invoiceInpArry.length; i++) {
       if (this.invoiceInpArry[i].product != undefined) {
@@ -277,14 +224,18 @@ export class MinFrmStockPermissionComponent implements OnInit {
           this.invoiceInpArry[i].qtyMsg = `لا يوجد رصيد لهذا الصنف`
         } else {
           let theProductQtyInfo = this.getTheProdQty(this.invoiceInpArry[i].product);
+          console.log({info: theProductQtyInfo, isOk: this.invoiceInpArry[i].qty, prod: this.invoiceInpArry[i].product})
           //console.log(theProductQtyInfo)
           if (theProductQtyInfo != undefined) {
-            if (this.invoiceInpArry[i].product == theProductQtyInfo.productName && this.invoiceInpArry[i].qty > theProductQtyInfo.productQty) {
+
+            if (this.invoiceInpArry[i].product == theProductQtyInfo.productName &&
+              this.invoiceInpArry[i].qty > theProductQtyInfo.productQty) {
+
               if (this.qtyIsOkArry == undefined) {
                 this.invoiceInpArry[i].Qtyinvaild = true;
                 this.invoiceInpArry[i].qtyMsg = `الرصيد المتاح ( ${theProductQtyInfo.productQty} )`
                 //console.log(this.qtyIsOkArry + ' : this.qtyIsOkArry')
-              } else if (this.qtyIsOkArry[i] == null) {
+              } else if (this.qtyIsOkArry[i] == 0) {
                 //console.log(this.qtyIsOkArry[i] + ' : this.qtyIsOkArry[i]')
                 this.invoiceInpArry[i].Qtyinvaild = true;
                 this.invoiceInpArry[i].qtyMsg = `الرصيد المتاح ( ${theProductQtyInfo.productQty} )`
@@ -296,17 +247,25 @@ export class MinFrmStockPermissionComponent implements OnInit {
                 this.invoiceInpArry[i].Qtyinvaild = false;
                 //console.log(theProductQtyInfo + ' : the tree if')
               };
+
             } else {
               this.invoiceInpArry[i].Qtyinvaild = false;
               //console.log('else')
             }
+
           } else {
             this.invoiceInpArry[i].Qtyinvaild = true;
             this.invoiceInpArry[i].qtyMsg = 'لا يوجد رصيد لهذا الصنف'
+            
           };
+          
         };
+        
       };
     };
+
+
+    
 
     for (let i = 0; i < this.invoiceInpArry.length; i++) {
       if (this.invoiceInpArry[i].Qtyinvaild == true) {
@@ -322,7 +281,7 @@ export class MinFrmStockPermissionComponent implements OnInit {
   custVaildMsg: string;
 
   isCustNameInvaild() {
-    let custName = $('#customerNameForMin').val()
+    let custName = this.custNameInpt //$('#customerNameForMin').val()
 
     for (let i = 0; i < this.customers.length; i++) {
       if (custName == this.customers[i].customerName) {
@@ -342,9 +301,13 @@ export class MinFrmStockPermissionComponent implements OnInit {
   };
 
   invoiceTotal: string = '0';
-  calcTotals() {
+  calcTotals(cond: string) {
+
+    if (cond == 'inpt') {
+      this.isAddQtyVaild();
+    };
+
     this.deleteMinInvBtnDisabled = true;
-    this.isAddQtyVaild();
     this.totalInvoice = []
     this.invoiceTotal = '0'
     for (let i = 0; i < this.invoiceInpArry.length; i++) {
@@ -364,7 +327,7 @@ export class MinFrmStockPermissionComponent implements OnInit {
   theCustomerId: number;
 
   getTheCustomerId() {
-    let theCustomer = $('#customerNameForMin').val();
+    let theCustomer = this.custNameInpt //$('#customerNameForMin').val();
     let custInfo = this.customers.find(customer => customer.customerName == theCustomer);
     if (custInfo != undefined) {
       this.theCustomerId = custInfo.customerId;
@@ -373,8 +336,8 @@ export class MinFrmStockPermissionComponent implements OnInit {
 
   getTheStockId() {
     // get the stockId
-    let theStock = $('#stockNameForMin').val();
-    let stockInfo: Stock = this._stockService.stocks.find(stock => stock.stockName == theStock);
+    //let theStock = this.stockNameInpt //$('#stockNameForMin').val();
+    let stockInfo: Stock = this._stockService.stocks.find(stock => stock.stockName == this.stockNameInpt);
     if (stockInfo != undefined) {
       this.theStockId = stockInfo.stockId;
     };
@@ -404,7 +367,7 @@ export class MinFrmStockPermissionComponent implements OnInit {
   theNote: string;
   theStockTransactionId: string;
 
-  ivoiceItemesForEdit: any[];
+  ivoiceItemesForEdit: any[] = [];
 
   invNumMin: number;
 
@@ -421,7 +384,7 @@ export class MinFrmStockPermissionComponent implements OnInit {
     this.ivoiceItemesForEdit = [];
 
     for (let i = 0; i < 7; i++) {
-      this.invoiceInp = new InvoiceInp()
+      this.invoiceInp = new InvoiceInp();
       this.invoiceInp.total = 0;
       this.invoiceInpArry.push(this.invoiceInp);
     };
@@ -462,7 +425,7 @@ export class MinFrmStockPermissionComponent implements OnInit {
         };
       };
 
-      this.resetAddinvoiceValu();
+      //this.resetAddinvoiceValu();
 
       $('#minStockTransactionId').val(theInvoiceInfo.stockTransactionId);
       for (let d = 0; d < theInvoiceInfo.invoiceDetails.length; d++) {
@@ -474,28 +437,31 @@ export class MinFrmStockPermissionComponent implements OnInit {
       };
 
       this.ivoiceItemesForEdit = theInvoiceInfo.invoiceDetails
+      console.log(this.ivoiceItemesForEdit)
 
       this._service.date_time = theInvoiceInfo.date_time;
+      this.stockNameInpt = theInvoiceInfo.stockName;
       $('#stockNameForMin').val(theInvoiceInfo.stockName);
+      this.custNameInpt = theInvoiceInfo.customerName
       $('#customerNameForMin').val(theInvoiceInfo.customerName);
       $('#minInvoiceNote').val(theInvoiceInfo.notes);
       this.invNumMin = theInvoiceInfo.invNumber;
 
       this.makeTheStockProds()
-      this.calcTotals();
+      this.calcTotals('other');
       this.qtyIsOkArry = [];
       for (let v = 0; v < this.invoiceInpArry.length; v++) {
         this.invoiceInpArry[v].inpVaild = false;
-        if (this.invoiceInpArry[v].Qtyinvaild == true) {
+        if (this.invoiceInpArry[v].Qtyinvaild != true) {
           let theQtyIsOk = this.invoiceInpArry[v].qty;
           this.qtyIsOkArry.push(theQtyIsOk)
         } else {
-          this.qtyIsOkArry.push(null)
+          this.qtyIsOkArry.push(0)
         }
-        //console.log(this.qtyIsOkArry)
+        console.log(this.qtyIsOkArry)
         //this.invoiceInpArry[v].Qtyinvaild = false;
       }
-      this.isAddQtyVaild();
+      //this.isAddQtyVaild();
       $('#minCallInvoice').hide();
       $('#minInvoiceForm').show();
 
@@ -505,7 +471,7 @@ export class MinFrmStockPermissionComponent implements OnInit {
 
   theCustomerInfo: Customer;
 
-  editStockQtys() {
+  editStockQtysPre() {
 
     this._stockService.getHandleBackEnd().subscribe((data: HandleBackEnd[]) => {
       this._stockService.handleBackEnd = data;
@@ -555,7 +521,228 @@ export class MinFrmStockPermissionComponent implements OnInit {
 
   }; // editStockQtys
 
+  editStockQtys() {
+
+    //this.getTheStockId();
+    let BtnSubmitHtml = $('#minNewInvoicetBtn').html(); // to check if invoice for update or add
+    let theProductId: number;
+    let postStockPridgeObj = new StockPridge();
+
+    if (BtnSubmitHtml == "تعديل الفاتورة") {
+
+      console.log(this.ivoiceItemesForEdit)
+
+      this.theCustomerInfo = this.getCustomerInfo(this.ivoiceItemesForEdit[0].customerId);
+
+      this.theCustomerInfo.customerRemain = this.theCustomerInfo.customerRemain - this.ivoiceItemesForEdit[0].invoiceTotal;
+      this._custService.updateCustomerSer(this.theCustomerInfo).subscribe();
+
+      for (let v = 0; v < this.ivoiceItemesForEdit.length; v++) {
+
+        let getProductsInfo = this._stockService.allProducts.find(
+          product => product.productName === this.ivoiceItemesForEdit[v].productName
+        )
+        theProductId = getProductsInfo.productId;
+
+        let getHandleInfo = this._stockService.handleBackEnd.find(
+          handleInfo => handleInfo.productId == theProductId &&
+            handleInfo.stockId == this.ivoiceItemesForEdit[v].stockId
+        )
+
+        let indx = this._stockService.handleBackEnd.findIndex(
+          i => i.stockProductId === getHandleInfo.stockProductId
+        )
+
+        postStockPridgeObj = {
+          productId: theProductId,
+          stockId: this.ivoiceItemesForEdit[v].stockId,
+          stockProductId: getHandleInfo.stockProductId,
+          productQty: getHandleInfo.productQty + parseInt(this.ivoiceItemesForEdit[v].Qty),
+          productCost: getHandleInfo.productCost,
+          productPrice: getHandleInfo.productPrice,
+        };
+
+        this._stockService.handleBackEnd[indx].productQty = postStockPridgeObj.productQty;
+        this._stockService.updateStockPridge(postStockPridgeObj).subscribe() // for stocks DB
+      };
+    };
+
+    //return Promise.resolve('qtyEdited')
+
+  }; // editStockQtys
+
   makeMinStockPremArry() {
+
+    const getHandle = new Promise((res) => {
+      this._stockService.getHandleBackEnd().subscribe((data: HandleBackEnd[]) => {
+        this._stockService.handleBackEnd = data;
+        res(data)
+      })
+    })
+
+    getHandle
+      .then(() => this.editStockQtys())
+      .then(() => {
+
+        this.getTheStockId();
+        this.getTheCustomerId();
+
+        let theProductId: number;
+        this.checkAllArry = 1; // check after loop on the handleArry that the product not found
+        this.theNote = $('#minInvoiceNote').val();
+        this.theStockTransactionId = $('#minStockTransactionId').val();
+
+        // mainTable
+        let stockTransaction: StockTransaction = {
+          stockTransactionId: Date.now().toString(),
+          invNumber: this._theStockComp.newMinInvNumber,
+          stockId: this.theStockId,
+          sndStockId: 1,
+          customerId: this.theCustomerId,
+          transactionType: 2,
+          invoiceTotal: parseInt(this.invoiceTotal),
+          date_time: this._service.date_time,
+          notes: this.theNote,
+        };
+
+        this.theCustomerInfo = this.getCustomerInfo(this.theCustomerId);
+        this.theCustomerInfo.customerRemain = this.theCustomerInfo.customerRemain + parseInt(this.invoiceTotal);
+        this._custService.updateCustomerSer(this.theCustomerInfo).subscribe();
+
+        // edit or add
+        if (this.theStockTransactionId == '') {
+
+          this._stockService.creatStockTransaction(stockTransaction).subscribe();
+
+        } else {
+
+          stockTransaction.stockTransactionId = this.theStockTransactionId;
+          this._stockService.UpdateStockTransaction(stockTransaction).subscribe();
+        };
+
+        let BtnSubmitHtml = $('#minNewInvoicetBtn').html(); // to check if invoice for update or add
+
+        for (let i = 0; i < this.invoiceInpArry.length; i++) {
+
+          // if not productName to delete stocktransactionDetail
+          if (this.invoiceInpArry[i].stockTransactionDetailsId != undefined && this.invoiceInpArry[i].product == '') {
+            this._stockService.deleteStockTransactionDetails(this.invoiceInpArry[i].stockTransactionDetailsId).subscribe();
+          };
+
+          let postStockPridgeObj = new StockPridge();
+          let stockTransactionD = new StockTransactionD();
+
+          if (this.invoiceInpArry[i].product != undefined && this.invoiceInpArry[i].product != '') {
+
+            let getProductInfo = this._stockService.allProducts.find(
+              product => product.productName === this.invoiceInpArry[i].product
+            );
+
+            theProductId = getProductInfo.productId;
+
+            // for the first invoice
+            if (this._stockService.handleBackEnd.length == 0) {
+
+              postStockPridgeObj = {
+                stockProductId: null,
+                productId: theProductId,
+                stockId: this.theStockId,
+                productQty: parseInt(this.invoiceInpArry[i].qty),
+                productPrice: parseInt(this.invoiceInpArry[i].price),
+                productCost: 0,
+              };
+
+              this._stockService.postStockPridge(postStockPridgeObj).subscribe();
+
+              // save stocktransactionDetails
+              stockTransactionD = {
+                stockTransactionDetailsId: null,
+                stockTransactionId: stockTransaction.stockTransactionId,
+                productId: theProductId,
+                price: parseInt(this.invoiceInpArry[i].price),
+                Qty: parseInt(this.invoiceInpArry[i].qty),
+              };
+
+              this._stockService.creatStockTransactionDetails(stockTransactionD).subscribe() // for invoice DB
+
+            }; // for the first invoice
+
+            let getHandleInfo = this._stockService.handleBackEnd.find(
+              handleInfo => handleInfo.productId == theProductId &&
+                handleInfo.stockId == this.theStockId
+            );
+
+            if (getHandleInfo != undefined) {
+
+              postStockPridgeObj = {
+                productId: theProductId,
+                stockId: this.theStockId,
+                productCost: getHandleInfo.productCost,
+                productPrice: parseInt(this.invoiceInpArry[i].price),
+                productQty: getHandleInfo.productQty - parseInt(this.invoiceInpArry[i].qty),
+                stockProductId: getHandleInfo.stockProductId
+              };
+
+              this._stockService.updateStockPridge(postStockPridgeObj).subscribe() // for stocks DB
+
+              // save stocktransactionDetails
+              stockTransactionD = {
+                stockTransactionDetailsId: null,
+                stockTransactionId: stockTransaction.stockTransactionId,
+                productId: theProductId,
+                price: parseInt(this.invoiceInpArry[i].price),
+                Qty: parseInt(this.invoiceInpArry[i].qty)
+              };
+
+              // edite Or Add
+              if (BtnSubmitHtml == "تعديل الفاتورة") {
+
+                stockTransactionD.stockTransactionDetailsId = this.invoiceInpArry[i].stockTransactionDetailsId;
+
+                if (stockTransactionD.stockTransactionDetailsId == undefined) {
+                  this._stockService.creatStockTransactionDetails(stockTransactionD).subscribe() // for invoice DB
+
+                };
+
+                this._stockService.UpdateStockTransactionDetails(stockTransactionD).subscribe();
+
+              } else if (BtnSubmitHtml == "تسجيل") {
+                this._stockService.creatStockTransactionDetails(stockTransactionD).subscribe() // for invoice DB
+
+              };
+
+            } else {
+
+              postStockPridgeObj = {
+                stockProductId: null,
+                productId: theProductId,
+                stockId: this.theStockId,
+                productQty: parseInt(this.invoiceInpArry[i].qty),
+                productCost: getHandleInfo.productCost,
+                productPrice: parseInt(this.invoiceInpArry[i].price),
+              };
+
+              // save stocktransactionDetails
+              stockTransactionD = {
+                stockTransactionDetailsId: null,
+                stockTransactionId: stockTransaction.stockTransactionId,
+                productId: theProductId,
+                price: parseInt(this.invoiceInpArry[i].price),
+                Qty: parseInt(this.invoiceInpArry[i].qty)
+              };
+
+              this._stockService.postStockPridge(postStockPridgeObj).subscribe();
+
+              this._stockService.creatStockTransactionDetails(stockTransactionD).subscribe(); // for invoice DB
+
+            };
+          };
+        }; // fst loop
+      })
+
+  }; // makeMinStockPremArry
+
+  makeMinStockPremArryPre() {
 
     this.getTheStockId();
     this.getTheCustomerId();
@@ -752,6 +939,7 @@ export class MinFrmStockPermissionComponent implements OnInit {
     //location.reload();
     this._theStockComp.showStocksEnquiry();
     //this.refreshBackendData();
+
   };
 
 

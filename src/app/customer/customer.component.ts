@@ -416,9 +416,11 @@ export class CustomerComponent implements OnInit {
 
           this.custRemainArry.push(cust);
 
-          custInfo.customerRemain = cust.remain;
+          if (custInfo.customerRemain != cust.remain) {
+            custInfo.customerRemain = cust.remain;
+            this.syncBackend(custInfo);
+          };
 
-          //this.syncBackend(custInfo);
         };
 
         res('makeCustRem')

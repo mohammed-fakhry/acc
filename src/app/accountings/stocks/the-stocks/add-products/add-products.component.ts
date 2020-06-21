@@ -3,6 +3,7 @@ import { StocksService } from '../stocks.service';
 import { ServicesService } from 'src/app/services.service';
 import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import { TheStocksComponent } from '../the-stocks.component';
+import { ProductsClass } from '../../products-class';
 
 @Component({
   selector: 'app-add-products',
@@ -60,7 +61,8 @@ export class AddProductsComponent implements OnInit {
     this._service.clearForm();
     this._theStockComp.ngOnInit();
     //this._theStockComp.makeProductNameArr();
-    this._theStockComp.getAllProducts.then((data) => {
+    this._theStockComp.getAllProducts.then((data: ProductsClass[]) => {
+      this._stockService.allProducts = data
       $('#productName').removeClass('is-valid is-invalid');
       $('#productNameAlert').hide();
       this.addProductFormVaild = true;

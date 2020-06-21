@@ -118,29 +118,18 @@ export class TheStocksComponent implements OnInit {
     this.closeFade();
   };
 
-  /* getStockTransactionArr() {
-    this._stockService.getStockTransactionList().subscribe((data: StockTransaction[]) => {
-      this._stockService.stockTransactionArr = data;
-    });
-  };
-
-  getHandlePrimList() {
-    this._stockService.getHandleAddtoStockPrimList().subscribe((data: HandleAddPrimBE[]) => {
-      this._stockService.HandleAddtoStockPrimArry = data;
-    });
-  }; */
-
   getStockTrance = new Promise((res) => {
     this._stockService.getStockTransactionList().subscribe((data: StockTransaction[]) => {
-      this._stockService.stockTransactionArr = data;
-      res('getStockTrance');
+      //this._stockService.stockTransactionArr = data;
+      res(data);
     });
   });
 
   getHandle = new Promise((res) => {
     this._stockService.getHandleAddtoStockPrimList().subscribe((data: HandleAddPrimBE[]) => {
-      this._stockService.HandleAddtoStockPrimArry = data;
-      res('getHandle')
+      //this._stockService.HandleAddtoStockPrimArry = data;
+      console.log(data)
+      res(data)
     });
   });
 
@@ -163,24 +152,20 @@ export class TheStocksComponent implements OnInit {
     });
   });
 
-  createTheInvoiceArry(type: number) {
-
-    //getHandleAddtoStockPrimList from Db
-    // this.getStockTransactionArr(); // stockTransactionArr
-    // this.getHandlePrimList(); // HandleAddtoStockPrimArry
+  createTheInvoiceArry(type: number, transAction: any, handleAdd: any) {
 
     this._stockService.makeInvoiceArry = [];
 
-    for (let i = 0; i < this._stockService.stockTransactionArr.length; i++) {
-      if (this._stockService.stockTransactionArr[i].transactionType == type) {
-        this._stockService.makeInvoiceArry.push(this._stockService.stockTransactionArr[i])
+    for (let i = 0; i < /* this._stockService.stockTransactionArr.length */ transAction.length; i++) {
+      if (/* this._stockService.stockTransactionArr */transAction[i].transactionType == type) {
+        this._stockService.makeInvoiceArry.push(/* this._stockService.stockTransactionArr */transAction[i])
       };
     };
 
     for (let m = 0; m < this._stockService.makeInvoiceArry.length; m++) {
       this._stockService.makeInvoiceArry[m].invoiceDetails = [];
 
-      let invoiceDetail = this._stockService.HandleAddtoStockPrimArry.filter(
+      let invoiceDetail = /* this._stockService.HandleAddtoStockPrimArry */handleAdd.filter(
         obj => obj.stockTransactionId == this._stockService.makeInvoiceArry[m].stockTransactionId
       );
 
@@ -196,25 +181,27 @@ export class TheStocksComponent implements OnInit {
       return a.invNumber - b.invNumber
     });
 
-    console.log(this._stockService.makeInvoiceArry)
+    return this._stockService.makeInvoiceArry
+
+    //console.log(this._stockService.makeInvoiceArry)
 
   }; // createTheInvoiceArry
 
   makeMinInvArry() {
 
-    this.createTheInvoiceArry(2);
+    //this.createTheInvoiceArry(2);
     this.minInvArry = this._stockService.makeInvoiceArry;
 
   };
 
   makeAddInvArry() {
-    this.createTheInvoiceArry(1);
+    //this.createTheInvoiceArry(1);
     this.addInvArry = this._stockService.makeInvoiceArry;
   };
 
   makeTranceInvArry() {
 
-    this.createTheInvoiceArry(3);
+    //this.createTheInvoiceArry(3);
 
     this.tranceInvArry = this._stockService.makeInvoiceArry;
     for (let i = 0; i < this.tranceInvArry.length; i++) {
@@ -235,6 +222,55 @@ export class TheStocksComponent implements OnInit {
       this._stockService.makeInvoiceArry[i].invoiceSearchVal = inVal;
     };
   };
+
+  tranceArr: any = []
+
+  getTransDetails = new Promise((res) => {
+    this._stockService.allStockProductsTrans().subscribe((data: any[]) => {
+      this.tranceArr = data
+      res(data)
+    });
+  });
+
+  stockProdFactory = (stock: Stock) => {
+
+    let products = [];
+
+    let filterd = this.tranceArr.filter(trance => trance.stockId == stock.stockId || trance.sndStockId == stock.stockId);
+    //console.log('filtered : ' + JSON.stringify(filterd))
+
+    for (let i = 0; i < this._stockService.allProducts.length; i++) {
+
+      let addProdArry =
+        filterd.filter(trance => trance.productId == this._stockService.allProducts[i].productId &&
+          trance.transactionType == 1).map(trance => trance.Qty)
+
+      let minProdArry =
+        filterd.filter(trance => trance.productId == this._stockService.allProducts[i].productId &&
+          trance.transactionType == 2).map(trance => trance.Qty);
+
+      let addTrance = filterd.filter(trance => trance.productId == this._stockService.allProducts[i].productId &&
+        trance.transactionType == 3 && trance.sndStockId == stock.stockId).map(trance => trance.Qty);
+
+      let minTrance = filterd.filter(trance => trance.productId == this._stockService.allProducts[i].productId &&
+        trance.transactionType == 3 && trance.sndStockId != stock.stockId).map(trance => trance.Qty);
+
+      let productDet = {
+        productName: this._stockService.allProducts[i].productName,
+        plus: this._service.sumArry(addProdArry),
+        min: this._service.sumArry(minProdArry),
+        plusTrance: this._service.sumArry(addTrance),
+        minTrance: this._service.sumArry(minTrance),
+        productQty: ((this._service.sumArry(addProdArry) + this._service.sumArry(addTrance)) - (this._service.sumArry(minProdArry) + this._service.sumArry(minTrance)))
+      };
+
+      products = [...products, productDet]
+
+    };
+
+    //this._stockService.productsFromStockArryView = products.filter(product => product.productQty != 0);
+    return products.filter(product => product.productQty != 0);//.filter(product => product.productQty != 0);
+  }
 
   testBackend() {
     //
@@ -339,82 +375,127 @@ export class TheStocksComponent implements OnInit {
 
   showAddToStockPrem() {
 
-    Promise.all([this.getStockTrance, this.getHandle]).then(() => {
-
-      this.makeAddInvArry();
-
-      $('.stocksClass').not('#addToStockPrem').hide();
-      $('#addToStockPrem').show();
-      $('#stocksSearch').hide(100);
-      this.buttonEffect('#premissionBtn');
-      // hide invoice addForm
-      $('#callInvoice').show();
-      $('#addInvoiceForm').hide();
-      $('#callInvoiceBtn').html("فاتورة جديدة");
-
-      this._service.clearForm()
-      if (this.addInvArry.length == 0) {
-        this.newAddInvNumber = 1
-      } else {
-        let lastArrIndx: number = this.addInvArry.length - 1
-        this.newAddInvNumber = this.addInvArry[lastArrIndx].invNumber + 1
-      };
-      this._service.clearForm();
-
+    let StockTrance = new Promise((res) => {
+      this._stockService.getStockTransactionList().subscribe((data: StockTransaction[]) => {
+        //this._stockService.stockTransactionArr = data;
+        res(data);
+      });
     });
+
+    let Handle = new Promise((res) => {
+      this._stockService.getHandleAddtoStockPrimList().subscribe((data: HandleAddPrimBE[]) => {
+        //this._stockService.HandleAddtoStockPrimArry = data;
+        res(data)
+      });
+    });
+
+    Promise.all([StockTrance, Handle])
+      .then((res) => this.addInvArry = this.createTheInvoiceArry(1, res[0], res[1]))
+      .then(() => {
+
+        $('.stocksClass').not('#addToStockPrem').hide();
+        $('#addToStockPrem').show();
+        $('#stocksSearch').hide(100);
+        this.buttonEffect('#premissionBtn');
+        // hide invoice addForm
+        $('#callInvoice').show();
+        $('#addInvoiceForm').hide();
+        $('#callInvoiceBtn').html("فاتورة جديدة");
+
+        this._service.clearForm()
+        if (this.addInvArry.length == 0) {
+          this.newAddInvNumber = 1
+        } else {
+          let lastArrIndx: number = this.addInvArry.length - 1
+          this.newAddInvNumber = this.addInvArry[lastArrIndx].invNumber + 1
+        };
+        this._service.clearForm();
+
+      });
     //console.log(this.addInvArry)
   };
 
   newTranceInvNumber: number;
   showTranceStockPrem() {
 
-    Promise.all([this.getStockTrance, this.getHandle]).then(() => {
-
-      this.makeTranceInvArry();
-
-      $('.stocksClass').not('#tranceFrmStockPrem').hide();
-      $('#tranceFrmStockPrem').show();
-      $('#stocksSearch').hide(100);
-      this.buttonEffect('#premissionBtn');
-      $('#callTranceInvoice').show();
-      $('#tranceInvoiceForm').hide();
-      $('#callTranceInvoiceBtn').html("اذن جديد");
-
-      this._service.clearForm();
-
-      if (this.tranceInvArry.length == 0) {
-        this.newTranceInvNumber = 1
-      } else {
-        let lastArrIndx: number = this.tranceInvArry.length - 1
-        this.newTranceInvNumber = this.tranceInvArry[lastArrIndx].invNumber + 1
-      };
-
+    let StockTrance = new Promise((res) => {
+      this._stockService.getStockTransactionList().subscribe((data: StockTransaction[]) => {
+        //this._stockService.stockTransactionArr = data;
+        res(data);
+      });
     });
+
+    let Handle = new Promise((res) => {
+      this._stockService.getHandleAddtoStockPrimList().subscribe((data: HandleAddPrimBE[]) => {
+        //this._stockService.HandleAddtoStockPrimArry = data;
+        res(data)
+      });
+    });
+
+    Promise.all([StockTrance, Handle])
+      .then((res) => this.tranceInvArry = this.createTheInvoiceArry(3, res[0], res[1]))
+      .then(() => {
+
+        $('.stocksClass').not('#tranceFrmStockPrem').hide();
+        $('#tranceFrmStockPrem').show();
+        $('#stocksSearch').hide(100);
+        this.buttonEffect('#premissionBtn');
+        $('#callTranceInvoice').show();
+        $('#tranceInvoiceForm').hide();
+        $('#callTranceInvoiceBtn').html("اذن جديد");
+
+        this._service.clearForm();
+
+        if (this.tranceInvArry.length == 0) {
+          this.newTranceInvNumber = 1
+        } else {
+          let lastArrIndx: number = this.tranceInvArry.length - 1
+          this.newTranceInvNumber = this.tranceInvArry[lastArrIndx].invNumber + 1
+        };
+
+      });
 
   };
 
   newMinInvNumber: number;
   showMinToStockPrem() {
 
-    Promise.all([this.getStockTrance, this.getHandle]).then(() => {
-
-      this.makeMinInvArry();
-      $('.stocksClass').not('#minFrmStockPrem').hide();
-      $('#minFrmStockPrem').show();
-      $('#stocksSearch').hide(100);
-      this.buttonEffect('#premissionBtn');
-      $('#minCallInvoice').show();
-      $('#minInvoiceForm').hide();
-      $('#minCallInvoiceBtn').html("فاتورة جديدة");
-      this._service.clearForm();
-      if (this.minInvArry.length == 0) {
-        this.newTranceInvNumber = 1
-      } else {
-        let lastArrIndx: number = this.minInvArry.length - 1
-        this.newMinInvNumber = this.minInvArry[lastArrIndx].invNumber + 1
-      };
-
+    let StockTrance = new Promise((res) => {
+      this._stockService.getStockTransactionList().subscribe((data: StockTransaction[]) => {
+        //this._stockService.stockTransactionArr = data;
+        res(data);
+      });
     });
+
+    let Handle = new Promise((res) => {
+      this._stockService.getHandleAddtoStockPrimList().subscribe((data: HandleAddPrimBE[]) => {
+        //this._stockService.HandleAddtoStockPrimArry = data;
+        res(data)
+      });
+    });
+
+    Promise.all([StockTrance, Handle])
+      .then((res) => {
+        this.minInvArry = this.createTheInvoiceArry(2, res[0], res[1])
+      })
+      .then(() => {
+
+        $('.stocksClass').not('#minFrmStockPrem').hide();
+        $('#minFrmStockPrem').show();
+        $('#stocksSearch').hide(100);
+        this.buttonEffect('#premissionBtn');
+        $('#minCallInvoice').show();
+        $('#minInvoiceForm').hide();
+        $('#minCallInvoiceBtn').html("فاتورة جديدة");
+        this._service.clearForm();
+        if (this.minInvArry.length == 0) {
+          this.newTranceInvNumber = 1
+        } else {
+          let lastArrIndx: number = this.minInvArry.length - 1
+          this.newMinInvNumber = this.minInvArry[lastArrIndx].invNumber + 1
+        };
+
+      });
 
     //console.log(this.newMinInvNumber)
   };

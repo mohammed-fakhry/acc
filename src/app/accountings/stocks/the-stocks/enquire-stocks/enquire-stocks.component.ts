@@ -55,8 +55,6 @@ export class EnquireStocksComponent implements OnInit {
     return s
   };
 
-  //totalProductsValuInStock: number ; // in stockDetails
-  //totalProductsValuArry: any[];
   showStockDetailsPre(stock: Stock) {
     this._stockService.totalProductsValuInStock = 0;
     //this.totalProductsValuArry = [];
@@ -100,26 +98,19 @@ export class EnquireStocksComponent implements OnInit {
 
   showStockDetails(stock: Stock) {
 
-    //{"stockTransactionId":"1589724526163","productId":"12","price":"125","Qty":"50"}
-
-    /* Qty: 171
-    invNumber: "9"
-    price: 0
-    productId: "12"
-    productName: "بن ازرق"
-    sndStockId: "5"
-    stockId: "1"
-    stockName: null
-    stockTransactionId: "1590619524494"
-    transactionType: "3" */
     $('#containerLoader').fadeIn();
 
     let tranceArr = [];
+    this._stockService.makeStockArryView = {
+      stockName: stock.stockName,
+      stockPlace: stock.stockPlace,
+      stockEmployee: stock.stockEmployee
+    }
 
     const getTransDetails = new Promise((res) => {
       this._stockService.allStockProductsTrans().subscribe((data) => {
         tranceArr = data
-        res('getTransDetails')
+        res(data)
       });
     });
 
@@ -149,8 +140,6 @@ export class EnquireStocksComponent implements OnInit {
           let minTrance = filterd.filter(trance => trance.productId == this._stockService.allProducts[i].productId &&
             trance.transactionType == 3 && trance.sndStockId != stock.stockId).map(trance => trance.Qty);
 
-
-
           let productDet = {
             productName: this._stockService.allProducts[i].productName,
             plus: this._service.sumArry(addProdArry),
@@ -166,8 +155,8 @@ export class EnquireStocksComponent implements OnInit {
 
         this._stockService.productsFromStockArryView = products.filter(product => product.productQty != 0);
 
-        console.log(this.stockProducts);
-        res('stockProdFactory');
+        //console.log(this._stockService.productsFromStockArryView);
+        res(this._stockService.productsFromStockArryView);
       })
     }
 

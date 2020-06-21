@@ -57,18 +57,20 @@
                     <div class="form-row">
                         <div class="col">
                             <label for="stockNameForMin">اسم المخزن</label>
-                            <select class="form-control p-1" id="stockNameForMin" (change)="makeTheStockProds()" name="stockNameInpt" [(ngModel)]='stockNameInpt'>
+                            <select class="form-control p-1" id="stockNameForMin" (change)="makeTheStockProds()"
+                                name="stockNameInpt" [(ngModel)]='stockNameInpt'>
                                 <option *ngFor="let stock of _stockService.stocks">{{stock.stockName}}</option>
                             </select>
                         </div>
                         <!--customerName-->
                         <div class="col">
-                            <label for="customerNameForMin" >اسم العميل</label>
+                            <label for="customerNameForMin">اسم العميل</label>
                             <!--<select class="form-control text-center mr-3 p-1" id="customerNameForAdd">
                                 <option *ngFor="let customer of customers">{{customer.customerName}}</option>
                             </select> name="product{{i}}"-->
                             <input type="search" id="customerNameForMin" class="form-control mdb-autocomplete p-1"
-                                list="minDatalistCustomer" (change)='isCustNameInvaild()' name="custNameInpt" [(ngModel)]='custNameInpt'>
+                                list="minDatalistCustomer" (change)='isCustNameInvaild()' name="custNameInpt"
+                                [(ngModel)]='custNameInpt'>
                             <div *ngIf="custNameInvaild" class="text-danger">{{custVaildMsg}}</div>
                             <datalist id="minDatalistCustomer">
                                 <option *ngFor="let customer of customers" value="{{customer.customerName}}">
@@ -110,19 +112,18 @@
                                 <div *ngIf="inpt.inpVaild" class="text-danger vaildAlert">{{inpt.productVaildMsg}}</div>
                             </td>
                             <td><input type="number" name="qty{{i}}" [(ngModel)]="inpt.qty" class="form-control"
-                                    (keyup)="calcTotals()" [disabled]="inputDisabled">
+                                    (keyup)="calcTotals('inpt')" [disabled]="inputDisabled">
                                 <div *ngIf="inpt.Qtyinvaild" class="text-danger vaildAlert pt-1">{{inpt.qtyMsg}}
                                 </div>
                             </td>
                             <td><input type="number" name="price{{i}}" [(ngModel)]="inpt.price" class="form-control"
-                                    (keyup)="calcTotals()" [disabled]="inputDisabled"></td>
+                                    (keyup)="calcTotals('inpt')" [disabled]="inputDisabled"></td>
                             <td class="text-center font-weight-bold">{{inpt.total}}</td>
                             <input name="stockTransactionDetailsId{{i}}" [(ngModel)]="inpt.stockTransactionDetailsId"
                                 class="d-none">
                         </tr>
-                        <div id="minAddFilds" class="btn btn-dark my-2 mr-1" style="width: 50px;"
-                            (click)="minAddFilds()">+
-                        </div>
+                        <button type="button" id="minAddFilds" class="btn btn-dark my-2 mr-1" style="width: 50px;"
+                            (click)="minAddFilds()">+</button>
                     </tbody>
 
                 </table>
