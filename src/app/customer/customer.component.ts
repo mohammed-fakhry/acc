@@ -418,7 +418,7 @@ export class CustomerComponent implements OnInit {
 
           if (custInfo.customerRemain != cust.remain) {
             custInfo.customerRemain = cust.remain;
-            this.syncBackend(custInfo);
+            this._custService.updateCustomerSer(cust).subscribe();
           };
 
         };
@@ -430,6 +430,7 @@ export class CustomerComponent implements OnInit {
 
     Promise.all([getInvoices, getRecipts]).then(makeCustRem).then(() => {
       //console.log(this.custRemainArry);
+      //setTimeout(() => $('#containerLoader').fadeOut(), 2000)
       $('#containerLoader').fadeOut();
       this.showCustomerEnquiry();
       //console.log(reciepts);
@@ -437,9 +438,9 @@ export class CustomerComponent implements OnInit {
 
   };
 
-  syncBackend(cust: Customer) {
+  /* syncBackend(cust: Customer) {
     this._custService.updateCustomerSer(cust).subscribe();
-  }
+  } */
 
   showCustomerInvoice(invoice) {
 

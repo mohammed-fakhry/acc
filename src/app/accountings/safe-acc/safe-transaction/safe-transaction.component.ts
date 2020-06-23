@@ -33,7 +33,7 @@ export class SafeTransactionComponent implements OnInit {
     $("#topArr").click(function () { // scrollTop Button
 
       let navPosition = $(".navbar").offset().top;
-      $("html , body").animate({ scrollTop: 0 }, 100);
+      $("html , body").animate({ scrollTop: 0 }, 250);
       $(this).hide();
       $('#btmArr').fadeIn();
     });
@@ -41,7 +41,8 @@ export class SafeTransactionComponent implements OnInit {
   };
 
   toBottom() {
-    window.scrollTo(0, document.body.scrollHeight);
+    //window.scrollTo(0, document.body.scrollHeight);
+    $("html , body").animate({ scrollTop: document.body.scrollHeight }, 250);
     $("#topArr").fadeIn();
     $('#btmArr').fadeOut();
   };
@@ -58,7 +59,7 @@ export class SafeTransactionComponent implements OnInit {
     $('#SafeReportTable').animate(
       { 'height': '100%' }
     );
-
+    $('.stickyInp').css({'right' : 0})
     $('.navHeader').addClass('sticky-top');
     $('#printSafeTrance').hide();
     $('#btmArr').fadeIn();
@@ -83,6 +84,8 @@ export class SafeTransactionComponent implements OnInit {
   filterdArr: SafeTransaction[];
 
   filterByDate() {
+
+    $('#containerLoader').fadeIn();
 
     $('#searchSafeTrance').attr({ 'disabled': false });
     $('#SafeReportTable').show();
@@ -121,6 +124,7 @@ export class SafeTransactionComponent implements OnInit {
         
       };
     };
+    $('#containerLoader').fadeOut();
   };
 
 }; // end

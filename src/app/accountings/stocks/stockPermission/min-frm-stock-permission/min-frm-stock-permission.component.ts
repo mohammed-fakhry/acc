@@ -182,6 +182,8 @@ export class MinFrmStockPermissionComponent implements OnInit {
       if (isDublicate) {
         found = true
         break
+      } else {
+        found = false
       }
     }
 
@@ -189,6 +191,8 @@ export class MinFrmStockPermissionComponent implements OnInit {
       if (found == true) {
         this.invoiceInpArry[index].inpVaild = true;
         this.invoiceInpArry[index].productVaildMsg = 'لا يمكن تكرار هذا الصنف'
+      } else if (found == false) {
+        this.invoiceInpArry[index].inpVaild = false;
       }
     }
 

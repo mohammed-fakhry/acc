@@ -15,8 +15,7 @@ export class ServicesService {
 
   showAddNewInvoiceSer(invoice) {
     this.router.navigate['stocks'];
-
-  }
+  };
 
   // make Date and Time
   dateNow: any;
@@ -34,7 +33,7 @@ export class ServicesService {
       if (!a.hasOwnProperty(key) || !b.hasOwnProperty(key)) {
         // property doesn't exist on either object
         return 0;
-      }
+      };
       const varA = (typeof a[key] === 'string')
         ? a[key].toUpperCase() : a[key];
       const varB = (typeof b[key] === 'string')
@@ -44,12 +43,12 @@ export class ServicesService {
         comparison = 1;
       } else if (varA < varB) {
         comparison = -1;
-      }
+      };
       return (
         (order === 'desc') ? (comparison * -1) : comparison
       );
-    }
-  }
+    };
+  };
 
   sumArry(arr: any[]) {
     let s = 0
@@ -79,8 +78,8 @@ export class ServicesService {
     for (let i = 0; i < dateTimeArry.length; i++) {
       if (dateTimeArry[i] < 10) {
         dateTimeArry[i] = '0' + dateTimeArry[i]
-      }
-    }
+      };
+    };
 
     this.fullDate = dateTimeArry[2] + '-' + dateTimeArry[1] + '-' + dateTimeArry[0] // this.year + '-' + this.month + '-' + this.day// this.month + '-' + this.day + '-' + this.year
     this.fullTime = dateTimeArry[3] + ':' + dateTimeArry[4] // this.hour + ':' + this.minutes
@@ -88,17 +87,20 @@ export class ServicesService {
     this.fullTime.toString()
     this.date_time = this.fullDate + 'T' + this.fullTime // + ' ' + this.fullTime
 
-  }
+  };
 
 
   printThis(show: string, hide1: string, hide2: string, hide3: string) {
 
     $(show).animate({
-      'width': '95%',
+      'width': '96%',
       'hight': '100%',
+      'right': '0px'
     })//.addClass('wideScreen')
+
     $('#app-side-bar').hide();
     $('#sidebarToggle').hide();
+
     if (hide1 != '') {
       $(hide1).slideUp(50)
     };
@@ -107,14 +109,15 @@ export class ServicesService {
     };
     if (hide3 != '') {
       $(hide3).slideUp(50)
-    }
+    };
+
     $('#mainStockHeader').slideUp(75)
     $('.vaildAlert').fadeOut();
 
   };
 
   clearForm() {
-    $('.form-control').val(null)
+    $('.form-control').val(null);
   };
 
   // defult url

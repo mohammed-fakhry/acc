@@ -24,6 +24,7 @@ export class TheStocksComponent implements OnInit {
   tranceInvArry: any[];
 
   searchTxt: string;
+  deleteMsg: string;
 
   constructor(public router: Router, public logService: LoginService,
     public _stockService: StocksService, public _service: ServicesService) { }
@@ -63,7 +64,7 @@ export class TheStocksComponent implements OnInit {
 
     this._stockService.getStockes().subscribe((data: Stock[]) => {
       this._stockService.stocks = data;
-      //console.log(this._stockService.stocks)
+      ////console.log(this._stockService.stocks)
     });
 
     this._stockService.getProducts().subscribe((data: ProductsClass[]) => {
@@ -128,7 +129,7 @@ export class TheStocksComponent implements OnInit {
   getHandle = new Promise((res) => {
     this._stockService.getHandleAddtoStockPrimList().subscribe((data: HandleAddPrimBE[]) => {
       //this._stockService.HandleAddtoStockPrimArry = data;
-      console.log(data)
+      //console.log(data)
       res(data)
     });
   });
@@ -148,7 +149,7 @@ export class TheStocksComponent implements OnInit {
     this._stockService.getStockes().subscribe((data: Stock[]) => {
       this._stockService.stocks = data;
       res(data)
-      //console.log(this._stockService.stocks)
+      ////console.log(this._stockService.stocks)
     });
   });
 
@@ -183,7 +184,7 @@ export class TheStocksComponent implements OnInit {
 
     return this._stockService.makeInvoiceArry
 
-    //console.log(this._stockService.makeInvoiceArry)
+    ////console.log(this._stockService.makeInvoiceArry)
 
   }; // createTheInvoiceArry
 
@@ -237,7 +238,7 @@ export class TheStocksComponent implements OnInit {
     let products = [];
 
     let filterd = this.tranceArr.filter(trance => trance.stockId == stock.stockId || trance.sndStockId == stock.stockId);
-    //console.log('filtered : ' + JSON.stringify(filterd))
+    ////console.log('filtered : ' + JSON.stringify(filterd))
 
     for (let i = 0; i < this._stockService.allProducts.length; i++) {
 
@@ -412,7 +413,7 @@ export class TheStocksComponent implements OnInit {
         this._service.clearForm();
 
       });
-    //console.log(this.addInvArry)
+    ////console.log(this.addInvArry)
   };
 
   newTranceInvNumber: number;
@@ -497,7 +498,7 @@ export class TheStocksComponent implements OnInit {
 
       });
 
-    //console.log(this.newMinInvNumber)
+    ////console.log(this.newMinInvNumber)
   };
 
   deleteStock() {

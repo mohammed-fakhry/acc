@@ -1,10 +1,12 @@
 <!--fadeLayer-->
 <div class="fadeLayer" id="theStockFadeLayer">
     <div class="container p-3 card askForDelete" style="display: none;" id="askForDeleteStock">
-        <h3 class="p-3 bg-danger text-light">هل انت متأكد من حذف</h3>
-        <h4 class="mb-2">
+        <h3 class="p-3 bg-danger text-light">تحذير!</h3> <!-- تحذير! هل انت متأكد من حذف -->
+        <h6>هل انت متأكد من حذف {{_stockService.stockDataView.stockName}}</h6>
+        <!-- <h4 class="mb-2">
             {{_stockService.stockDataView.stockName}}
-        </h4>
+        </h4> -->
+        <p class="smokeBg p-2">{{deleteMsg}}</p>
         <hr>
         <div class="d-flex flex-row-reverse">
             <button class="btn btn-danger mr-2" id="deleteStock" (click)="deleteStock()">نعم</button>

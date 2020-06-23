@@ -5,6 +5,7 @@ import { TheStocksComponent } from '../the-stocks.component';
 import { StockTransactionD } from '../../stock-transaction-d';
 import { trace } from 'console';
 import { ServicesService } from 'src/app/services.service';
+import { HandleBackEnd } from 'src/app/handle-back-end';
 
 @Component({
   selector: 'app-enquire-stocks',
@@ -34,6 +35,7 @@ export class EnquireStocksComponent implements OnInit {
     $('#askForDeleteStock').show();
     $('.askForDelete').addClass('animate');
     this._stockService.stockDataView = stock;
+    this._theStocksComponent.deleteMsg = 'سيتم حذف بيانات المخزن و ايضاً حذف بيانات الاصناف .. يجب عمل نسخة احتياطية ربما لن يمكنك استرجاع هذه البيانات'
   };
 
   showUpdateStock(stock: Stock) {
@@ -56,6 +58,7 @@ export class EnquireStocksComponent implements OnInit {
   };
 
   showStockDetailsPre(stock: Stock) {
+
     this._stockService.totalProductsValuInStock = 0;
     //this.totalProductsValuArry = [];
     $('.stocksClass').not('#stockDtails').hide();
@@ -69,6 +72,7 @@ export class EnquireStocksComponent implements OnInit {
     let getStockProducts = this._stockService.makeStockArry.find(
       stockArr => stockArr.stockId == stock.stockId
     );
+
     this._stockService.makeStockArryView = getStockProducts;
 
     this._stockService.productsFromStockArryView = getStockProducts.stockProducts.filter(
@@ -79,19 +83,14 @@ export class EnquireStocksComponent implements OnInit {
     let total = 0
     let TotalForSum: any[] = [];
     let count = 0;
+
     for (let s = 0; s < this._stockService.productsFromStockArryView.length; s++) {
-      //this._stockService.totalProductsValuInStock = this._stockService.totalProductsValuInStock +
       total = parseInt(this._stockService.productsFromStockArryView[s].productQty) * parseInt(this._stockService.productsFromStockArryView[s].productCost)
       TotalForSum.push(total)
       count++
-      //console.log(count)
-    }
-    //this._stockService.makeInvoiceArry()
-    ////console.log(this._stockService.makeInvoiceArry())
-    this._stockService.totalProductsValuInStock = this.sumArry(TotalForSum)
-    //console.log(this._stockService.productsFromStockArryView)
+    };
 
-    ////console.log(this.totalProductsValu)
+    this._stockService.totalProductsValuInStock = this.sumArry(TotalForSum);
   };
 
   stockProducts: any[];
@@ -101,15 +100,17 @@ export class EnquireStocksComponent implements OnInit {
     $('#containerLoader').fadeIn();
 
     let tranceArr = [];
-    this._stockService.makeStockArryView = {
-      stockName: stock.stockName,
-      stockPlace: stock.stockPlace,
-      stockEmployee: stock.stockEmployee
-    }
 
     const getTransDetails = new Promise((res) => {
       this._stockService.allStockProductsTrans().subscribe((data) => {
         tranceArr = data
+        res(data)
+      });
+    });
+
+    const getHandle = new Promise((res) => {
+      this._stockService.getHandleBackEnd().subscribe((data: HandleBackEnd[]) => {
+        this._stockService.handleBackEnd = data;
         res(data)
       });
     });
@@ -126,51 +127,90 @@ export class EnquireStocksComponent implements OnInit {
 
         for (let i = 0; i < this._stockService.allProducts.length; i++) {
 
-          let addProdArry =
-            filterd.filter(trance => trance.productId == this._stockService.allProducts[i].productId &&
-              trance.transactionType == 1).map(trance => trance.Qty)
+          if (filterd != undefined) {
 
-          let minProdArry =
-            filterd.filter(trance => trance.productId == this._stockService.allProducts[i].productId &&
-              trance.transactionType == 2).map(trance => trance.Qty);
+            let addProdArry =
+              filterd.filter(trance => {
+                return (trance.productId == this._stockService.allProducts[i].productId && trance.transactionType == 1)
+                  || (trance.productId == this._stockService.allProducts[i].productId && trance.transactionType == 3 && trance.sndStockId == stock.stockId)
+              });
 
-          let addTrance = filterd.filter(trance => trance.productId == this._stockService.allProducts[i].productId &&
-            trance.transactionType == 3 && trance.sndStockId == stock.stockId).map(trance => trance.Qty);
+            let minProdArry =
+              filterd.filter(trance => {
+                return (trance.productId == this._stockService.allProducts[i].productId && trance.transactionType == 2)
+                  || (trance.productId == this._stockService.allProducts[i].productId && trance.transactionType == 3 && trance.sndStockId != stock.stockId)
+              });
 
-          let minTrance = filterd.filter(trance => trance.productId == this._stockService.allProducts[i].productId &&
-            trance.transactionType == 3 && trance.sndStockId != stock.stockId).map(trance => trance.Qty);
+            let productDet = { // the main object
 
-          let productDet = {
-            productName: this._stockService.allProducts[i].productName,
-            plus: this._service.sumArry(addProdArry),
-            min: this._service.sumArry(minProdArry),
-            plusTrance: this._service.sumArry(addTrance),
-            minTrance: this._service.sumArry(minTrance),
-            productQty: ((this._service.sumArry(addProdArry) + this._service.sumArry(addTrance)) - (this._service.sumArry(minProdArry) + this._service.sumArry(minTrance)))
+              productName: this._stockService.allProducts[i].productName,
+
+              in: {
+                qty: () => {
+                  let qtyArr = addProdArry.map(trance => trance.Qty);
+                  return this._service.sumArry(qtyArr)
+                },
+                totalPrices: () => {
+                  let priceArr = addProdArry.map(trance => trance.price * trance.Qty);
+                  return this._service.sumArry(priceArr)
+                },
+                avr: () => {
+                  let math = productDet.in.totalPrices() / productDet.in.qty()
+                  return parseFloat(math.toFixed(2))
+                }
+              },
+              sold: {
+                qty: () => {
+                  let qtyArr = minProdArry.map(trance => trance.Qty);
+                  return this._service.sumArry(qtyArr)
+                },
+                totalPrices: () => {
+                  let priceArr = minProdArry.map(trance => trance.price * trance.Qty);
+                  return this._service.sumArry(priceArr)
+                }
+              },
+
+              remain: {
+                qty: () => productDet.in.qty() - productDet.sold.qty(),
+                val: () => {
+                  let total = productDet.remain.qty() * productDet.in.avr()
+                  return parseFloat(total.toFixed(2))
+                },
+                color: () => {
+                  if (productDet.remain.qty() < 0) {
+                    return 'text-danger font-weight-bold'
+                  } else {
+                    return 'text-dark'
+                  }
+                }
+              },
+              
+            }; // productDet
+
+            products = [...products, productDet];
           };
-
-          products = [...products, productDet]
-
         };
 
-        this._stockService.productsFromStockArryView = products.filter(product => product.productQty != 0);
+        this._stockService.productsFromStockArryView = products.filter(product => product.remain.qty() != 0);
 
-        //console.log(this._stockService.productsFromStockArryView);
         res(this._stockService.productsFromStockArryView);
-      })
-    }
+      });
+    };
 
-    getTransDetails.then(stockProdFactory).then(() => {
-      this._stockService.totalProductsValuInStock = 0;
-      //this.totalProductsValuArry = [];
-      $('.stocksClass').not('#stockDtails').hide();
-      $('#stockDtails').show();
-      $('#stocksSearch').hide(100);
-      $('#stockBtn').removeClass("btn-outline-info").addClass("btn-outline-secondary").animate({ fontSize: '1.5em' }, 50);
-      $('#premissionBtn').removeClass('btn-outline-secondary').addClass('btn-outline-info').animate({ fontSize: '1em' }, 50);
+    Promise.all([getTransDetails, getHandle])
+      .then(stockProdFactory).then(() => {
 
-      $('#containerLoader').fadeOut();
-    });
+        let totalProductsValuArry = this._stockService.productsFromStockArryView.map(product => product.remain.val());
+        this._stockService.totalProductsValuInStock = this._service.sumArry(totalProductsValuArry);
+
+        $('.stocksClass').not('#stockDtails').hide();
+        $('#stockDtails').show();
+        $('#stocksSearch').hide(100);
+        $('#stockBtn').removeClass("btn-outline-info").addClass("btn-outline-secondary").animate({ fontSize: '1.5em' }, 50);
+        $('#premissionBtn').removeClass('btn-outline-secondary').addClass('btn-outline-info').animate({ fontSize: '1em' }, 50);
+        // loading fade
+        $('#containerLoader').fadeOut();
+      });
 
   };
 

@@ -5,8 +5,8 @@
 <div class="container-fluid" id="headerSafeReport">
     <div class="row">
         <div class="col-md-2">
-            <div class="theHeader inpCard p-3 stickyInp">
-                <div class="closeBtn printBtns">
+            <div class="theHeader InpCard_Row p-3 stickyInp">
+                <!-- <div class="closeBtn printBtns">
                     <div>
                         <button class="btn btn-outline-danger" id="reloadLoc" (click)='reloadLoc()'>X</button>
                     </div>
@@ -14,6 +14,11 @@
                         <button class="btn btn-outline-secondary" (click)='openwindowPrint()'><i
                                 class="fa fa-print"></i></button>
                     </div>
+                </div> -->
+                <div class="form-inline mb-3 bottomBorder pb-3 closeBtn" style="display: none;">
+                    <button class="btn btn-outline-secondary" (click)='openwindowPrint()'><i
+                            class="fa fa-print"></i></button>
+                    <button class="btn btn-outline-danger mr-3" id="reloadLoc" (click)='reloadLoc()'>X</button>
                 </div>
                 <div class="d-flex justify-content-between">
                     <h2 class="cardHeader">تقرير حركة خزنة</h2>
@@ -42,42 +47,38 @@
                     <button style="height: 100%;" (click)='filterByDate()' class="btn btn-outline-info text-center"><i
                             class="fa fa-filter"></i></button>
                 </div>
-                <!--PrintBtns-->
-
-                <!-- <div class="headerLeftBorder mr-3"></div> -->
-
             </div>
         </div>
         <div class="col-md-10">
             <div class="card">
-                <div class="panel-body panel-flex-table" id="SafeReportTable" style="display: none;">
+                <div class="panel-body panel-flex-table" id="SafeReportTable" style="display: none; height: 930px;">
                     <table class="flex-table table table-hover" style="height: 100%;">
                         <thead class="navHeader text-light">
                             <tr>
                                 <!---->
-                                <th style="width: fit-content; flex: 1.2;">التاريخ</th>
-                                <th>الاذن</th>
-                                <th style="flex: 2;">نوع االحركة</th>
+                                <th style="width: fit-content; flex: 1.1;">التاريخ</th>
+                                <th style="flex: .5;">الاذن</th>
+                                <th style="flex: 1.5;">نوع االحركة</th>
                                 <th style="flex: 2;">بيان الحركة</th>
                                 <th class="text-center">مدين</th>
                                 <th class="text-center">دائن</th>
                                 <th class="text-center">رصيد</th>
-                                <th>ملاحظات</th>
+                                <th style="flex: 2;">ملاحظات</th>
                             </tr>
                         </thead>
                         <tbody class=" mt-3 tableBody">
                             <tr *ngFor='let safeRep of filterdArr|safeTranceSearch:searchSafeTrance; let i = index'>
-                                <td class="lightBg" style="width: fit-content; flex: 1.2;">
+                                <td style="width: fit-content; flex: 1.1;">
                                     {{safeRep.date}}
                                     <!-- <input disabled value="{{safeRep.date_time}}" type="datetime-local"> -->
                                 </td>
-                                <td>{{safeRep.safeReceiptId}}</td>
-                                <td style="flex: 2;" class="{{safeRep.receiptKind_color}}">{{safeRep.receiptKind}}</td>
+                                <td style="flex: .5;">{{safeRep.safeReceiptId}}</td>
+                                <td style="flex: 1.5;" class="{{safeRep.receiptKind_color}}">{{safeRep.receiptKind}}</td>
                                 <td style="flex: 2;">{{safeRep.transactionExplain}}</td>
                                 <td class="text-center">{{safeRep.receiptValIn}}</td>
                                 <td class="{{safeRep.receiptKind_color}} text-center">{{safeRep.receiptValOut}}</td>
-                                <td class="lightBg text-center">{{safeRep.safeNet}}</td>
-                                <td>{{safeRep.recieptNote}}</td>
+                                <td class="darkBg text-center">{{safeRep.safeNet}}</td>
+                                <td style="flex: 2;">{{safeRep.recieptNote}}</td>
                             </tr>
                         </tbody>
                     </table>

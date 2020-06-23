@@ -211,10 +211,40 @@ export class ProductsReportComponent implements OnInit {
 
         for (let i = 0; i < mainArry.length; i++) {
 
-          let d = new Date(mainArry[i].date_time)
+          let d = new Date(mainArry[i].date_time);
+          let timeCond = '';
+          let hour = d.getHours();
+          let hourStr = '';
+          let minutes = d.getMinutes();
+          let minutesStr = '';
+          
+          //(d.getHours() > 12) ? timeCond = 'Pm' : timeCond = 'Am';
+          if (d.getHours() > 12) {
+            timeCond = 'Pm'
+            hour = d.getHours() - 12
+            if (hour < 10) {
+              hourStr = `0${hour.toString()}`
+            } else {
+              hourStr = `${hour.toString()}`
+            }
+            
+          } else {
+            timeCond = 'Am'
+            if (hour < 10) {
+              hourStr = `0${hour.toString()}`
+            } else {
+              hourStr = `${hour.toString()}`
+            }
+          }
+
+          if (d.getMinutes() < 10) {
+            minutesStr = `0${minutes.toString()}`
+          } else {
+            minutesStr = `${minutes.toString()}`
+          }
 
           let theObj = {
-            date_time: `${d.getFullYear()} / ${d.getMonth()} / ${d.getDate()} | ${d.getHours()}:${d.getMinutes()}`,
+            date_time: `${d.getDate()}/${d.getMonth()+1}/${d.getFullYear()}` + ' | ' + `${hourStr}:${minutesStr}${timeCond}`,//  + `${timeCond}`,
             invNumber: mainArry[i].invNumber,
             price: mainArry[i].price,
             customerName: mainArry[i].customerName,

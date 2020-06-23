@@ -35,7 +35,7 @@ export class SafeReceiptComponent implements OnInit {
     //this.checkReceiptValid();
     this.safeReceipt_inpts = new SafeReceiptInpts()
 
-  }
+  };
 
   getSafeInfo_backEnd() {
     this._safeDataService.getSafes().subscribe((data: SafeData[]) => {
@@ -47,21 +47,21 @@ export class SafeReceiptComponent implements OnInit {
     let currentDateNow = Date.now() //new Date()
     let currentDate = new Date(currentDateNow)
     this._service.makeTime_date(currentDate);
-  }
+  };
 
   getSafeInfo(safeName) {
     let safeInfo = this._safeDataService.safeList.find(
       safe => safe.safeName == safeName
     )
     return safeInfo;
-  }
+  };
 
   getCustomerInfo(customerName) {
     let customerInfo = this._safeAccComponent.customers.find(
       customer => customer.customerName == customerName
     )
     return customerInfo;
-  }
+  };
 
   getAccInfo(accName) {
     let accInfo = this._safeAccComponent.otherAcc.find(
@@ -105,7 +105,7 @@ export class SafeReceiptComponent implements OnInit {
   searchSafeReceiptTxt: string;
 
   changAddSafeReceiptBtn() {
-    if (this.searchSafeReceiptTxt == '') {
+    if (this.searchSafeReceiptTxt == '' || this.searchSafeReceiptTxt == undefined || this.searchSafeReceiptTxt == null) {
       $('#call_SafeRecieptBtn').html('ايصال جديد')
     } else {
       $('#call_SafeRecieptBtn').html('بحث')
@@ -117,7 +117,7 @@ export class SafeReceiptComponent implements OnInit {
       safeReceipt => safeReceipt.safeReceiptId == receiptId
     );
     return receiptInfo
-  }
+  };
 
   theReceiptInfo: SafeReceiptInpts;
 
@@ -185,7 +185,7 @@ export class SafeReceiptComponent implements OnInit {
     // receipt val valid
     receiptValValid: false,
     receiptValValidMsg: '',
-  }
+  };
 
   makeSndSafeNull() {
     // clear inputs
@@ -206,7 +206,7 @@ export class SafeReceiptComponent implements OnInit {
     // clear validation
     this.validTests.customerValid = false;
     this.checkReceiptValid();
-  }
+  };
 
   makeAccNameNull() {
     this.safeReceipt_inpts.AccName = null;
@@ -214,7 +214,7 @@ export class SafeReceiptComponent implements OnInit {
     this.validTests.accValid = false;
     $('#AccName').removeClass('is-invalid').removeClass('is-valid');
     this.checkReceiptValid();
-  }
+  };
 
   checkReceiptValid() {
 
@@ -232,7 +232,7 @@ export class SafeReceiptComponent implements OnInit {
           this.isReceiptValid = true;
         } else {
           this.isReceiptValid = false;
-        }
+        };
 
       } else if (this.safeReceipt_inpts.transactionAccKind == 'خزنة') {
 
@@ -242,7 +242,7 @@ export class SafeReceiptComponent implements OnInit {
           this.isReceiptValid = true;
         } else {
           this.isReceiptValid = false;
-        }
+        };
 
       } else if (this.safeReceipt_inpts.transactionAccKind == 'عميل') {
 
