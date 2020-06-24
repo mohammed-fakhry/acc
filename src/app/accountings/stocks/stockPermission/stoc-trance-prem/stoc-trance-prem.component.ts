@@ -40,8 +40,8 @@ export class StocTrancePremComponent implements OnInit {
   ngOnInit() {
 
     $('#hideFadeLayerMP').click(function () {
-      $('.fadeLayer').hide();
-      $('.askForDelete').removeClass('animate')
+      $('.fadeLayer').fadeOut('fast');
+      $('.askForDelete').fadeOut('fast').removeClass('animate')
     })
 
   }
@@ -386,7 +386,7 @@ export class StocTrancePremComponent implements OnInit {
     this.ivoiceItemesForEdit = [];
 
     // to add 5 fildes
-    for (let i = 0; i < 7; i++) {
+    for (let i = 0; i < 10; i++) {
 
       this.invoiceInp = new InvoiceInp()
 

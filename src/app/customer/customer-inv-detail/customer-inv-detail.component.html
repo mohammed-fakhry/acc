@@ -4,9 +4,9 @@
     </div>
     <hr> -->
     <div class="d-flex justify-content-between px-1">
-        <button class="btn btn-danger mr-2" id="hideInvDet">اخفاء</button>
-        <h4 class="py-2 {{_customerService.invKindColor}}">{{_customerService.invoiceKind}}</h4>
-        <h4 class="py-2"> رقم : {{_customerService.invoiceNum}}</h4>
+        <button class="btn btn-danger mr-2 font-weight-bold" id="hideInvDet">x</button>
+        <h6 class="py-2 {{_customerService.invKindColor}}">{{_customerService.invoiceKind}}</h6>
+        <h6 class="py-2"> رقم : {{_customerService.invoiceNum}}</h6>
         <!--<h5 class="py-2">{{_customerService.date_time}}</h5>-->
         <input disabled [(ngModel)]='_customerService.date_time' type="datetime-local">
     </div>

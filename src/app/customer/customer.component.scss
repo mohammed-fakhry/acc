@@ -21,3 +21,21 @@
  .customerClass {
      display: none;
  }
+
+ /* #showCustomerInvoice {
+     border: none;
+     //height: 30px;
+ } */
+
+ #customerInvDetails tbody td {
+    height: 40px;
+ };
+
+ #customerInvDetail {
+    transform: scale(.75);
+    transition: .09s;
+ };
+
+ #customerInvDetail.animate {
+    transform: scale(1);
+ }

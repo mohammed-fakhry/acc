@@ -51,17 +51,17 @@ export class CustomerComponent implements OnInit {
     });
 
     $('#hideFadeLayer').click(function () {
-      $('.fadeLayer').hide();
-      $('.askForDelete').removeClass('animate').hide()
+      $('.fadeLayer').fadeOut('fast');
+      $('.askForDelete').fadeOut('fast').removeClass('animate')
     });
 
     //$("#customerEnquirybtn").attr("disabled", 'true');
 
     $("#hideInvDet").click(function () {
-      $("#customerFadeLayer").hide();
-      $('.fadeLayer').hide();
-      $('.askForDelete').removeClass('animate').hide();
-      $('#customerInvDetail').hide();
+      $("#customerFadeLayer").fadeOut('fast');
+      //$('.fadeLayer').fadeOut('slow');
+      $('.askForDelete').fadeOut('fast').removeClass('animate')
+      $('#customerInvDetail').fadeOut('fast').removeClass('animate')
     });
 
     //this.setCustomerRemain()
@@ -250,7 +250,7 @@ export class CustomerComponent implements OnInit {
           invoiceTotalAdd: 0,
           netTotal: 0,
           notes: ''
-        }
+        };
 
         customerInvDetail.stockTransactionId = this._stockService.stockTransactionArr[i].stockTransactionId;
         customerInvDetail.transactionType = this._stockService.stockTransactionArr[i].transactionType;
@@ -269,7 +269,7 @@ export class CustomerComponent implements OnInit {
           customerInvDetail.invoiceKind = 'فاتورة بيع'
           customerInvDetail.invoiceTotalAdd = 0;
           customerInvDetail.invKindColor = 'text-danger'
-        }
+        };
         this.customerInvArry.push(customerInvDetail)
       };
     };
@@ -332,7 +332,6 @@ export class CustomerComponent implements OnInit {
     }
 
   };
-
 
   setCustomerRemain() {
 
@@ -409,9 +408,7 @@ export class CustomerComponent implements OnInit {
           cust.minValsReciept = minValRec;
           cust.remain =
             (this._service.sumArry(cust.addValsInvoices) + this._service.sumArry(cust.addValsReciept) + cust.paid) -
-              (this._service.sumArry(cust.minValsInvoices) + this._service.sumArry(cust.minValsReciept))
-            /* (this._service.sumArry(cust.addValsInvoices) - this._service.sumArry(cust.minValsInvoices)) +
-            (this._service.sumArry(cust.addValsReciept) - this._service.sumArry(cust.minValsReciept)); */
+            (this._service.sumArry(cust.minValsInvoices) + this._service.sumArry(cust.minValsReciept))
           cust.customerRemain = cust.remain;
 
           this.custRemainArry.push(cust);
@@ -429,11 +426,8 @@ export class CustomerComponent implements OnInit {
     };
 
     Promise.all([getInvoices, getRecipts]).then(makeCustRem).then(() => {
-      //console.log(this.custRemainArry);
-      //setTimeout(() => $('#containerLoader').fadeOut(), 2000)
       $('#containerLoader').fadeOut();
       this.showCustomerEnquiry();
-      //console.log(reciepts);
     });
 
   };
@@ -472,7 +466,7 @@ export class CustomerComponent implements OnInit {
     this._custService.invTotal = this._service.sumArry(this._custService.invTotalArry);
     //console.log(invoice)
     $('#customerFadeLayer').show(0);
-    $('#customerInvDetail').show()
+    $('#customerInvDetail').show().addClass('animate')
   }
 
 

@@ -95,8 +95,8 @@ export class TheStocksComponent implements OnInit {
   }
 
   closeFade() {
-    $('#theStockFadeLayer').hide();
-    $('.askForDelete').removeClass('animate').hide();
+    $('#theStockFadeLayer').fadeOut('fast');
+    $('.askForDelete').fadeOut('fast').removeClass('animate').hide();
   };
 
   showAddToStockPrem_fade() {

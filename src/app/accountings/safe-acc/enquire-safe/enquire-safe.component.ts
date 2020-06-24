@@ -35,7 +35,7 @@ export class EnquireSafeComponent implements OnInit {
     $('#addSafe').show();
     $('#showAddSafeBtn').removeClass("btn-outline-info").addClass("btn-outline-secondary").animate({ fontSize: '1.5em' }, 50);
     $('.headerMainBtn').not('#showAddSafeBtn').removeClass('btn-outline-secondary').addClass('btn-outline-info').animate({ fontSize: '1em' }, 50);
-    $('.headerMainBtn').attr({'disabled': false});
+    $('.headerMainBtn').attr({ 'disabled': false });
   };
 
   makeSafeTransaction(safe: SafeData) {
@@ -61,20 +61,20 @@ export class EnquireSafeComponent implements OnInit {
 
       this._safeDataService.safeTransactionArr.push(theSafeRecipt)
     }
-    
+
     for (let i = 0; i < this._safeDataService.safeReceiptList.length; i++) {
       let theSafeRecipt: any
 
       if (safe.safeId == this._safeDataService.safeReceiptList[i].safeId) {
 
         let onlyDate = new Date(this._safeDataService.safeReceiptList[i].date_time)
-        
+
         theSafeRecipt = {
           safeReceiptId: this._safeDataService.safeReceiptList[i].safeReceiptId,
           receiptKind: this._safeDataService.safeReceiptList[i].receiptKind,
           receiptKind_color: '',
           date_time: this._safeDataService.safeReceiptList[i].date_time,
-          date: `${onlyDate.getDate()}-${onlyDate.getMonth()+1}-${onlyDate.getFullYear()}`,
+          date: `${onlyDate.getDate()}-${onlyDate.getMonth() + 1}-${onlyDate.getFullYear()}`,
           transactionAccKind: this._safeDataService.safeReceiptList[i].transactionAccKind,
           recieptNote: this._safeDataService.safeReceiptList[i].recieptNote,
           transactionExplain: null,
@@ -104,27 +104,36 @@ export class EnquireSafeComponent implements OnInit {
         this._safeDataService.safeTransactionArr.push(theSafeRecipt)
       };
     };
-    
+
     this._safeDataService.safeTransactionArr.sort(this._service.sortArry('date_time'))
 
     for (let s = 0; s < this._safeDataService.safeTransactionArr.length; s++) {
 
-      if (this._safeDataService.safeTransactionArr[s -1] == undefined) {
+      if (this._safeDataService.safeTransactionArr[s - 1] == undefined) {
         this._safeDataService.safeTransactionArr[s].safeNet = this._safeDataService.safeTransactionArr[s].receiptValIn - this._safeDataService.safeTransactionArr[s].receiptValOut;
       } else {
-        this._safeDataService.safeTransactionArr[s].safeNet = this._safeDataService.safeTransactionArr[s-1].safeNet + this._safeDataService.safeTransactionArr[s].receiptValIn - this._safeDataService.safeTransactionArr[s].receiptValOut;
+        this._safeDataService.safeTransactionArr[s].safeNet = this._safeDataService.safeTransactionArr[s - 1].safeNet + this._safeDataService.safeTransactionArr[s].receiptValIn - this._safeDataService.safeTransactionArr[s].receiptValOut;
       };
-      
+
     };
-     
-  }
+
+    let lastIndex = this._safeDataService.safeTransactionArr.length - 1
+
+    if (this._safeDataService.safeTransactionArr[lastIndex] != undefined) {
+      if (safe.currentSafeVal != this._safeDataService.safeTransactionArr[lastIndex].safeNet) {
+        safe.currentSafeVal = this._safeDataService.safeTransactionArr[lastIndex].safeNet
+        this._safeDataService.updateSafeData(safe).subscribe();
+      };
+    };
+
+  };
 
   showSafeTranaction(safe: SafeData) {
     this.makeSafeTransaction(safe);
     $('.safeClass').not('#safeTransaction').hide();
     $('#SafeReportTable').hide();
     $('#safeTransaction').show();
-    $('.headerMainBtn').attr({'disabled': false});
+    $('.headerMainBtn').attr({ 'disabled': false });
     //$('#showAddSafeBtn').removeClass("btn-outline-info").addClass("btn-outline-secondary").animate({ fontSize: '1.5em' }, 50);
     $('.headerMainBtn').removeClass('btn-outline-secondary').addClass('btn-outline-info').animate({ fontSize: '1em' }, 50);
   };

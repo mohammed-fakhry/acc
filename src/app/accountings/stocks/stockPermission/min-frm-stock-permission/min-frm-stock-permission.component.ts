@@ -43,8 +43,8 @@ export class MinFrmStockPermissionComponent implements OnInit {
     this.getBackendData();
 
     $('#hideFadeLayerMP').click(function () {
-      $('.fadeLayer').hide();
-      $('.askForDelete').removeClass('animate')
+      $('.fadeLayer').fadeOut('fast');
+      $('.askForDelete').fadeOut('fast').removeClass('animate')
     })
 
   } // ngOnInit
@@ -387,7 +387,7 @@ export class MinFrmStockPermissionComponent implements OnInit {
     this.invoiceInpArry = [];
     this.ivoiceItemesForEdit = [];
 
-    for (let i = 0; i < 7; i++) {
+    for (let i = 0; i < 10; i++) {
       this.invoiceInp = new InvoiceInp();
       this.invoiceInp.total = 0;
       this.invoiceInpArry.push(this.invoiceInp);

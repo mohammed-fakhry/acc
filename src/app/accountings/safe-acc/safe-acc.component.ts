@@ -128,14 +128,14 @@ export class SafeAccComponent implements OnInit {
 
   showSafeEnquir_fade() {
     this.showSafeEnquir();
-    $('#theSafeFadeLayer').hide();
-    $('.askForDelete').removeClass('animate').hide();
+    $('#theSafeFadeLayer').fadeOut('fast');
+    $('.askForDelete').fadeOut('fast').removeClass('animate');
   }
 
   showAddNewRecipt_fade() {
     this.showAddSafeReceipt();
     $('#theSafeFadeLayer').hide();
-    $('.askForDelete').removeClass('animate').hide();
+    $('.askForDelete').fadeOut('fast').removeClass('animate');
   };
 
   buttonEffect(max: string) {

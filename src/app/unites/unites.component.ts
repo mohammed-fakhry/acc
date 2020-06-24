@@ -79,12 +79,12 @@ export class UnitesComponent implements OnInit {
 
     // Methods
     $('#hideFadeLayer').click(function () {
-      $('.fadeLayer').hide()
-      $('.askForDelete').removeClass('animate')
+      $('.fadeLayer').fadeOut('fast')
+      $('.askForDelete').fadeOut('fast').removeClass('animate')
     })
     $('#hideCalcLayer').click(function() {
-      $('#calcFade').hide()
-      $('#calculator').removeClass('animate');
+      $('#calcFade').fadeOut('fast')
+      $('#calculator').fadeOut('fast').removeClass('animate');
       this._service.clearForm();
     })
   } // ngOnInit
@@ -173,7 +173,7 @@ export class UnitesComponent implements OnInit {
 
   askForDeleteUnit(unit: UnitData) {
     $('#DelFade').show(0)
-    $('.askForDelete').addClass('animate')
+    $('.askForDelete').show().addClass('animate')
     this.unitDataView = unit;
   };
 
@@ -187,7 +187,7 @@ export class UnitesComponent implements OnInit {
 
   showcalculator() {
     $('#calcFade').show(0);
-    $('#calculator').addClass('animate')
+    $('#calculator').show().addClass('animate')
   }
 } // end
 

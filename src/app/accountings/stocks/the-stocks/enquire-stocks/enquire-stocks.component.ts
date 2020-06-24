@@ -21,8 +21,8 @@ export class EnquireStocksComponent implements OnInit {
     // hide Fade layer
     $('#hideFadeLayer').click(function () {
       //$('.fadeLayer').hide()
-      $('#theStockFadeLayer').hide()
-      $('.askForDelete').removeClass('animate')
+      $('#theStockFadeLayer').fadeOut('fast')
+      $('.askForDelete').fadeOut('fast').removeClass('animate')
     })
 
     ////console.log(this._stockService.stocks)
@@ -33,7 +33,7 @@ export class EnquireStocksComponent implements OnInit {
     //$('.fadeLayer').show(0);
     $('#theStockFadeLayer').show(0);
     $('#askForDeleteStock').show();
-    $('.askForDelete').addClass('animate');
+    $('.askForDelete').show().addClass('animate');
     this._stockService.stockDataView = stock;
     this._theStocksComponent.deleteMsg = 'سيتم حذف بيانات المخزن و ايضاً حذف بيانات الاصناف .. يجب عمل نسخة احتياطية ربما لن يمكنك استرجاع هذه البيانات'
   };

@@ -1,6 +1,10 @@
-table th,td {
-    text-align: center;
-};
+.card {
+    tr {
+        th,td {
+            text-align: center;
+            height: 43px;
+    }
+}};
 
 h5 {
     text-align: center;

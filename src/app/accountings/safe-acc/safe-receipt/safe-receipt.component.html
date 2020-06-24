@@ -38,7 +38,7 @@
             <!--firstSection-->
             <div class="row navHeader p-2">
                 <div class="form-inline col-md-4 col-lg-3 col-sm-6">
-                    <label for="receiptKind">نوع الايصال</label>
+                    <label for="receiptKind" class="text-white">نوع الايصال</label>
                     <select class="form-control p-1 mr-3" name="receiptKind" [(ngModel)]='safeReceipt_inpts.receiptKind'
                         id="receiptKind" (change)="receiptKindChanged()">
                         <option>ايصال استلام نقدية</option>
@@ -82,7 +82,7 @@
             <!--thirdSection-->
             <!--receiptKind-->
             <div class="form-inline navHeader p-2">
-                <label for="receiptKind">نوع الحساب</label>
+                <label for="receiptKind" class="text-white">نوع الحساب</label>
                 <select class="form-control p-1 mr-3" name="transactionAccKind"
                     [(ngModel)]='safeReceipt_inpts.transactionAccKind' id="transactionAccKind"
                     (change)="transactionAccKindChanged()">

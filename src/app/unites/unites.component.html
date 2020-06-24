@@ -18,16 +18,15 @@
         <div class="form-inline">
             <h1 class="px-2">الوحدات</h1>
             <div class="headerLeftBorder"></div>
-            <button  class="btn btn-outline-info ml-2 mx-2" id="showAddUnitBtn"
-                (click)="showAddUnit()">اضافة</button>
+            <button class="btn btn-outline-info ml-2 mx-2" id="showAddUnitBtn" (click)="showAddUnit()">اضافة</button>
             <button style="font-size: 1.5em;" class="btn btn-outline-secondary ml-2 mx-2" id="unitEnquirybtn"
                 (click)="showUnitEnquiry()" disabled>استعلام</button>
             <div class="headerLeftBorder"></div>
             <input *ngIf="router.url === '/unites'" [(ngModel)]="searchTxt" placeholder="بحث" class="form-control mx-3"
                 id="unitSearch">
         </div>
-        <button class="btn btn-outline-info ml-2 mx-2 p-3" id="showcalculatorBtn"
-            (click)="showcalculator()"><i class="fa fa-calculator"></i></button>
+        <button class="btn btn-outline-info ml-2 mx-2 p-3" id="showcalculatorBtn" (click)="showcalculator()"><i
+                class="fa fa-calculator"></i></button>
     </nav>
 </div>
 
@@ -101,17 +100,17 @@
                     <td>{{unit.unitPrice}}</td>
                     <td>{{unit.unitCompany}}</td>
                     <td>{{unit.unitDate}}</td>
-                    <td><button class="btn btn-outline-success ml-2" id="showUpdateUnit" (click)="showUpdateUnit(unit)"><i
-                                class="fa fa-edit"></i></button></td>
-                    <td><button class="btn btn-danger ml-2" (click)="askForDeleteUnit(unit)"><i
-                                class="fa fa-trash"></i></button></td>
+                    <td class="textBtn btn-outline-success ml-2" id="showUpdateUnit" (click)="showUpdateUnit(unit)"><i
+                            class="fa fa-edit"></i></td>
+                    <td class="textBtn btn-danger ml-2" (click)="askForDeleteUnit(unit)"><i class="fa fa-trash"></i>
+                    </td>
                 </tr>
             </tbody>
         </table>
     </div>
 </div>
 <!--calculator--->
-<div class="fadeLayer" id="calcFade"  style="display: none; padding-top: 10%;">
+<div class="fadeLayer" id="calcFade" style="display: none; padding-top: 10%;">
     <div class="container  card p-3 mt-2" id="calculator">
         <div>
             <button class="btn btn-danger mb-3" id="hideCalcLayer">×</button>
@@ -160,22 +159,38 @@
         <table class="table mt-2 table-hover" style="width: 100%;">
             <thead class="bg-dark text-light">
                 <tr>
-                    <th><h5>اجمالى السعر</h5></th>
-                    <th><h5>المقدمة</h5></th>
-                    <th><h5>المتبقى</h5></th>
-                    <th><h5>الاقساط</h5></th>
+                    <th>
+                        <h5>اجمالى السعر</h5>
+                    </th>
+                    <th>
+                        <h5>المقدمة</h5>
+                    </th>
+                    <th>
+                        <h5>المتبقى</h5>
+                    </th>
+                    <th>
+                        <h5>الاقساط</h5>
+                    </th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
-                    <td class="bigNum font-weight-bold"><h3>{{totalPrice}}</h3></td>
-                    <td class="bigNum font-weight-bold"><h3>{{preMoneyResult}}</h3></td>
-                    <td class="bigNum font-weight-bold"><h3>{{remainPrice}}</h3></td>
-                    <td class="bigNum font-weight-bold"><h3>{{remainPaid}}</h3></td>
+                    <td class="bigNum font-weight-bold">
+                        <h3>{{totalPrice}}</h3>
+                    </td>
+                    <td class="bigNum font-weight-bold">
+                        <h3>{{preMoneyResult}}</h3>
+                    </td>
+                    <td class="bigNum font-weight-bold">
+                        <h3>{{remainPrice}}</h3>
+                    </td>
+                    <td class="bigNum font-weight-bold">
+                        <h3>{{remainPaid}}</h3>
+                    </td>
                 </tr>
             </tbody>
         </table>
-        
+
     </div>
 
 </div>

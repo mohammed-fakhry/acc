@@ -49,8 +49,8 @@ export class AddToStockPermissionComponent implements OnInit {
     this.getBackendData();
 
     $('#hideFadeLayerAP').click(function () {
-      $('#fadeLayerAP').hide();
-      $('.askForDelete').removeClass('animate')
+      $('#fadeLayerAP').fadeOut('fast');
+      $('.askForDelete').fadeOut('fast').removeClass('animate')
     })
 
   } // ngOnInit
@@ -841,7 +841,7 @@ export class AddToStockPermissionComponent implements OnInit {
     this.invoiceInpArry = [];
     this.ivoiceItemesForEdit = [];
     // to add 5 fildes
-    for (let i = 0; i < 7; i++) {
+    for (let i = 0; i < 10; i++) {
       this.invoiceInp = new InvoiceInp();
       this.invoiceInp.total = 0;
       this.invoiceInp.inpVaild = false;
@@ -922,7 +922,7 @@ export class AddToStockPermissionComponent implements OnInit {
 
   showDeleteAddInvoice() {
     $('#fadeLayerAP').show(0);
-    $('.askForDelete').addClass('animate');
+    $('.askForDelete').show().addClass('animate');
   };
 
   deleteAddInvoice() {

@@ -1,8 +1,9 @@
 <div class="card inpCard mt-3" id="addWorkerInside">
     <div class="p-3">
         <h2 class="pb-3 cardHeader">اضافة بيانات مخزن</h2>
+        <hr >
         <form [formGroup]='stockData' (ngSubmit)="addNewStock()" class="pt-3">
-            <div class="form-row">
+            <div class="form-row mb-5">
                 <input formControlName="stockId" id="stockId" class="form-control d-none">
                 <div class="col">
                     <label>اسم المخزن</label>
@@ -20,6 +21,7 @@
                         class="form-control">
                 </div>
             </div>
+            <hr>
             <button class="btn btn-outline-primary mt-2 ml-2" type="submit" id="addNewStockBtn">اضافة</button>
         </form>
     </div>

@@ -124,8 +124,8 @@ export class WorkersComponent implements OnInit {
     });
     // hide Fade layer
     $('#hideFadeLayer').click(function () {
-      $('.fadeLayer').hide()
-      $('.askForDelete').removeClass('animate')
+      $('.fadeLayer').fadeOut('fast')
+      $('.askForDelete').fadeOut('fast').removeClass('animate')
     })
 
   } // ngOnInit
@@ -302,7 +302,7 @@ export class WorkersComponent implements OnInit {
 
   askForDelete(worker: Worker) {
     $('.fadeLayer').show(0)
-    $('.askForDelete').addClass('animate')
+    $('.askForDelete').show().addClass('animate')
     this.putWorkerDataValue(worker);
   };
 

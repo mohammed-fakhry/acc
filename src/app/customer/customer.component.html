@@ -58,24 +58,25 @@
                         <!-- <th>تليفون</th> -->
                         <!--<th class="d-none">الوحدة</th>-->
                         <!--<th class="d-none">تاريخ التعاقد</th>-->
-                        <th class="HideCol">بيانات</th>
+                        <!-- <th class="HideCol">بيانات</th> -->
                         <th class="HideCol">تعديل</th>
                         <th class="HideCol">حذف</th>
                     </tr>
                 </thead>
                 <tbody class="mt-3">
                     <tr *ngFor="let customer of custRemainArry|searchCustomer:searchCust; let i=index">
-                        <td>{{customer.customerName}}</td>
+                        <td class="btn-outline-secondary textBtn" id="showCustomerCard"
+                            (click)="showCustomerCard(customer)">{{customer.customerName}}</td>
                         <td id="remain{{i}}">{{customer.remain}}</td>
                         <!-- <td>{{customer.customerTell}}</td> -->
                         <!--<td class="d-none">{{customer.customerUnit}}</td>-->
                         <!--<td class="d-none">{{customer.customerDateIN}}</td>-->
-                        <td class="HideCol"><button class="btn btn-outline-secondary ml-2" id="showCustomerCard"
-                                (click)="showCustomerCard(customer)"><i class="fa fa-id-card"></i></button></td>
-                        <td class="HideCol"><button class="btn btn-outline-success ml-2" id="showUpdatecustomer"
-                                (click)="showUpdateCustomer(customer)"><i class="fa fa-edit"></i></button></td>
-                        <td class="HideCol"><button class="btn btn-danger ml-2" disabled id="askDeletcustomerBtn"
-                                (click)="askForDelete(customer)"><i class="fa fa-trash"></i></button></td>
+                        <!-- <td class="HideCol"><button class="btn btn-outline-secondary ml-2" id="showCustomerCard"
+                                (click)="showCustomerCard(customer)"><i class="fa fa-id-card"></i></button></td> -->
+                        <td class="textBtn btn-outline-success ml-2 HideCol" id="showUpdatecustomer"
+                            (click)="showUpdateCustomer(customer)"><i class="fa fa-edit"></i></td>
+                        <td class="textBtn btn-outline-danger ml-2 HideCol" disabled id="askDeletcustomerBtn"
+                            (click)="askForDelete(customer)"><i class="fa fa-trash"></i></td>
                     </tr>
                 </tbody>
             </table>
@@ -187,7 +188,7 @@
                 <thead class="navHeader text-light text-center">
                     <tr>
                         <th>التاريخ</th>
-                        <th class="custDet" style="flex: .5;">تفاصيل</th>
+                        <th class="custDet" style="flex: .3;">تفاصيل</th>
                         <th style="flex: 2;">رقم الفاتورة</th>
                         <th class="text-center">دائن</th>
                         <th class="text-center">مدين</th>
@@ -201,9 +202,14 @@
                             {{invoice.date_time}}
                             <!-- <input disabled value="{{invoice.date_time}}" type="datetime-local"> -->
                         </td>
-                        <td class="text-center" style="flex: .5;" class="custDet"><button
-                                class="btn btn-outline-secondary {{invoice.hideBtn}}" id="showCustomerInvoice"
-                                (click)="showCustomerInvoice(invoice)"><i class="fa fa-id-card"></i></button></td>
+                        <!-- <td class="text-center" style="flex: .3;" class="custDet"><i
+                                class="fa fa-id-card btn btn-outline-secondary {{invoice.hideBtn}}"
+                                id="showCustomerInvoice" (click)="showCustomerInvoice(invoice)"></i></td> -->
+                        <td class="custDet" style="flex: .3; padding: 0;"><i
+                                class="fa fa-id-card text-center py-2 {{invoice.hideBtn}} textBtn btn-outline-secondary"
+                                (click)="showCustomerInvoice(invoice)"
+                                style="width: 100%; height: 100%; margin: auto;"></i>
+                        </td>
                         <td style="flex: 2;" id="invoiceNum{{i}}" class="{{invoice.invKindColor}}">
                             {{invoice.invoiceKind}} رقم :
                             {{invoice.invoiceNum}}</td>

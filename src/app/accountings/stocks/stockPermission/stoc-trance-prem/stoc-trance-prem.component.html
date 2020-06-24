@@ -8,7 +8,7 @@
         <hr>
         <div class="d-flex flex-row-reverse">
             <button class="btn btn-danger mr-2" id="deleteTrancePrem" (click)="deleteTranceInvoice()">نعم</button>
-            <button class="btn btn-outline-info" id="hideFadeLayerTP">الغاء</button>
+            <button class="btn btn-outline-primary" id="hideFadeLayerTP">الغاء</button>
         </div>
     </div>
 </div>
@@ -36,9 +36,7 @@
         <button class="btn btn-outline-info ml-2" type="submit" id="callTranceInvoiceBtn"
             (click)="showNewTranceInvoice()">اذن
             جديد</button>
-
     </div>
-
     <div id="tranceInvoiceForm" style="display: none;">
         <div class="d-flex justify-content-between">
             <h2 class="cardHeader">اذن نقل</h2>
@@ -79,7 +77,7 @@
                         </div>
                     </div>
                     <div class="text-center" id="printTrancePremBtn">
-                        <i class="fa fa-expand btn btn-outline-info p-3 text-center" (click)='printThisTranceInv()'></i>
+                        <i class="fa fa-expand btn btn-outline-primary p-3 text-center" (click)='printThisTranceInv()'></i>
                     </div>
                 </div>
             </div>
@@ -97,7 +95,6 @@
                     </thead>
                     <tbody class=" mt-3 tableBody">
                         <tr *ngFor="let inpt of invoiceInpArry; let i = index">
-                            <!--{{i + 1}}-->
                             <td style="flex: none; width: 50px;">
                                 <button type="button" class="btn btn-outline-danger" (click)='deleteFilds(i)'>-</button>
                             </td>
