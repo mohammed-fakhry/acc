@@ -57,7 +57,7 @@ export class StocksService {
   }
 
   productsFromStockArryView: any[];
-  totalProductsValuInStock: number ; // in stockDetails
+  totalProductsValuInStock: string ; // in stockDetails
   constructor(private http: HttpClient) { };
 
   HandleAddtoStockPrimArry: HandleAddPrimBE[];

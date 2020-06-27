@@ -92,13 +92,13 @@ background-color: rgba(214, 234, 241, 0.95);
   font-weight: bold;
   padding-right: 10px;
 }
+
 .card {
   border: none;//solid 1px rgb(2, 107, 121);
   padding-top: 20px;
   margin-right: 0px;
   margin-left: 0px;
 }
-
 
 .tableBody {
   overflow-y: auto;
@@ -155,7 +155,7 @@ background-color: rgba(214, 234, 241, 0.95);
       tbody {
         flex: 1; //variable height
         overflow-y: scroll;
-        margin-bottom: 20px;
+        margin-bottom: 15px;
       }
       tr {
         width: 100% ;
@@ -202,15 +202,15 @@ background-color: rgba(214, 234, 241, 0.95);
   border-right: none;
   border-bottom: solid 1px rgb(195, 195, 195);
   background-color: whitesmoke;
-}
+};
 
 label {
   color: rgb(72, 143, 199);
-}
+};
 
 .table-sm th {
   padding: 10px 5px;
-}
+};
 
 .mdFlex {
   flex: 2;
@@ -245,7 +245,8 @@ body .wideScreen {
 
 .bottomBorder {
   border-bottom: solid 1px black;
-}
+};
+
 .inpCard {
  background-color: whitesmoke;
  //background-color: rgb(228, 228, 228);

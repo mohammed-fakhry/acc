@@ -111,24 +111,76 @@ export class CustomerComponent implements OnInit {
     let currentDateNow = Date.now() //new Date()
     let currentDate = new Date(currentDateNow)
     this._service.makeTime_date(currentDate);
+  };
+
+  cellArry: any[];
+  balance: number;
+
+  markCell(i, cell: string) {
+
+    $('#balanceContain').show();
+    const element = document.querySelector(`#${cell}${i}`);
+    $(`#${cell}${i}`).toggleClass('darkBg');
+
+
+    let dirIn = 'invoiceTotalAdd'
+    let dirOut = 'invoiceTotalMin'
+
+    let num = 0;
+
+    let cond = element.classList.contains("darkBg")
+
+    if (cond) {
+
+      if (dirIn == cell) {
+        num = - this.customerInvArry[i].invoiceTotalAdd
+        this.cellArry.push(num)
+      } else if (dirOut == cell) {
+        num = this.customerInvArry[i].invoiceTotalMin
+        this.cellArry.push(num)
+      };
+      $(`#${cell}${i}`).css('cursor', 'grabbing')
+
+    } else {
+
+      let index: number;
+
+      $(`#${cell}${i}`).css('cursor', 'grab')
+
+      if (dirIn == cell) {
+        num = - this.customerInvArry[i].invoiceTotalAdd
+        index = this.cellArry.findIndex(theCell => theCell == num);
+        this.cellArry.splice(index, 1)
+      } else if (dirOut == cell) {
+        num = this.customerInvArry[i].invoiceTotalMin;
+        index = this.cellArry.findIndex(theCell => theCell == num);
+        this.cellArry.splice(index, 1)
+      };
+
+    }
+
+    if (this.cellArry.length == 0) {
+      this.balance = 0
+    } else {
+      this.balance = this._service.sumArry(this.cellArry)
+    };
+
+    if (this.balance < 0) {
+      $('#balance').css('color', 'red')
+    } else {
+      $('#balance').css('color', 'black')
+    }
+
   }
 
   printThisCustomerList() {
-
-    for (let i = 0; i < this.customers.length; i++) {
-      if (this.customers[i].customerRemain < 0) {
-        $(`#remain${i}`).css('color', 'red');
-      } else {
-        $(`#remain${i}`).css('color', 'black');
-      }
-    };
 
     let Newcustomers = this.custRemainArry.filter((customer) => {
       return customer.customerRemain != 0 && customer.customerName != 'تست'
     });
 
     Newcustomers.sort(function (a, b) {
-      return a.remain - b.remain;
+      return a.customerRemain - b.customerRemain;
     });
     this.custRemainArry = Newcustomers
 
@@ -147,8 +199,6 @@ export class CustomerComponent implements OnInit {
     //window.print();
     this.getCurrentDate();
 
-    //location.reload();
-    //this.customers.sort(this._service.sortArry('customerRemain'))
   }
 
   openwindowPrint() {
@@ -193,8 +243,6 @@ export class CustomerComponent implements OnInit {
   makeCustomerInvArry() {
 
     this.customerInvArry = []
-
-    //console.log(this._stockService.stockTransactionArr)
 
     this.theCustomerInfo = this.getCustomerInfo(this.customerData.value.customerId)
 
@@ -257,8 +305,7 @@ export class CustomerComponent implements OnInit {
         customerInvDetail.invoiceNum = this._stockService.stockTransactionArr[i].invNumber;
         customerInvDetail.date_time = this._stockService.stockTransactionArr[i].date_time;
         customerInvDetail.notes = this._stockService.stockTransactionArr[i].notes
-        //customerInvDetail.hideBtn = 'رصيد اول'
-        //date_time
+
         if (this._stockService.stockTransactionArr[i].transactionType == 1) {
           customerInvDetail.invoiceTotalAdd = this._stockService.stockTransactionArr[i].invoiceTotal;
           customerInvDetail.invoiceKind = 'فاتورة شراء'
@@ -305,11 +352,9 @@ export class CustomerComponent implements OnInit {
           customerInvDetail.invKindColor = 'text-danger';
         }
         this.customerInvArry.push(customerInvDetail);
-        //console.log(this.customerData.value.customerName)
       }
     }
 
-    //console.log(this.theCustomerInfo)
     this.customerInvArry.sort(this._service.sortArry('date_time'))
 
     for (let c = 0; c < this.customerInvArry.length; c++) {
@@ -353,8 +398,6 @@ export class CustomerComponent implements OnInit {
         reciepts = data
         res('getRecipts')
       })
-      //console.log(reciepts)
-
     })
 
     const makeCustRem = () => {
@@ -369,6 +412,7 @@ export class CustomerComponent implements OnInit {
           if (custInfo.customerPaid != 0) { fstPaid = custInfo.customerPaid };
 
           let cust = {
+
             customerName: custInfo.customerName,
             customerId: custInfo.customerId,
             customerTell: custInfo.customerTell,
@@ -376,46 +420,49 @@ export class CustomerComponent implements OnInit {
             customerPaid: custInfo.customerPaid,
             customerAdd: custInfo.customerAdd,
             customerDateIN: custInfo.customerDateIN,
-            customerRemain: 0,
+            customerRemain: custInfo.customerRemain,
             paid: fstPaid,
-            addValsInvoices: [],
-            minValsInvoices: [],
-            addValsReciept: [],
-            minValsReciept: [],
-            remain: 0,
+
+            addValsInvoices:
+              invoices
+                .filter(invoice => invoice.transactionType == 2 && invoice.customerId == custInfo.customerId)
+                .map(invoice => invoice.invoiceTotal),
+
+            minValsInvoices:
+              invoices
+                .filter(invoice => invoice.transactionType == 1 && invoice.customerId == custInfo.customerId)
+                .map(invoice => invoice.invoiceTotal),
+
+            addValsReciept:
+              reciepts
+                .filter(reciept => reciept.receiptKind == 'ايصال صرف نقدية' && reciept.customerId == custInfo.customerId)
+                .map(reciept => reciept.receiptVal),
+
+            minValsReciept:
+              reciepts
+                .filter(reciept => reciept.receiptKind == 'ايصال استلام نقدية' && reciept.customerId == custInfo.customerId)
+                .map(reciept => reciept.receiptVal),
+
+            remain: () => {
+              let total =
+                (this._service.sumArry(cust.addValsInvoices) + this._service.sumArry(cust.addValsReciept) + cust.paid) -
+                (this._service.sumArry(cust.minValsInvoices) + this._service.sumArry(cust.minValsReciept))
+              return total
+            },
+
+            color: () => {
+              if (cust.remain() < 0) {
+                return 'text-danger'
+              }
+              return ''
+            },
           };
-
-          let plusValInv = invoices
-            .filter(invoice => invoice.transactionType == 2 && invoice.customerId == custInfo.customerId)
-            .map(invoice => invoice.invoiceTotal);
-
-          let minValInv = invoices
-            .filter(invoice => invoice.transactionType == 1 && invoice.customerId == custInfo.customerId)
-            .map(invoice => invoice.invoiceTotal);
-
-          let plusValRec = reciepts
-            .filter(reciept => reciept.customerId == custInfo.customerId && reciept.receiptKind == 'ايصال صرف نقدية')
-            .map(reciept => reciept.receiptVal);
-
-          let minValRec = reciepts
-            .filter(reciept => reciept.customerId == custInfo.customerId && reciept.receiptKind == 'ايصال استلام نقدية')
-            .map(reciept => reciept.receiptVal);
-
-          //console.log(plusVal)
-          cust.addValsInvoices = plusValInv; //.push(plusVal);
-          cust.minValsInvoices = minValInv; //.push(minVal);
-          cust.addValsReciept = plusValRec;
-          cust.minValsReciept = minValRec;
-          cust.remain =
-            (this._service.sumArry(cust.addValsInvoices) + this._service.sumArry(cust.addValsReciept) + cust.paid) -
-            (this._service.sumArry(cust.minValsInvoices) + this._service.sumArry(cust.minValsReciept))
-          cust.customerRemain = cust.remain;
 
           this.custRemainArry.push(cust);
 
-          if (custInfo.customerRemain != cust.remain) {
-            custInfo.customerRemain = cust.remain;
-            this._custService.updateCustomerSer(cust).subscribe();
+          if (custInfo.customerRemain != cust.remain()) {
+            custInfo.customerRemain = cust.remain();
+            this._custService.updateCustomerSer(custInfo).subscribe();
           };
 
         };
@@ -432,15 +479,10 @@ export class CustomerComponent implements OnInit {
 
   };
 
-  /* syncBackend(cust: Customer) {
-    this._custService.updateCustomerSer(cust).subscribe();
-  } */
-
   showCustomerInvoice(invoice) {
 
     this._custService.customerInv = [];
     this._custService.invTotalArry = [];
-    //console.log(invoice)
     for (let i = 0; i < this.customersInvoices.length; i++) {
 
       let customerInvDetail = {
@@ -457,19 +499,17 @@ export class CustomerComponent implements OnInit {
         customerInvDetail.total = this.customersInvoices[i].Qty * this.customersInvoices[i].price;
         this._custService.customerInv.push(customerInvDetail);
         this._custService.invTotalArry.push(customerInvDetail.total);
-      }
+      };
+
     };
 
     this._custService.invoiceKind = invoice.invoiceKind;
     this._custService.date_time = invoice.date_time
     this._custService.invoiceNum = invoice.invoiceNum
     this._custService.invTotal = this._service.sumArry(this._custService.invTotalArry);
-    //console.log(invoice)
     $('#customerFadeLayer').show(0);
     $('#customerInvDetail').show().addClass('animate')
   }
-
-
 
   // CRUD Functions
   addNewCustomer() {
@@ -477,19 +517,13 @@ export class CustomerComponent implements OnInit {
     if (addBtnVal == 'اضافة') {
 
       this.customerData.value.customerRemain = this.customerData.value.customerPaid;
-      this._custService.creatCustomer(this.customerData.value)
-        .subscribe()
-      //console.log(this.customerData.value)
+      this._custService.creatCustomer(this.customerData.value).subscribe()
       this._service.clearForm();
-      //location.reload();
 
     } else if (addBtnVal == 'تعديل') {
 
-      //this.customerData.value.customerRemain = this.customerData.value.customerPaid;
       this._custService.updateCustomerSer(this.customerData.value).subscribe(() => {
-        //console.log(this.customerData.value);
         this.showCustomerEnquiry();
-        //location.reload();
       },
         error => {
           // alert(error);
@@ -503,9 +537,8 @@ export class CustomerComponent implements OnInit {
     $('.fadeLayer').show(0)
     $('.askForDelete').show().addClass('animate')
     this.putCustomerDataValue(customer);
-    //this.customerDataView = customer;
-    //console.log(this.customerDataView)
   }
+
   deletCustomer() {
     $('.fadeLayer').hide()
     this._custService.deleteCustomerSer(this.customerData.value.customerId)
@@ -529,8 +562,6 @@ export class CustomerComponent implements OnInit {
     $('#addNewCustomerBtn').html('تعديل');
     $('#addCustomer h2:first').html('تعديل بيانات عميل');
     this.putCustomerDataValue(customer);
-    //this.customerDataView = customer;
-    // //console.log(customer, this.customerDataView);
     this.buttonEffect('#showAddCustomerBtn', '#customerEnquirybtn');
   };
 
@@ -538,24 +569,21 @@ export class CustomerComponent implements OnInit {
   showCustomerCard(customer: Customer) {
 
     $('#printCustomerList').hide(150)
+    $('#balanceContain').hide();
     this.putCustomerDataValue(customer);
-    //this.customerDataView = customer;
+    this.cellArry = [];
+    this.balance = 0;
     this.makeCustomerInvArry();
     if (customer.customerRemain < 0) {
       this.customerRemainColor = 'text-danger'
-      //$('#customerRemainCard').css('color', 'red')
     } else {
       this.customerRemainColor = 'text-dark'
     }
-    //console.log(this.customerRemainColor)
-    //this.buttonEffect('#showAddCustomerBtn','#customerEnquirybtn');
     $('#showAddCustomerBtn').removeClass('btn-outline-secondary').addClass('btn-outline-info').animate({ fontSize: '1em' }, 50);
     $('#customerEnquirybtn').removeClass('btn-outline-secondary').addClass('btn-outline-info').animate({ fontSize: '1em' }, 50);
     $("#customerEnquirybtn").attr({ "disabled": false });
     $("#showAddCustomerBtn").attr({ "disabled": false });
-
     $('.customerClass').not('#customerDetails').hide();
-    //$('#customerDetails').show();
     $('#customerInvDetails').show();
   }
 
@@ -585,7 +613,6 @@ export class CustomerComponent implements OnInit {
 
   showCustomerEnquiry() {
     this.searchCust = null;
-    //this.getCustomerData_BackEnd();
     $('#printCustomerList').show(150)
     $('.customerClass').not('#customerEnquiry').hide();
     $('#customerEnquiry').show();

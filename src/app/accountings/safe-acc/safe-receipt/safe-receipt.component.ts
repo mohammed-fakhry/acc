@@ -137,6 +137,8 @@ export class SafeReceiptComponent implements OnInit {
   };
 
   showAddNewSafeReceipt() {
+
+    $('#showAddSafeReceipt').attr({ 'disabled': false })
     // getBackendData_Receipt
     this._safeAccComponent.getBackendData_Receipt();
 
@@ -157,13 +159,17 @@ export class SafeReceiptComponent implements OnInit {
     } else {
 
       $('#addNewSafeReceipt').html('تعديل الايصال');
+
       this.theReceiptInfo = this.getTheReceiptInfo(this.searchSafeReceiptTxt);
-      
+      //console.log(this.theReceiptInfo)
+
       this.putValsForEdit(this.theReceiptInfo)
       this.transactionAccKindChanged();
       this.receiptKindChanged();
-     
+
       this.valIsOk = this.safeReceipt_inpts.currentSafeVal + this.theReceiptInfo.receiptVal;
+      //console.log(this.valIsOk)
+
     };
     $('#add_SafeReceiptInside').show();
     $('#header_SafeRecipt').hide();
@@ -371,7 +377,7 @@ export class SafeReceiptComponent implements OnInit {
     } else {
 
       if (this.safeReceipt_inpts.secSafeName == this.safeReceipt_inpts.safeName) {
-        
+
         this.validTests.firstSafeValidMsg = 'لا يمكن تكرار نفس الخزنة';
         $('#safeNameReceipt').removeClass('is-valid').addClass('is-invalid');
         this.validTests.fstSafeinValid = true;
@@ -402,7 +408,7 @@ export class SafeReceiptComponent implements OnInit {
       this.validTests.accValidMsg = 'خطأ فى اسم الحساب'
       $('#AccName').removeClass('is-valid').addClass('is-invalid');
       this.safeReceipt_inpts.currentAccVal = null;
-      
+
     } else {
 
       this.validTests.accValid = false;
@@ -480,12 +486,15 @@ export class SafeReceiptComponent implements OnInit {
         //let valIsOk: Number;
         let submBtn = $('#addNewSafeReceipt').html()
 
-        if (submBtn == 'تعديل الايصال') {
 
-          //console.log(submBtn)
+
+        if (submBtn == 'تعديل الايصال') {
+          this.theReceiptInfo = this.getTheReceiptInfo(this.searchSafeReceiptTxt);
+          this.valIsOk = this.safeReceipt_inpts.currentSafeVal + this.theReceiptInfo.receiptVal;
           if (this.valIsOk >= this.safeReceipt_inpts.receiptVal) {
             $('#receiptVal').removeClass('is-invalid').addClass('is-valid');
             this.validTests.receiptValValid = false;
+
           } else {
             $('#receiptVal').removeClass('is-valid').addClass('is-invalid');
             this.validTests.receiptValValid = true;
@@ -537,7 +546,7 @@ export class SafeReceiptComponent implements OnInit {
     let indx = this._safeDataService.safeList.findIndex(
       i => i.safeId === oldSafe.safeId
     );
-    
+
     this._safeDataService.updateSafeData(oldSafe).subscribe();
     // pass new Value to edit
     this._safeDataService.safeList[indx].currentSafeVal = oldSafe.currentSafeVal;
@@ -548,7 +557,7 @@ export class SafeReceiptComponent implements OnInit {
     let oldSecSafe = this._safeDataService.safeList.find(
       safe => safe.safeId == this.theReceiptInfo.secSafeId
     );
-
+      
     // the condition
     if (this.theReceiptInfo.secSafeName != null) {
       if (this.theReceiptKind == 'add') {
@@ -624,10 +633,10 @@ export class SafeReceiptComponent implements OnInit {
 
   saveRecieptData() {
 
-    let fstSafe_NewVal: number;
-    let sndSafe_NewVal: number;
-    let fstSafe_NewData: SafeData;
-    let sndSafe_NewData: SafeData;
+    let fstSafe_NewVal: number; //
+    let sndSafe_NewVal: number; //
+    let fstSafe_NewData: SafeData; //
+    let sndSafe_NewData: SafeData; //
     // customer
     let customer_NewVal: number;
     let customer_NewData: Customer;

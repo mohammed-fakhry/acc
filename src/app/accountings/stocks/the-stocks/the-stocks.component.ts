@@ -270,7 +270,7 @@ export class TheStocksComponent implements OnInit {
     };
 
     //this._stockService.productsFromStockArryView = products.filter(product => product.productQty != 0);
-    return products.filter(product => product.productQty != 0);//.filter(product => product.productQty != 0);
+    return products //.filter(product => product.productQty != 0);//.filter(product => product.productQty != 0);
   }
 
   testBackend() {
@@ -318,20 +318,30 @@ export class TheStocksComponent implements OnInit {
     $('.headerMainBtn').not(max).removeClass('btn-outline-secondary').addClass('btn-outline-info').animate({ fontSize: '1em' }, 50);
   };
 
+  animateToggle(hide: string, show: string) {
+    $(`${hide}`).not(`${show}`).hide();
+    $(`${show}`).show();
+  };
+
   showStocksEnquiry() {
     //this.getBackendData();
     this.getStocks.then(() => {
-      $('.stocksClass').not('#stocksEnquiry').hide();
-      $('#stocksEnquiry').css('display', 'block');
+      /* $('.stocksClass').not('#stocksEnquiry').hide(0,() => {
+        $('#stocksEnquiry').show('fast') //.css('display', 'block');
+        $('#stocksSearch').fadeIn(100);
+      }); */
+      this.animateToggle('.stocksClass', '#stocksEnquiry');
       $('#stocksSearch').fadeIn(100);
+
       this.buttonEffect('#stockBtn');
     });
   };
 
   showProductsReport() {
     $('#prodDetTable').hide();
-    $('.stocksClass').not('#productsReport').hide();
-    $('#productsReport').show();
+    /* $('.stocksClass').not('#productsReport').hide();
+    $('#productsReport').show(); */
+    this.animateToggle('.stocksClass', '#productsReport');
     $('#stocksSearch').fadeIn(100);
     this.buttonEffect('#stockBtn');
     //this.getBackendData();
@@ -339,16 +349,18 @@ export class TheStocksComponent implements OnInit {
   }
 
   showAddNewStock() {
-    $('.stocksClass').not('#addNewStock').hide();
-    $('#addNewStock').show();
+    /* $('.stocksClass').not('#addNewStock').hide();
+    $('#addNewStock').show(); */
+    this.animateToggle('.stocksClass', '#addNewStock');
     $('#stocksSearch').hide(100);
     this.buttonEffect('#stockBtn');
   };
 
   showProfits() {
     this.getBackendData();
-    $('.stocksClass').not('#profits').hide();
-    $('#profits').show();
+    /* $('.stocksClass').not('#profits').hide();
+    $('#profits').show(); */
+    this.animateToggle('.stocksClass', '#profits');
     $('#stocksSearch').hide(100);
     this.buttonEffect('#showProfitsBtn');
     this.makeMinInvArry()
@@ -363,9 +375,10 @@ export class TheStocksComponent implements OnInit {
       this.productNameArr = [];
       this.productNameArr = this._stockService.allProducts.map(product => product.productName);
       this.productNameVaild = true;
-      $('.stocksClass').not('#addNewProduct').hide();
       $('#productName').removeClass('is-valid').removeClass('is-invalid');
-      $('#addNewProduct').show();
+      /* $('.stocksClass').not('#addNewProduct').hide();
+      $('#addNewProduct').show(); */
+      this.animateToggle('.stocksClass', '#addNewProduct');
       $('#stocksSearch').hide(100);
       this.buttonEffect('#stockBtn');
     });
@@ -394,8 +407,9 @@ export class TheStocksComponent implements OnInit {
       .then((res) => this.addInvArry = this.createTheInvoiceArry(1, res[0], res[1]))
       .then(() => {
 
-        $('.stocksClass').not('#addToStockPrem').hide();
-        $('#addToStockPrem').show();
+        /* $('.stocksClass').not('#addToStockPrem').hide();
+        $('#addToStockPrem').show(); */
+        this.animateToggle('.stocksClass', '#addToStockPrem');
         $('#stocksSearch').hide(100);
         this.buttonEffect('#premissionBtn');
         // hide invoice addForm
@@ -437,8 +451,9 @@ export class TheStocksComponent implements OnInit {
       .then((res) => this.tranceInvArry = this.createTheInvoiceArry(3, res[0], res[1]))
       .then(() => {
 
-        $('.stocksClass').not('#tranceFrmStockPrem').hide();
-        $('#tranceFrmStockPrem').show();
+        /* $('.stocksClass').not('#tranceFrmStockPrem').hide();
+        $('#tranceFrmStockPrem').show(); */
+        this.animateToggle('.stocksClass', '#tranceFrmStockPrem');
         $('#stocksSearch').hide(100);
         this.buttonEffect('#premissionBtn');
         $('#callTranceInvoice').show();
@@ -481,8 +496,9 @@ export class TheStocksComponent implements OnInit {
       })
       .then(() => {
 
-        $('.stocksClass').not('#minFrmStockPrem').hide();
-        $('#minFrmStockPrem').show();
+        /* $('.stocksClass').not('#minFrmStockPrem').hide();
+        $('#minFrmStockPrem').show(); */
+        this.animateToggle('.stocksClass', '#minFrmStockPrem');
         $('#stocksSearch').hide(100);
         this.buttonEffect('#premissionBtn');
         $('#minCallInvoice').show();

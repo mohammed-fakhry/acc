@@ -31,7 +31,7 @@
             <div class="col text-center" id="printCustomerList" style="display: none;">
                 <input *ngIf="router.url === '/customers'" [(ngModel)]="searchCust" placeholder="بحث"
                     class="form-control mx-3" id="searchCust">
-                <i class="fa fa-expand btn p-3 btn-light text-center" (click)='printThisCustomerList()'></i>
+                <i class="fa fa-expand btn p-3 btn-info text-center" (click)='printThisCustomerList()'></i>
             </div>
         </div>
     </nav>
@@ -67,7 +67,7 @@
                     <tr *ngFor="let customer of custRemainArry|searchCustomer:searchCust; let i=index">
                         <td class="btn-outline-secondary textBtn" id="showCustomerCard"
                             (click)="showCustomerCard(customer)">{{customer.customerName}}</td>
-                        <td id="remain{{i}}">{{customer.remain}}</td>
+                        <td id="remain{{i}}" class="{{customer.color()}}">{{customer.remain()}}</td>
                         <!-- <td>{{customer.customerTell}}</td> -->
                         <!--<td class="d-none">{{customer.customerUnit}}</td>-->
                         <!--<td class="d-none">{{customer.customerDateIN}}</td>-->
@@ -178,8 +178,12 @@
         <div class="d-flex justify-content-around">
             <h3 class="card-title cardHeader">حساب {{customerData.value.customerName}}</h3>
             <div class="form-inline">
-                <h5 class="cardHeader">اجمالى مستحق : </h5>
+                <h5 class="cardHeader">اجمالى مستحق : </h5>                
                 <h5 class="{{customerRemainColor}} mr-2" id="customerRemain">{{customerData.value.customerRemain}}</h5>
+            </div>
+            <div id="balanceContain" class="form-inline inpCard" style="display: none; border-radius: 5px; padding: 0px;">
+                <h5 class="px-2 cardHeader">ميزان</h5>
+                <h5 id="balance" class="px-3">{{balance}}</h5>
             </div>
             <i class="fa fa-expand btn p-3 btn-outline-info text-center" (click)='printThis()'></i>
         </div>
@@ -213,8 +217,8 @@
                         <td style="flex: 2;" id="invoiceNum{{i}}" class="{{invoice.invKindColor}}">
                             {{invoice.invoiceKind}} رقم :
                             {{invoice.invoiceNum}}</td>
-                        <td class="text-center" id="invoiceTotalAdd{{i}}">{{invoice.invoiceTotalAdd}}</td>
-                        <td class="text-center" id="invoiceTotalMin{{i}}">{{invoice.invoiceTotalMin}}</td>
+                        <td class="text-center invCell" id="invoiceTotalAdd{{i}}" (click)='markCell(i, "invoiceTotalAdd")'>{{invoice.invoiceTotalAdd}}</td>
+                        <td class="text-center invCell" id="invoiceTotalMin{{i}}" (click)='markCell(i, "invoiceTotalMin")'>{{invoice.invoiceTotalMin}}</td>
                         <td id="netTotal{{i}}" class="{{invoice.netTotalColor}} lightBg text-center">
                             {{invoice.netTotal}}
                         </td>

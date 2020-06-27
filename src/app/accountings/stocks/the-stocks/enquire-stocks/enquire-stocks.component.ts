@@ -59,7 +59,7 @@ export class EnquireStocksComponent implements OnInit {
 
   showStockDetailsPre(stock: Stock) {
 
-    this._stockService.totalProductsValuInStock = 0;
+    //this._stockService.totalProductsValuInStock = 0;
     //this.totalProductsValuArry = [];
     $('.stocksClass').not('#stockDtails').hide();
     $('#stockDtails').show();
@@ -90,7 +90,7 @@ export class EnquireStocksComponent implements OnInit {
       count++
     };
 
-    this._stockService.totalProductsValuInStock = this.sumArry(TotalForSum);
+    //this._stockService.totalProductsValuInStock = this.sumArry(TotalForSum);
   };
 
   stockProducts: any[];
@@ -98,6 +98,12 @@ export class EnquireStocksComponent implements OnInit {
   showStockDetails(stock: Stock) {
 
     $('#containerLoader').fadeIn();
+
+    this._stockService.makeStockArryView = {
+      stockName: stock.stockName,
+      stockPlace: stock.stockPlace,
+      stockEmployee: stock.stockEmployee
+    };
 
     let tranceArr = [];
 
@@ -174,7 +180,7 @@ export class EnquireStocksComponent implements OnInit {
                 qty: () => productDet.in.qty() - productDet.sold.qty(),
                 val: () => {
                   let total = productDet.remain.qty() * productDet.in.avr()
-                  return parseFloat(total.toFixed(2))
+                  return parseFloat(total.toFixed(2).toLocaleString())
                 },
                 color: () => {
                   if (productDet.remain.qty() < 0) {
@@ -200,8 +206,9 @@ export class EnquireStocksComponent implements OnInit {
     Promise.all([getTransDetails, getHandle])
       .then(stockProdFactory).then(() => {
 
-        let totalProductsValuArry = this._stockService.productsFromStockArryView.map(product => product.remain.val());
-        this._stockService.totalProductsValuInStock = this._service.sumArry(totalProductsValuArry);
+        let totalProductsValuArry = this._stockService.productsFromStockArryView.map(product => parseInt(product.remain.val()));
+
+        this._stockService.totalProductsValuInStock = this._service.sumArry(totalProductsValuArry).toLocaleString();
 
         $('.stocksClass').not('#stockDtails').hide();
         $('#stockDtails').show();

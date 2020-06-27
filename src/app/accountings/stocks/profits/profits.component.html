@@ -26,38 +26,37 @@
                         id="searchProd">
                     <hr>
                     <!-- style="height: 100%; margin-top: 0px; margin-bottom: 5px;" -->
-                    <div>
-                        <table class="table table-hover">
-                            <thead class="navHeader">
-                                <tr>
-                                    <th scope="col">بيان</th>
-                                    <th scope="col">قيمة</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <th scope="row">ارباح</th>
-                                    <td class="bg-success text-light">{{totalAdd}}</td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">خسائر</th>
-                                    <td class="bg-danger text-light">{{totalMin}}</td>
-                                </tr>
-                                <tr class="smokeBg">
-                                    <th scope="row">مصاريف عمال</th>
-                                    <td>{{employeeExpence}}</td>
-                                </tr>
-                                <tr class="bottomBorder smokeBg" style="border-bottom: solid 2px black;">
-                                    <th scope="row">مصاريف متنوعة</th>
-                                    <td>{{otherExpence}}</td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">صافى</th>
-                                    <td class="lightBg p-2">{{totalProfit}}</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
+                    <table class="table table-hover">
+                        <thead class="navHeader">
+                            <tr>
+                                <th scope="col">بيان</th>
+                                <th scope="col">قيمة</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th scope="row">ارباح</th>
+                                <td class="bg-success text-light">{{totalAdd}}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">خسائر</th>
+                                <td class="bg-danger text-light">{{totalMin}}</td>
+                            </tr>
+                            <tr class="smokeBg">
+                                <th scope="row">مصاريف عمال</th>
+                                <td>{{employeeExpence}}</td>
+                            </tr>
+                            <tr class="bottomBorder smokeBg" style="border-bottom: solid 2px black;">
+                                <th scope="row">مصاريف متنوعة</th>
+                                <td>{{otherExpence}}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">صافى</th>
+                                <td class="lightBg p-2">{{totalProfit}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
                     <!-- <div>
                         <h5 class="lightBg p-2" style="border-radius: 5px;">صافى : {{totalProfit}}</h5>
                         <h5 class="bg-success p-2 text-light" style="border-radius: 5px;">ارباح : {{totalAdd}}</h5>

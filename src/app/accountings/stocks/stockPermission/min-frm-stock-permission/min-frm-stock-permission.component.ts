@@ -144,7 +144,7 @@ export class MinFrmStockPermissionComponent implements OnInit {
     let stockInfo = this._stockService.stocks.find(stock => stock.stockName == this.stockNameInpt);
 
 
-    ////console.log(this.stockNameInpt)
+    //console.log(this.stockNameInpt)
 
     for (let i = 0; i < this.invoiceInpArry.length; i++) {
 
@@ -228,7 +228,7 @@ export class MinFrmStockPermissionComponent implements OnInit {
           this.invoiceInpArry[i].qtyMsg = `لا يوجد رصيد لهذا الصنف`
         } else {
           let theProductQtyInfo = this.getTheProdQty(this.invoiceInpArry[i].product);
-          console.log({info: theProductQtyInfo, isOk: this.invoiceInpArry[i].qty, prod: this.invoiceInpArry[i].product})
+          //console.log({info: theProductQtyInfo, isOk: this.invoiceInpArry[i].qty, prod: this.invoiceInpArry[i].product})
           //console.log(theProductQtyInfo)
           if (theProductQtyInfo != undefined) {
 
@@ -441,7 +441,7 @@ export class MinFrmStockPermissionComponent implements OnInit {
       };
 
       this.ivoiceItemesForEdit = theInvoiceInfo.invoiceDetails
-      console.log(this.ivoiceItemesForEdit)
+      //console.log(this.ivoiceItemesForEdit)
 
       this._service.date_time = theInvoiceInfo.date_time;
       this.stockNameInpt = theInvoiceInfo.stockName;
@@ -462,7 +462,7 @@ export class MinFrmStockPermissionComponent implements OnInit {
         } else {
           this.qtyIsOkArry.push(0)
         }
-        console.log(this.qtyIsOkArry)
+        //console.log(this.qtyIsOkArry)
         //this.invoiceInpArry[v].Qtyinvaild = false;
       }
       //this.isAddQtyVaild();
@@ -534,7 +534,7 @@ export class MinFrmStockPermissionComponent implements OnInit {
 
     if (BtnSubmitHtml == "تعديل الفاتورة") {
 
-      console.log(this.ivoiceItemesForEdit)
+      //console.log(this.ivoiceItemesForEdit)
 
       this.theCustomerInfo = this.getCustomerInfo(this.ivoiceItemesForEdit[0].customerId);
 

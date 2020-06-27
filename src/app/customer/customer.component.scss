@@ -39,3 +39,7 @@
  #customerInvDetail.animate {
     transform: scale(1);
  }
+
+ .invCell:hover {
+    cursor: grab;
+ }

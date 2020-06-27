@@ -20,7 +20,7 @@ export class ProfitsComponent implements OnInit {
 
   profitArr: any[];
   profitArrCust: any[];
-  totalProfit: number;
+  totalProfit: string;
   totalMin: number;
   totalAdd: number;
   stockInfo: Stock;
@@ -89,36 +89,6 @@ export class ProfitsComponent implements OnInit {
     ////console.time('method')
 
     this.stockInfo = stock; //
-    /*  HandleAddtoStockPrimArry
-    Qty: 50
-    customerId: "27"
-    customerName: "عمر اشرف - حسام"
-    date_time: "2020-05-17T15:52"
-    invNumber: 1
-    invoiceTotal: 4150
-    notes: ""
-    price: 83
-    productId: "73"
-    productName: "كليوباترا حمرا"
-    sndStockId: "1"
-    stockId: "4"
-    stockName: "حسام المخزن"
-    stockTransactionDetailsId: "1"
-    stockTransactionId: "1589723611583"
-    transactionType: "1"
-    */
-
-
-    /* handleBackEnd
-    productCost: 146
-    productId: "14"
-    productName: "سوبر 1"
-    productPrice: 187
-    productQty: 1994
-    stockId: "4"
-    stockName: "حسام المخزن"
-    stockProductId: "1"
-    */
 
     let mainFilterdArr_in = [];
     let mainFilterdArr_sold = [];
@@ -159,7 +129,6 @@ export class ProfitsComponent implements OnInit {
 
       this.profitArr = [];
 
-      //mainFilterdArr_in = this._stockService.HandleAddtoStockPrimArry.filter(h => h.transactionType == 1 && h.stockId == stock.stockId)
       mainFilterdArr_in = this._stockService.HandleAddtoStockPrimArry
         .filter(h => h.stockId == stock.stockId || h.sndStockId == stock.stockId)
         .filter(h => h.transactionType == 1 || h.transactionType == 3)
@@ -198,14 +167,13 @@ export class ProfitsComponent implements OnInit {
           return invoic
         });
       filterdArr_sold.sort(this._servicesService.sortArry('time'));
-      //console.log(filterdArr_sold)
 
       stockProds = this._stockService.handleBackEnd.filter(item => item.stockId == stock.stockId);
 
       for (let i = 0; i < stockProds.length; i++) {
 
         let mainArry = {
-          // `${product.date.getDate()}-${product.date.getMonth()}-${product.date.getFullYear()}`
+
           in: {
             allDetails: filterdArr_In.filter(product => product.productId == stockProds[i].productId),
             qtyArr: () => mainArry.in.allDetails.map(product => product.Qty),
@@ -221,9 +189,10 @@ export class ProfitsComponent implements OnInit {
             dateArry: () => mainArry.sold.allDetails.map(product => product.date),
           },
           everyDayArr: () => {
-            let unique = [...new Set(mainArry.in.dateArry())];
-            console.log(unique)
+            let unique = mainArry.in.dateArry() //[...new Set(mainArry.in.dateArry())];
+            return unique
           }
+
         };
 
         let lastIndex_in = mainArry.in.pricesArr().length - 1;
@@ -270,7 +239,7 @@ export class ProfitsComponent implements OnInit {
 
           let productProfit = ((Math.floor(pricesDetailsArr.sold.avarege - Math.floor(pricesDetailsArr.in.avarege()))) * pricesDetailsArr.sold.totalQty)
 
-          let prodDetails = {
+          let prodDetails = { // the main object
 
             name: stockProds[i].productName,
             qtyRemain: (pricesDetailsArr.in.totalQty - pricesDetailsArr.sold.totalQty),
@@ -386,9 +355,6 @@ export class ProfitsComponent implements OnInit {
 
           this.profitArr.push(prodDetails);
 
-          /* stockProds[i].productQty = prodDetails.qtyRemain;
-          this._stockService.updateStockPridge(stockProds[i]).subscribe(); */
-
           if (stockProds[i].productCost != prodDetails.in.avr) {
             stockProds[i].productCost = prodDetails.in.avr;
             this._stockService.updateStockPridge(stockProds[i]).subscribe();
@@ -411,7 +377,7 @@ export class ProfitsComponent implements OnInit {
 
         //console.log(arrTotals)
 
-        this.totalProfit = this._servicesService.sumArry(arrTotals) + this.employeeExpence + this.otherExpence;
+        this.totalProfit = (this._servicesService.sumArry(arrTotals) + this.employeeExpence + this.otherExpence).toLocaleString();
         this.totalMin = this._servicesService.sumArry(arrMin);
         this.totalAdd = this._servicesService.sumArry(arrAdd);
 
@@ -459,7 +425,7 @@ export class ProfitsComponent implements OnInit {
         };
 
         (newObj.unitProfit < 0) ? newObj.color = 'bg-danger text-white' : newObj.color = 'bg-success text-white';
-        (newObj.totalProfit < 0) ? newObj.colorTotal = 'bg-danger text-white' : newObj.colorTotal = 'lightBg text-dark';
+        (newObj.totalProfit < 0) ? newObj.colorTotal = 'bg-danger text-white' : newObj.colorTotal = 'text-dark';
 
         this.profitArrCust.push(newObj);
       };

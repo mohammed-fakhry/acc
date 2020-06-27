@@ -32,9 +32,17 @@
 <!--add_SafeReceiptInside-->
 <div class="mt-3 card inpCard" style="display: none;" id="add_SafeReceiptInside">
     <div class="p-4">
-        <h2 class="mb-2 cardHeader">ايصال استلام نقدية</h2>
+        <div class="d-flex justify-content-between">
+            <h2 class="mb-2 cardHeader">ايصال استلام نقدية</h2>
+            <button id="deleteSafeReceipt"  class="btn btn-outline-danger" [disabled]='deleteSafeReceipt'
+                (click)="showDeleteSafeReciept()" style="display: none">حذف
+                الفاتورة</button>
+        </div>
         <button class="btn btn-success d-none" (click)='receiptTestBtn()'>test</button>
         <form (ngSubmit)="addNewSafeReceipt()" class="pt-3">
+            <!-- <button id="deleteMinInvoice" style="display: none;" class="btn btn-danger"
+                [disabled]='deleteMinInvBtnDisabled' (click)="showDeleteMinInvoice()">حذف
+                الفاتورة</button> -->
             <!--firstSection-->
             <div class="row navHeader p-2">
                 <div class="form-inline col-md-4 col-lg-3 col-sm-6">
@@ -56,8 +64,8 @@
             <div class="row mt-3">
                 <div class="form-inline col-md-4 col-lg-3 col-sm-6">
                     <label class="ml-2" for="date_time">تاريخ الايصال</label>
-                    <input class="form-control" name="date_time" [(ngModel)]='safeReceipt_inpts.date_time' type="datetime-local"
-                        id="date_time">
+                    <input class="form-control" name="date_time" [(ngModel)]='safeReceipt_inpts.date_time'
+                        type="datetime-local" id="date_time">
                 </div>
             </div>
             <!--line1-->
@@ -116,7 +124,6 @@
                                 {{safeReceipt_inpts.currentAccVal}}</div>
                         </div>
                     </div>
-
                 </div>
                 <!--safe-->
                 <div class="mt-3 accKindClassRec" id="safeReceiptAcc">
