@@ -50,6 +50,46 @@ export class ServicesService {
     };
   };
 
+  inArabicWords = (number) => {
+    let aNum: any;
+    //this.theANum = "320862"
+
+    var one = [
+      '', 'واحد ', 'اثنان ', 'ثلاثة ', 'اربعة ', 'خمسة '
+      , 'ستة ', 'سبعة ', 'ثمانية ', 'تسعة ', 'عشرة ', 'احدى عشر '
+      , 'اثنى عشر ', 'ثلاثة عشر ', 'اربعة عشر ', 'خمسة عشر '
+      , 'ستة عشر ', 'سبعة عشر ', 'ثمانية عشر ', 'تسعة عشر '
+    ];
+
+    var two = ['', '', ' عشرون ', 'ثلاثون ', 'اربعون ', 'خمسون ', 'ستون ', 'سبعون ', 'ثمانون ', 'تسعون'];
+    var hund = ['', 'مائة', 'مئتان', 'ثلاثمائة ', 'اربعمائة ', 'خمسمائة', 'ستمائة ', 'سبعمائة', 'ثمانمائة', 'تسعمائة ']
+
+    if ((number = number.toString()).length > 9) return 'overflow';
+    aNum = ('000000000' + number).substr(-9).match(/^(\d{2})(\d{1})(\d{1})(\d{2})(\d{1})(\d{2})$/);
+    //console.log('aNum : ' + aNum)
+    if (!aNum) return; var strA = '';
+    strA += (aNum[1] != 0) ? (one[Number(aNum[1])] || two[aNum[1][0]] + ' ' + one[aNum[1][1]]) + 'بليون ' : '';
+    strA += (aNum[2] != 0) ? (one[Number(aNum[2])] || two[aNum[2][0]] + ' ' + one[aNum[2][1]]) + 'مليون ' : '';
+
+    strA += (aNum[3] != 0) ?
+      ((aNum[2] != 0) ? 'و ' : '') +
+      `${(hund[Number(aNum[3])])} ` +
+      ((aNum[4] == 0) ? 'الف ' : '')
+      : '';
+
+    strA += (aNum[4] != 0) ?
+      ((aNum[3] != 0 && one[aNum[4][1]] != '') ? 'و' : '') +
+      ((one[Number(aNum[4])] != undefined) ? ` ${one[Number(aNum[4])]} الف ` : `${one[aNum[4][1]]}و ${two[aNum[4][0]]} الف `) : '';
+
+    strA += (aNum[5] != 0) ? `و ${(hund[Number(aNum[5])])} ` : '';
+
+    strA += (aNum[6] != 0) ? ((one[aNum[6][1]] != '') ? 'و ' : '') + (one[Number(aNum[6])] || `${one[aNum[6][1]]}و ${two[aNum[6][0]]}`) : '';
+    console.log(aNum)
+
+    return strA;
+
+  };
+
   sumArry(arr: any[]) {
     let s = 0
     for (let i = 0; i < arr.length; i++) {
@@ -86,6 +126,41 @@ export class ServicesService {
     this.fullDate.toString();
     this.fullTime.toString()
     this.date_time = this.fullDate + 'T' + this.fullTime // + ' ' + this.fullTime
+
+  };
+
+  setDate_time(date: string) {
+
+    let d = new Date(date)
+
+    let obj = {
+      year: d.getFullYear(),
+      month: () => ((d.getMonth() + 1) < 10) ? `0${d.getMonth() + 1}` : `${d.getMonth() + 1}`,
+      day: () => (d.getDate() < 10) ? `0${d.getDate()}` : `${d.getDate()}`,
+
+      hour: () => {
+        if (d.getHours() < 10) {
+          return `0${d.getHours()}`
+
+        } else if (d.getHours() >= 10 && d.getHours() <= 12) {
+          return `${d.getHours()}`
+
+        } else {
+
+          if ((d.getHours() - 12) < 10) {
+            return `0${d.getHours() - 12}`
+
+          } else {
+            return `${d.getHours() - 12}`
+          };
+        };
+      },
+
+      minutes: () => (d.getMinutes() < 10) ? `0${d.getMinutes()}` : `${d.getMinutes()}`,
+      timeCond: () => (d.getHours() >= 12) ? 'pm' : 'am',
+    };
+
+    return `(${obj.hour()}:${obj.minutes()}${obj.timeCond()}) | ${obj.day()}/${obj.month()}/${obj.year}`
 
   };
 

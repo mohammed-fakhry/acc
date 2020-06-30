@@ -1,19 +1,19 @@
 <!--fadeLayer-->
 <div class="fadeLayer" id="fadeLayer_SafeReceipt">
     <div class="container p-3 card askForDelete">
-        <h3 class="p-3 bg-danger text-light">هل انت متأكد من حذف</h3>
-        <h4 class="mb-2">
-            <!--{{_stockService.stockDataView.stockName}}-->
-        </h4>
+        <h3 class="text-white bg-danger p-3">هل انت متأكد من حذف الايصال رقم {{safeReceipt_inpts.safeReceiptId}}</h3>
+        <p>بقيمة {{safeReceipt_inpts.receiptVal}} جنيه</p>
+        <p>من {{safeReceipt_inpts.safeName}}</p>
+        <p class="text-danger">هذه الخطوة لا يمكن الرجوع عنها و فى حالة عدم عمل نسخة احتياطية لن تتمكن من استعادة هذه البيانات</p>
         <hr>
         <div class="d-flex flex-row-reverse">
-            <button class="btn btn-danger mr-2" id="delete_SafeReceipt" (click)="deleteSafeReceipt()">نعم</button>
-            <button class="btn btn-outline-info" id="hideFadeLayer_SafeReceipt">الغاء</button>
+            <button class="btn btn-outline-danger mr-2" id="delete_SafeReceipt" (click)="deleteSafeReceipt()">متأكد من الحذف</button>
+            <button class="btn btn-outline-info" id="hideFadeLayer_SafeReceipt" (click)='hideFadeLayer_SafeReceipt()'>الغاء</button>
         </div>
     </div>
 </div>
 <!--onlyForm-->
-<div class="card inpCard  mt-3 p-3" id="header_SafeRecipt">
+<div class="card inpCard mt-3 p-3" id="header_SafeRecipt">
     <div class="form-inline" id="callSafeReceipt">
         <h2 class="cardHeader">ايصال (استلام | صرف) نقدية</h2>
         <div class="headerLeftBorder mr-2"></div>
@@ -34,16 +34,12 @@
     <div class="p-4">
         <div class="d-flex justify-content-between">
             <h2 class="mb-2 cardHeader">ايصال استلام نقدية</h2>
-            <button id="deleteSafeReceipt"  class="btn btn-outline-danger" [disabled]='deleteSafeReceipt'
+            <button id="deleteSafeReceipt"  class="btn btn-outline-danger" [disabled]='deleteReceiptCond'
                 (click)="showDeleteSafeReciept()" style="display: none">حذف
                 الفاتورة</button>
         </div>
         <button class="btn btn-success d-none" (click)='receiptTestBtn()'>test</button>
         <form (ngSubmit)="addNewSafeReceipt()" class="pt-3">
-            <!-- <button id="deleteMinInvoice" style="display: none;" class="btn btn-danger"
-                [disabled]='deleteMinInvBtnDisabled' (click)="showDeleteMinInvoice()">حذف
-                الفاتورة</button> -->
-            <!--firstSection-->
             <div class="row navHeader p-2">
                 <div class="form-inline col-md-4 col-lg-3 col-sm-6">
                     <label for="receiptKind" class="text-white">نوع الايصال</label>

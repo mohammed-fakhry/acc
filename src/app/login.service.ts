@@ -30,7 +30,8 @@ export class LoginService {
     } else {
       this.isUser = false
     }
-  }
+  };
+
   checkIsUser() {
     if (this.isUser == true) {
       $('#sideBar').removeClass('d-none');
@@ -47,7 +48,8 @@ export class LoginService {
       this.isUser = true;
       this.checkIsUser();
     }
-  }
+  };
+  
   reternlog() {
     if (this.isUser == false) {
       this.router.navigate(['/logIn'])

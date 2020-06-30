@@ -437,10 +437,25 @@ export class StocTrancePremComponent implements OnInit {
 
       this.resetTranceinvoiceValu();
 
+      let stockInfo = this._stockService.stocks.find(stock => stock.stockId == invoiceInfo.stockId)
+      let secStockInfo = this._stockService.stocks.find(stock => stock.stockId == invoiceInfo.sndStockId)
+
+      if (invoiceInfo.stockId == 1) {
+        $('#fstStockNameForTrance').val('اذن اضافة');
+      } else {
+        $('#fstStockNameForTrance').val(stockInfo.stockName);
+      };
+
+      if (invoiceInfo.sndStockId == 1) {
+        $('#sndStockNameForTrance').val('اذن خصم');
+      } else {
+        $('#sndStockNameForTrance').val(secStockInfo.stockName);
+      };
+
       $('#tranceStockTransactionId').val(invoiceInfo.stockTransactionId);
-      $('#fstStockNameForTrance').val(invoiceInfo.stockName);
-      $('#sndStockNameForTrance').val(invoiceInfo.sndStockName);
       $('#tranceInvoiceNote').val(invoiceInfo.notes);
+
+      console.log(invoiceInfo)
 
       this.invNumTrance = invoiceInfo.invNumber;
       this._service.date_time = invoiceInfo.date_time;
@@ -651,7 +666,7 @@ export class StocTrancePremComponent implements OnInit {
             stockTransactionDetailsId: null,
             stockTransactionId: stockTransaction.stockTransactionId,
             productId: theProductId,
-            price: parseInt(this.invoiceInpArry[i].price),
+            price: parseFloat(this.invoiceInpArry[i].price),
             Qty: parseInt(this.invoiceInpArry[i].qty),
           };
 
@@ -710,7 +725,7 @@ export class StocTrancePremComponent implements OnInit {
             stockTransactionDetailsId: null,
             stockTransactionId: stockTransaction.stockTransactionId,
             productId: theProductId,
-            price: parseInt(this.invoiceInpArry[i].price),
+            price: parseFloat(this.invoiceInpArry[i].price),
             Qty: parseInt(this.invoiceInpArry[i].qty),
           };
 

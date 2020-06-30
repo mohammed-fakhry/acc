@@ -22,11 +22,11 @@
                     </datalist>
                     <div *ngIf='_safeDataService.safeInpts.safeEmployeeInvaild' class="text-danger">موظف غير مسجل</div>
                 </div>
-                <div class="col">
+                <!-- <div class="col">
                     <label>رصيد اول</label>
                     <input id="opendVal" type="number" [(ngModel)]='_safeDataService.safeInpts.opendVal' name="opendVal"
                         class="form-control">
-                </div>
+                </div> -->
             </div>
             <button [disabled]='addSafeInvalid' class="btn btn-outline-info mt-3 ml-2" type="submit"
                 id="addNewSafeBtn">اضافة</button>

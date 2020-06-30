@@ -24,6 +24,7 @@ export class SafeReceiptComponent implements OnInit {
   valIsOk: number;
   // safeArry
   theSafeList: SafeData[];
+  deleteReceiptCond: boolean = true;
 
   constructor(public _safeDataService: SafeDataService, public _stockService: StocksService,
     public _service: ServicesService, public _custService: CustomerService, public _safeAccComponent: SafeAccComponent) { }
@@ -151,6 +152,7 @@ export class SafeReceiptComponent implements OnInit {
       $('#receiptVal').removeClass('is-invalid').removeClass('is-valid');
       $('#AccName').removeClass('is-invalid').removeClass('is-valid');
       $('#addNewSafeReceipt').html('حفظ الايصال');
+      $('#deleteSafeReceipt').hide();
 
       this.validTests.receiptValValid = false;
       this.safeReceipt_inpts.receiptVal = null;
@@ -169,8 +171,10 @@ export class SafeReceiptComponent implements OnInit {
 
       this.valIsOk = this.safeReceipt_inpts.currentSafeVal + this.theReceiptInfo.receiptVal;
       //console.log(this.valIsOk)
-
+      $('#deleteSafeReceipt').show();
+      this.deleteReceiptCond = false;
     };
+    
     $('#add_SafeReceiptInside').show();
     $('#header_SafeRecipt').hide();
   };
@@ -264,6 +268,8 @@ export class SafeReceiptComponent implements OnInit {
         this.isReceiptValid = true;
       };
     };
+
+    this.deleteReceiptCond = true;
 
   };
 
@@ -536,20 +542,24 @@ export class SafeReceiptComponent implements OnInit {
       safe => safe.safeId == this.theReceiptInfo.safeId
     );
 
+    let newVal: number = 0;
+
     // the condition
     if (this.theReceiptKind == 'add') {
-      oldSafe.currentSafeVal = oldSafe.currentSafeVal - receiptVal;
+      newVal = oldSafe.currentSafeVal - receiptVal;
     } else {
-      oldSafe.currentSafeVal = oldSafe.currentSafeVal + receiptVal;
+      newVal = oldSafe.currentSafeVal + receiptVal;
     };
 
-    let indx = this._safeDataService.safeList.findIndex(
-      i => i.safeId === oldSafe.safeId
+    let i = this._safeDataService.safeList.findIndex(
+      safe => safe.safeId === oldSafe.safeId
     );
+
+    oldSafe.currentSafeVal = newVal
 
     this._safeDataService.updateSafeData(oldSafe).subscribe();
     // pass new Value to edit
-    this._safeDataService.safeList[indx].currentSafeVal = oldSafe.currentSafeVal;
+    this._safeDataService.safeList[i].currentSafeVal = newVal;
   };
 
   editSecSafeVal(receiptVal: number) { // from old receipt
@@ -559,7 +569,7 @@ export class SafeReceiptComponent implements OnInit {
     );
       
     // the condition
-    if (this.theReceiptInfo.secSafeName != null) {
+    if (this.theReceiptInfo.secSafeName != null && this.theReceiptInfo.secSafeName != undefined) {
       if (this.theReceiptKind == 'add') {
         oldSecSafe.currentSafeVal = oldSecSafe.currentSafeVal + receiptVal;
       } else {
@@ -794,6 +804,24 @@ export class SafeReceiptComponent implements OnInit {
   addNewSafeReceipt() {
     this.saveRecieptData();
     this.showInvoiceDone();
+  };
+
+  showDeleteSafeReciept() {
+    $('#fadeLayer_SafeReceipt').show(0);
+    $('.askForDelete').addClass('animate');
+  };
+
+  deleteSafeReceipt() {
+    this._safeDataService.deleteSafeReciept(this.safeReceipt_inpts.safeReceiptId).subscribe()
+    $('#fadeLayer_SafeReceipt').hide();
+    $('.askForDelete').removeClass('animate');
+    this._safeAccComponent.showSafeEnquir();
+    window.alert(`تم حذف الفاتورة رقم ${this.safeReceipt_inpts.safeReceiptId}`)
+  };
+
+  hideFadeLayer_SafeReceipt() {
+    $('#fadeLayer_SafeReceipt').hide();
+    $('.askForDelete').removeClass('animate');
   };
 
 };

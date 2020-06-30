@@ -381,6 +381,14 @@ export class ProfitsComponent implements OnInit {
         this.totalMin = this._servicesService.sumArry(arrMin);
         this.totalAdd = this._servicesService.sumArry(arrAdd);
 
+        for (let i =0 ; i < this.profitArr.length; i++ ) {
+          if (this.profitArr[i].qtyRemain == 0) {
+            $(`#remainProfit${i}`).hide()
+            console.log(i)
+          };
+        };
+        
+
         $('.chooseBtn').not(`#showStockProfits${index}`).removeClass('btn-secondary').addClass('btn-light');
         $(`#showStockProfits${index}`).removeClass('btn-light').addClass('btn-secondary');
         $('#totalProfits').show();

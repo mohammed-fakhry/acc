@@ -122,7 +122,6 @@ export class CustomerComponent implements OnInit {
     const element = document.querySelector(`#${cell}${i}`);
     $(`#${cell}${i}`).toggleClass('darkBg');
 
-
     let dirIn = 'invoiceTotalAdd'
     let dirOut = 'invoiceTotalMin'
 
@@ -145,8 +144,6 @@ export class CustomerComponent implements OnInit {
 
       let index: number;
 
-      $(`#${cell}${i}`).css('cursor', 'grab')
-
       if (dirIn == cell) {
         num = - this.customerInvArry[i].invoiceTotalAdd
         index = this.cellArry.findIndex(theCell => theCell == num);
@@ -156,8 +153,9 @@ export class CustomerComponent implements OnInit {
         index = this.cellArry.findIndex(theCell => theCell == num);
         this.cellArry.splice(index, 1)
       };
+      $(`#${cell}${i}`).css('cursor', 'grab')
 
-    }
+    };
 
     if (this.cellArry.length == 0) {
       this.balance = 0
@@ -169,9 +167,9 @@ export class CustomerComponent implements OnInit {
       $('#balance').css('color', 'red')
     } else {
       $('#balance').css('color', 'black')
-    }
+    };
 
-  }
+  };
 
   printThisCustomerList() {
 
@@ -209,7 +207,7 @@ export class CustomerComponent implements OnInit {
     $(`.printable`).css('width', '100%');
     window.print();
     location.reload();
-  }
+  };
 
   reloadLoc() {
     location.reload();
@@ -303,7 +301,8 @@ export class CustomerComponent implements OnInit {
         customerInvDetail.stockTransactionId = this._stockService.stockTransactionArr[i].stockTransactionId;
         customerInvDetail.transactionType = this._stockService.stockTransactionArr[i].transactionType;
         customerInvDetail.invoiceNum = this._stockService.stockTransactionArr[i].invNumber;
-        customerInvDetail.date_time = this._stockService.stockTransactionArr[i].date_time;
+        customerInvDetail.date_time = this._stockService.stockTransactionArr[i].date_time
+        customerInvDetail.date = this._service.setDate_time(this._stockService.stockTransactionArr[i].date_time);
         customerInvDetail.notes = this._stockService.stockTransactionArr[i].notes
 
         if (this._stockService.stockTransactionArr[i].transactionType == 1) {
@@ -336,6 +335,7 @@ export class CustomerComponent implements OnInit {
           netTotal: 0,
         };
 
+        customerInvDetail.date = this._service.setDate_time(this.customerReceiptArr[r].date_time);
         customerInvDetail.date_time = this.customerReceiptArr[r].date_time;
         customerInvDetail.invoiceNum = this.customerReceiptArr[r].safeReceiptId;
         customerInvDetail.notes = this.customerReceiptArr[r].recieptNote;
@@ -485,20 +485,17 @@ export class CustomerComponent implements OnInit {
     this._custService.invTotalArry = [];
     for (let i = 0; i < this.customersInvoices.length; i++) {
 
-      let customerInvDetail = {
-        productName: '',
-        price: 0,
-        Qty: 0,
-        total: 0
-      }
-
       if (this.customersInvoices[i].stockTransactionId == invoice.stockTransactionId) {
-        customerInvDetail.productName = this.customersInvoices[i].productName;
-        customerInvDetail.price = this.customersInvoices[i].price;
-        customerInvDetail.Qty = this.customersInvoices[i].Qty;
-        customerInvDetail.total = this.customersInvoices[i].Qty * this.customersInvoices[i].price;
+
+        let customerInvDetail = {
+          productName: this.customersInvoices[i].productName,
+          price: this.customersInvoices[i].price,
+          Qty: this.customersInvoices[i].Qty,
+          total: () => (this.customersInvoices[i].Qty * this.customersInvoices[i].price)
+        };
+
         this._custService.customerInv.push(customerInvDetail);
-        this._custService.invTotalArry.push(customerInvDetail.total);
+        this._custService.invTotalArry.push(customerInvDetail.total());
       };
 
     };
@@ -537,7 +534,7 @@ export class CustomerComponent implements OnInit {
     $('.fadeLayer').show(0)
     $('.askForDelete').show().addClass('animate')
     this.putCustomerDataValue(customer);
-  }
+  };
 
   deletCustomer() {
     $('.fadeLayer').hide()

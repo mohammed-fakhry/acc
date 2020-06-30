@@ -511,7 +511,7 @@ export class AddToStockPermissionComponent implements OnInit {
             stockTransactionDetailsId: null,
             stockTransactionId: stockTransaction.stockTransactionId,
             productId: theProductId,
-            price: parseInt(this.invoiceInpArry[i].price),
+            price: parseFloat(this.invoiceInpArry[i].price),
             Qty: parseInt(this.invoiceInpArry[i].qty),
           };
 
@@ -550,7 +550,7 @@ export class AddToStockPermissionComponent implements OnInit {
             stockTransactionDetailsId: null,
             stockTransactionId: stockTransaction.stockTransactionId,
             productId: theProductId,
-            price: parseInt(this.invoiceInpArry[i].price),
+            price: parseFloat(this.invoiceInpArry[i].price),
             Qty: parseInt(this.invoiceInpArry[i].qty),
           };
 
@@ -594,7 +594,7 @@ export class AddToStockPermissionComponent implements OnInit {
             stockTransactionDetailsId: null,
             stockTransactionId: stockTransaction.stockTransactionId,
             productId: theProductId,
-            price: parseInt(this.invoiceInpArry[i].price),
+            price: parseFloat(this.invoiceInpArry[i].price),
             Qty: parseInt(this.invoiceInpArry[i].qty)
           };
 

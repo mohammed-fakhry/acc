@@ -157,16 +157,16 @@ export class TheStocksComponent implements OnInit {
 
     this._stockService.makeInvoiceArry = [];
 
-    for (let i = 0; i < /* this._stockService.stockTransactionArr.length */ transAction.length; i++) {
-      if (/* this._stockService.stockTransactionArr */transAction[i].transactionType == type) {
-        this._stockService.makeInvoiceArry.push(/* this._stockService.stockTransactionArr */transAction[i])
+    for (let i = 0; i < transAction.length; i++) {
+      if (transAction[i].transactionType == type) {
+        this._stockService.makeInvoiceArry.push(transAction[i])
       };
     };
 
     for (let m = 0; m < this._stockService.makeInvoiceArry.length; m++) {
       this._stockService.makeInvoiceArry[m].invoiceDetails = [];
 
-      let invoiceDetail = /* this._stockService.HandleAddtoStockPrimArry */handleAdd.filter(
+      let invoiceDetail = handleAdd.filter(
         obj => obj.stockTransactionId == this._stockService.makeInvoiceArry[m].stockTransactionId
       );
 
@@ -182,9 +182,10 @@ export class TheStocksComponent implements OnInit {
       return a.invNumber - b.invNumber
     });
 
+    console.log(this._stockService.makeInvoiceArry)
     return this._stockService.makeInvoiceArry
 
-    ////console.log(this._stockService.makeInvoiceArry)
+    
 
   }; // createTheInvoiceArry
 
@@ -269,8 +270,7 @@ export class TheStocksComponent implements OnInit {
 
     };
 
-    //this._stockService.productsFromStockArryView = products.filter(product => product.productQty != 0);
-    return products //.filter(product => product.productQty != 0);//.filter(product => product.productQty != 0);
+    return products
   }
 
   testBackend() {
@@ -326,31 +326,22 @@ export class TheStocksComponent implements OnInit {
   showStocksEnquiry() {
     //this.getBackendData();
     this.getStocks.then(() => {
-      /* $('.stocksClass').not('#stocksEnquiry').hide(0,() => {
-        $('#stocksEnquiry').show('fast') //.css('display', 'block');
-        $('#stocksSearch').fadeIn(100);
-      }); */
       this.animateToggle('.stocksClass', '#stocksEnquiry');
+      $('#stocksEnquiry').css('display', 'block')
       $('#stocksSearch').fadeIn(100);
-
       this.buttonEffect('#stockBtn');
     });
   };
 
   showProductsReport() {
     $('#prodDetTable').hide();
-    /* $('.stocksClass').not('#productsReport').hide();
-    $('#productsReport').show(); */
     this.animateToggle('.stocksClass', '#productsReport');
     $('#stocksSearch').fadeIn(100);
     this.buttonEffect('#stockBtn');
-    //this.getBackendData();
     this._service.clearForm();
   }
 
   showAddNewStock() {
-    /* $('.stocksClass').not('#addNewStock').hide();
-    $('#addNewStock').show(); */
     this.animateToggle('.stocksClass', '#addNewStock');
     $('#stocksSearch').hide(100);
     this.buttonEffect('#stockBtn');
@@ -358,8 +349,6 @@ export class TheStocksComponent implements OnInit {
 
   showProfits() {
     this.getBackendData();
-    /* $('.stocksClass').not('#profits').hide();
-    $('#profits').show(); */
     this.animateToggle('.stocksClass', '#profits');
     $('#stocksSearch').hide(100);
     this.buttonEffect('#showProfitsBtn');
@@ -369,15 +358,11 @@ export class TheStocksComponent implements OnInit {
   productNameArr: any[];
 
   showAddNewProduct() {
-
-    ///this.makeProductNameArr();
     this.getAllProducts.then(() => {
       this.productNameArr = [];
       this.productNameArr = this._stockService.allProducts.map(product => product.productName);
       this.productNameVaild = true;
       $('#productName').removeClass('is-valid').removeClass('is-invalid');
-      /* $('.stocksClass').not('#addNewProduct').hide();
-      $('#addNewProduct').show(); */
       this.animateToggle('.stocksClass', '#addNewProduct');
       $('#stocksSearch').hide(100);
       this.buttonEffect('#stockBtn');
@@ -406,9 +391,6 @@ export class TheStocksComponent implements OnInit {
     Promise.all([StockTrance, Handle])
       .then((res) => this.addInvArry = this.createTheInvoiceArry(1, res[0], res[1]))
       .then(() => {
-
-        /* $('.stocksClass').not('#addToStockPrem').hide();
-        $('#addToStockPrem').show(); */
         this.animateToggle('.stocksClass', '#addToStockPrem');
         $('#stocksSearch').hide(100);
         this.buttonEffect('#premissionBtn');

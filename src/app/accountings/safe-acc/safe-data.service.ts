@@ -49,4 +49,8 @@ export class SafeDataService {
     return this.http.put(`${this.url}updateSafeReceipt.php?id=` + safeReceipt.safeReceiptId, safeReceipt)
   };
 
+  deleteSafeReciept(id: number) {
+    return this.http.delete<SafeReceiptInpts[]>(`${this.url}deleteSafeReciept.php?id=` + id)
+  };
+
 }
