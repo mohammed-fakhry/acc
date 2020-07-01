@@ -266,11 +266,11 @@ export class MinFrmStockPermissionComponent implements OnInit {
           } else {
             this.invoiceInpArry[i].Qtyinvaild = true;
             this.invoiceInpArry[i].qtyMsg = 'لا يوجد رصيد لهذا الصنف'
-            
+
           };
-          
+
         };
-        
+
       };
     };
 
@@ -286,6 +286,27 @@ export class MinFrmStockPermissionComponent implements OnInit {
 
   custNameInvaild: boolean;
   custVaildMsg: string;
+
+  customerCss: any[]
+
+  makeCustomerCss() {
+    this.custClass = ''
+    this.customerCss = this.customers.map((cust) => {
+      return {
+        name: cust.customerName,
+        css: () => {
+          if (cust.customerName.includes('- سيف')) {
+            return 'font-weight-bolder text-light bg-info'
+          } else {
+            return ''
+          }
+        }
+      }
+    })
+    console.log(this.customerCss)
+  };
+
+  custClass: string = '';
 
   isCustNameInvaild() {
     let custName = this.custNameInpt //$('#customerNameForMin').val()
@@ -305,6 +326,8 @@ export class MinFrmStockPermissionComponent implements OnInit {
       this.isMinInvInvaild = false;
     };
 
+    let cCss = this.customerCss.find(cust => cust.name == custName)
+    this.custClass = cCss.css();
   };
 
   invoiceTotal: string = '0';
@@ -379,6 +402,8 @@ export class MinFrmStockPermissionComponent implements OnInit {
   date_time: string;
 
   ShowMinNewInvoice() {
+
+    this.makeCustomerCss();
 
     this.getTheStockId()
     //this.makeTheStockProds()
@@ -470,8 +495,12 @@ export class MinFrmStockPermissionComponent implements OnInit {
       $('#minCallInvoice').hide();
       $('#minInvoiceForm').show();
 
+      let cCss = this.customerCss.find(cust => cust.name == theInvoiceInfo.customerName)
+      this.custClass = cCss.css();
+
     }
     this.deleteMinInvBtnDisabled = false;
+
   }; // ShowMinNewInvoice
 
   theCustomerInfo: Customer;
@@ -930,7 +959,7 @@ export class MinFrmStockPermissionComponent implements OnInit {
 
     $('.fadeLayer').hide();
     $('#fadeLayerMP').hide();
-    
+
     let stockTransId = $('#minStockTransactionId').val();
 
     for (let i = 0; this.invoiceInpArry.length; i++) {

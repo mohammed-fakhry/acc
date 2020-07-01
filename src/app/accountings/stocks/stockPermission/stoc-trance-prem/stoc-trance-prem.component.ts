@@ -410,6 +410,7 @@ export class StocTrancePremComponent implements OnInit {
       $('#tranceInvoiceForm').show();
       $('#newTranceInvoicetBtn').html("تسجيل");
       $('#tranceStockTransactionId').val('');
+      $('#deleteTranceInvoice').hide();
 
       this._service.clearForm();
       this.resetTranceinvoiceValu();
@@ -423,6 +424,9 @@ export class StocTrancePremComponent implements OnInit {
       $('#newTranceInvoicetBtn').html("تعديل الاذن");
       this.inptDisabled = false;
       $('#invNumTrance').show();
+
+      $('#deleteTranceInvoice').show();
+      this.deleteInvTranceBtnDisabled = false;
 
       let invoiceInfo = this._stockService.makeInvoiceArry.find(
         invoice => invoice.invoiceSearchVal == this.searchInVal
@@ -770,9 +774,9 @@ export class StocTrancePremComponent implements OnInit {
     };
 
     // backEnd
-    this._stockService.deleteStockTransaction(stockTransId).subscribe();
+    //this._stockService.deleteStockTransaction(stockTransId).subscribe();
 
-    this.editStockQtys();
+    //this.editStockQtys();
     this._theStockComp.showStocksEnquiry();
   };
 

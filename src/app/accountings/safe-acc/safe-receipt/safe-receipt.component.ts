@@ -139,6 +139,8 @@ export class SafeReceiptComponent implements OnInit {
 
   showAddNewSafeReceipt() {
 
+    this.makeCustomerCss()
+
     $('#showAddSafeReceipt').attr({ 'disabled': false })
     // getBackendData_Receipt
     this._safeAccComponent.getBackendData_Receipt();
@@ -426,6 +428,27 @@ export class SafeReceiptComponent implements OnInit {
 
   theCustomerId: number;
   theCustomerInfo: Customer;
+  customerCss: any[]
+
+
+  makeCustomerCss() {
+    this.custClass = ''
+    this.customerCss = this._safeAccComponent.customers.map((cust) => {
+      return {
+        name: cust.customerName,
+        css: () => {
+          if (cust.customerName.includes('- سيف')) {
+            return 'font-weight-bolder text-light bg-info pr-2'
+          } else {
+            return ''
+          }
+        }
+      }
+    })
+    console.log(this.customerCss)
+  };
+
+  custClass: string = '';
 
   isCustomerValid() {
 
@@ -453,6 +476,8 @@ export class SafeReceiptComponent implements OnInit {
 
     };
     this.checkReceiptValid();
+    let cCss = this.customerCss.find(cust => cust.name == this.theCustomerInfo.customerName)
+    this.custClass = cCss.css();
 
   } // isCustomerValid
 

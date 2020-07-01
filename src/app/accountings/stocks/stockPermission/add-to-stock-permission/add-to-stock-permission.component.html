@@ -65,10 +65,10 @@
                         <div class="col m-2">
                             <label for="customerNameForAdd">اسم المورد</label>
                             <input type="search" id="customerNameForAdd" (change)="isCustomerVaild()"
-                                class="form-control mdb-autocomplete p-1" list="datalistCustomer">
+                                class="form-control mdb-autocomplete p-1 {{custClass}}" list="datalistCustomer">
                             <div *ngIf="customerVaild" class="text-danger">{{custVaildMsg}}</div>
                             <datalist id="datalistCustomer">
-                                <option *ngFor="let customer of customers" value="{{customer.customerName}}">
+                                <option *ngFor="let customer of customerCss" value="{{customer.name}}">
                                 </option>
                             </datalist>
                         </div>

@@ -67,7 +67,7 @@
                             <!--<select class="form-control text-center mr-3 p-1" id="customerNameForAdd">
                                 <option *ngFor="let customer of customers">{{customer.customerName}}</option>
                             </select> name="product{{i}}"-->
-                            <input type="search" id="customerNameForMin" class="form-control mdb-autocomplete p-1"
+                            <input type="search" id="customerNameForMin" class="form-control {{custClass}} mdb-autocomplete p-1"
                                 list="minDatalistCustomer" (change)='isCustNameInvaild()' name="custNameInpt"
                                 [(ngModel)]='custNameInpt'>
                             <div *ngIf="custNameInvaild" class="text-danger">{{custVaildMsg}}</div>

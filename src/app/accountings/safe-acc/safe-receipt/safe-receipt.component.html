@@ -149,7 +149,7 @@
                             <label for="customerName_Receipt">اسم العميل</label>
                             <input name="customerName" [(ngModel)]='safeReceipt_inpts.customerName' type="search"
                                 id="customerName_Receipt" (keyup)="isCustomerValid()"
-                                class="form-control clearForm mdb-autocomplete p-1 pr-5" list="datalistCustomer">
+                                class="form-control clearForm mdb-autocomplete p-1 pr-5 {{custClass}}" list="datalistCustomer">
                             <div *ngIf="validTests.customerValid" class="text-danger mt-2">{{validTests.custValidMsg}}
                             </div>
                             <datalist id="datalistCustomer">

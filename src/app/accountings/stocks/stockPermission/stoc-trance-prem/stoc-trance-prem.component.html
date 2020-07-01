@@ -40,11 +40,11 @@
     <div id="tranceInvoiceForm" style="display: none;">
         <div class="d-flex justify-content-between">
             <h2 class="cardHeader">اذن نقل</h2>
+            <input disabled id="invNumTrance" class="text-center" type="text" value="رقم الفاتورة ( {{invNumTrance}} )">
+            <input [(ngModel)]='_service.date_time' type="datetime-local">
             <button id="deleteTranceInvoice" style="display: none;" class="btn btn-danger"
                 [disabled]='deleteInvTranceBtnDisabled' (click)="showDeleteTranceInvoice()">حذف
                 الفاتورة</button>
-            <input disabled id="invNumTrance" class="text-center" type="text" value="رقم الفاتورة ( {{invNumTrance}} )">
-            <input [(ngModel)]='_service.date_time' type="datetime-local">
         </div>
         <hr>
         <form (ngSubmit)="tranceFrmStockPrem()">
@@ -77,7 +77,8 @@
                         </div>
                     </div>
                     <div class="text-center" id="printTrancePremBtn">
-                        <i class="fa fa-expand btn btn-outline-primary p-3 text-center" (click)='printThisTranceInv()'></i>
+                        <i class="fa fa-expand btn btn-outline-primary p-3 text-center"
+                            (click)='printThisTranceInv()'></i>
                     </div>
                 </div>
             </div>

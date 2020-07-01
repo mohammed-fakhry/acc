@@ -99,29 +99,57 @@ export class ProfitsComponent implements OnInit {
 
     const makeExpences = () => {
 
-      let employeeArr = this.safeReciepts.filter(acc => acc.AccName == 'مصاريف عمال');
-      let employeeTotals = []
+      if (stock.stockName == 'حسام المخزن') {
+        let employeeArr = this.safeReciepts.filter(acc => acc.AccName == 'مصاريف عمال');
+        let employeeTotals = []
 
-      for (let i = 0; i < employeeArr.length; i++) {
-        let receiptVal = employeeArr[i].receiptVal;
-        if (employeeArr[i].receiptKind == 'ايصال صرف نقدية') {
-          receiptVal = - employeeArr[i].receiptVal;
+        for (let i = 0; i < employeeArr.length; i++) {
+          let receiptVal = employeeArr[i].receiptVal;
+          if (employeeArr[i].receiptKind == 'ايصال صرف نقدية') {
+            receiptVal = - employeeArr[i].receiptVal;
+          }
+          employeeTotals.push(receiptVal)
         }
-        employeeTotals.push(receiptVal)
-      }
-      this.employeeExpence = this._service.sumArry(employeeTotals);
+        this.employeeExpence = this._service.sumArry(employeeTotals);
 
-      let otherAccArry = this.safeReciepts.filter(acc => acc.AccName == 'حساب المصاريف');
-      let otherAccTotals = [];
+        let otherAccArry = this.safeReciepts.filter(acc => acc.AccName == 'حساب المصاريف');
+        let otherAccTotals = [];
 
-      for (let o = 0; o < otherAccArry.length; o++) {
-        let receiptVal_acc = otherAccArry[o].receiptVal;
-        if (otherAccArry[o].receiptKind == 'ايصال صرف نقدية') {
-          receiptVal_acc = - otherAccArry[o].receiptVal;
+        for (let o = 0; o < otherAccArry.length; o++) {
+          let receiptVal_acc = otherAccArry[o].receiptVal;
+          if (otherAccArry[o].receiptKind == 'ايصال صرف نقدية') {
+            receiptVal_acc = - otherAccArry[o].receiptVal;
+          }
+          otherAccTotals.push(receiptVal_acc)
         }
-        otherAccTotals.push(receiptVal_acc)
+        this.otherExpence = this._service.sumArry(otherAccTotals);
+
+
+      } else if (stock.stockName == 'سيف المخزن') {
+        let employeeArr = this.safeReciepts.filter(acc => acc.AccName == 'مصاريف عمال - سيف');
+        let employeeTotals = []
+
+        for (let i = 0; i < employeeArr.length; i++) {
+          let receiptVal = employeeArr[i].receiptVal;
+          if (employeeArr[i].receiptKind == 'ايصال صرف نقدية') {
+            receiptVal = - employeeArr[i].receiptVal;
+          }
+          employeeTotals.push(receiptVal)
+        }
+        this.employeeExpence = this._service.sumArry(employeeTotals);
+
+        let otherAccArry = this.safeReciepts.filter(acc => acc.AccName == 'حساب المصاريف - سيف');
+        let otherAccTotals = [];
+
+        for (let o = 0; o < otherAccArry.length; o++) {
+          let receiptVal_acc = otherAccArry[o].receiptVal;
+          if (otherAccArry[o].receiptKind == 'ايصال صرف نقدية') {
+            receiptVal_acc = - otherAccArry[o].receiptVal;
+          }
+          otherAccTotals.push(receiptVal_acc)
+        }
+        this.otherExpence = this._service.sumArry(otherAccTotals);
       }
-      this.otherExpence = this._service.sumArry(otherAccTotals);
 
     };
 
@@ -290,7 +318,7 @@ export class ProfitsComponent implements OnInit {
                 if (prodDetails.qtyRemain < 0) {
                   return 0
                 } else {
-                  return ((prodDetails.sold.lastPrice() - prodDetails.in.avr) * prodDetails.qtyRemain)
+                  return Math.ceil( (prodDetails.sold.lastPrice() - prodDetails.in.avr) * prodDetails.qtyRemain )
                 }
               },
               color: () => {
@@ -381,13 +409,13 @@ export class ProfitsComponent implements OnInit {
         this.totalMin = this._servicesService.sumArry(arrMin);
         this.totalAdd = this._servicesService.sumArry(arrAdd);
 
-        for (let i =0 ; i < this.profitArr.length; i++ ) {
+        for (let i = 0; i < this.profitArr.length; i++) {
           if (this.profitArr[i].qtyRemain == 0) {
             $(`#remainProfit${i}`).hide()
             console.log(i)
           };
         };
-        
+
 
         $('.chooseBtn').not(`#showStockProfits${index}`).removeClass('btn-secondary').addClass('btn-light');
         $(`#showStockProfits${index}`).removeClass('btn-light').addClass('btn-secondary');
@@ -426,9 +454,9 @@ export class ProfitsComponent implements OnInit {
           Qty: filterdArr[i].Qty,
           productCost: productdet.productCost,
           price: filterdArr[i].price,
-          unitProfit: filterdArr[i].price - productdet.productCost,
+          unitProfit: Math.ceil( filterdArr[i].price - productdet.productCost),
           color: '',
-          totalProfit: (filterdArr[i].price - productdet.productCost) * filterdArr[i].Qty,
+          totalProfit: Math.ceil((filterdArr[i].price - productdet.productCost) * filterdArr[i].Qty),
           colorTotal: ''
         };
 

@@ -386,6 +386,13 @@ export class CustomerComponent implements OnInit {
     let reciepts: CustomerReceipt[];
     this.custRemainArry = [];
 
+    const getCustomers = new Promise((res, rej) => {
+      this._custService.getCustomer().subscribe((data: Customer[]) => {
+        this.customers = data
+        res('done')
+      })
+    });
+
     const getInvoices = new Promise((res, rej) => {
       this._stockService.getStockTransactionList().subscribe((data: StockTransaction[]) => {
         invoices = data;
@@ -456,6 +463,12 @@ export class CustomerComponent implements OnInit {
               }
               return ''
             },
+            nameColor: () => {
+              if (cust.remain() < 0) {
+                return 'btn-outline-info'
+              }
+              return 'btn-outline-secondary'
+            }
           };
 
           this.custRemainArry.push(cust);
@@ -472,7 +485,7 @@ export class CustomerComponent implements OnInit {
 
     };
 
-    Promise.all([getInvoices, getRecipts]).then(makeCustRem).then(() => {
+    Promise.all([getInvoices, getRecipts, getCustomers]).then(makeCustRem).then(() => {
       $('#containerLoader').fadeOut();
       this.showCustomerEnquiry();
     });

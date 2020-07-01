@@ -43,7 +43,7 @@ export class LoginComponent implements OnInit {
     for (let i = 0; i < this.users.length; i++) {
       if (this.users[i].userName == this.userData.controls.userName.value && this.users[i].userPassword == this.userData.controls.userPassword.value) {
         this.logService.isUser = true;
-        sessionStorage.setItem('y', this.logService.randPath)
+        sessionStorage.setItem('y', 'y')
         break;
       }
     }

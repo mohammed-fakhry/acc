@@ -40,8 +40,8 @@ export class SideBarComponent implements OnInit {
       console.log($('#sidebarBtns').height())
       $('#sidebar').css('height', 'auto')
       $('.mainBtns').not($(this)).not('#logOut').not('#MainSettingBtn').removeClass('navHeader').addClass('btn-light');
-      
-      
+
+
     });
 
     // make active button
@@ -127,7 +127,7 @@ export class SideBarComponent implements OnInit {
       'marginRight': '15px' //`${sidebarToggleLeft + 50} px`
     })
     if (sideBarHeight == 0) { //open sideBar
-      $('#sidebar').animate({ height: `${sidebarBtnsHeight + 20}px` },200).toggleClass('card');
+      $('#sidebar').animate({ height: `${sidebarBtnsHeight + 20}px` }, 200).toggleClass('card');
       $('#sidebarBtns').show()
       $('#fadeEffect').fadeIn().css({
         'height': `100%`,
