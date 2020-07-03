@@ -161,6 +161,9 @@ export class AddToStockPermissionComponent implements OnInit {
   inptDisabled: boolean = true;
 
   stockChanged() {
+
+    let name = $('#stockNameForAdd').val();
+
     this.deleteInvBtnDisabled = true;
     if ($('#stockNameForAdd').val() == '-') {
       this.stockNameVaild = true;
@@ -168,6 +171,12 @@ export class AddToStockPermissionComponent implements OnInit {
     } else {
       this.stockNameVaild = false;
       this.inptDisabled = false;
+    }
+
+    if (name.includes('سيف')) {
+      $('#stockNameForAdd').addClass('bg-info text-white')
+    } else {
+      $('#stockNameForAdd').removeClass('bg-info text-white')
     }
   };
 
@@ -192,7 +201,6 @@ export class AddToStockPermissionComponent implements OnInit {
         }
       }
     })
-    console.log(this.customerCss)
   };
 
 
@@ -783,9 +791,7 @@ export class AddToStockPermissionComponent implements OnInit {
       let currentDate = new Date(currentDateNow)
       this._service.makeTime_date(currentDate);
       this.date_time = this._service.date_time;
-      //console.log(this.date_time)
       $('#invNum').hide();
-      ////console.log(currentDate)
       $('#callInvoice').hide();
       $('#addInvoiceForm').show();
       $('#addNewInvoicetBtn').html("تسجيل");
@@ -800,7 +806,6 @@ export class AddToStockPermissionComponent implements OnInit {
     } else if (callInvoiceBtnVal == "بحث") {
       // add fildes if the inputArry < invoiceArry
       $('#addNewInvoicetBtn').html("تعديل الفاتورة");
-      ////console.log(this._stockService.makeInvoiceArry)
       $('#deleteAddInvoice').show();
       $('#invNum').show();
       this.inptDisabled = false;
@@ -830,7 +835,6 @@ export class AddToStockPermissionComponent implements OnInit {
       let cCss = this.customerCss.find(cust => cust.name == theInvoice.customerName)
       this.custClass = cCss.css();
 
-      ////console.log(JSON.stringify( theInvoice) + ' : theInvoice')
       this.invNum = theInvoice.invNumber;
       this.ivoiceItemesForEdit = theInvoice.invoiceDetails;
       this.date_time = theInvoice.date_time;
@@ -844,11 +848,9 @@ export class AddToStockPermissionComponent implements OnInit {
 
       this.calcTotals();
       this.deleteInvBtnDisabled = false;
-      //console.log(this.ivoiceItemesForEdit);
     };
     $('#callInvoice').hide();
     $('#addInvoiceForm').show();
-    ////console.log(this.ivoiceItemesForEdit)
 
   }; // showAddNewInvoice
 
@@ -908,7 +910,6 @@ if (this.invoiceInpArry[i].product !== undefined) { *** Done
         this._stockService.creatStockTransactionDetails(stockTransactionD).subscribe() // for invoice DB
 
         this.checkAllArry = 1; // reload
-        ////console.log('firstInvoice')
       }
       // for the first invoice *********************************************************************************************
       *** Done

@@ -65,8 +65,6 @@ export class ProductsReportComponent implements OnInit {
 
   showProductReportPre() {
 
-    console.log(this._stockService.HandleAddtoStockPrimArry)
-
     let stockNameForProdRep = $('#stockNameForProdRep').val(); //
 
     if (stockNameForProdRep == undefined) {
@@ -77,7 +75,6 @@ export class ProductsReportComponent implements OnInit {
     } else {
       this.stockNameVaild = false;
       $('#prodDetTable').show();
-      ////console.log(this._stockService.HandleAddtoStockPrimArry)
       this.filteredProducts = [];
       this.filteredProducts = this._stockService.HandleAddtoStockPrimArry.filter((product) => {
         return product.productName === this.productInpt;
@@ -161,7 +158,6 @@ export class ProductsReportComponent implements OnInit {
     toDate.getTime();
 
     if (fromDate == 'Invalid Date' || toDate == 'Invalid Date') {
-      //console.log('invaildDate')
     } else {
       this.filteredProducts = this.filteredProducts.filter((date) => {
         return date.theDate > fromDate && date.theDate < toDate
@@ -198,16 +194,12 @@ export class ProductsReportComponent implements OnInit {
         let mainArry: HandleAddPrimBE[] = [];
         let theStockInfo: Stock = this._stockService.stocks.find(stock => stock.stockName == this.stockNameInp);
 
-        console.log(theStockInfo)
-
         let theMainArry =
           this._stockService.HandleAddtoStockPrimArry.filter((product) => {
             return product.productName === this.productInpt;
           })
 
         mainArry = theMainArry.filter(product => product.stockId == theStockInfo.stockId || product.sndStockId == theStockInfo.stockId);
-
-        console.log(mainArry)
 
         for (let i = 0; i < mainArry.length; i++) {
 
@@ -299,7 +291,6 @@ export class ProductsReportComponent implements OnInit {
         };
 
         this.filteredProducts.sort(this._service.sortArry('theDate'))
-        console.log(this.filteredProducts)
 
         for (let f = 0; f < this.filteredProducts.length; f++) {
 
@@ -325,7 +316,6 @@ export class ProductsReportComponent implements OnInit {
         toDate.getTime();
 
         if (fromDate == 'Invalid Date' || toDate == 'Invalid Date') {
-          //console.log('invaildDate')
         } else {
           this.filteredProducts = this.filteredProducts.filter((date) => {
             return date.theDate > fromDate && date.theDate < toDate

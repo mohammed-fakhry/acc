@@ -3,7 +3,6 @@ import { Stock } from '../../../stock';
 import { StocksService } from '../stocks.service';
 import { TheStocksComponent } from '../the-stocks.component';
 import { StockTransactionD } from '../../stock-transaction-d';
-import { trace } from 'console';
 import { ServicesService } from 'src/app/services.service';
 import { HandleBackEnd } from 'src/app/handle-back-end';
 
@@ -24,9 +23,6 @@ export class EnquireStocksComponent implements OnInit {
       $('#theStockFadeLayer').fadeOut('fast')
       $('.askForDelete').fadeOut('fast').removeClass('animate')
     })
-
-    ////console.log(this._stockService.stocks)
-
   } // ngOnInit
 
   askForDelete(stock: Stock) {

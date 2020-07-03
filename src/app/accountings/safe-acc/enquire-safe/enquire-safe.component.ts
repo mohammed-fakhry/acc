@@ -28,7 +28,6 @@ export class EnquireSafeComponent implements OnInit {
 
   showEditSafe(safe) {
     this.fillData(safe);
-    //console.log(safe)
     $('#addSafeHeader').html('تعديل بيانات خزنة')
     $('#addNewSafeBtn').html('تعديل')
     $('.safeClass').not('#addSafe').hide();

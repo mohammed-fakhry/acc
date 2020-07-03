@@ -119,8 +119,14 @@ export class MinFrmStockPermissionComponent implements OnInit {
 
     this._theStockComp.getStockTrance.then((data: any[]) => {
       this.theStockProds = this._theStockComp.stockProdFactory(stockInfo)
-      //console.log(this.theStockProds)
     });
+
+    // stockNameForMin
+    if (this.stockNameInpt.includes('سيف')) {
+      $('#stockNameForMin').addClass('bg-info text-white')
+    } else {
+      $('#stockNameForMin').removeClass('bg-info text-white')
+    }
 
     this.inputDisabled = false;
   }
@@ -143,9 +149,6 @@ export class MinFrmStockPermissionComponent implements OnInit {
     // let custInfo = this.customers.find(cust => cust.customerName == this.custNameInpt);
     let stockInfo = this._stockService.stocks.find(stock => stock.stockName == this.stockNameInpt);
 
-
-    //console.log(this.stockNameInpt)
-
     for (let i = 0; i < this.invoiceInpArry.length; i++) {
 
       if (this.invoiceInpArry[i].price != undefined || this.invoiceInpArry[i].qty != undefined) {
@@ -160,7 +163,6 @@ export class MinFrmStockPermissionComponent implements OnInit {
             this.invoiceInpArry[i].productVaildMsg = 'خطأ فى اسم الصنف'
             // product{{i}}
             $(`#product${i}`).addClass('is-invaild');
-            //console.log('yes')
           };
 
           if (this.invoiceInpArry[i].Qtyinvaild == true) {
@@ -179,7 +181,6 @@ export class MinFrmStockPermissionComponent implements OnInit {
         return product != undefined
       })
       let isDublicate = filtert.some((item, indx) => {
-        //console.log(indx + ' : indx')
         index = indx
         return valueArr.indexOf(item) != indx
       })
@@ -234,8 +235,7 @@ export class MinFrmStockPermissionComponent implements OnInit {
           this.invoiceInpArry[i].qtyMsg = `لا يوجد رصيد لهذا الصنف`
         } else {
           let theProductQtyInfo = this.getTheProdQty(this.invoiceInpArry[i].product);
-          //console.log({info: theProductQtyInfo, isOk: this.invoiceInpArry[i].qty, prod: this.invoiceInpArry[i].product})
-          //console.log(theProductQtyInfo)
+
           if (theProductQtyInfo != undefined) {
 
             if (this.invoiceInpArry[i].product == theProductQtyInfo.productName &&
@@ -244,9 +244,7 @@ export class MinFrmStockPermissionComponent implements OnInit {
               if (this.qtyIsOkArry == undefined) {
                 this.invoiceInpArry[i].Qtyinvaild = true;
                 this.invoiceInpArry[i].qtyMsg = `الرصيد المتاح ( ${theProductQtyInfo.productQty} )`
-                //console.log(this.qtyIsOkArry + ' : this.qtyIsOkArry')
               } else if (this.qtyIsOkArry[i] == 0) {
-                //console.log(this.qtyIsOkArry[i] + ' : this.qtyIsOkArry[i]')
                 this.invoiceInpArry[i].Qtyinvaild = true;
                 this.invoiceInpArry[i].qtyMsg = `الرصيد المتاح ( ${theProductQtyInfo.productQty} )`
               } else if (this.invoiceInpArry[i].qty <= this.qtyIsOkArry[i]) {
@@ -255,12 +253,10 @@ export class MinFrmStockPermissionComponent implements OnInit {
                 && this.invoiceInpArry[i].qty <= theProductQtyInfo.productQty
                 && this.invoiceInpArry[i].inpVaild == false) {
                 this.invoiceInpArry[i].Qtyinvaild = false;
-                //console.log(theProductQtyInfo + ' : the tree if')
               };
 
             } else {
               this.invoiceInpArry[i].Qtyinvaild = false;
-              //console.log('else')
             }
 
           } else {
@@ -303,7 +299,6 @@ export class MinFrmStockPermissionComponent implements OnInit {
         }
       }
     })
-    console.log(this.customerCss)
   };
 
   custClass: string = '';
@@ -423,7 +418,6 @@ export class MinFrmStockPermissionComponent implements OnInit {
       let currentDateNow = Date.now() //new Date()
       let currentDate = new Date(currentDateNow)
       this._service.makeTime_date(currentDate);
-      //console.log(this._service.date_time);
 
       $('#invNumMin').hide();
       $('#minCallInvoice').hide();
@@ -440,7 +434,6 @@ export class MinFrmStockPermissionComponent implements OnInit {
 
     } else if (callInvoiceBtnVal == "بحث") {
       $('#minNewInvoicetBtn').html("تعديل الفاتورة");
-      //console.log(this._stockService.makeInvoiceArry)
       $('#deleteMinInvoice').show();
       $('#invNumMin').show();
       this.inputDisabled = false;
@@ -467,7 +460,6 @@ export class MinFrmStockPermissionComponent implements OnInit {
       };
 
       this.ivoiceItemesForEdit = theInvoiceInfo.invoiceDetails
-      //console.log(this.ivoiceItemesForEdit)
 
       this._service.date_time = theInvoiceInfo.date_time;
       this.stockNameInpt = theInvoiceInfo.stockName;
@@ -488,8 +480,6 @@ export class MinFrmStockPermissionComponent implements OnInit {
         } else {
           this.qtyIsOkArry.push(0)
         }
-        //console.log(this.qtyIsOkArry)
-        //this.invoiceInpArry[v].Qtyinvaild = false;
       }
       //this.isAddQtyVaild();
       $('#minCallInvoice').hide();
@@ -563,8 +553,6 @@ export class MinFrmStockPermissionComponent implements OnInit {
     let postStockPridgeObj = new StockPridge();
 
     if (BtnSubmitHtml == "تعديل الفاتورة") {
-
-      //console.log(this.ivoiceItemesForEdit)
 
       this.theCustomerInfo = this.getCustomerInfo(this.ivoiceItemesForEdit[0].customerId);
 
@@ -727,8 +715,6 @@ export class MinFrmStockPermissionComponent implements OnInit {
                 price: parseFloat(this.invoiceInpArry[i].price),
                 Qty: parseInt(this.invoiceInpArry[i].qty)
               };
-
-              console.log(stockTransactionD.price)
 
               // edite Or Add
               if (BtnSubmitHtml == "تعديل الفاتورة") {
@@ -952,7 +938,6 @@ export class MinFrmStockPermissionComponent implements OnInit {
     $('#fadeLayerMP').show(0);
     $('.askForDelete').addClass('animate');
     let stockTransId = $('#minStockTransactionId').val();
-    //console.log(stockTransId)
   };
 
   deleteMinInvoice() {

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { SideEffectService } from '../side-effect.service';
 import { Router, NavigationEnd } from '@angular/router';
 import { LoginService } from '../login.service';
+import { ServicesService } from '../services.service';
 
 @Component({
   selector: 'app-side-bar',
@@ -15,15 +16,7 @@ export class SideBarComponent implements OnInit {
   url: string;
   mainRoute: string;
 
-  constructor(private _sideBarEffect: SideEffectService, public router: Router, private logService: LoginService) {
-
-  }
-
-  /* sideBarEffect() {
-     $('#sidebarToggle').click(function () {
-       $('#sideBar button').hide()
-     })
-   }*/
+  constructor(public _sideBarEffect: SideEffectService, public router: Router, public logService: LoginService, public _service: ServicesService) { }
 
   ngOnInit() {
 
@@ -32,12 +25,10 @@ export class SideBarComponent implements OnInit {
     this.url = this.currentUrl.slice(this.ind);
 
     $(".mainBtns").click(function () {
-      console.log($('#sidebarBtns').height())
       //$('#sidebar').animate({ height: `${sidebarBtnsHeight + 20}px` });
       $(this).removeClass('btn-light').addClass('navHeader')
       $(this).next().slideToggle(100);
       $("#sidebar .secDiv").not($(this).next()).slideUp(100);
-      console.log($('#sidebarBtns').height())
       $('#sidebar').css('height', 'auto')
       $('.mainBtns').not($(this)).not('#logOut').not('#MainSettingBtn').removeClass('navHeader').addClass('btn-light');
 
@@ -75,7 +66,6 @@ export class SideBarComponent implements OnInit {
     };
 
     // active main btn
-    //console.log(this.mainRoute)
     for (let i = 0; i <= htmlDbItemsBtns.length; i++) {
       if (this.url == dBUrls[i]) { // dataBase
         htmlDbItemsBtns[i].removeClass('btn-light').addClass('btn-secondary');
@@ -92,10 +82,22 @@ export class SideBarComponent implements OnInit {
       };
     });
 
+    window.addEventListener("resize", () => {
+      if (window.innerHeight == screen.height) {
+        // browser is fullscreen
+        $('.panel-body').not('.invoiceTable').not('.standTable').not('.tableWithHeader').css('height', '930px')
+        $('.invoiceTable').css('height', '590px')
+        $('.tableWithHeader').css('height', '860px')
+      } else {
+        $('.panel-body').not('.invoiceTable').not('.standTable').not('.tableWithHeader').css('height', '830px')
+        $('.tableWithHeader').css('height', '790px')
+        $('.invoiceTable').css('height', '530px')
+      };
+    });
+
   }; // ngOnInit
 
   secButtonClick(btnId) {
-    //console.log(btnId)
     $(`#${btnId}`).removeClass('btn-light').addClass('btn-secondary')// .next().slideToggle(500);
     $("#sidebar .secButton").not(`#${btnId}`).removeClass('btn-secondary').addClass('btn-light');
     this.sidebarToggle();
@@ -110,8 +112,7 @@ export class SideBarComponent implements OnInit {
     //this.logService.changeIsUser();
     $('#logOut').hide();
     //$('#sidebarToggle').hide();
-    console.log(this.logService.isUser)
-    location.reload();
+    //location.reload();
   };
 
   // new effects
@@ -119,12 +120,12 @@ export class SideBarComponent implements OnInit {
     let sideBarHeight = $('#sidebar').height()
     let sidebarBtnsHeight = $('#sidebarBtns').height()
     let sidebarToggleLPosition = $('#sidebarToggle').position();
-    //let sidebarToggleLeft = sidebarToggleLPosition.left
+
     let sidebarToggleHeight = sidebarToggleLPosition.top
-    //$('#sidebarToggle').removeClass('pFixed sticky-top');
+
     $('#sidebar').css({
       'marginTop': `${sidebarToggleHeight + 15}px`,
-      'marginRight': '15px' //`${sidebarToggleLeft + 50} px`
+      'marginRight': '15px'
     })
     if (sideBarHeight == 0) { //open sideBar
       $('#sidebar').animate({ height: `${sidebarBtnsHeight + 20}px` }, 200).toggleClass('card');
@@ -132,21 +133,40 @@ export class SideBarComponent implements OnInit {
       $('#fadeEffect').fadeIn().css({
         'height': `100%`,
       })
-      $('#sidebarToggle').hide(); // removeClass("fa-align-justify").addClass("fa-minus")
+      $('#sidebarToggle').hide();
     } else { //close sideBar
       $('#sidebarBtns').hide()
-      $('#sidebar').css('height', '0').toggleClass('card'); //.animate({ height: '0px' }).toggleClass('card')
+      $('#sidebar').css('height', '0').toggleClass('card');
       $('#fadeEffect').hide()
-      $('#sidebarToggle').show(); //removeClass("fa-minus").addClass("fa-align-justify")
+      $('#sidebarToggle').show();
     }
   }
 
   fadeEffect() {
     $('#sidebarBtns').hide()
-    $('#sidebar').removeClass("card").css('height', '0') //animate({ height: '0px' }, 200)
+    $('#sidebar').removeClass("card").css('height', '0')
     $('#fadeEffect').hide()
-    $('#sidebarToggle').show() //removeClass("fa-minus").addClass("fa-align-justify")
-    //$('#sidebarToggle').addClass('pFixed sticky-top');
+    $('#sidebarToggle').show()
   }
+
+  backupMsg: string;
+  backupPath: string;
+
+  backup() {
+    this._service.backUp().subscribe(data => {
+      this.backupMsg = data[1];
+      this.backupPath = data[0]
+    });
+    this.sidebarToggle();
+    $('#fadeBackupDone').show();
+    $('#backupDone').show();
+    $('.askForDelete').addClass('animate');
+  }
+
+  hideBackUpDone() {
+    $('#fadeBackupDone').hide();
+    $('#backupDone').hide();
+    $('.askForDelete').removeClass('animate');
+  };
 
 } // end

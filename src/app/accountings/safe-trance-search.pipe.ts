@@ -10,7 +10,6 @@ export class SafeTranceSearchPipe implements PipeTransform {
     if (text == undefined) {
       return safeTrance
     }
-    console.log(text)
     return safeTrance.filter((safeRep) => {
       if (safeRep.transactionExplain.recieptNote !=null) {
         return safeRep.receiptKind.includes(text)

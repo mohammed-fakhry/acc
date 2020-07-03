@@ -37,7 +37,6 @@ export class CustomerService {
   }
 
   updateCustomerSer(customer: Customer) {
-    console.log(customer)
     return this.http.put(`${this.url}updateCustomer.php?id=` + customer.customerId, customer)
   }
 

@@ -28,8 +28,8 @@ export class SafeAccComponent implements OnInit {
 
     this.logService.logStart(); this.logService.reternlog();
     this.getBackendData_Receipt();
-    this.inArabicWords(this.theANum);
-
+    this._service.handleTableHeight();
+    //this.inArabicWords(this.theANum);
   };
 
 
@@ -63,17 +63,11 @@ export class SafeAccComponent implements OnInit {
 
     if ((this.theANum = this.theANum.toString()).length > 9) return 'overflow';
     aNum = ('000000000' + this.theANum).substr(-9).match(/^(\d{2})(\d{1})(\d{3})(\d{3})/ /* (\d{2})$/ */);
-    //console.log('aNum : ' + aNum)
     if (!aNum) return; var strA = '';
     strA += (aNum[1] != 0) ? (one[Number(aNum[1])] || two[aNum[1][0]] + ' ' + one[aNum[1][1]]) + 'بليون ' : '';
     strA += (aNum[2] != 0) ? (one[Number(aNum[2])] || two[aNum[2][0]] + ' ' + one[aNum[2][1]]) + 'مليون ' : '';
     strA += (aNum[3] != 0) ? (one[Number(aNum[3])] || one[aNum[3][1]] + 'و' + two[aNum[3][0]]) + 'مائة الف ' : '';
-    //console.log('num : ' + aNum[1])
-    //console.log('theString')
-    //console.log(strA)
     return strA;
-    ////console.log('theNum : ')
-
   };
 
   getOtheAccInfo_backEnd() {

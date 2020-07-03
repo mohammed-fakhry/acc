@@ -101,13 +101,14 @@ export class StocTrancePremComponent implements OnInit {
 
     if (sndStock == 'اذن خصم') {
       this.theSndStockId = 1
-    } else if (sndStock == undefined) {
-      //console.log('undifined')
     } else {
       let sndStockInfo = this._stockService.stocks.find(
         stock => stock.stockName == sndStock
       );
-      this.theSndStockId = sndStockInfo.stockId;
+      if (sndStockInfo != undefined) {
+        this.theSndStockId = sndStockInfo.stockId;
+      }
+      
     };
   };
 
@@ -164,6 +165,7 @@ export class StocTrancePremComponent implements OnInit {
     };
     
     this.inputDisabled = false;
+
   };
 
   qtyIsOkArry: any[];
@@ -267,6 +269,19 @@ export class StocTrancePremComponent implements OnInit {
       this.inptDisabled = true;
     };
 
+    if (fstStockNameForTrance.includes('سيف')) {
+      $('#fstStockNameForTrance').addClass('bg-info text-white')
+    } else {
+      $('#fstStockNameForTrance').removeClass('bg-info text-white')
+    }
+
+    if (sndStockNameForTrance != null && sndStockNameForTrance != '' ) {
+      if (sndStockNameForTrance.includes('سيف')) {
+        $('#sndStockNameForTrance').addClass('bg-info text-white')
+      } else {
+        $('#sndStockNameForTrance').removeClass('bg-info text-white')
+      }
+    }
   };
 
   productNameIdArr: any[];
@@ -459,8 +474,6 @@ export class StocTrancePremComponent implements OnInit {
       $('#tranceStockTransactionId').val(invoiceInfo.stockTransactionId);
       $('#tranceInvoiceNote').val(invoiceInfo.notes);
 
-      console.log(invoiceInfo)
-
       this.invNumTrance = invoiceInfo.invNumber;
       this._service.date_time = invoiceInfo.date_time;
       
@@ -627,7 +640,6 @@ export class StocTrancePremComponent implements OnInit {
       date_time: this._service.date_time,
       notes: this.theNote,
     };
-    //console.log(stockTransaction)
 
     // edit or add
     if (this.theStockTransactionId == '') {
@@ -651,7 +663,6 @@ export class StocTrancePremComponent implements OnInit {
         theProductId = this.getProductInfo.productId;
 
         this.getHandleInfo = this.findHandle(theProductId, this.theSndStockId);
-        ////console.log(this.getHandleInfo + ' : fstHandle')
 
         if (this.getHandleInfo != undefined) {
 

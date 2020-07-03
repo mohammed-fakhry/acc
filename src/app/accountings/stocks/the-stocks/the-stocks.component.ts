@@ -35,6 +35,7 @@ export class TheStocksComponent implements OnInit {
 
     this.logService.logStart(); this.logService.reternlog();
     // getStocks data from backEnd
+    this._service.handleTableHeight();
 
     this.getBackendData();
     this._stockService.makeStockArry = [{
@@ -64,7 +65,6 @@ export class TheStocksComponent implements OnInit {
 
     this._stockService.getStockes().subscribe((data: Stock[]) => {
       this._stockService.stocks = data;
-      ////console.log(this._stockService.stocks)
     });
 
     this._stockService.getProducts().subscribe((data: ProductsClass[]) => {
@@ -129,7 +129,6 @@ export class TheStocksComponent implements OnInit {
   getHandle = new Promise((res) => {
     this._stockService.getHandleAddtoStockPrimList().subscribe((data: HandleAddPrimBE[]) => {
       //this._stockService.HandleAddtoStockPrimArry = data;
-      //console.log(data)
       res(data)
     });
   });
@@ -149,7 +148,6 @@ export class TheStocksComponent implements OnInit {
     this._stockService.getStockes().subscribe((data: Stock[]) => {
       this._stockService.stocks = data;
       res(data)
-      ////console.log(this._stockService.stocks)
     });
   });
 
@@ -182,11 +180,7 @@ export class TheStocksComponent implements OnInit {
       return a.invNumber - b.invNumber
     });
 
-    console.log(this._stockService.makeInvoiceArry)
     return this._stockService.makeInvoiceArry
-
-    
-
   }; // createTheInvoiceArry
 
   makeMinInvArry() {
@@ -239,7 +233,6 @@ export class TheStocksComponent implements OnInit {
     let products = [];
 
     let filterd = this.tranceArr.filter(trance => trance.stockId == stock.stockId || trance.sndStockId == stock.stockId);
-    ////console.log('filtered : ' + JSON.stringify(filterd))
 
     for (let i = 0; i < this._stockService.allProducts.length; i++) {
 
@@ -309,7 +302,7 @@ export class TheStocksComponent implements OnInit {
   // testBtn
   testbtn() {
 
-
+    this._service.backUp().subscribe();
     //this.getBackendData();
   };
 
@@ -409,7 +402,6 @@ export class TheStocksComponent implements OnInit {
         this._service.clearForm();
 
       });
-    ////console.log(this.addInvArry)
   };
 
   newTranceInvNumber: number;
@@ -495,8 +487,6 @@ export class TheStocksComponent implements OnInit {
         };
 
       });
-
-    ////console.log(this.newMinInvNumber)
   };
 
   deleteStock() {

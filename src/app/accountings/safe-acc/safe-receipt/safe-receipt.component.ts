@@ -165,18 +165,16 @@ export class SafeReceiptComponent implements OnInit {
       $('#addNewSafeReceipt').html('تعديل الايصال');
 
       this.theReceiptInfo = this.getTheReceiptInfo(this.searchSafeReceiptTxt);
-      //console.log(this.theReceiptInfo)
 
       this.putValsForEdit(this.theReceiptInfo)
       this.transactionAccKindChanged();
       this.receiptKindChanged();
 
       this.valIsOk = this.safeReceipt_inpts.currentSafeVal + this.theReceiptInfo.receiptVal;
-      //console.log(this.valIsOk)
       $('#deleteSafeReceipt').show();
       this.deleteReceiptCond = false;
     };
-    
+
     $('#add_SafeReceiptInside').show();
     $('#header_SafeRecipt').hide();
   };
@@ -398,6 +396,13 @@ export class SafeReceiptComponent implements OnInit {
         this.validTests.secSafeinValid = false;
       };
 
+      if (this.safeReceipt_inpts.safeName.includes('سيف')) {
+        $('#safeNameReceipt').addClass('bg-info text-white')
+      } else {
+        $('#safeNameReceipt').removeClass('bg-info text-white')
+      }
+
+
       this.safeReceipt_inpts.currentSafeVal = this.theSafeInfo.currentSafeVal
     };
 
@@ -445,7 +450,6 @@ export class SafeReceiptComponent implements OnInit {
         }
       }
     })
-    console.log(this.customerCss)
   };
 
   custClass: string = '';
@@ -474,10 +478,13 @@ export class SafeReceiptComponent implements OnInit {
         $('#currentCustomerVal').css('color', 'black')
       };
 
+      let cCss = this.customerCss.find(cust => cust.name == this.theCustomerInfo.customerName)
+      this.custClass = cCss.css();
+
     };
+
     this.checkReceiptValid();
-    let cCss = this.customerCss.find(cust => cust.name == this.theCustomerInfo.customerName)
-    this.custClass = cCss.css();
+
 
   } // isCustomerValid
 
@@ -592,22 +599,25 @@ export class SafeReceiptComponent implements OnInit {
     let oldSecSafe = this._safeDataService.safeList.find(
       safe => safe.safeId == this.theReceiptInfo.secSafeId
     );
-      
+
     // the condition
     if (this.theReceiptInfo.secSafeName != null && this.theReceiptInfo.secSafeName != undefined) {
       if (this.theReceiptKind == 'add') {
         oldSecSafe.currentSafeVal = oldSecSafe.currentSafeVal + receiptVal;
-      } else {
+      } else if (oldSecSafe != undefined) {
         oldSecSafe.currentSafeVal = oldSecSafe.currentSafeVal - receiptVal;
       };
 
-      let indx = this._safeDataService.safeList.findIndex(
-        i => i.safeId === oldSecSafe.safeId
-      );
+      if (oldSecSafe != undefined) {
+        let indx = this._safeDataService.safeList.findIndex(
+          i => i.safeId === oldSecSafe.safeId
+        );
 
-      this._safeDataService.updateSafeData(oldSecSafe).subscribe();
-      // pass new Value to edit
-      this._safeDataService.safeList[indx].currentSafeVal = oldSecSafe.currentSafeVal;
+        this._safeDataService.updateSafeData(oldSecSafe).subscribe();
+        // pass new Value to edit
+        this._safeDataService.safeList[indx].currentSafeVal = oldSecSafe.currentSafeVal;
+      }
+
     };
 
   };
@@ -622,17 +632,20 @@ export class SafeReceiptComponent implements OnInit {
     if (this.theReceiptInfo.customerId != null) {
       if (this.theReceiptKind == 'add') {
         oldCustomer.customerRemain = oldCustomer.customerRemain + receiptVal;
-      } else {
+      } else if (oldCustomer != undefined) {
         oldCustomer.customerRemain = oldCustomer.customerRemain - receiptVal;
       };
 
-      let indx = this._safeAccComponent.customers.findIndex(
-        i => i.customerId === oldCustomer.customerId
-      );
+      if (oldCustomer != undefined) {
+        let indx = this._safeAccComponent.customers.findIndex(
+          i => i.customerId === oldCustomer.customerId
+        );
 
-      this._custService.updateCustomerSer(oldCustomer).subscribe();
-      // pass new Value to edit
-      this._safeAccComponent.customers[indx].customerRemain = oldCustomer.customerRemain;
+        this._custService.updateCustomerSer(oldCustomer).subscribe();
+        // pass new Value to edit
+        this._safeAccComponent.customers[indx].customerRemain = oldCustomer.customerRemain;
+      }
+
     };
 
   };
@@ -648,17 +661,19 @@ export class SafeReceiptComponent implements OnInit {
 
       if (this.theReceiptKind == 'add') {
         oldAcc.currentAccVal = oldAcc.currentAccVal + receiptVal;
-      } else {
+      } else if (oldAcc != undefined) {
         oldAcc.currentAccVal = oldAcc.currentAccVal - receiptVal;
       };
 
-      let indx = this._safeAccComponent.otherAcc.findIndex(
-        i => i.accId === oldAcc.accId
-      );
+      if (oldAcc != undefined) {
+        let indx = this._safeAccComponent.otherAcc.findIndex(
+          i => i.accId === oldAcc.accId
+        );
 
-      this._service.updateOtherAccSer(oldAcc).subscribe();
-      // pass new Value to edit
-      this._safeAccComponent.otherAcc[indx].currentAccVal = oldAcc.currentAccVal;
+        this._service.updateOtherAccSer(oldAcc).subscribe();
+        // pass new Value to edit
+        this._safeAccComponent.otherAcc[indx].currentAccVal = oldAcc.currentAccVal;
+      };
     };
   };
 
@@ -752,7 +767,6 @@ export class SafeReceiptComponent implements OnInit {
         currentSafeVal: fstSafe_NewVal, // the only changed val
       };
       // save to backend
-      console.log(fstSafe_NewData.currentSafeVal + ' : lastEdit');
       this._safeDataService.updateSafeData(fstSafe_NewData).subscribe();
 
       customer_NewData = { // customer update in backend

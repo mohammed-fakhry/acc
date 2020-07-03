@@ -28,6 +28,19 @@ export class ServicesService {
   fullTime: any;
   date_time: any;
 
+  handleTableHeight() {
+    if (window.innerHeight == screen.height) {
+      // browser is fullscreen
+      $('.panel-body').not('.invoiceTable').not('.standTable').not('.tableWithHeader').css('height', '930px')
+      $('.invoiceTable').css('height', '590px')
+      $('.tableWithHeader').css('height', '860px')
+    } else {
+      $('.panel-body').not('.invoiceTable').not('.standTable').not('.tableWithHeader').css('height', '830px')
+      $('.tableWithHeader').css('height', '780px')
+      $('.invoiceTable').css('height', '530px')
+    }
+  }
+
   sortArry(key, order = 'asc') {
     return function innerSort(a, b) {
       if (!a.hasOwnProperty(key) || !b.hasOwnProperty(key)) {
@@ -66,7 +79,6 @@ export class ServicesService {
 
     if ((number = number.toString()).length > 9) return 'overflow';
     aNum = ('000000000' + number).substr(-9).match(/^(\d{2})(\d{1})(\d{1})(\d{2})(\d{1})(\d{2})$/);
-    //console.log('aNum : ' + aNum)
     if (!aNum) return; var strA = '';
     strA += (aNum[1] != 0) ? (one[Number(aNum[1])] || two[aNum[1][0]] + ' ' + one[aNum[1][1]]) + 'بليون ' : '';
     strA += (aNum[2] != 0) ? (one[Number(aNum[2])] || two[aNum[2][0]] + ' ' + one[aNum[2][1]]) + 'مليون ' : '';
@@ -84,7 +96,6 @@ export class ServicesService {
     strA += (aNum[5] != 0) ? `و ${(hund[Number(aNum[5])])} ` : '';
 
     strA += (aNum[6] != 0) ? ((one[aNum[6][1]] != '') ? 'و ' : '') + (one[Number(aNum[6])] || `${one[aNum[6][1]]}و ${two[aNum[6][0]]}`) : '';
-    console.log(aNum)
 
     return strA;
 
@@ -233,5 +244,9 @@ export class ServicesService {
   updateOtherAccSer(acc: OtherAcc) {
     return this.http.put(`${this.url}updateOtherAccounts.php?id=` + acc.accId, acc)
   };
+
+  backUp() {
+    return this.http.get<any>(`${this.url}backup.php`);
+  }
 
 }

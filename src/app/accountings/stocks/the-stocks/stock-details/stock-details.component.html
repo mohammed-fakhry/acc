@@ -11,9 +11,13 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-3" id="stockDetHead">
-            <div class="cardBorderY">
+            <div class="cardBorderY stickyInp">
                 <div class="card">
-                    <h3 class="cardHeader">مخزن : {{_stockService.makeStockArryView.stockName}}</h3>
+                    <div class="d-flex justify-content-between">
+                        <h3 class="cardHeader">مخزن : {{_stockService.makeStockArryView.stockName}}</h3>
+                        <i class="fa fa-expand btn btn-outline-secondary text-center mb-1 mx-2"
+                        (click)='expandThisstockDet()'></i>
+                    </div>
                     <h5 class="pb-3" style="border-bottom: solid 1.5px teal;">
                     </h5>
                     <!---->
@@ -30,6 +34,11 @@
                         <h5 class="cardHeader">اجمالى قيمة الاصناف : </h5>
                         <h5 class="mr-2 bigNum">{{_stockService.totalProductsValuInStock}}</h5>
                     </div>
+                    <hr>
+                    <div class="d-flex justify-content-around mx-2 mb-2">
+                        <input placeholder="بحث صنف" class="form-control col" type="search"
+                            [(ngModel)]='productSearchTxt'>
+                    </div>
                 </div>
 
             </div>
@@ -38,13 +47,6 @@
             <!--table-->
             <div class="cardBorderY">
                 <div class="card">
-                    <div class="d-flex justify-content-around">
-                        <h3 class="col">جرد اصناف مخزن</h3>
-                        <input placeholder="بحث صنف" class="form-control col" type="search"
-                            [(ngModel)]='productSearchTxt'>
-                        <i class="fa fa-expand btn btn-outline-secondary text-center mb-1 mx-2"
-                            (click)='expandThisstockDet()'></i>
-                    </div>
                     <div class="panel-body panel-flex-table" id="stockDetailtable">
                         <table class="flex-table table table-hover">
                             <thead class="navHeader text-light">

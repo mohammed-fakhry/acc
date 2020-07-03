@@ -3,11 +3,9 @@ import { StocksService } from '../the-stocks/stocks.service';
 import { TheStocksComponent } from '../the-stocks/the-stocks.component';
 import { HandleAddPrimBE } from '../handle-add-prim-be';
 import { HandleBackEnd } from 'src/app/handle-back-end';
-import { element } from 'protractor';
 import { ServicesService } from 'src/app/services.service';
 import { Stock } from '../../stock';
 import { SafeDataService } from '../../safe-acc/safe-data.service';
-import { SafeData } from '../../safe-acc/safe-data';
 import { SafeReceiptInpts } from '../../safe-acc/safe-receipt-inpts';
 import { OtherAcc } from '../../other-acc';
 
@@ -254,6 +252,7 @@ export class ProfitsComponent implements OnInit {
           if (pricesDetailsArr.sold.maxPrice == Infinity || pricesDetailsArr.sold.maxPrice == -Infinity) {
             pricesDetailsArr.sold.maxPrice = 0;
           };
+
           if (pricesDetailsArr.sold.minPrice == Infinity || pricesDetailsArr.sold.minPrice == -Infinity) {
             pricesDetailsArr.sold.minPrice = 0;
           };
@@ -261,6 +260,7 @@ export class ProfitsComponent implements OnInit {
           if (pricesDetailsArr.in.maxPrice == Infinity || pricesDetailsArr.in.maxPrice == -Infinity) {
             pricesDetailsArr.in.maxPrice = 0;
           };
+
           if (pricesDetailsArr.in.minPrice == Infinity || pricesDetailsArr.in.minPrice == -Infinity) {
             pricesDetailsArr.in.minPrice = 0;
           };
@@ -318,7 +318,7 @@ export class ProfitsComponent implements OnInit {
                 if (prodDetails.qtyRemain < 0) {
                   return 0
                 } else {
-                  return Math.ceil( (prodDetails.sold.lastPrice() - prodDetails.in.avr) * prodDetails.qtyRemain )
+                  return Math.ceil((prodDetails.sold.lastPrice() - prodDetails.in.avr) * prodDetails.qtyRemain);
                 }
               },
               color: () => {
@@ -403,8 +403,6 @@ export class ProfitsComponent implements OnInit {
         let arrMin = arrTotals.filter(total => total < 0);
         let arrAdd = arrTotals.filter(total => total > 0);
 
-        //console.log(arrTotals)
-
         this.totalProfit = (this._servicesService.sumArry(arrTotals) + this.employeeExpence + this.otherExpence).toLocaleString();
         this.totalMin = this._servicesService.sumArry(arrMin);
         this.totalAdd = this._servicesService.sumArry(arrAdd);
@@ -412,10 +410,8 @@ export class ProfitsComponent implements OnInit {
         for (let i = 0; i < this.profitArr.length; i++) {
           if (this.profitArr[i].qtyRemain == 0) {
             $(`#remainProfit${i}`).hide()
-            console.log(i)
           };
         };
-
 
         $('.chooseBtn').not(`#showStockProfits${index}`).removeClass('btn-secondary').addClass('btn-light');
         $(`#showStockProfits${index}`).removeClass('btn-light').addClass('btn-secondary');
@@ -423,12 +419,28 @@ export class ProfitsComponent implements OnInit {
         $('#customersProfits').hide();
         $('#productProfits').show();
         $('#searchProd').show();
-        $('#showProfitsPreBtn').show();
+        $('#showProfitsPreBtn').html('تفاصيل حركة البيع')
+        //$('#showProfitsPreBtn').show();
         //setTimeout(() => $('#containerLoader').fadeOut(), 2000)
         $('#containerLoader').fadeOut();
       });
 
   };
+
+  toggleStockProfits(stock) {
+
+    let btnVal = $('#showProfitsPreBtn').html()
+
+    if (btnVal == 'تفاصيل حركة البيع') {
+      this.showStockProfitsPre(stock);
+      $('#showProfitsPreBtn').html('تفاصيل ارباح الاصناف')
+    } else {
+      $('#showProfitsPreBtn').html('تفاصيل حركة البيع')
+      $('#productProfits').show();
+      $('#customersProfits').hide();
+    }
+
+  }
 
   showStockProfitsPre(stock) {
 
@@ -454,7 +466,7 @@ export class ProfitsComponent implements OnInit {
           Qty: filterdArr[i].Qty,
           productCost: productdet.productCost,
           price: filterdArr[i].price,
-          unitProfit: Math.ceil( filterdArr[i].price - productdet.productCost),
+          unitProfit: Math.ceil(filterdArr[i].price - productdet.productCost),
           color: '',
           totalProfit: Math.ceil((filterdArr[i].price - productdet.productCost) * filterdArr[i].Qty),
           colorTotal: ''
@@ -471,7 +483,7 @@ export class ProfitsComponent implements OnInit {
     $('#customersProfits').show();
     $('#productProfits').hide();
     $('#searchProd').hide();
-    $('#showProfitsPreBtn').hide();
+    //$('#showProfitsPreBtn').hide();
 
   };
 

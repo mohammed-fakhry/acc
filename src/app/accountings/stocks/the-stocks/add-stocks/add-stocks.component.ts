@@ -33,7 +33,6 @@ export class AddStocksComponent implements OnInit {
     this._stockService.getStockes().subscribe((data: Stock[]) => {
       data.shift()
       this._stockService.stocks = data;
-      ////console.log(this._stockService.stocks)
     });
   }
 

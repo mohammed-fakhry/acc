@@ -38,6 +38,7 @@ export class CustomerComponent implements OnInit {
     this.customers = []
 
     this.getCustomerData_BackEnd();
+    this._service.handleTableHeight();
 
     this.customerData = new FormGroup({
       customerId: new FormControl(''),
@@ -72,12 +73,7 @@ export class CustomerComponent implements OnInit {
 
     this._custService.getCustomer().subscribe((data: Customer[]) => {
       this.customers = data;
-      //console.log(this.customers)
     });
-
-    /*this._stockService.getHandleAddtoStockPrimList().subscribe((data: HandleAddPrimBE[]) => { // get the details to make customerInvArry
-      this.customersInvoices = data;
-    })*/
 
     this._stockService.getStockTransactionList().subscribe((data: StockTransaction[]) => {
       this._stockService.stockTransactionArr = data;
@@ -464,7 +460,7 @@ export class CustomerComponent implements OnInit {
               return ''
             },
             nameColor: () => {
-              if (cust.remain() < 0) {
+              if (cust.customerName.includes('- سيف')) {
                 return 'btn-outline-info'
               }
               return 'btn-outline-secondary'
@@ -537,7 +533,6 @@ export class CustomerComponent implements OnInit {
       },
         error => {
           // alert(error);
-          //console.log(this.customerDataView);
         });
     };
 

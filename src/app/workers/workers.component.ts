@@ -108,6 +108,8 @@ export class WorkersComponent implements OnInit {
 
     this.getBackendData();
 
+    this._service.handleTableHeight();
+
     this.workerData = new FormGroup({
       workerId: new FormControl(''),
       workerName: new FormControl('', [Validators.required, Validators.minLength(5), Validators.maxLength(100)]),

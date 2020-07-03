@@ -105,7 +105,6 @@ export class AddSafeComponent implements OnInit {
     let safeInfo = this._safeDataService.safeList.find(
       safe => safe.safeId == this._safeDataService.safeInpts.safeId
     )
-    console.log(safeInfo)
 
     let addSafeBtnVal = $('#addNewSafeBtn').html();
 
@@ -119,7 +118,6 @@ export class AddSafeComponent implements OnInit {
         currentSafeVal: safeInfo.currentSafeVal
       }
       this._safeDataService.updateSafeData(this.safeData).subscribe()
-      console.log(this.safeData)
     } else if (addSafeBtnVal == 'اضافة') {
       this.safeData = {
         safeId: null,
@@ -130,7 +128,6 @@ export class AddSafeComponent implements OnInit {
         currentSafeVal: this._safeDataService.safeInpts.opendVal
       }
       this._safeDataService.creatSafe(this.safeData).subscribe();
-      //console.log(this.safeData.workerId)
     }
 
     this._safeAccComponent.getSafeInfo_backEnd();

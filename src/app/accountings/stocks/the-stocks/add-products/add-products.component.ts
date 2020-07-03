@@ -30,11 +30,9 @@ export class AddProductsComponent implements OnInit {
     if (this._theStockComp.productNameVaild = true) {
       this.addProductFormVaild = true;
     }
-    ////console.log(this._stockService.productDataView.productName)
   }
 
   isProductNameVaild() { // validation
-    ////console.log(this._stockService.productDataView.productName)
     const getProductName = this._stockService.allProducts.find(product => product.productName === this._stockService.productDataView.productName);
     if (this._stockService.productDataView.productName != '') {
       if (getProductName != undefined) {
@@ -53,7 +51,6 @@ export class AddProductsComponent implements OnInit {
       this.addProductFormVaild = true;
       $('#productName').removeClass('is-valid').addClass('is-invalid')
     }
-    //console.log(getProductName)
   }
 
   addNewProduct() {
@@ -67,8 +64,6 @@ export class AddProductsComponent implements OnInit {
       $('#productNameAlert').hide();
       this.addProductFormVaild = true;
     })
-
-    ////console.log(this._stockService.allProducts);
   }
 
 }
