@@ -492,6 +492,7 @@ export class CustomerComponent implements OnInit {
 
     this._custService.customerInv = [];
     this._custService.invTotalArry = [];
+    console.log(this.customersInvoices)
     for (let i = 0; i < this.customersInvoices.length; i++) {
 
       if (this.customersInvoices[i].stockTransactionId == invoice.stockTransactionId) {
@@ -500,6 +501,7 @@ export class CustomerComponent implements OnInit {
           productName: this.customersInvoices[i].productName,
           price: this.customersInvoices[i].price,
           Qty: this.customersInvoices[i].Qty,
+          note: this.customersInvoices[i].notes,
           total: () => (this.customersInvoices[i].Qty * this.customersInvoices[i].price)
         };
 
@@ -509,10 +511,23 @@ export class CustomerComponent implements OnInit {
 
     };
 
-    this._custService.invoiceKind = invoice.invoiceKind;
+    this._custService.customerInvMainDet = {
+      invoiceKind: invoice.invoiceKind,
+      date_time: invoice.date_time,
+      invoiceNum: invoice.invoiceNum,
+      note: invoice.notes,
+      invTotal: this._service.sumArry(this._custService.invTotalArry),
+    }
+    if(invoice.transactionType == 2) {
+      this._custService.invKindColor = 'text-danger'
+    } else {
+      this._custService.invKindColor = 'text-info'
+    }
+    //this._custService.invKindColor = invoice.
+    /* this._custService.invoiceKind = invoice.invoiceKind;
     this._custService.date_time = invoice.date_time
     this._custService.invoiceNum = invoice.invoiceNum
-    this._custService.invTotal = this._service.sumArry(this._custService.invTotalArry);
+    this._custService.invTotal = this._service.sumArry(this._custService.invTotalArry); */
     $('#customerFadeLayer').show(0);
     $('#customerInvDetail').show().addClass('animate')
   }

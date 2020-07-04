@@ -11,13 +11,27 @@ export class CustomerService {
 
   // customer invoice Details Vars
   customerInv: any[];
-  invoiceKind: string;
+  /* 
+    this._custService.invoiceKind = invoice.invoiceKind;
+    this._custService.date_time = invoice.date_time
+    this._custService.invoiceNum = invoice.invoiceNum
+    this._custService.invTotal = this._service.sumArry(this._custService.invTotalArry);
+  */
+  customerInvMainDet = {
+    invoiceKind: null,
+    date_time: null,
+    invoiceNum: null,
+    note: null,
+    invTotal: 0,
+  };
+
+  /* invoiceKind: string;
   date_time: string;
-  invoiceNum: string;
+  invoiceNum: string; */
   invKindColor: string;
   //customerInvDetail: any;
   invTotalArry: any[];
-  invTotal: number;
+  //invTotal: number;
 
   constructor(private http: HttpClient) { }
 

@@ -96,9 +96,7 @@
                     </thead>
                     <tbody class=" mt-3 tableBody">
                         <tr *ngFor="let inpt of invoiceInpArry; let i = index">
-                            <td style="flex: none; width: 50px;">
-                                <button type="button" class="btn btn-outline-danger" (click)='deleteFilds(i)'>-</button>
-                            </td>
+                            <td style="flex: none; width: 50px;" class="pt-4">{{i + 1}}</td>
                             <td>
                                 <input type="search" name="product{{i}}" [(ngModel)]="inpt.product" id="product{{i}}"
                                     class="form-control mdb-autocomplete" list="datalist1"
@@ -110,12 +108,12 @@
                                 <div *ngIf="inpt.inpVaild" class="text-danger vaildAlert">{{inpt.productVaildMsg}}</div>
                             </td>
                             <td><input type="number" name="qty{{i}}" [(ngModel)]="inpt.qty" class="form-control"
-                                    id="qty{{i}}" (keyup)="calcTotals()" [disabled]="inptDisabled">
+                                    id="qty{{i}}" (keyup)="calcTotals('inpt')" [disabled]="inptDisabled">
                                 <div *ngIf="inpt.Qtyinvaild" class="text-danger vaildAlert">{{inpt.qtyMsg}}
                                 </div>
                             </td>
                             <td><input type="number" name="price{{i}}" [(ngModel)]="inpt.price" class="form-control"
-                                    (change)="calcTotals()">
+                                    (change)="calcTotals('inpt')">
                             </td>
                             <td class="text-center font-weight-bold">{{inpt.total}}</td>
                             <input name="stockTransactionDetailsId{{i}}" [(ngModel)]="inpt.stockTransactionDetailsId"

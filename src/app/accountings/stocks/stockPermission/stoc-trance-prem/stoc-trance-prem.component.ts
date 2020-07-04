@@ -33,6 +33,7 @@ export class StocTrancePremComponent implements OnInit {
   sndStockNameVaild: boolean;
 
   deleteInvTranceBtnDisabled: boolean;
+  stockDetailsIdArr: any;
 
   constructor(public _stockService: StocksService, public formBuilder: FormBuilder,
     public _service: ServicesService, public _custService: CustomerService, public _theStockComp: TheStocksComponent) { }
@@ -63,22 +64,6 @@ export class StocTrancePremComponent implements OnInit {
     this.invoiceInp.total = 0;
     this.invoiceInpArry.push(this.invoiceInp);
   };
-
-  deleteFilds(i) {
-    let BtnSubmitHtml = $('#newTranceInvoicetBtn').html();
-
-    if (BtnSubmitHtml = 'تعديل الاذن') {
-
-      if (this.invoiceInpArry[i].stockTransactionDetailsId != undefined) {
-        //console.log(this.invoiceInpArry[i].stockTransactionDetailsId);
-        //$('#')
-      } else {
-        //console.log('undifined - test')
-      };
-
-    };
-    //this.invoiceInpArry.splice(i,1)
-  }
 
   theFstStockId: number;
   theSndStockId: number;
@@ -165,7 +150,6 @@ export class StocTrancePremComponent implements OnInit {
     };
     
     this.inputDisabled = false;
-
   };
 
   qtyIsOkArry: any[];
@@ -350,13 +334,33 @@ export class StocTrancePremComponent implements OnInit {
       } else {
         this.isAddInvVaild = false;
       };
-    };
 
+      if (this.invoiceInpArry[i].product == '') {
+        
+        if (this.invoiceInpArry[i].price > 0 || this.invoiceInpArry[i].qty >= 0) {
+          
+          if (this.invoiceInpArry[i + 1] != undefined) {
+            
+            if (this.invoiceInpArry[i + 1].product != undefined || this.invoiceInpArry[i + 1].product != '' || this.invoiceInpArry[i + 1].product != null) {
+              this.stockDetailsIdArr.push(this.invoiceInpArry[i].stockTransactionDetailsId)
+              this.invoiceInpArry.splice(i, 1)
+              this.calcTotals('checkVaild')
+            } else {
+              this.invoiceInpArry[i].price = null;
+              this.invoiceInpArry[i].qty = null;
+              this.calcTotals('checkVaild')
+            };
+          };
+        };
+      };
+    };
   };
 
-  calcTotals() {
+  calcTotals(cond: string) {
     this.deleteInvTranceBtnDisabled = true;
-    this.isAddQtyVaild()
+    if (cond == 'inpt') {
+      this.isAddQtyVaild()
+    }
 
     this.totalInvoice = [];
     this.invoiceTotal = '0'
@@ -387,6 +391,7 @@ export class StocTrancePremComponent implements OnInit {
 
   showNewTranceInvoice() {
 
+    this.stockDetailsIdArr = []; // for check productName vaild to delete when edite
     this._theStockComp.testBackend();
     this.productArr = [];
     this.productNameIdArr = [];
@@ -487,7 +492,7 @@ export class StocTrancePremComponent implements OnInit {
       this.ivoiceItemesForEdit = invoiceInfo.invoiceDetails;
       //
       this.makeTheStockProds();
-      this.calcTotals();
+      this.calcTotals('inpt');
 
       this.qtyIsOkArry = [];
 
@@ -657,7 +662,7 @@ export class StocTrancePremComponent implements OnInit {
 
       let stockTransactionD = new StockTransactionD();
 
-      if (this.invoiceInpArry[i].product != undefined) {
+      if (this.invoiceInpArry[i].product != undefined && this.invoiceInpArry[i].product !== '') {
 
         this.getProductInfo = this.findProduct(this.invoiceInpArry[i].product);
         theProductId = this.getProductInfo.productId;
@@ -760,6 +765,12 @@ export class StocTrancePremComponent implements OnInit {
 
   tranceFrmStockPrem() {
     this.makeTranceStockPremArry();
+    if (this.stockDetailsIdArr.length != 0) {
+      for (let i = 0; i < this.stockDetailsIdArr.length ; i++) {
+        this._stockService.deleteStockTransactionDetails(this.stockDetailsIdArr[i]).subscribe();
+        console.log('detail id deleted')
+      };
+    }
     this.showInvoiceDone();
   };
 

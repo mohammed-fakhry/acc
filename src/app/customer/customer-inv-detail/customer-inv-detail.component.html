@@ -4,20 +4,25 @@
     </div>
     <hr> -->
     <div class="d-flex justify-content-between px-1">
-        <button class="btn btn-danger mr-2 font-weight-bold" id="hideInvDet">x</button>
-        <h6 class="py-2 {{_customerService.invKindColor}}">{{_customerService.invoiceKind}}</h6>
-        <h6 class="py-2"> رقم : {{_customerService.invoiceNum}}</h6>
+        <button class="btn btn-outline-danger mr-2 font-weight-bold" id="hideInvDet" style="height: calc(1.5em + .75rem + 2px);">x</button>
+        <h5 class="{{_customerService.invKindColor}}">{{_customerService.customerInvMainDet.invoiceKind}}</h5>
+        <h6 class="py-2"> رقم : {{_customerService.customerInvMainDet.invoiceNum}}</h6>
+        <div class="py-2 form-inline">
+            <h6 class="pl-1" >ملاحظات : </h6>
+            <h6 class="text-info"> {{_customerService.customerInvMainDet.note}} </h6>
+        </div>
         <!--<h5 class="py-2">{{_customerService.date_time}}</h5>-->
-        <input disabled [(ngModel)]='_customerService.date_time' type="datetime-local">
+        <input disabled [(ngModel)]='_customerService.customerInvMainDet.date_time' type="datetime-local">
     </div>
-    <div class="panel-body panel-flex-table mt-3">
-        <table class="flex-table table table-striped">
+    <hr>
+    <div class="panel-body panel-flex-table standTable">
+        <table class="flex-table table table-hover">
             <thead class="navHeader text-white">
                 <tr>
                     <th>اسم الصنف</th>
                     <th>العدد</th>
                     <th>السعر</th>
-                    <th class="lightBg">الاجمالى : {{_customerService.invTotal}}</th>
+                    <th class="lightBg">الاجمالى : {{_customerService.customerInvMainDet.invTotal}}</th>
                 </tr>
             </thead>
             <tbody class=" mt-3 tableBody">

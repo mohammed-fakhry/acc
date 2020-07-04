@@ -103,6 +103,8 @@ export class AddToStockPermissionComponent implements OnInit {
 
   isAddInvVaild: boolean = false;
 
+  stockDetailsIdArr: any[];
+
   isAddNameVaild() { // inputValidation
     this.deleteInvBtnDisabled = true;
     let found: boolean;
@@ -148,9 +150,23 @@ export class AddToStockPermissionComponent implements OnInit {
       };
 
       if (this.invoiceInpArry[i].product == '') {
-        if (this.invoiceInpArry[i].price > 0 || this.invoiceInpArry[i].qty > 0) {
-          this.invoiceInpArry[i].price = null;
-          this.invoiceInpArry[i].qty = null;
+        
+        if (this.invoiceInpArry[i].price > 0 || this.invoiceInpArry[i].qty >= 0) {
+          
+          if (this.invoiceInpArry[i + 1] != undefined) {
+            
+            if (this.invoiceInpArry[i + 1].product != undefined || this.invoiceInpArry[i + 1].product != '' || this.invoiceInpArry[i + 1].product != null) {
+              this.stockDetailsIdArr.push(this.invoiceInpArry[i].stockTransactionDetailsId)
+              this.invoiceInpArry.splice(i, 1)
+              //console.log(this.stockDetailsIdArr)
+              this.calcTotals()
+            } else {
+              this.invoiceInpArry[i].price = null;
+              this.invoiceInpArry[i].qty = null;
+              
+              this.calcTotals()
+            };
+          };
         };
       };
     };
@@ -427,7 +443,7 @@ export class AddToStockPermissionComponent implements OnInit {
       let postStockPridgeObj = new StockPridge();
       let stockTransactionD = new StockTransactionD();
 
-      if (this.invoiceInpArry[i].product != undefined) {
+      if (this.invoiceInpArry[i].product != undefined && this.invoiceInpArry[i].product != '' && this.invoiceInpArry[i].qty != 0) {
 
         let getProductInfo = this._stockService.allProducts.find(product => product.productName === this.invoiceInpArry[i].product)
 
@@ -599,7 +615,7 @@ export class AddToStockPermissionComponent implements OnInit {
       let postStockPridgeObj = new StockPridge();
       let stockTransactionD = new StockTransactionD();
 
-      if (this.invoiceInpArry[i].product != undefined) {
+      if (this.invoiceInpArry[i].product != undefined && this.invoiceInpArry[i].product !== '') {
 
         let getProductInfo = this._stockService.allProducts.find(product => product.productName === this.invoiceInpArry[i].product)
 
@@ -717,7 +733,7 @@ export class AddToStockPermissionComponent implements OnInit {
           //console.log('six');
         };
       };
-    }; // fst for invoiceInpArry
+    }; // fst for invoiceInpArry    
   }; // makeAddStockPremArry
 
   showInvoiceDone() {
@@ -728,6 +744,13 @@ export class AddToStockPermissionComponent implements OnInit {
   addToStockPrem() { // the main function
     this.makeAddStockPremArry();
     this.showInvoiceDone();
+    // delete invDetail when delete the productName
+    if (this.stockDetailsIdArr.length != 0) {
+      for (let i = 0; i < this.stockDetailsIdArr.length ; i++) {
+        this._stockService.deleteStockTransactionDetails(this.stockDetailsIdArr[i]).subscribe();
+        console.log('detail id deleted')
+      };
+    }
   };
 
 
@@ -764,6 +787,8 @@ export class AddToStockPermissionComponent implements OnInit {
   showAddNewInvoice() {
 
     this.makeCustomerCss();
+
+    this.stockDetailsIdArr = [] // for check productName vaild to delete when edite
 
     this._theStockComp.testBackend(); // to make stockArry
     this.productArr = []

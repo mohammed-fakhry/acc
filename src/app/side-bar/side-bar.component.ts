@@ -3,6 +3,7 @@ import { SideEffectService } from '../side-effect.service';
 import { Router, NavigationEnd } from '@angular/router';
 import { LoginService } from '../login.service';
 import { ServicesService } from '../services.service';
+import { stringify } from 'querystring';
 
 @Component({
   selector: 'app-side-bar',
@@ -31,15 +32,14 @@ export class SideBarComponent implements OnInit {
       $("#sidebar .secDiv").not($(this).next()).slideUp(100);
       $('#sidebar').css('height', 'auto')
       $('.mainBtns').not($(this)).not('#logOut').not('#MainSettingBtn').removeClass('navHeader').addClass('btn-light');
-
-
     });
 
-    // make active button
+    // make active button old code
     let customerBtn = $('#customersBtn');
     let workersBtn = $('#workersBtn');
     let unitesBtn = $('#unitesBtn');
     let safeAccBtn = $('#safeAccBtn');
+    let settBtn = $('#SettBtn');
     //safeAcc
     let htmlDbItemsBtns: any[] = [workersBtn, unitesBtn]
     let dBUrls: any[] = ['/workers', '/unites'] // dataBaseUrls
@@ -47,7 +47,6 @@ export class SideBarComponent implements OnInit {
     let stocksBtn = $('#stocksBtn');
     let htmlAccItemsBtns: any[] = [customerBtn, stocksBtn, safeAccBtn];
     let accUrls: any[] = ['/customers', '/stocks', '/safe-acc'];
-
 
     if (dBUrls.includes(this.url)) {
       this.mainRoute = 'Db'
@@ -85,11 +84,11 @@ export class SideBarComponent implements OnInit {
     window.addEventListener("resize", () => {
       if (window.innerHeight == screen.height) {
         // browser is fullscreen
-        $('.panel-body').not('.invoiceTable').not('.standTable').not('.tableWithHeader').css('height', '930px')
+        $('.panel-body').not('.invoiceTable').not('.standTable').not('.tableWithHeader').css('height', '910px')
         $('.invoiceTable').css('height', '590px')
         $('.tableWithHeader').css('height', '860px')
       } else {
-        $('.panel-body').not('.invoiceTable').not('.standTable').not('.tableWithHeader').css('height', '830px')
+        $('.panel-body').not('.invoiceTable').not('.standTable').not('.tableWithHeader').css('height', '820px')
         $('.tableWithHeader').css('height', '790px')
         $('.invoiceTable').css('height', '530px')
       };
@@ -153,20 +152,34 @@ export class SideBarComponent implements OnInit {
   backupPath: string;
 
   backup() {
-    this._service.backUp().subscribe(data => {
-      this.backupMsg = data[1];
-      this.backupPath = data[0]
+
+    $('#containerLoader').fadeIn();
+
+    const postBackup = new Promise((res) => {
+      this._service.backUp().subscribe(data => {
+        this.backupMsg = data[1];
+        this.backupPath = data[0]
+        res('done')
+      });
     });
-    this.sidebarToggle();
-    $('#fadeBackupDone').show();
-    $('#backupDone').show();
-    $('.askForDelete').addClass('animate');
-  }
+
+    postBackup.then(() => {
+      this.sidebarToggle();
+      $('#sidebarToggle').hide();
+      $('#containerLoader').fadeOut(0, () => {
+        $('#fadeBackupDone').show();
+        $('#backupDone').show();
+        $('.askForDelete').addClass('animate');
+      });
+    });
+
+  };
 
   hideBackUpDone() {
     $('#fadeBackupDone').hide();
     $('#backupDone').hide();
     $('.askForDelete').removeClass('animate');
+    $('#sidebarToggle').show()
   };
 
-} // end
+}; // end

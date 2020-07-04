@@ -9,4 +9,5 @@ export class CustomerInvArry {
     Qty: number;
     customerId: number;
     customerName: string;
+    notes: string;
 }

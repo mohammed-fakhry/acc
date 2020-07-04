@@ -26,6 +26,7 @@ export class MinFrmStockPermissionComponent implements OnInit {
   totalInvoice: any[];
   searchTxt: string;
   deleteMinInvBtnDisabled: boolean;
+  stockDetailsIdArr: any;
 
   constructor(public _stockService: StocksService, public formBuilder: FormBuilder,
     public _service: ServicesService, public _custService: CustomerService, public _theStockComp: TheStocksComponent) { }
@@ -210,7 +211,30 @@ export class MinFrmStockPermissionComponent implements OnInit {
       } else if (this.invoiceInpArry[i].inpVaild == false) {
         this.isMinInvInvaild = false;
       }
+
+      if (this.invoiceInpArry[i].product == '') {
+        
+        if (this.invoiceInpArry[i].price > 0 || this.invoiceInpArry[i].qty >= 0) {
+          
+          if (this.invoiceInpArry[i + 1] != undefined) {
+            
+            if (this.invoiceInpArry[i + 1].product != undefined || this.invoiceInpArry[i + 1].product != '' || this.invoiceInpArry[i + 1].product != null) {
+              this.stockDetailsIdArr.push(this.invoiceInpArry[i].stockTransactionDetailsId)
+              this.invoiceInpArry.splice(i, 1)
+              //console.log(this.stockDetailsIdArr)
+              this.calcTotals('checkVaild')
+            } else {
+              this.invoiceInpArry[i].price = null;
+              this.invoiceInpArry[i].qty = null;
+              
+              this.calcTotals('checkVaild')
+            };
+          };
+        };
+      };
     }
+
+
 
   } // isMinNameVaild
 
@@ -932,6 +956,13 @@ export class MinFrmStockPermissionComponent implements OnInit {
   minFrmStockPrem() {
     this.makeMinStockPremArry();
     this.showInvoiceDone();
+    // delete invDetail when delete the productName
+    if (this.stockDetailsIdArr.length != 0) {
+      for (let i = 0; i < this.stockDetailsIdArr.length; i++) {
+        this._stockService.deleteStockTransactionDetails(this.stockDetailsIdArr[i]).subscribe();
+        console.log('detail id deleted')
+      };
+    }
   }; // minFrmStockPrem
 
   showDeleteMinInvoice() {
