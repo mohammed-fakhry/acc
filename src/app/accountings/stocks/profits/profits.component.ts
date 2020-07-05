@@ -52,7 +52,34 @@ export class ProfitsComponent implements OnInit {
   employeeExpence: number;
   otherExpence: number;
 
-  showStockProfits(stock, index) {
+  theStock: Stock;
+  theIndex: number;
+  theStockName: string = ''
+
+  showProfitOptions(stock, index) {
+
+    this.theStock = stock;
+    this.theIndex = index;
+    this.theStockName = stock.stockName
+
+    $('#howIsProfits').show();
+    $('#productProfits').hide();
+
+  };
+
+  dateSortFrom: any;
+  dateSortTo: any;
+
+  makeNull() {
+    this.dateSortFrom = null;
+    this.dateSortTo = null;
+  }
+
+  
+
+  showStockProfits(/* stock, index */) {
+
+    $('#howIsProfits').hide();
 
     $('#containerLoader').fadeIn();
 
@@ -86,7 +113,7 @@ export class ProfitsComponent implements OnInit {
 
     ////console.time('method')
 
-    this.stockInfo = stock; //
+    this.stockInfo = this.theStock; //
 
     let mainFilterdArr_in = [];
     let mainFilterdArr_sold = [];
@@ -95,9 +122,50 @@ export class ProfitsComponent implements OnInit {
     let filterdArr_sold = [];
     let stockProds: HandleBackEnd[] = [];
 
+    let sorted: boolean;
+
+    const filterDate = () => {
+      let match_fromDate = this.dateSortFrom + 'T00:00';
+      let match_toDate = this.dateSortTo + 'T23:59';
+      let fromDate = new Date(this.dateSortFrom).getTime();
+      let toDate = new Date(this.dateSortTo).getTime();
+
+      
+
+      if (this.dateSortFrom != undefined && this.dateSortTo != undefined && this.dateSortFrom != null && this.dateSortTo != null) {
+        
+        mainFilterdArr_in = this._stockService.HandleAddtoStockPrimArry
+          .filter(h => h.stockId == this.theStock.stockId && h.date_time < match_toDate)
+          .filter(h => h.transactionType == 1 || (h.transactionType == 3 && h.sndStockId == this.theStock.stockId))
+
+        mainFilterdArr_sold = this._stockService.HandleAddtoStockPrimArry
+          .filter(h => h.transactionType == 2 && h.stockId == this.theStock.stockId && h.date_time > match_fromDate && h.date_time < match_toDate)
+
+        this.safeReciepts = this.safeReciepts.filter((date) => {
+          return date.date_time > match_fromDate && date.date_time < match_toDate
+        });
+
+        sorted = true;
+
+      } else {
+
+        mainFilterdArr_in = this._stockService.HandleAddtoStockPrimArry
+          .filter(h => h.stockId == this.theStock.stockId)
+          .filter(h => h.transactionType == 1 || (h.transactionType == 3 && h.sndStockId == this.theStock.stockId));
+
+        mainFilterdArr_sold = this._stockService.HandleAddtoStockPrimArry
+          .filter(h => h.transactionType == 2 && h.stockId == this.theStock.stockId);
+
+        sorted = false;
+
+      };
+
+      return Promise.resolve('filterd');
+    };
+
     const makeExpences = () => {
 
-      if (stock.stockName == 'حسام المخزن') {
+      if (this.theStock.stockName == 'حسام المخزن') {
         let employeeArr = this.safeReciepts.filter(acc => acc.AccName == 'مصاريف عمال');
         let employeeTotals = []
 
@@ -123,7 +191,7 @@ export class ProfitsComponent implements OnInit {
         this.otherExpence = this._service.sumArry(otherAccTotals);
 
 
-      } else if (stock.stockName == 'سيف المخزن') {
+      } else if (this.theStock.stockName == 'سيف المخزن') {
         let employeeArr = this.safeReciepts.filter(acc => acc.AccName == 'مصاريف عمال - سيف');
         let employeeTotals = []
 
@@ -155,9 +223,9 @@ export class ProfitsComponent implements OnInit {
 
       this.profitArr = [];
 
-      mainFilterdArr_in = this._stockService.HandleAddtoStockPrimArry
-        .filter(h => h.stockId == stock.stockId || h.sndStockId == stock.stockId)
-        .filter(h => h.transactionType == 1 || h.transactionType == 3)
+      /* mainFilterdArr_in
+        .filter(h => h.stockId == this.theStock.stockId || h.sndStockId == this.theStock.stockId)
+        .filter(h => h.transactionType == 1 || h.transactionType == 3) */
 
       filterdArr_In =
         mainFilterdArr_in.map(invoic => {
@@ -175,8 +243,7 @@ export class ProfitsComponent implements OnInit {
         });
       filterdArr_In.sort(this._servicesService.sortArry('time'))
 
-      mainFilterdArr_sold = this._stockService.HandleAddtoStockPrimArry
-        .filter(h => h.transactionType == 2 && h.stockId == stock.stockId);
+      /* mainFilterdArr_sold.filter(h => h.transactionType == 2 && h.stockId == this.theStock.stockId); */
 
       filterdArr_sold =
         mainFilterdArr_sold.map(invoic => {
@@ -194,7 +261,7 @@ export class ProfitsComponent implements OnInit {
         });
       filterdArr_sold.sort(this._servicesService.sortArry('time'));
 
-      stockProds = this._stockService.handleBackEnd.filter(item => item.stockId == stock.stockId);
+      stockProds = this._stockService.handleBackEnd.filter(item => item.stockId == this.theStock.stockId);
 
       for (let i = 0; i < stockProds.length; i++) {
 
@@ -270,7 +337,26 @@ export class ProfitsComponent implements OnInit {
           let prodDetails = { // the main object
 
             name: stockProds[i].productName,
-            qtyRemain: (pricesDetailsArr.in.totalQty - pricesDetailsArr.sold.totalQty),
+            qtyRemain: () => {
+              if (sorted) {
+                let allIn = this._stockService.HandleAddtoStockPrimArry
+                  .filter(h => h.stockId == this.theStock.stockId)
+                  .filter(h => h.transactionType == 1 || (h.transactionType == 3 && h.sndStockId == this.theStock.stockId))
+                  .map(product => product.Qty);
+
+                let allOut = this._stockService.HandleAddtoStockPrimArry
+                  .filter(h => h.transactionType == 2 && h.stockId == this.theStock.stockId)
+                  .map(product => product.Qty);
+
+                console.log(allIn)
+
+                return (this._servicesService.sumArry(allIn) - this._servicesService.sumArry(allOut))
+
+              } else {
+                return (pricesDetailsArr.in.totalQty - pricesDetailsArr.sold.totalQty)
+              }
+
+            },
             qtyRemainVal: ((pricesDetailsArr.in.totalQty - pricesDetailsArr.sold.totalQty) * Math.floor(pricesDetailsArr.in.avarege())),
 
             in: {
@@ -315,10 +401,10 @@ export class ProfitsComponent implements OnInit {
 
             profitLastPrice: {
               val: () => {
-                if (prodDetails.qtyRemain < 0) {
+                if (prodDetails.qtyRemain() < 0) {
                   return 0
                 } else {
-                  return Math.ceil((prodDetails.sold.lastPrice() - prodDetails.in.avr) * prodDetails.qtyRemain);
+                  return Math.ceil((prodDetails.sold.lastPrice() - prodDetails.in.avr) * prodDetails.qtyRemain());
                 }
               },
               color: () => {
@@ -353,10 +439,10 @@ export class ProfitsComponent implements OnInit {
                 return ((prodDetails.in.avr * 10) / 100) + prodDetails.in.avr
               },
               profit: () => {
-                if (prodDetails.qtyRemain < 0) {
+                if (prodDetails.qtyRemain() < 0) {
                   return 0
                 } else {
-                  return Math.ceil(prodDetails.recommendedPrice.price() - prodDetails.in.avr) * prodDetails.qtyRemain
+                  return Math.ceil(prodDetails.recommendedPrice.price() - prodDetails.in.avr) * prodDetails.qtyRemain()
                 };
               },
               percentage: () => {
@@ -396,6 +482,7 @@ export class ProfitsComponent implements OnInit {
     };
 
     Promise.all([getHandle, getHandleAdd, getSafeReceipt])
+      .then(filterDate)
       .then(() => makeExpences())
       .then(makeHandlePrice).then((profitArray: any[]) => {
 
@@ -413,8 +500,8 @@ export class ProfitsComponent implements OnInit {
           };
         };
 
-        $('.chooseBtn').not(`#showStockProfits${index}`).removeClass('btn-secondary').addClass('btn-light');
-        $(`#showStockProfits${index}`).removeClass('btn-light').addClass('btn-secondary');
+        $('.chooseBtn').not(`#showStockProfits${this.theIndex}`).removeClass('btn-secondary').addClass('btn-light');
+        $(`#showStockProfits${this.theIndex}`).removeClass('btn-light').addClass('btn-secondary');
         $('#totalProfits').show();
         $('#customersProfits').hide();
         $('#productProfits').show();
