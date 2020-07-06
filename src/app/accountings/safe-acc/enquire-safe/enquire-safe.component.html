@@ -4,20 +4,20 @@
         <table class="flex-table table table-hover">
             <thead class="navHeader">
                 <tr>
-                    <th>الخزنة</th>
-                    <th>امين الخزنة</th>
+                    <th style="flex: 2">الخزنة</th>
+                    <th style="flex: 2">امين الخزنة</th>
                     <!-- <th>حركة خزنة</th> -->
-                    <th>تعديل</th>
+                    <th style="flex: .5">تعديل</th>
                 </tr>
             </thead>
             <tbody class=" mt-3 tableBody">
                 <tr *ngFor="let safe of _safeDataService.safeList">
                     <td class="textBtn btn-outline-secondary" id="showSafeTranaction"
-                        (click)="showSafeTranaction(safe)">{{safe.safeName}}</td>
-                    <td>{{safe.safeEmployee}}</td>
+                        (click)="showSafeTranaction(safe)" style="flex: 2">{{safe.safeName}}</td>
+                    <td style="flex: 2">{{safe.safeEmployee}}</td>
                     <!-- <td><button class="btn btn-outline-secondary ml-2" id="showSafeTranaction"
                             (click)="showSafeTranaction(safe)"><i class="fa fa-archive"></i></button></td> -->
-                    <td class="textBtn btn-outline-success ml-2" id="editSafe" (click)="showEditSafe(safe)"><i
+                    <td class="textBtn btn-outline-success" id="editSafe" (click)="showEditSafe(safe)" style="flex: .5"><i
                             class="fa fa-edit"></i></td>
                 </tr>
             </tbody>

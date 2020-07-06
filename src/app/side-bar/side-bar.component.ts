@@ -84,12 +84,12 @@ export class SideBarComponent implements OnInit {
     window.addEventListener("resize", () => {
       if (window.innerHeight == screen.height) {
         // browser is fullscreen
-        $('.panel-body').not('.invoiceTable').not('.standTable').not('.tableWithHeader').css('height', '910px')
+        $('.panel-body').not('.invoiceTable').not('.standTable').not('.tableWithHeader').css('height', '920px')
         $('.invoiceTable').css('height', '590px')
         $('.tableWithHeader').css('height', '860px')
       } else {
         $('.panel-body').not('.invoiceTable').not('.standTable').not('.tableWithHeader').css('height', '820px')
-        $('.tableWithHeader').css('height', '790px')
+        $('.tableWithHeader').css('height', '780px')
         $('.invoiceTable').css('height', '530px')
       };
     });

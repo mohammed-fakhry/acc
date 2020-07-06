@@ -1,18 +1,24 @@
 <!-- style="margin-top: 5%; width: 40%;" -->
 <div class="container">
-    <div class="card mt-5">
-        <form class="formgroup m-5" [formGroup]="userData" (ngSubmit)="logIn()">
-            <h1 class="text-info">تسجيل الدخول</h1>
-            <hr>
-            <label>اسم المستخدم</label>
-            <input formControlName="userName" type="text" class="form-control mb-3">
-            <label>كلمة السر</label>
-            <input formControlName="userPassword" type="password" class="form-control mb-3">
-            <div class="invalid-feedback d-none m-2">
-                خطأ فى اسم المستخدم او كلمة السر
+    <div class="cardBorderY mt-5">
+        <div class="card p-3">
+            <form class="formgroup" [formGroup]="userData" (ngSubmit)="logIn()">
+                <h1 class="cardHeader">تسجيل الدخول</h1>
+                <hr>
+                <label>اسم المستخدم</label>
+                <input formControlName="userName" type="text" class="form-control mb-3">
+                <label>كلمة السر</label>
+                <input formControlName="userPassword" type="password" class="form-control mb-3">
+                <div class="invalid-feedback d-none m-2">
+                    خطأ فى اسم المستخدم او كلمة السر
+                </div>
+                <button id="logInBtn" class="btn btn-outline-info" type="submit">تسجيل الدخول</button>
+                <div class="alert alert-danger d-none mt-2" role="alert"></div>
+            </form>
+            <div class="form-inline" style="direction: ltr; font-size: small;">
+                <p>powerd by</p>
+                <p class="cardHeader px-1" >theGenius</p>
             </div>
-            <button id="logInBtn" class="btn btn-outline-info" type="submit">تسجيل الدخول</button>
-            <div class="alert alert-danger d-none mt-2" role="alert"></div>
-        </form>
+        </div>
     </div>
 </div>

@@ -56,17 +56,20 @@
                             </tbody>
                         </table>
                         <hr>
-                        <button class="btn btn-outline-primary m-2" id="showProfitsPreBtn"
+                        <button *ngIf='filtered' class="btn btn-outline-primary m-2" id="showProfitsPreBtn"
                             (click)='toggleStockProfits(stockInfo)'>تفاصيل حركة
                             البيع</button>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="col-md-2 cardBorderY inpCard_row pb-3" style="display: none;" id="howIsProfits">
+        <div class="col-md-5 cardBorderY inpCard_row pb-3" style="display: none;" id="howIsProfits">
             <h3 class="mt-3 cardHeader">ارباح اصناف {{theStockName}}</h3>
             <hr>
-            <div class="text-danger mb-3" id="makeDateNullBtn" (click)='makeDateNull()' style="display: none; border: none; cursor: pointer;">يمكنك حذف قيم التاريخ</div>
+            <div class="form-inline" id="makeDateNullBtn" style="display: none;">
+                <div class="text-danger mb-3">يمكنك حذف قيم التاريخ لاظهار كامل تفاصيل ارباح المدة بالضغط</div>
+                <div class="cardHeader pr-1 mb-3" style="cursor: pointer;" (click)='makeDateNull()'>هنا</div>
+            </div>
             <div class="row mb-3">
                 <div class="form-group col">
                     <label for="dateSortFrom">من تاريخ</label>
@@ -86,12 +89,12 @@
             <div>
                 <button class="btn btn-outline-info" (click)='showStockProfits()'>عرض الارباح</button>
             </div>
-            
+
         </div>
 
         <!-- productProfits -->
-        <div class="col-md-10 cardBorderY" style="display: none; height: 950px; overflow-y: auto;" id="productProfits">
-            <div id="profitDetails" class="pt-1">
+        <div class="col-md-10 cardBorderY pt-3 smokeBg" style="display: none; overflow-y: auto;" id="productProfits">
+            <div id="profitDetails" class="panel-body">
                 <div *ngFor='let product of profitArr|searchProdProfit:searchProd; let i = index'
                     class="row mb-3 bg-light" style="padding: 10px 0;">
                     <div class="col-md-1 darkGrayBg shadow-lg" style="text-align: center; border-radius: 5px;">

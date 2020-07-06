@@ -65,6 +65,7 @@ export class ProfitsComponent implements OnInit {
     $('#howIsProfits').show();
     $('#productProfits').hide();
     $('#customersProfits').hide();
+    $('#totalProfits').hide();
 
   };
 
@@ -266,7 +267,7 @@ export class ProfitsComponent implements OnInit {
       for (let i = 0; i < stockProds.length; i++) {
 
         let inDateArr: any[] = [];
-        let betweenDateArry: any[] = []
+        let betweenDateArry: any[] = [] // filtered arry between the two dates
 
         if (this.filtered) {
           let between: any[]
@@ -325,14 +326,7 @@ export class ProfitsComponent implements OnInit {
 
           let lastIndex_in = mainArry.in.pricesArr().length - 1;
           let lastIndex_Sold = mainArry.sold.pricesArr().length - 1;
-          let mathAvr = (this._servicesService.sumArry(mainArry.in.price_X_qty()) / this._servicesService.sumArry(mainArry.in.qtyArr()))
-
-          /* console.log({
-            product: stockProds[i].productName,
-            in: mainArry.everyDayArrIn(),
-            qtySold: mainArry.sold.qtyArr(),
-            avr: mathAvr
-          }); */
+          //let mathAvr = (this._servicesService.sumArry(mainArry.in.price_X_qty()) / this._servicesService.sumArry(mainArry.in.qtyArr()));
 
           let pricesDetailsArr = {
             in: {
@@ -343,7 +337,7 @@ export class ProfitsComponent implements OnInit {
               lastPrice: () => mainArry.in.pricesArr()[lastIndex_in],
               avarege: () => {
                 if (mainArry.everyDayArrIn().length > 0) {
-                  return mathAvr
+                  return (this._servicesService.sumArry(mainArry.in.price_X_qty()) / this._servicesService.sumArry(mainArry.in.qtyArr()))
                 } else {
                   return pricesDetailsArr.in.lastPrice()
                 }
@@ -507,7 +501,7 @@ export class ProfitsComponent implements OnInit {
             };
 
           }; // if (pricesDetailsArr.sold.totalQty != 0)
-        }
+        };
       };
 
       return Promise.resolve(this.profitArr);
