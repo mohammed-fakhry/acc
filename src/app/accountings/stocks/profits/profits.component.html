@@ -66,25 +66,27 @@
         <div class="col-md-2 cardBorderY inpCard_row pb-3" style="display: none;" id="howIsProfits">
             <h3 class="mt-3 cardHeader">ارباح اصناف {{theStockName}}</h3>
             <hr>
+            <div class="text-danger mb-3" id="makeDateNullBtn" (click)='makeDateNull()' style="display: none; border: none; cursor: pointer;">يمكنك حذف قيم التاريخ</div>
             <div class="row mb-3">
                 <div class="form-group col">
                     <label for="dateSortFrom">من تاريخ</label>
                     <div class="input-group">
                         <input type="date" id="dateSortFrom" class="form-control" name="dateSortFrom"
-                            [(ngModel)]='dateSortFrom'>
-                        <button class="btn btn-outline-danger mr-2" (click)='makeNull()'>x</button>
+                            [(ngModel)]='dateSortFrom' (change)='dateChanged()'>
                     </div>
                 </div>
                 <div class="form-group col">
                     <label for="dateSortTo">الى تاريخ</label>
                     <div class="input-group">
                         <input type="date" id="dateSortTo" class="form-control" name="dateSortTo"
-                            [(ngModel)]='dateSortTo'>
-                        <button class="btn btn-outline-danger mr-2" (click)='makeNull()'>x</button>
+                            [(ngModel)]='dateSortTo' (change)='dateChanged()'>
                     </div>
                 </div>
             </div>
-            <button class="btn btn-outline-info" (click)='showStockProfits()'>عرض الارباح</button>
+            <div>
+                <button class="btn btn-outline-info" (click)='showStockProfits()'>عرض الارباح</button>
+            </div>
+            
         </div>
 
         <!-- productProfits -->
@@ -150,7 +152,7 @@
                         </div>
                     </div>
                     <!-- secCard -->
-                    <div class="col-md-3">
+                    <div *ngIf='!filtered' class="col-md-3">
                         <div class="card shadow smokeBg">
                             <div class="panel-body panel-flex-table standTable"
                                 style="height: 100%; margin-top: 0px; margin-bottom: 5px;">
@@ -183,7 +185,7 @@
                             </div>
                         </div>
                     </div>
-                    <div *ngIf='product.qtyRemain == 0' class="col-md-5">
+                    <div *ngIf='product.qtyRemain() == 0 || filtered' class="col-md-5">
                         <div class="card shadow smokeBg">
                             <div class="panel-body panel-flex-table standTable"
                                 style="height: 100%; margin-top: 0px; margin-bottom: 5px;">
@@ -201,14 +203,14 @@
                                     </thead>
                                     <tbody class="table Body" style="overflow-y: hidden;">
                                         <tr class="text-center">
-                                            <th>لا يوجد رصيد لهذا الصنف</th>
+                                            <th>{{product.onlyProfitMsg()}}</th>
                                         </tr>
                                     </tbody>
                                 </table>
                             </div>
                         </div>
                     </div>
-                    <div *ngIf='product.qtyRemain != 0' class="col-md-5">
+                    <div *ngIf='product.qtyRemain() != 0 && !filtered' class="col-md-5">
                         <div class="card shadow smokeBg">
                             <div class="panel-body panel-flex-table standTable"
                                 style="height: 100%; margin-top: 0px; margin-bottom: 5px;">

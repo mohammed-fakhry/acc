@@ -64,18 +64,24 @@ export class ProfitsComponent implements OnInit {
 
     $('#howIsProfits').show();
     $('#productProfits').hide();
+    $('#customersProfits').hide();
 
   };
 
   dateSortFrom: any;
   dateSortTo: any;
 
-  makeNull() {
-    this.dateSortFrom = null;
-    this.dateSortTo = null;
+  filtered: boolean;
+
+  dateChanged() {
+    $('#makeDateNullBtn').show();
   }
 
-  
+  makeDateNull() {
+    this.dateSortFrom = null;
+    this.dateSortTo = null;
+    $('#makeDateNullBtn').hide();
+  }
 
   showStockProfits(/* stock, index */) {
 
@@ -122,21 +128,19 @@ export class ProfitsComponent implements OnInit {
     let filterdArr_sold = [];
     let stockProds: HandleBackEnd[] = [];
 
-    let sorted: boolean;
+    let match_fromDate = this.dateSortFrom + 'T00:00';
+    let match_toDate = this.dateSortTo + 'T23:59';
 
     const filterDate = () => {
-      let match_fromDate = this.dateSortFrom + 'T00:00';
-      let match_toDate = this.dateSortTo + 'T23:59';
-      let fromDate = new Date(this.dateSortFrom).getTime();
-      let toDate = new Date(this.dateSortTo).getTime();
-
-      
 
       if (this.dateSortFrom != undefined && this.dateSortTo != undefined && this.dateSortFrom != null && this.dateSortTo != null) {
-        
-        mainFilterdArr_in = this._stockService.HandleAddtoStockPrimArry
-          .filter(h => h.stockId == this.theStock.stockId && h.date_time < match_toDate)
-          .filter(h => h.transactionType == 1 || (h.transactionType == 3 && h.sndStockId == this.theStock.stockId))
+
+        mainFilterdArr_in =
+          this._stockService.HandleAddtoStockPrimArry
+            .filter(h => ((h.stockId == this.theStock.stockId && h.transactionType == 1)
+              || (h.sndStockId == this.theStock.stockId && h.transactionType == 3))
+              && h.date_time < match_toDate);
+        //.filter(h => h.transactionType == 1 || h.transactionType == 3)
 
         mainFilterdArr_sold = this._stockService.HandleAddtoStockPrimArry
           .filter(h => h.transactionType == 2 && h.stockId == this.theStock.stockId && h.date_time > match_fromDate && h.date_time < match_toDate)
@@ -145,18 +149,18 @@ export class ProfitsComponent implements OnInit {
           return date.date_time > match_fromDate && date.date_time < match_toDate
         });
 
-        sorted = true;
+        this.filtered = true;
 
       } else {
 
         mainFilterdArr_in = this._stockService.HandleAddtoStockPrimArry
-          .filter(h => h.stockId == this.theStock.stockId)
-          .filter(h => h.transactionType == 1 || (h.transactionType == 3 && h.sndStockId == this.theStock.stockId));
+          .filter(h => (h.stockId == this.theStock.stockId && h.transactionType == 1)
+            || (h.sndStockId == this.theStock.stockId && h.transactionType == 3))
 
         mainFilterdArr_sold = this._stockService.HandleAddtoStockPrimArry
           .filter(h => h.transactionType == 2 && h.stockId == this.theStock.stockId);
 
-        sorted = false;
+        this.filtered = false;
 
       };
 
@@ -232,10 +236,8 @@ export class ProfitsComponent implements OnInit {
           invoic = {
             ...invoic,
             date: () => {
-              let day = new Date(invoic.date_time).getDate();
-              let month = new Date(invoic.date_time).getMonth();
-              let year = new Date(invoic.date_time).getFullYear();
-              return `${day}-${month}-${year}`
+              let i = invoic.date_time.indexOf('T')
+              return invoic.date_time.slice(0, i);
             },
             time: new Date(invoic.date_time).getTime(),
           };
@@ -250,10 +252,8 @@ export class ProfitsComponent implements OnInit {
           invoic = {
             ...invoic,
             date: () => {
-              let day = new Date(invoic.date_time).getDate();
-              let month = new Date(invoic.date_time).getMonth();
-              let year = new Date(invoic.date_time).getFullYear();
-              return `${day}-${month}-${year}`
+              let i = invoic.date_time.indexOf('T')
+              return invoic.date_time.slice(0, i);
             },
             time: new Date(invoic.date_time).getTime()
           };
@@ -265,6 +265,34 @@ export class ProfitsComponent implements OnInit {
 
       for (let i = 0; i < stockProds.length; i++) {
 
+        let inDateArr: any[] = [];
+        let betweenDateArry: any[] = []
+
+        if (this.filtered) {
+          let between: any[]
+          between =
+            this._stockService.HandleAddtoStockPrimArry
+              .filter(h => ((h.stockId == this.theStock.stockId && h.transactionType == 1)
+                || (h.sndStockId == this.theStock.stockId && h.transactionType == 3))
+                && h.date_time < match_toDate && h.date_time > match_fromDate
+                && (h.productId == stockProds[i].productId)
+              );
+
+          betweenDateArry = between.map(invoic => {
+            invoic = {
+              ...invoic,
+              date: () => {
+                let i = invoic.date_time.indexOf('T')
+                return invoic.date_time.slice(0, i);
+              },
+              time: new Date(invoic.date_time).getTime()
+            };
+            return invoic
+          }).sort(this._servicesService.sortArry('time'));
+
+          inDateArr = betweenDateArry.map(product => product.date());
+        };
+
         let mainArry = {
 
           in: {
@@ -272,210 +300,214 @@ export class ProfitsComponent implements OnInit {
             qtyArr: () => mainArry.in.allDetails.map(product => product.Qty),
             pricesArr: () => mainArry.in.allDetails.map(product => product.price),
             price_X_qty: () => mainArry.in.allDetails.map(product => product.price * product.Qty),
-            dateArry: () => mainArry.in.allDetails.map(product => product.date),
+            dateArry: () => mainArry.in.allDetails.map(product => product.date()),
           },
           sold: {
             allDetails: filterdArr_sold.filter(product => product.productId == stockProds[i].productId),
             qtyArr: () => mainArry.sold.allDetails.map(product => product.Qty),
             pricesArr: () => mainArry.sold.allDetails.map(product => product.price),
             price_X_qty: () => mainArry.sold.allDetails.map(product => product.price * product.Qty),
-            dateArry: () => mainArry.sold.allDetails.map(product => product.date),
+            dateArry: () => mainArry.sold.allDetails.map(product => product.date()),
           },
-          everyDayArr: () => {
-            let unique = mainArry.in.dateArry() //[...new Set(mainArry.in.dateArry())];
+          everyDayArrIn: () => {
+            let unique = [];
+            if (this.filtered) { // array if dateFiltered
+              unique = [...new Set(inDateArr)]
+            } else {
+              unique = [...new Set(mainArry.in.dateArry())]; // array without dateFiltered
+            }
             return unique
-          }
-
-        };
-
-        let lastIndex_in = mainArry.in.pricesArr().length - 1;
-        let lastIndex_Sold = mainArry.sold.pricesArr().length - 1;
-
-        let pricesDetailsArr = {
-          in: {
-            totalPrices: this._servicesService.sumArry(mainArry.in.price_X_qty()),
-            maxPrice: Math.max(...mainArry.in.pricesArr()),
-            minPrice: Math.min(...mainArry.in.pricesArr()),
-            totalQty: this._servicesService.sumArry(mainArry.in.qtyArr()),
-            avarege: () => {
-              if (this._servicesService.sumArry(mainArry.in.qtyArr()) != 0) {
-                return (this._servicesService.sumArry(mainArry.in.price_X_qty()) / this._servicesService.sumArry(mainArry.in.qtyArr()))
-              } else {
-                return 0
-              }
-            },
           },
-          sold: {
-            totalPrices: this._servicesService.sumArry(mainArry.sold.price_X_qty()),
-            maxPrice: Math.max(...mainArry.sold.pricesArr()),
-            minPrice: Math.min(...mainArry.sold.pricesArr()),
-            totalQty: this._servicesService.sumArry(mainArry.sold.qtyArr()),
-            avarege: (this._servicesService.sumArry(mainArry.sold.price_X_qty()) / this._servicesService.sumArry(mainArry.sold.qtyArr())),
-          }
+
         };
 
-        if (pricesDetailsArr.sold.totalQty != 0) {
+        if (mainArry.sold.qtyArr().length > 0) {
 
-          if (pricesDetailsArr.sold.maxPrice == Infinity || pricesDetailsArr.sold.maxPrice == -Infinity) {
-            pricesDetailsArr.sold.maxPrice = 0;
-          };
+          let lastIndex_in = mainArry.in.pricesArr().length - 1;
+          let lastIndex_Sold = mainArry.sold.pricesArr().length - 1;
+          let mathAvr = (this._servicesService.sumArry(mainArry.in.price_X_qty()) / this._servicesService.sumArry(mainArry.in.qtyArr()))
 
-          if (pricesDetailsArr.sold.minPrice == Infinity || pricesDetailsArr.sold.minPrice == -Infinity) {
-            pricesDetailsArr.sold.minPrice = 0;
-          };
+          /* console.log({
+            product: stockProds[i].productName,
+            in: mainArry.everyDayArrIn(),
+            qtySold: mainArry.sold.qtyArr(),
+            avr: mathAvr
+          }); */
 
-          if (pricesDetailsArr.in.maxPrice == Infinity || pricesDetailsArr.in.maxPrice == -Infinity) {
-            pricesDetailsArr.in.maxPrice = 0;
-          };
-
-          if (pricesDetailsArr.in.minPrice == Infinity || pricesDetailsArr.in.minPrice == -Infinity) {
-            pricesDetailsArr.in.minPrice = 0;
-          };
-
-          let productProfit = ((Math.floor(pricesDetailsArr.sold.avarege - Math.floor(pricesDetailsArr.in.avarege()))) * pricesDetailsArr.sold.totalQty)
-
-          let prodDetails = { // the main object
-
-            name: stockProds[i].productName,
-            qtyRemain: () => {
-              if (sorted) {
-                let allIn = this._stockService.HandleAddtoStockPrimArry
-                  .filter(h => h.stockId == this.theStock.stockId)
-                  .filter(h => h.transactionType == 1 || (h.transactionType == 3 && h.sndStockId == this.theStock.stockId))
-                  .map(product => product.Qty);
-
-                let allOut = this._stockService.HandleAddtoStockPrimArry
-                  .filter(h => h.transactionType == 2 && h.stockId == this.theStock.stockId)
-                  .map(product => product.Qty);
-
-                console.log(allIn)
-
-                return (this._servicesService.sumArry(allIn) - this._servicesService.sumArry(allOut))
-
-              } else {
-                return (pricesDetailsArr.in.totalQty - pricesDetailsArr.sold.totalQty)
-              }
-
-            },
-            qtyRemainVal: ((pricesDetailsArr.in.totalQty - pricesDetailsArr.sold.totalQty) * Math.floor(pricesDetailsArr.in.avarege())),
-
+          let pricesDetailsArr = {
             in: {
-              qty: pricesDetailsArr.in.totalQty,
-              qtyVal: pricesDetailsArr.in.totalPrices,
-              maxPrice: pricesDetailsArr.in.maxPrice,
-              minPrice: pricesDetailsArr.in.minPrice,
-              avr: Math.floor(pricesDetailsArr.in.avarege()),
+              totalPrices: this._servicesService.sumArry(mainArry.in.price_X_qty()),
+              maxPrice: Math.max(...mainArry.in.pricesArr()),
+              minPrice: Math.min(...mainArry.in.pricesArr()),
+              totalQty: this._servicesService.sumArry(mainArry.in.qtyArr()),
               lastPrice: () => mainArry.in.pricesArr()[lastIndex_in],
+              avarege: () => {
+                if (mainArry.everyDayArrIn().length > 0) {
+                  return mathAvr
+                } else {
+                  return pricesDetailsArr.in.lastPrice()
+                }
+              },
             },
-
             sold: {
-              qty: pricesDetailsArr.sold.totalQty,
-              qtyVal: pricesDetailsArr.sold.totalPrices,
-              maxPrice: pricesDetailsArr.sold.maxPrice,
-              minPrice: pricesDetailsArr.sold.minPrice,
-              avr: Math.floor(pricesDetailsArr.sold.avarege),
-              lastPrice: () => mainArry.sold.pricesArr()[lastIndex_Sold],
-            },
+              totalPrices: this._servicesService.sumArry(mainArry.sold.price_X_qty()),
+              maxPrice: Math.max(...mainArry.sold.pricesArr()),
+              minPrice: Math.min(...mainArry.sold.pricesArr()),
+              totalQty: this._servicesService.sumArry(mainArry.sold.qtyArr()),
+              avarege: (this._servicesService.sumArry(mainArry.sold.price_X_qty()) / this._servicesService.sumArry(mainArry.sold.qtyArr())),
+            }
+          };
 
-            profits: {
-              profit: productProfit,
-              profitCond: () => {
-                if (prodDetails.profits.profit < 0) {
-                  return 'خسائر'
-                } else {
-                  return 'ارباح'
-                }
-              },
-              profitsColor: () => {
-                if (prodDetails.profits.profit < 0) {
-                  return 'bg-danger text-light'
-                } else {
-                  return 'bg-success text-light'
-                }
-              },
-              perc: () => {
-                let perc = Math.floor((prodDetails.profits.profit / prodDetails.sold.qtyVal) * 100)
-                return `${perc}%`
-              }
-            },
+          if (pricesDetailsArr.sold.totalQty != 0) {
 
-            profitLastPrice: {
-              val: () => {
-                if (prodDetails.qtyRemain() < 0) {
-                  return 0
-                } else {
-                  return Math.ceil((prodDetails.sold.lastPrice() - prodDetails.in.avr) * prodDetails.qtyRemain());
+            if (pricesDetailsArr.sold.maxPrice == Infinity || pricesDetailsArr.sold.maxPrice == -Infinity) {
+              pricesDetailsArr.sold.maxPrice = 0;
+            };
+
+            if (pricesDetailsArr.sold.minPrice == Infinity || pricesDetailsArr.sold.minPrice == -Infinity) {
+              pricesDetailsArr.sold.minPrice = 0;
+            };
+
+            if (pricesDetailsArr.in.maxPrice == Infinity || pricesDetailsArr.in.maxPrice == -Infinity) {
+              pricesDetailsArr.in.maxPrice = 0;
+            };
+
+            if (pricesDetailsArr.in.minPrice == Infinity || pricesDetailsArr.in.minPrice == -Infinity) {
+              pricesDetailsArr.in.minPrice = 0;
+            };
+
+            let productProfit = ((Math.floor(pricesDetailsArr.sold.avarege - Math.floor(pricesDetailsArr.in.avarege()))) * pricesDetailsArr.sold.totalQty)
+
+            let prodDetails = { // the main object
+
+              name: stockProds[i].productName,
+              productId: stockProds[i].productId,
+              qtyRemain: () => (pricesDetailsArr.in.totalQty - pricesDetailsArr.sold.totalQty),
+              qtyRemainVal: ((pricesDetailsArr.in.totalQty - pricesDetailsArr.sold.totalQty) * Math.floor(pricesDetailsArr.in.avarege())),
+              onlyProfitMsg: () => {
+                if (this.filtered) {
+                  return `كمية مباعة ${pricesDetailsArr.sold.totalQty}`
+                } else if (prodDetails.qtyRemain() == 0) {
+                  return `لا يوجد رصيد لهذا الصنف`
                 }
               },
-              color: () => {
-                if (prodDetails.profitLastPrice.val() >= 0) {
-                  return 'text-dark'
-                } else {
-                  return 'text-danger font-weight-bold'
-                }
+
+              in: {
+                qty: pricesDetailsArr.in.totalQty,
+                qtyVal: pricesDetailsArr.in.totalPrices,
+                maxPrice: pricesDetailsArr.in.maxPrice,
+                minPrice: pricesDetailsArr.in.minPrice,
+                lastPrice: () => mainArry.in.pricesArr()[lastIndex_in],
+                avr: Math.floor(pricesDetailsArr.in.avarege()),
               },
-              percentage: () => {
-                if (prodDetails.qtyRemainVal != 0) {
-                  let perc = Math.floor((prodDetails.profitLastPrice.val() / prodDetails.qtyRemainVal) * 100)
-                  return `${perc}%`
-                } else {
-                  return '0%'
-                }
+
+              sold: {
+                qty: pricesDetailsArr.sold.totalQty,
+                qtyVal: pricesDetailsArr.sold.totalPrices,
+                maxPrice: pricesDetailsArr.sold.maxPrice,
+                minPrice: pricesDetailsArr.sold.minPrice,
+                lastPrice: () => mainArry.sold.pricesArr()[lastIndex_Sold],
+                avr: Math.floor(pricesDetailsArr.sold.avarege),
               },
-              total: {
-                val: () => prodDetails.profitLastPrice.val() + prodDetails.profits.profit,
-                color: () => {
-                  if (prodDetails.profitLastPrice.total.val() >= 0) {
-                    return 'bg-success text-white'
+
+              profits: {
+                profit: productProfit,
+                profitCond: () => {
+                  if (prodDetails.profits.profit < 0) {
+                    return 'خسائر'
                   } else {
-                    return 'bg-danger text-white'
-                  }
-                }
-              }
-            },
-
-            recommendedPrice: {
-              price: () => {
-                return ((prodDetails.in.avr * 10) / 100) + prodDetails.in.avr
-              },
-              profit: () => {
-                if (prodDetails.qtyRemain() < 0) {
-                  return 0
-                } else {
-                  return Math.ceil(prodDetails.recommendedPrice.price() - prodDetails.in.avr) * prodDetails.qtyRemain()
-                };
-              },
-              percentage: () => {
-                if (prodDetails.qtyRemainVal != 0) {
-                  let perc = Math.floor((prodDetails.recommendedPrice.profit() / prodDetails.qtyRemainVal) * 100)
-                  return `${perc}%`
-                } else {
-                  return '0%'
-                }
-              },
-              total: {
-                val: () => prodDetails.recommendedPrice.profit() + prodDetails.profits.profit,
-                color: () => {
-                  if (prodDetails.recommendedPrice.total.val() >= 0) {
-                    return 'bg-success text-white'
-                  } else {
-                    return 'bg-danger text-white'
+                    return 'ارباح'
                   }
                 },
+                profitsColor: () => {
+                  if (prodDetails.profits.profit < 0) {
+                    return 'bg-danger text-light'
+                  } else {
+                    return 'bg-success text-light'
+                  }
+                },
+                perc: () => {
+                  let perc = Math.floor((prodDetails.profits.profit / prodDetails.sold.qtyVal) * 100)
+                  return `${perc}%`
+                }
               },
-            },
 
-          }; // prodDetails
+              profitLastPrice: {
+                val: () => {
+                  if (prodDetails.qtyRemain() < 0) {
+                    return 0
+                  } else {
+                    return Math.ceil((prodDetails.sold.lastPrice() - prodDetails.in.avr) * prodDetails.qtyRemain());
+                  }
+                },
+                color: () => {
+                  if (prodDetails.profitLastPrice.val() >= 0) {
+                    return 'text-dark'
+                  } else {
+                    return 'text-danger font-weight-bold'
+                  }
+                },
+                percentage: () => {
+                  if (prodDetails.qtyRemainVal != 0) {
+                    let perc = Math.floor((prodDetails.profitLastPrice.val() / prodDetails.qtyRemainVal) * 100)
+                    return `${perc}%`
+                  } else {
+                    return '0%'
+                  }
+                },
+                total: {
+                  val: () => prodDetails.profitLastPrice.val() + prodDetails.profits.profit,
+                  color: () => {
+                    if (prodDetails.profitLastPrice.total.val() >= 0) {
+                      return 'bg-success text-white'
+                    } else {
+                      return 'bg-danger text-white'
+                    }
+                  }
+                }
+              },
 
-          this.profitArr.push(prodDetails);
+              recommendedPrice: {
+                price: () => {
+                  return ((prodDetails.in.avr * 10) / 100) + prodDetails.in.avr
+                },
+                profit: () => {
+                  if (prodDetails.qtyRemain() < 0) {
+                    return 0
+                  } else {
+                    return Math.ceil(prodDetails.recommendedPrice.price() - prodDetails.in.avr) * prodDetails.qtyRemain()
+                  };
+                },
+                percentage: () => {
+                  if (prodDetails.qtyRemainVal != 0) {
+                    let perc = Math.floor((prodDetails.recommendedPrice.profit() / prodDetails.qtyRemainVal) * 100)
+                    return `${perc}%`
+                  } else {
+                    return '0%'
+                  }
+                },
+                total: {
+                  val: () => prodDetails.recommendedPrice.profit() + prodDetails.profits.profit,
+                  color: () => {
+                    if (prodDetails.recommendedPrice.total.val() >= 0) {
+                      return 'bg-success text-white'
+                    } else {
+                      return 'bg-danger text-white'
+                    }
+                  },
+                },
+              },
 
-          if (stockProds[i].productCost != prodDetails.in.avr) {
-            stockProds[i].productCost = prodDetails.in.avr;
-            this._stockService.updateStockPridge(stockProds[i]).subscribe();
-          };
+            }; // prodDetails
 
-        }; // if (pricesDetailsArr.sold.totalQty != 0)
+            this.profitArr.push(prodDetails);
+            if (!this.filtered && (stockProds[i].productCost != prodDetails.in.avr)) {
+              stockProds[i].productCost = prodDetails.in.avr;
+              this._stockService.updateStockPridge(stockProds[i]).subscribe();
+            };
 
+          }; // if (pricesDetailsArr.sold.totalQty != 0)
+        }
       };
 
       return Promise.resolve(this.profitArr);
@@ -531,15 +563,27 @@ export class ProfitsComponent implements OnInit {
 
   showStockProfitsPre(stock) {
 
-    let filterdArr = this._stockService.HandleAddtoStockPrimArry.filter(h => h.transactionType == 2 && h.stockId == stock.stockId)
+    let match_fromDate = this.dateSortFrom + 'T00:00';
+    let match_toDate = this.dateSortTo + 'T23:59';
 
-    let stockProds = this._stockService.handleBackEnd.filter(stockF => stockF.stockId == stock.stockId)
+    let filterdArr = []
+
+    if (!this.filtered) {
+      filterdArr = this._stockService.HandleAddtoStockPrimArry.filter(h => h.transactionType == 2 && h.stockId == stock.stockId)
+    } else {
+      filterdArr = this._stockService.HandleAddtoStockPrimArry
+        .filter(h => (h.transactionType == 2 && h.stockId == stock.stockId) && h.date_time < match_toDate && h.date_time > match_fromDate)
+    };
+
+    console.log(this.filtered)
+
+    //let stockProds = this.profitArr.filter(prod => prod.productId) //this._stockService.handleBackEnd.filter(stockF => stockF.stockId == stock.stockId)
 
     this.profitArrCust = []
 
     for (let i = 0; i < filterdArr.length; i++) {
 
-      let productdet: HandleBackEnd = stockProds.find(prod => filterdArr[i].productId == prod.productId);
+      let productdet = this.profitArr.find(prod => filterdArr[i].productId == prod.productId);
       let itemDate = new Date(filterdArr[i].date_time);
       let theDate = `${itemDate.getDate()}-${itemDate.getMonth() + 1}-${itemDate.getFullYear()}`;
 
@@ -551,11 +595,11 @@ export class ProfitsComponent implements OnInit {
           customerName: filterdArr[i].customerName,
           productName: filterdArr[i].productName,
           Qty: filterdArr[i].Qty,
-          productCost: productdet.productCost,
+          productCost: productdet.in.avr,
           price: filterdArr[i].price,
-          unitProfit: Math.ceil(filterdArr[i].price - productdet.productCost),
+          unitProfit: Math.ceil(filterdArr[i].price - productdet.in.avr),
           color: '',
-          totalProfit: Math.ceil((filterdArr[i].price - productdet.productCost) * filterdArr[i].Qty),
+          totalProfit: Math.ceil((filterdArr[i].price - productdet.in.avr) * filterdArr[i].Qty),
           colorTotal: ''
         };
 
