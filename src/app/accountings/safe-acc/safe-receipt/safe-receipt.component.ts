@@ -413,6 +413,7 @@ export class SafeReceiptComponent implements OnInit {
   theOtherAccInfo: OtherAcc;
 
   accNameChanged() {
+
     this.theOtherAccInfo = this.getAccInfo(this.safeReceipt_inpts.AccName);
 
     if (this.theOtherAccInfo == undefined) {
@@ -428,6 +429,13 @@ export class SafeReceiptComponent implements OnInit {
       $('#AccName').removeClass('is-invalid').addClass('is-valid');
       this.safeReceipt_inpts.currentAccVal = this.theOtherAccInfo.currentAccVal;
     };
+
+    if (this.safeReceipt_inpts.AccName.includes('سيف')) {
+      $('#AccName').addClass('bg-info text-white')
+    } else {
+      $('#AccName').removeClass('bg-info text-white')
+    }
+
     this.checkReceiptValid();
   };
 

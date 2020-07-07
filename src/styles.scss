@@ -1,9 +1,13 @@
 /* You can add global styles to this file, and also import other style files */
+
+$shadow : 0 .5rem 1rem rgba(0,0,0,.15);
+
 * {
   font-family: 'Droid Arabic Kufi', sans-serif;
   text-align: right;
   direction: rtl;
 }
+
 body {
   background-color: rgb(228, 230, 235); //rgb(36, 36, 36);  //rgb(204, 206, 218); //rgb(241, 242, 246);
   position: relative;
@@ -72,11 +76,11 @@ background-color: rgb(22, 76, 117); //rgba(0, 7, 7, 0.95); //rgb(26, 51, 70); //
 color: white;
 }
 
-.cardBorderY {
+/* .cardBorderY {
   border-radius: 5px ;
   border-top: solid 3px rgb(22, 76, 117);
   border-bottom: solid 3px rgb(22, 76, 117);
-}
+} */
 
 .lightBg {
 color: black;
@@ -89,7 +93,7 @@ background-color: rgba(214, 234, 241, 0.95);
 }
 
 .darkGrayBg {
-  background-color: rgb(211, 211, 211);
+  background-color: rgb(202, 202, 202);
   color: black;
 }
 
@@ -104,6 +108,9 @@ background-color: rgba(214, 234, 241, 0.95);
   padding-top: 20px;
   margin-right: 0px;
   margin-left: 0px;
+  border-radius: 5px;
+  border-top: solid 1.2px rgb(22, 76, 117);
+  border-bottom: solid 1.2px rgb(22, 76, 117);
 }
 
 .tableBody {
@@ -160,7 +167,7 @@ background-color: rgba(214, 234, 241, 0.95);
       }
       tbody {
         flex: 1; //variable height
-        overflow-y: scroll;
+        overflow-y: auto;
         margin-bottom: 15px;
       }
       tr {
@@ -258,15 +265,22 @@ body .wideScreen {
  //background-color: rgb(228, 228, 228);
  margin-right: 20px;
  margin-left: 20px;
- box-shadow: 0 .5rem 1rem rgba(0,0,0,.15) //0 15px 30px rgba(0, 0, 0, 0.486);
+ box-shadow: $shadow; // 0 .5rem 1rem rgba(0,0,0,.15) //0 15px 30px rgba(0, 0, 0, 0.486);
 }
 
 .inpCard_row {
   background-color: whitesmoke;
-  box-shadow: 0 .5rem 1rem rgba(0,0,0,.15); //0 15px 30px rgba(0, 0, 0, 0.486);
+  box-shadow: $shadow; // 0 .5rem 1rem rgba(0,0,0,.15); //0 15px 30px rgba(0, 0, 0, 0.486);
   border-radius: 5px;
 };
 
+.rowTableCard {
+  padding-top: 10px;
+  color: black;
+  background-color: rgb(228, 228, 228);
+  border-radius: 5px;
+  box-shadow: $shadow;
+}
 
 .settinLable {
  font-weight: bold;

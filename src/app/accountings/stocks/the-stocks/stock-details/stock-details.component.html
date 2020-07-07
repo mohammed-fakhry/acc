@@ -11,7 +11,8 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-3" id="stockDetHead">
-            <div class="cardBorderY stickyInp">
+            <!-- cardBorderY -->
+            <div class="stickyInp">
                 <div class="card">
                     <div class="d-flex justify-content-between">
                         <h3 class="cardHeader">مخزن : {{_stockService.makeStockArryView.stockName}}</h3>
@@ -36,7 +37,7 @@
                     </div>
                     <hr>
                     <div class="d-flex justify-content-around mx-2 mb-2">
-                        <input placeholder="بحث صنف" class="form-control col" type="search"
+                        <input placeholder="بحث باسم الصنف" class="form-control col" type="search"
                             [(ngModel)]='productSearchTxt'>
                     </div>
                 </div>
@@ -45,7 +46,7 @@
         </div>
         <div class="col-md-9" id="stockDetail">
             <!--table-->
-            <div class="cardBorderY">
+            <!-- <div class="cardBorderY"> -->
                 <div class="card">
                     <div class="panel-body panel-flex-table" id="stockDetailtable">
                         <table class="flex-table table table-hover">
@@ -70,7 +71,7 @@
                         </table>
                     </div>
                 </div>
-            </div>
+            <!-- </div> -->
         </div>
     </div>
 </div>

@@ -367,6 +367,14 @@ export class TheStocksComponent implements OnInit {
 
   showAddToStockPrem() {
 
+    let getProds = new Promise((res) => {
+      this._stockService.getProducts().subscribe((data: ProductsClass[]) => {
+        this._stockService.allProducts = data;
+        res(data);
+      });
+    })
+    
+
     let StockTrance = new Promise((res) => {
       this._stockService.getStockTransactionList().subscribe((data: StockTransaction[]) => {
         //this._stockService.stockTransactionArr = data;
@@ -381,7 +389,7 @@ export class TheStocksComponent implements OnInit {
       });
     });
 
-    Promise.all([StockTrance, Handle])
+    Promise.all([getProds, StockTrance, Handle])
       .then((res) => this.addInvArry = this.createTheInvoiceArry(1, res[0], res[1]))
       .then(() => {
         this.animateToggle('.stocksClass', '#addToStockPrem');
@@ -407,6 +415,13 @@ export class TheStocksComponent implements OnInit {
   newTranceInvNumber: number;
   showTranceStockPrem() {
 
+    let getProds = new Promise((res) => {
+      this._stockService.getProducts().subscribe((data: ProductsClass[]) => {
+        this._stockService.allProducts = data;
+        res(data);
+      });
+    })
+
     let StockTrance = new Promise((res) => {
       this._stockService.getStockTransactionList().subscribe((data: StockTransaction[]) => {
         //this._stockService.stockTransactionArr = data;
@@ -421,7 +436,7 @@ export class TheStocksComponent implements OnInit {
       });
     });
 
-    Promise.all([StockTrance, Handle])
+    Promise.all([getProds, StockTrance, Handle])
       .then((res) => this.tranceInvArry = this.createTheInvoiceArry(3, res[0], res[1]))
       .then(() => {
 
@@ -450,6 +465,13 @@ export class TheStocksComponent implements OnInit {
   newMinInvNumber: number;
   showMinToStockPrem() {
 
+    let getProds = new Promise((res) => {
+      this._stockService.getProducts().subscribe((data: ProductsClass[]) => {
+        this._stockService.allProducts = data;
+        res(data);
+      });
+    })
+
     let StockTrance = new Promise((res) => {
       this._stockService.getStockTransactionList().subscribe((data: StockTransaction[]) => {
         //this._stockService.stockTransactionArr = data;
@@ -464,7 +486,7 @@ export class TheStocksComponent implements OnInit {
       });
     });
 
-    Promise.all([StockTrance, Handle])
+    Promise.all([getProds, StockTrance, Handle])
       .then((res) => {
         this.minInvArry = this.createTheInvoiceArry(2, res[0], res[1])
       })

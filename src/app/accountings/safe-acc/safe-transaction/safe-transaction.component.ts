@@ -88,8 +88,7 @@ export class SafeTransactionComponent implements OnInit {
     $('#containerLoader').fadeIn();
 
     $('#searchSafeTrance').attr({ 'disabled': false });
-    $('#SafeReportTable').show();
-
+    
     //this.searchSafeTrance = '';
 
     let fromDate = $('#fromDateSafeRe').val();
@@ -124,7 +123,10 @@ export class SafeTransactionComponent implements OnInit {
         
       };
     };
-    $('#containerLoader').fadeOut();
+    $('#containerLoader').fadeOut(0,() => {
+      $('#SafeReportTable').slideDown('slow');
+    });
+    
   };
 
 }; // end

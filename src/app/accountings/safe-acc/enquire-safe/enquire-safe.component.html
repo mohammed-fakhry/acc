@@ -1,6 +1,6 @@
 <!--table-->
 <div class="card mt-3">
-    <div class="panel-body panel-flex-table">
+    <div class="panel-body panel-flex-table standTable" style="height: 100%;">
         <table class="flex-table table table-hover">
             <thead class="navHeader">
                 <tr>
@@ -10,7 +10,7 @@
                     <th style="flex: .5">تعديل</th>
                 </tr>
             </thead>
-            <tbody class=" mt-3 tableBody">
+            <tbody class=" mt-3 tableBody" style="overflow-y: auto; ">
                 <tr *ngFor="let safe of _safeDataService.safeList">
                     <td class="textBtn btn-outline-secondary" id="showSafeTranaction"
                         (click)="showSafeTranaction(safe)" style="flex: 2">{{safe.safeName}}</td>

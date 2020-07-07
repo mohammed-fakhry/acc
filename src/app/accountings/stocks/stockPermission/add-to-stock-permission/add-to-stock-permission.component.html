@@ -7,8 +7,8 @@
         </h4>
         <hr>
         <div class="d-flex flex-row-reverse">
-            <button class="btn btn-danger mr-2" id="deleteAddPrem" (click)="deleteAddInvoice()">نعم</button>
-            <button class="btn btn-outline-primary" id="hideFadeLayerAP">الغاء</button>
+            <button class="btn btn-outline-danger mr-2" id="deleteAddPrem" (click)="deleteAddInvoice()">نعم</button>
+            <button class="btn btn-outline-info" id="hideFadeLayerAP">الغاء</button>
         </div>
     </div>
 </div>
@@ -42,7 +42,7 @@
             <!--<div class="text-center">رقم الفاتورة ( {{invNum}} )</div>-->
             <input disabled id="invNum" class="text-center" type="text" value="رقم الفاتورة ( {{invNum}} )">
             <input [(ngModel)]='date_time' type="datetime-local">
-            <button id="deleteAddInvoice" style="display: none;" class="btn btn-danger"
+            <button id="deleteAddInvoice" style="display: none;" class="btn btn-outline-danger"
                 [disabled]='deleteInvBtnDisabled' (click)="showDeleteAddInvoice()">حذف
                 الفاتورة</button>
         </div>

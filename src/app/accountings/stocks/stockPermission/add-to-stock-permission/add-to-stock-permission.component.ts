@@ -49,8 +49,8 @@ export class AddToStockPermissionComponent implements OnInit {
     this.getBackendData();
 
     $('#hideFadeLayerAP').click(function () {
-      $('#fadeLayerAP').fadeOut('fast');
-      $('.askForDelete').fadeOut('fast').removeClass('animate')
+      $('#fadeLayerAP').hide();
+      $('.askForDelete').removeClass('animate');
     })
 
   } // ngOnInit
@@ -150,11 +150,11 @@ export class AddToStockPermissionComponent implements OnInit {
       };
 
       if (this.invoiceInpArry[i].product == '') {
-        
+
         if (this.invoiceInpArry[i].price > 0 || this.invoiceInpArry[i].qty >= 0) {
-          
+
           if (this.invoiceInpArry[i + 1] != undefined) {
-            
+
             if (this.invoiceInpArry[i + 1].product != undefined || this.invoiceInpArry[i + 1].product != '' || this.invoiceInpArry[i + 1].product != null) {
               this.stockDetailsIdArr.push(this.invoiceInpArry[i].stockTransactionDetailsId)
               this.invoiceInpArry.splice(i, 1)
@@ -163,7 +163,7 @@ export class AddToStockPermissionComponent implements OnInit {
             } else {
               this.invoiceInpArry[i].price = null;
               this.invoiceInpArry[i].qty = null;
-              
+
               this.calcTotals()
             };
           };
@@ -361,29 +361,53 @@ export class AddToStockPermissionComponent implements OnInit {
         let getHandleBackEndInfo = this._stockService.handleBackEnd.find(handleInfo =>
           handleInfo.productId === theProductId && handleInfo.stockId === this.ivoiceItemesForEdit[v].stockId);
 
-        let indx = this._stockService.handleBackEnd.findIndex(
-          i => i.stockProductId === getHandleBackEndInfo.stockProductId
-        );
+        postStockPridgeObj = {
+          stockProductId: null,
+          productId: theProductId,
+          stockId: this.ivoiceItemesForEdit[v].stockId,
+          productCost: this.ivoiceItemesForEdit[v].price,
+          productQty: parseInt(this.ivoiceItemesForEdit[v].Qty),
+          productPrice: null,
+        }
 
-        if (getHandleBackEndInfo != undefined) {
-          postStockPridgeObj.productId = theProductId; // for edit and add
-          postStockPridgeObj.stockId = this.ivoiceItemesForEdit[v].stockId; // for edit and add
+        if (getHandleBackEndInfo == undefined) {
+          this._stockService.postStockPridge(postStockPridgeObj).subscribe();
 
+        } else if (getHandleBackEndInfo != undefined) {
+
+          let cost: number;
           allProductQty = getHandleBackEndInfo.productQty - parseInt(this.ivoiceItemesForEdit[v].Qty);
           productTotalsPriceAvr = (getHandleBackEndInfo.productCost * getHandleBackEndInfo.productQty)
             - (parseInt(this.ivoiceItemesForEdit[v].price) * parseInt(this.ivoiceItemesForEdit[v].Qty));
           if (allProductQty == 0) {
-            postStockPridgeObj.productCost = getHandleBackEndInfo.productCost;
+            cost = getHandleBackEndInfo.productCost;
           } else {
-            postStockPridgeObj.productCost = Math.floor(productTotalsPriceAvr / allProductQty) // price avarage
+            cost = Math.floor(productTotalsPriceAvr / allProductQty) // price avarage
           };
+
+          let indx = this._stockService.handleBackEnd.findIndex(
+            i => i.stockProductId === getHandleBackEndInfo.stockProductId
+          );
           postStockPridgeObj.stockProductId = getHandleBackEndInfo.stockProductId;
-          postStockPridgeObj.productQty = getHandleBackEndInfo.productQty - parseInt(this.ivoiceItemesForEdit[v].Qty);
+          postStockPridgeObj.productCost = cost;
 
           this._stockService.handleBackEnd[indx].productQty = postStockPridgeObj.productQty;
           this._stockService.handleBackEnd[indx].productCost = postStockPridgeObj.productCost;
 
           this._stockService.updateStockPridge(postStockPridgeObj).subscribe() // for stocks DB
+
+          //postStockPridgeObj.productId = theProductId; // for edit and add ***
+          //postStockPridgeObj.stockId = this.ivoiceItemesForEdit[v].stockId; // for edit and add ***
+          //allProductQty = getHandleBackEndInfo.productQty - parseInt(this.ivoiceItemesForEdit[v].Qty); // ***
+          //productTotalsPriceAvr = (getHandleBackEndInfo.productCost * getHandleBackEndInfo.productQty) // ***
+          //  - (parseInt(this.ivoiceItemesForEdit[v].price) * parseInt(this.ivoiceItemesForEdit[v].Qty)); // ***
+          //if (allProductQty == 0) { //*
+          //postStockPridgeObj.productCost = getHandleBackEndInfo.productCost;//*
+          //} else {
+          //postStockPridgeObj.productCost = Math.floor(productTotalsPriceAvr / allProductQty) // price avarage
+          //};//
+          //postStockPridgeObj.stockProductId = getHandleBackEndInfo.stockProductId;//*
+          //postStockPridgeObj.productQty = getHandleBackEndInfo.productQty - parseInt(this.ivoiceItemesForEdit[v].Qty); //*
         };
       };
     };
@@ -746,7 +770,7 @@ export class AddToStockPermissionComponent implements OnInit {
     this.showInvoiceDone();
     // delete invDetail when delete the productName
     if (this.stockDetailsIdArr.length != 0) {
-      for (let i = 0; i < this.stockDetailsIdArr.length ; i++) {
+      for (let i = 0; i < this.stockDetailsIdArr.length; i++) {
         this._stockService.deleteStockTransactionDetails(this.stockDetailsIdArr[i]).subscribe();
         console.log('detail id deleted')
       };
@@ -818,7 +842,7 @@ export class AddToStockPermissionComponent implements OnInit {
       this.date_time = this._service.date_time;
       $('#invNum').hide();
       $('#callInvoice').hide();
-      $('#addInvoiceForm').show();
+      $('#addInvoiceForm').slideDown('fast');
       $('#addNewInvoicetBtn').html("تسجيل");
       $('#deleteAddInvoice').hide();
       $('#stockTransactionId').val('')
@@ -875,17 +899,18 @@ export class AddToStockPermissionComponent implements OnInit {
       this.deleteInvBtnDisabled = false;
     };
     $('#callInvoice').hide();
-    $('#addInvoiceForm').show();
+    $('#addInvoiceForm').slideDown('fast');
 
   }; // showAddNewInvoice
 
   showDeleteAddInvoice() {
     $('#fadeLayerAP').show(0);
-    $('.askForDelete').show().addClass('animate');
+    $('.askForDelete').addClass('animate');
   };
 
   deleteAddInvoice() {
     $('#fadeLayerAP').hide();
+    $('.askForDelete').removeClass('animate');
     let stockTransId = $('#stockTransactionId').val();
     for (let i = 0; this.invoiceInpArry.length; i++) {
       if (this.invoiceInpArry[i].stockTransactionDetailsId == undefined) {

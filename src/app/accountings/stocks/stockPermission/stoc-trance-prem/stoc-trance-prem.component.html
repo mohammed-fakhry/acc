@@ -42,7 +42,7 @@
             <h2 class="cardHeader">اذن نقل</h2>
             <input disabled id="invNumTrance" class="text-center" type="text" value="رقم الفاتورة ( {{invNumTrance}} )">
             <input [(ngModel)]='_service.date_time' type="datetime-local">
-            <button id="deleteTranceInvoice" style="display: none;" class="btn btn-danger"
+            <button id="deleteTranceInvoice" style="display: none;" class="btn btn-outline-danger"
                 [disabled]='deleteInvTranceBtnDisabled' (click)="showDeleteTranceInvoice()">حذف
                 الفاتورة</button>
         </div>

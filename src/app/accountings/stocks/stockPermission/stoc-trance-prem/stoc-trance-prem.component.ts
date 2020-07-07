@@ -41,8 +41,8 @@ export class StocTrancePremComponent implements OnInit {
   ngOnInit() {
 
     $('#hideFadeLayerMP').click(function () {
-      $('.fadeLayer').fadeOut('fast');
-      $('.askForDelete').fadeOut('fast').removeClass('animate')
+      $('.hideFadeLayerMP').fadeOut('fast');
+      $('.askForDelete').removeClass('animate')
     })
 
   }
@@ -427,7 +427,7 @@ export class StocTrancePremComponent implements OnInit {
 
       $('#invNumTrance').hide();
       $('#callTranceInvoice').hide();
-      $('#tranceInvoiceForm').show();
+      $('#tranceInvoiceForm').slideDown('fast');
       $('#newTranceInvoicetBtn').html("تسجيل");
       $('#tranceStockTransactionId').val('');
       $('#deleteTranceInvoice').hide();
@@ -508,9 +508,8 @@ export class StocTrancePremComponent implements OnInit {
       }
 
       this.isAddQtyVaild();
-
       $('#callTranceInvoice').hide();
-      $('#tranceInvoiceForm').show();
+      $('#tranceInvoiceForm').slideDown('fast');
 
       this.deleteInvTranceBtnDisabled = true;
     };

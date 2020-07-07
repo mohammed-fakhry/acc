@@ -30,7 +30,7 @@ export class ProductsReportComponent implements OnInit {
   stockNameVaild: boolean;
 
   isProductNameVaild() {
-    $('#prodDetTable').hide();
+    $('#prodDetTable').slideUp('fast');
     this.productInpt = $('#productInpt').val();
     for (let i = 0; i < this._stockService.allProducts.length; i++) {
       if (this.productInpt == this._stockService.allProducts[i].productName) {
@@ -185,7 +185,7 @@ export class ProductsReportComponent implements OnInit {
 
         this.stockNameVaild = true;
         $('#stockNameForProdRep').addClass('is-invalid')
-        $('#prodDetTable').hide();
+        $('#prodDetTable').slideUp('fast');
         this.prodRepFormInvaild = true;
 
         //rej('productInpt is undefined')
@@ -330,7 +330,7 @@ export class ProductsReportComponent implements OnInit {
 
     getHandle.then(theMetod).then(() => {
 
-      $('#prodDetTable').show();
+      $('#prodDetTable').slideDown('fast');
       
     });
 

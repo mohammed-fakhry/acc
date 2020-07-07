@@ -44,8 +44,8 @@ export class MinFrmStockPermissionComponent implements OnInit {
     this.getBackendData();
 
     $('#hideFadeLayerMP').click(function () {
-      $('.fadeLayer').fadeOut('fast');
-      $('.askForDelete').fadeOut('fast').removeClass('animate')
+      $('.askForDelete').removeClass('animate');
+      $('#fadeLayerMP').hide();
     })
 
   } // ngOnInit
@@ -213,11 +213,11 @@ export class MinFrmStockPermissionComponent implements OnInit {
       }
 
       if (this.invoiceInpArry[i].product == '') {
-        
+
         if (this.invoiceInpArry[i].price > 0 || this.invoiceInpArry[i].qty >= 0) {
-          
+
           if (this.invoiceInpArry[i + 1] != undefined) {
-            
+
             if (this.invoiceInpArry[i + 1].product != undefined || this.invoiceInpArry[i + 1].product != '' || this.invoiceInpArry[i + 1].product != null) {
               this.stockDetailsIdArr.push(this.invoiceInpArry[i].stockTransactionDetailsId)
               this.invoiceInpArry.splice(i, 1)
@@ -226,7 +226,7 @@ export class MinFrmStockPermissionComponent implements OnInit {
             } else {
               this.invoiceInpArry[i].price = null;
               this.invoiceInpArry[i].qty = null;
-              
+
               this.calcTotals('checkVaild')
             };
           };
@@ -445,7 +445,7 @@ export class MinFrmStockPermissionComponent implements OnInit {
 
       $('#invNumMin').hide();
       $('#minCallInvoice').hide();
-      $('#minInvoiceForm').show();
+      $('#minInvoiceForm').slideDown('fast');
       $('#minNewInvoicetBtn').html("تسجيل")
       $('#deleteMinInvoice').hide();
       $('#minStockTransactionId').val('');
@@ -507,7 +507,7 @@ export class MinFrmStockPermissionComponent implements OnInit {
       }
       //this.isAddQtyVaild();
       $('#minCallInvoice').hide();
-      $('#minInvoiceForm').show();
+      $('#minInvoiceForm').slideDown('fast');
 
       let cCss = this.customerCss.find(cust => cust.name == theInvoiceInfo.customerName)
       this.custClass = cCss.css();
@@ -607,6 +607,8 @@ export class MinFrmStockPermissionComponent implements OnInit {
           productCost: getHandleInfo.productCost,
           productPrice: getHandleInfo.productPrice,
         };
+
+        postStockPridgeObj = new StockPridge()
 
         this._stockService.handleBackEnd[indx].productQty = postStockPridgeObj.productQty;
         this._stockService.updateStockPridge(postStockPridgeObj).subscribe() // for stocks DB
@@ -973,7 +975,7 @@ export class MinFrmStockPermissionComponent implements OnInit {
 
   deleteMinInvoice() {
 
-    $('.fadeLayer').hide();
+    $('.askForDelete').removeClass('animate');
     $('#fadeLayerMP').hide();
 
     let stockTransId = $('#minStockTransactionId').val();

@@ -7,8 +7,8 @@
         </h4>
         <hr>
         <div class="d-flex flex-row-reverse">
-            <button class="btn btn-danger mr-2" id="deleteMinPrem" (click)="deleteMinInvoice()">نعم</button>
-            <button class="btn btn-outline-primary" id="hideFadeLayerMP">الغاء</button>
+            <button class="btn btn-outline-danger mr-2" id="deleteMinPrem" (click)="deleteMinInvoice()">نعم</button>
+            <button class="btn btn-outline-info" id="hideFadeLayerMP">الغاء</button>
         </div>
     </div>
 </div>
@@ -42,7 +42,7 @@
             <h2 class="cardHeader text-danger">فاتورة بيع</h2>
             <input disabled id="invNumMin" class="text-center" type="text" value="رقم الفاتورة ( {{invNumMin}} )">
             <input [(ngModel)]='_service.date_time' type="datetime-local">
-            <button id="deleteMinInvoice" style="display: none;" class="btn btn-danger"
+            <button id="deleteMinInvoice" style="display: none;" class="btn btn-outline-danger"
                 [disabled]='deleteMinInvBtnDisabled' (click)="showDeleteMinInvoice()">حذف
                 الفاتورة</button>
         </div>
