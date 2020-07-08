@@ -762,6 +762,13 @@ export class AddToStockPermissionComponent implements OnInit {
 
   showInvoiceDone() {
     this._theStockComp.ngOnInit();
+    this._stockService.invoiceDoneMsg = {
+      invoiceKind: 'فاتورة شراء',
+      from: this.theCustomerInfo.customerName,
+      to: $('#stockNameForAdd').val(),
+      invoiceVal: null,
+      invoiceNote: $('#addInvoiceNote').val(),
+    }
     this._theStockComp.showFade_newInvoice('fade_addNewApBtn');
   };
 

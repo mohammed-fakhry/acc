@@ -174,9 +174,9 @@ export class SafeReceiptComponent implements OnInit {
       $('#deleteSafeReceipt').show();
       this.deleteReceiptCond = false;
     };
-
-    $('#add_SafeReceiptInside').show();
     $('#header_SafeRecipt').hide();
+    $('#add_SafeReceiptInside').show();
+    
   };
 
   validTests = {

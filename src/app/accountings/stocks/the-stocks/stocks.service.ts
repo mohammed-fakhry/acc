@@ -33,6 +33,14 @@ export class StocksService {
   stockTransactionDetailsArr: StockTransactionD[];
   makeInvoiceArry:any[];
 
+  invoiceDoneMsg = {
+    invoiceKind: null,
+    from: null,
+    to: null,
+    invoiceVal: null,
+    invoiceNote: null
+  }
+
   makeStockArryView: any = {
     stockId: 0,
     stockName: '',

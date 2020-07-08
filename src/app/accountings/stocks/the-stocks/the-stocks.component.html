@@ -16,6 +16,14 @@
     <div class="container card p-3 askForDelete" style="display: none;" id="stockPerDone">
         <h3 class="bg-info text-white p-3">تم التسجيل بنجاح</h3>
         <hr>
+        <!--  -->
+        <div>
+            <h5>{{_stockService.invoiceDoneMsg.invoiceKind}}</h5>
+            <h5>من : {{_stockService.invoiceDoneMsg.from}}</h5>
+            <h5>الى : {{_stockService.invoiceDoneMsg.to}}</h5>
+            <h5>بقيمة : {{_stockService.invoiceDoneMsg.invoiceVal}}</h5>
+            <h5>ملاحظات : {{_stockService.invoiceDoneMsg.invoiceNote}}</h5>
+        </div>
         <div class="d-flex flex-row-reverse">
             <!--fade_addNewApBtn-->
             <button class="btn btn-outline-info mr-2 fadeBtns" id="fade_addNewApBtn"
@@ -89,7 +97,7 @@
     </nav>
 </div>
 <!--stocksEnquiry-->
-<app-enquire-stocks class="stocksClass container" id="stocksEnquiry" style="display: block;"></app-enquire-stocks>
+<app-enquire-stocks class="stocksClass mainContainer" id="stocksEnquiry" style="display: block;"></app-enquire-stocks>
 <!--addNewStock-->
 <app-add-stocks class="stocksClass mainContainer" id="addNewStock"></app-add-stocks>
 <!--addNewProduct-->
