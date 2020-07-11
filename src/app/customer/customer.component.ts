@@ -358,16 +358,16 @@ export class CustomerComponent implements OnInit {
       if (c == 0) {
         this.customerInvArry[c].netTotal = parseInt(this.customerInvArry[c].invoiceTotalMin) - parseInt(this.customerInvArry[c].invoiceTotalAdd);
         if (this.customerInvArry[c].netTotal < 0) {
-          this.customerInvArry[c].netTotalColor = 'text-danger'
+          this.customerInvArry[c].netTotalColor = 'lightBg text-danger'
         } else {
-          this.customerInvArry[c].netTotalColor = 'text-dark'
+          this.customerInvArry[c].netTotalColor = 'lightBg text-dark'
         }
       } else {
         this.customerInvArry[c].netTotal = parseInt(this.customerInvArry[c - 1].netTotal) - parseInt(this.customerInvArry[c].invoiceTotalAdd) + parseInt(this.customerInvArry[c].invoiceTotalMin)
         if (this.customerInvArry[c].netTotal < 0) {
-          this.customerInvArry[c].netTotalColor = 'text-danger'
+          this.customerInvArry[c].netTotalColor = 'lightBg text-danger'
         } else {
-          this.customerInvArry[c].netTotalColor = 'text-dark'
+          this.customerInvArry[c].netTotalColor = 'lightBg text-dark'
         }
       }
     }

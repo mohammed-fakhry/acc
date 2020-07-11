@@ -952,18 +952,28 @@ export class MinFrmStockPermissionComponent implements OnInit {
 
   showInvoiceDone() {
     this._theStockComp.ngOnInit();
+    this._stockService.invoiceDoneMsg = {
+      invoiceKind: 'فاتورة البيع',
+      from: $('#stockNameForMin').val(),
+      to: this.custNameInpt,
+      invoiceVal: parseInt(this.invoiceTotal),
+      invoiceNote: $('#minInvoiceNote').val(),
+    }
     this._theStockComp.showFade_newInvoice('fade_minNewApBtn');
   };
 
   minFrmStockPrem() {
     this.makeMinStockPremArry();
     this.showInvoiceDone();
+
     // delete invDetail when delete the productName
-    if (this.stockDetailsIdArr.length != 0) {
-      for (let i = 0; i < this.stockDetailsIdArr.length; i++) {
-        this._stockService.deleteStockTransactionDetails(this.stockDetailsIdArr[i]).subscribe();
-        console.log('detail id deleted')
-      };
+    if (this.stockDetailsIdArr != undefined) {
+      if (this.stockDetailsIdArr.length != 0) {
+        for (let i = 0; i < this.stockDetailsIdArr.length; i++) {
+          this._stockService.deleteStockTransactionDetails(this.stockDetailsIdArr[i]).subscribe();
+          console.log('detail id deleted')
+        };
+      }
     }
   }; // minFrmStockPrem
 

@@ -149,6 +149,7 @@ export class SafeAccComponent implements OnInit {
 
   showAddSafeReceipt() {
     this.getBackendData_Receipt();
+    
     //this._service.clearForm();
     $('#call_SafeRecieptBtn').html('ايصال جديد')
     $('.safeClass').not('#safeReceipt').hide();

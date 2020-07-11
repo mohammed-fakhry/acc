@@ -326,13 +326,17 @@ export class ProfitsComponent implements OnInit {
 
           let lastIndex_in = mainArry.in.pricesArr().length - 1;
           let lastIndex_Sold = mainArry.sold.pricesArr().length - 1;
-          //let mathAvr = (this._servicesService.sumArry(mainArry.in.price_X_qty()) / this._servicesService.sumArry(mainArry.in.qtyArr()));
+
+          let maxIn = Math.max(...mainArry.in.pricesArr());
+          let minIn = Math.min(...mainArry.in.pricesArr());
+          let maxSold = Math.max(...mainArry.sold.pricesArr());
+          let minSold = Math.min(...mainArry.sold.pricesArr());
 
           let pricesDetailsArr = {
             in: {
               totalPrices: this._servicesService.sumArry(mainArry.in.price_X_qty()),
-              maxPrice: Math.max(...mainArry.in.pricesArr()),
-              minPrice: Math.min(...mainArry.in.pricesArr()),
+              maxPrice: (maxIn == Infinity || maxIn == -Infinity) ? 0 : maxIn,
+              minPrice: (minIn == Infinity || minIn == -Infinity) ? 0 : minIn,
               totalQty: this._servicesService.sumArry(mainArry.in.qtyArr()),
               lastPrice: () => mainArry.in.pricesArr()[lastIndex_in],
               avarege: () => {
@@ -345,8 +349,8 @@ export class ProfitsComponent implements OnInit {
             },
             sold: {
               totalPrices: this._servicesService.sumArry(mainArry.sold.price_X_qty()),
-              maxPrice: Math.max(...mainArry.sold.pricesArr()),
-              minPrice: Math.min(...mainArry.sold.pricesArr()),
+              maxPrice: (maxSold == Infinity || maxSold == -Infinity) ? 0 : maxSold,
+              minPrice: (minSold == Infinity || minSold == -Infinity) ? 0 : minSold,
               totalQty: this._servicesService.sumArry(mainArry.sold.qtyArr()),
               avarege: (this._servicesService.sumArry(mainArry.sold.price_X_qty()) / this._servicesService.sumArry(mainArry.sold.qtyArr())),
             }
@@ -354,23 +358,7 @@ export class ProfitsComponent implements OnInit {
 
           if (pricesDetailsArr.sold.totalQty != 0) {
 
-            if (pricesDetailsArr.sold.maxPrice == Infinity || pricesDetailsArr.sold.maxPrice == -Infinity) {
-              pricesDetailsArr.sold.maxPrice = 0;
-            };
-
-            if (pricesDetailsArr.sold.minPrice == Infinity || pricesDetailsArr.sold.minPrice == -Infinity) {
-              pricesDetailsArr.sold.minPrice = 0;
-            };
-
-            if (pricesDetailsArr.in.maxPrice == Infinity || pricesDetailsArr.in.maxPrice == -Infinity) {
-              pricesDetailsArr.in.maxPrice = 0;
-            };
-
-            if (pricesDetailsArr.in.minPrice == Infinity || pricesDetailsArr.in.minPrice == -Infinity) {
-              pricesDetailsArr.in.minPrice = 0;
-            };
-
-            let productProfit = ((Math.floor(pricesDetailsArr.sold.avarege - Math.floor(pricesDetailsArr.in.avarege()))) * pricesDetailsArr.sold.totalQty)
+            //let productProfit = ((Math.floor(pricesDetailsArr.sold.avarege - Math.floor(pricesDetailsArr.in.avarege()))) * pricesDetailsArr.sold.totalQty)
 
             let prodDetails = { // the main object
 
@@ -380,7 +368,7 @@ export class ProfitsComponent implements OnInit {
               qtyRemainVal: ((pricesDetailsArr.in.totalQty - pricesDetailsArr.sold.totalQty) * Math.floor(pricesDetailsArr.in.avarege())),
               onlyProfitMsg: () => {
                 if (this.filtered) {
-                  return `كمية مباعة ${pricesDetailsArr.sold.totalQty}`
+                  return `كمية بيع | ${pricesDetailsArr.sold.totalQty}`
                 } else if (prodDetails.qtyRemain() == 0) {
                   return `لا يوجد رصيد لهذا الصنف`
                 }
@@ -405,7 +393,7 @@ export class ProfitsComponent implements OnInit {
               },
 
               profits: {
-                profit: productProfit,
+                profit: ((Math.floor(pricesDetailsArr.sold.avarege - Math.floor(pricesDetailsArr.in.avarege()))) * pricesDetailsArr.sold.totalQty),
                 profitCond: () => {
                   if (prodDetails.profits.profit < 0) {
                     return 'خسائر'
@@ -528,14 +516,17 @@ export class ProfitsComponent implements OnInit {
 
         $('.chooseBtn').not(`#showStockProfits${this.theIndex}`).removeClass('btn-secondary').addClass('btn-light');
         $(`#showStockProfits${this.theIndex}`).removeClass('btn-light').addClass('btn-secondary');
-        $('#totalProfits').show();
-        $('#customersProfits').hide();
-        $('#productProfits').show();
-        $('#searchProd').show();
-        $('#showProfitsPreBtn').html('تفاصيل حركة البيع')
+        $('#containerLoader').fadeOut(0, () => {
+          $('#totalProfits').show();
+          $('#customersProfits').hide();
+          $('#productProfits').slideDown(300);
+          $('#searchProd').show();
+          $('#showProfitsPreBtn').html('تفاصيل حركة البيع')
+        });
+
         //$('#showProfitsPreBtn').show();
         //setTimeout(() => $('#containerLoader').fadeOut(), 2000)
-        $('#containerLoader').fadeOut();
+
       });
 
   };

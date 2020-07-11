@@ -176,7 +176,7 @@ export class SafeReceiptComponent implements OnInit {
     };
     $('#header_SafeRecipt').hide();
     $('#add_SafeReceiptInside').show();
-    
+
   };
 
   validTests = {
@@ -322,10 +322,10 @@ export class SafeReceiptComponent implements OnInit {
 
     if (this.safeReceipt_inpts.receiptKind == 'ايصال استلام نقدية') {
       this.theReceiptKind = 'add'
-      $('#secSection_safeReceipt').removeClass('lightBg p-3');
+      $('#secSection_safeReceipt').removeClass('shadow lightBg p-3');
     } else {
       this.theReceiptKind = 'min'
-      $('#secSection_safeReceipt').addClass('lightBg p-3');
+      $('#secSection_safeReceipt').addClass('shadow lightBg p-3');
     }
 
     this.isReceiptValValid();
@@ -430,11 +430,13 @@ export class SafeReceiptComponent implements OnInit {
       this.safeReceipt_inpts.currentAccVal = this.theOtherAccInfo.currentAccVal;
     };
 
-    if (this.safeReceipt_inpts.AccName.includes('سيف')) {
-      $('#AccName').addClass('bg-info text-white')
-    } else {
-      $('#AccName').removeClass('bg-info text-white')
-    }
+    if (this.safeReceipt_inpts.AccName != undefined) {
+      if (this.safeReceipt_inpts.AccName.includes('سيف')) {
+        $('#AccName').addClass('bg-info text-white')
+      } else {
+        $('#AccName').removeClass('bg-info text-white')
+      }
+    };
 
     this.checkReceiptValid();
   };
@@ -532,8 +534,6 @@ export class SafeReceiptComponent implements OnInit {
         //let valIsOk: Number;
         let submBtn = $('#addNewSafeReceipt').html()
 
-
-
         if (submBtn == 'تعديل الايصال') {
           this.theReceiptInfo = this.getTheReceiptInfo(this.searchSafeReceiptTxt);
           this.valIsOk = this.safeReceipt_inpts.currentSafeVal + this.theReceiptInfo.receiptVal;
@@ -625,7 +625,6 @@ export class SafeReceiptComponent implements OnInit {
         // pass new Value to edit
         this._safeDataService.safeList[indx].currentSafeVal = oldSecSafe.currentSafeVal;
       }
-
     };
 
   };
@@ -845,6 +844,50 @@ export class SafeReceiptComponent implements OnInit {
 
   showInvoiceDone() {
     this._safeAccComponent.ngOnInit();
+
+    let lastIndex = this._safeDataService.safeReceiptList.length - 1
+    console.log(this._safeDataService.safeReceiptList[lastIndex].safeReceiptId)
+
+    let resultCheck: string;
+    if (this.safeReceipt_inpts.transactionAccKind == 'عميل') {
+      resultCheck = this.safeReceipt_inpts.customerName
+    } else if (this.safeReceipt_inpts.transactionAccKind == 'حساب') {
+      resultCheck = this.safeReceipt_inpts.AccName
+    } else if (this.safeReceipt_inpts.transactionAccKind == 'خزنة') {
+      resultCheck = this.safeReceipt_inpts.secSafeName
+    };
+
+    let addNewSafeReceipt_Btn = $('#addNewSafeReceipt').html();
+
+    this._safeDataService.receiptDoneMsg = {
+
+      recieptNum: () => {
+        if (addNewSafeReceipt_Btn == "تعديل الايصال") {
+          return this.safeReceipt_inpts.safeReceiptId
+        } else {
+          return parseInt(this._safeDataService.safeReceiptList[lastIndex].safeReceiptId.toString()) + 1
+        };
+      },
+
+      from: () => {
+        if (this.safeReceipt_inpts.receiptKind == 'ايصال صرف نقدية') {
+          return this.safeReceipt_inpts.safeName
+        } else {
+          return resultCheck
+        }
+      },
+
+      to: () => {
+        if (this.safeReceipt_inpts.receiptKind == 'ايصال استلام نقدية') {
+          return this.safeReceipt_inpts.safeName
+        } else {
+          return resultCheck
+        }
+      },
+
+      val: this.safeReceipt_inpts.receiptVal,
+      notes: this.safeReceipt_inpts.recieptNote
+    }
     this._safeAccComponent.showAddSafeReceipt_fade('showAddSafeReceipt_fade');
   };
 

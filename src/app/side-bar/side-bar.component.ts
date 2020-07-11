@@ -17,6 +17,19 @@ export class SideBarComponent implements OnInit {
   url: string;
   mainRoute: string;
 
+  customerBtn = $('#customersBtn');
+  workersBtn = $('#workersBtn');
+  unitesBtn = $('#unitesBtn');
+  safeAccBtn = $('#safeAccBtn');
+  settBtn = $('#SettBtn');
+  stocksBtn = $('#stocksBtn');
+  //safeAcc
+  htmlDbItemsBtns: any[] = [this.workersBtn, this.unitesBtn]
+  dBUrls: any[] = ['/workers', '/unites'] // dataBaseUrls
+
+  htmlAccItemsBtns: any[] = [this.customerBtn, this.stocksBtn, this.safeAccBtn];
+  accUrls: any[] = ['/customers', '/stocks', '/safe-acc'];
+
   constructor(public _sideBarEffect: SideEffectService, public router: Router, public logService: LoginService, public _service: ServicesService) { }
 
   ngOnInit() {
@@ -35,25 +48,14 @@ export class SideBarComponent implements OnInit {
     });
 
     // make active button old code
-    let customerBtn = $('#customersBtn');
-    let workersBtn = $('#workersBtn');
-    let unitesBtn = $('#unitesBtn');
-    let safeAccBtn = $('#safeAccBtn');
-    let settBtn = $('#SettBtn');
-    //safeAcc
-    let htmlDbItemsBtns: any[] = [workersBtn, unitesBtn]
-    let dBUrls: any[] = ['/workers', '/unites'] // dataBaseUrls
 
-    let stocksBtn = $('#stocksBtn');
-    let htmlAccItemsBtns: any[] = [customerBtn, stocksBtn, safeAccBtn];
-    let accUrls: any[] = ['/customers', '/stocks', '/safe-acc'];
 
-    if (dBUrls.includes(this.url)) {
+    if (this.dBUrls.includes(this.url)) {
       this.mainRoute = 'Db'
       $('#dbBtn').next().show()
       $('#dbBtn').removeClass('btn-light').addClass('navHeader')
       $('#sidebar .secDiv').not($('#dbBtn').next()).hide()
-    } else if (accUrls.includes(this.url)) {
+    } else if (this.accUrls.includes(this.url)) {
       this.mainRoute = 'acc'
       $('#accBtn').next().show()
       $('#accBtn').removeClass('btn-light').addClass('navHeader')
@@ -65,11 +67,11 @@ export class SideBarComponent implements OnInit {
     };
 
     // active main btn
-    for (let i = 0; i <= htmlDbItemsBtns.length; i++) {
-      if (this.url == dBUrls[i]) { // dataBase
-        htmlDbItemsBtns[i].removeClass('btn-light').addClass('btn-secondary');
-      } else if (this.url == accUrls[i]) { // accounting
-        htmlAccItemsBtns[i].removeClass('btn-light').addClass('btn-secondary');
+    for (let i = 0; i <= this.htmlDbItemsBtns.length; i++) {
+      if (this.url == this.dBUrls[i]) { // dataBase
+        this.htmlDbItemsBtns[i].removeClass('btn-light').addClass('btn-secondary');
+      } else if (this.url == this.accUrls[i]) { // accounting
+        this.htmlAccItemsBtns[i].removeClass('btn-light').addClass('btn-secondary');
       }
     }
 
@@ -116,12 +118,38 @@ export class SideBarComponent implements OnInit {
 
   // new effects
   sidebarToggle() {
+
+    this.currentUrl = window.location.href;
+    this.ind = this.currentUrl.lastIndexOf("/");
+    this.url = this.currentUrl.slice(this.ind);
+
+    const sideHight = (idStr: String) => {
+      $('#sidebar').css('height', 'auto') 
+      $('.mainBtns').not($(`${idStr}`)).not('#logOut').not('#MainSettingBtn').removeClass('navHeader').addClass('btn-light');
+      $(`${idStr}`).next().show()
+      $(`${idStr}`).removeClass('btn-light').addClass('navHeader')
+      $('#sidebar .secDiv').not($(`${idStr}`).next()).hide()
+      $('#sidebar').css('height', 'auto')
+    };
+
     let sideBarHeight = $('#sidebar').height()
+
+    if (this.dBUrls.includes(this.url)) {
+      this.mainRoute = 'Db'
+      sideHight('#dbBtn')
+    } else if (this.accUrls.includes(this.url)) {
+      this.mainRoute = 'acc'
+      sideHight('#accBtn')
+    } else {
+      this.mainRoute = 'false'
+      $('#sidebar .secDiv').hide();
+      $('#sidBar h3').not('#logOut').removeClass('navHeader').addClass('btn-light')
+    };
+    
     let sidebarBtnsHeight = $('#sidebarBtns').height()
     let sidebarToggleLPosition = $('#sidebarToggle').position();
-
     let sidebarToggleHeight = sidebarToggleLPosition.top
-
+    
     $('#sidebar').css({
       'marginTop': `${sidebarToggleHeight + 15}px`,
       'marginRight': '15px'
@@ -138,8 +166,8 @@ export class SideBarComponent implements OnInit {
       $('#sidebar').css('height', '0').toggleClass('card');
       $('#fadeEffect').hide()
       $('#sidebarToggle').show();
-    }
-  }
+    };    
+  };
 
   fadeEffect() {
     $('#sidebarBtns').hide()
@@ -152,7 +180,7 @@ export class SideBarComponent implements OnInit {
   backupPath: string;
 
   backup() {
-
+    this.sidebarToggle();
     $('#containerLoader').fadeIn();
 
     const postBackup = new Promise((res) => {
@@ -164,7 +192,6 @@ export class SideBarComponent implements OnInit {
     });
 
     postBackup.then(() => {
-      this.sidebarToggle();
       $('#sidebarToggle').hide();
       $('#containerLoader').fadeOut(0, () => {
         $('#fadeBackupDone').show();

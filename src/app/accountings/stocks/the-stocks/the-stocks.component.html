@@ -1,6 +1,6 @@
 <!--fadeLayer-->
 <div class="fadeLayer" id="theStockFadeLayer">
-    <div class="container p-3 card askForDelete" style="display: none;" id="askForDeleteStock">
+    <div class="container p-3 card askForDelete" style="display: none; width: 35%;" id="askForDeleteStock">
         <h3 class="p-3 bg-danger text-light">تحذير!</h3> <!-- تحذير! هل انت متأكد من حذف -->
         <h6>هل انت متأكد من حذف {{_stockService.stockDataView.stockName}}</h6>
         <!-- <h4 class="mb-2">
@@ -13,26 +13,47 @@
             <button class="btn btn-outline-info" id="hideFadeLayer">الغاء</button>
         </div>
     </div>
-    <div class="container card p-3 askForDelete" style="display: none;" id="stockPerDone">
-        <h3 class="bg-info text-white p-3">تم التسجيل بنجاح</h3>
-        <hr>
+    <div class="container card p-3 askForDelete" style="display: none; width: 40%;" id="stockPerDone">
+        <h3 class="bg-info text-white p-3">تم تسجيل "{{_stockService.invoiceDoneMsg.invoiceKind}}"</h3>
         <!--  -->
-        <div>
-            <h5>{{_stockService.invoiceDoneMsg.invoiceKind}}</h5>
-            <h5>من : {{_stockService.invoiceDoneMsg.from}}</h5>
-            <h5>الى : {{_stockService.invoiceDoneMsg.to}}</h5>
-            <h5>بقيمة : {{_stockService.invoiceDoneMsg.invoiceVal}}</h5>
-            <h5>ملاحظات : {{_stockService.invoiceDoneMsg.invoiceNote}}</h5>
+        <hr>
+        <div class="row">
+            <div class="col">
+                <div class="pt-3 font-weight-bolder px-3" style="border-radius: 5px; box-shadow: none; background-color: whitesmoke;">
+                    <div class="form-inline">
+                        <p>من | </p>
+                        <p class="text-info pr-2"> {{_stockService.invoiceDoneMsg.from}} </p>
+                    </div>
+                    <div class="form-inline">
+                        <p>اجمالى | </p>
+                        <p class="text-info pr-2"> {{_stockService.invoiceDoneMsg.invoiceVal}} </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="pt-3 font-weight-bolder px-3" style="border-radius: 5px; box-shadow: none; background-color: whitesmoke;">
+                    <div class="form-inline">
+                        <p>الى | </p>
+                        <p class="text-info pr-2"> {{_stockService.invoiceDoneMsg.to}} </p>
+                    </div>
+                    <div class="form-inline">
+                        <p>ملاحظات | </p>
+                        <p class="text-info pr-2"> {{_stockService.invoiceDoneMsg.invoiceNote}} </p>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="d-flex flex-row-reverse">
+        
+        <hr>
+        <div class="d-flex flex-row">
             <!--fade_addNewApBtn-->
-            <button class="btn btn-outline-info mr-2 fadeBtns" id="fade_addNewApBtn"
+            <button class="btn btn-outline-info ml-2 fadeBtns" id="fade_addNewApBtn"
                 (click)="showAddToStockPrem_fade()">فاتورة شراء جديدة</button>
             <!--fade_minNewApBtn-->
-            <button class="btn btn-outline-info mr-2 fadeBtns" id="fade_minNewApBtn"
+            <button class="btn btn-outline-info ml-2 fadeBtns" id="fade_minNewApBtn"
                 (click)="showMinToStockPrem_fade()">فاتورة بيع جديدة</button>
             <!--fade_showTranceStockPrem-->
-            <button class="btn btn-outline-info mr-2 fadeBtns" id="fade_showTranceStockPrem"
+            <button class="btn btn-outline-info ml-2 fadeBtns" id="fade_showTranceStockPrem"
                 (click)="showTranceStockPrem_fade()">اذن مخزن جديد</button>
             <!--backToTheStart-showTranceStockPrem-->
             <button class="btn btn-outline-secondary" id="Hidefade_addNewApBtn"

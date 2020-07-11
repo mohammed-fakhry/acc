@@ -21,6 +21,14 @@ export class SafeDataService {
   // safe transaction
   safeTransactionArr: SafeTransaction[];
 
+  receiptDoneMsg = {
+    recieptNum: () => null,
+    from: () => '',
+    to: () => '',
+    val: null,
+    notes: ''
+  }
+
   constructor(private http: HttpClient) { }
 
   url: string = 'http://localhost/accounting/';

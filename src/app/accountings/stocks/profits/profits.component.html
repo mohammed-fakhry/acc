@@ -207,6 +207,9 @@
                                         </tr>
                                     </thead>
                                     <tbody class="table Body" style="overflow-y: hidden;">
+                                        <tr *ngIf="filtered" class="text-center">
+                                            <th>كمية شراء | {{product.in.qty}}</th>
+                                        </tr>
                                         <tr class="text-center">
                                             <th>{{product.onlyProfitMsg()}}</th>
                                         </tr>

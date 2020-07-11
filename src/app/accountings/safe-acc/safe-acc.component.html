@@ -8,11 +8,40 @@
             <button class="btn btn-info" id="hideFadeLayer">الغاء</button>
         </div>-->
     </div>
-    <div class="container card askForDelete p-3" id="SafeReceiptDone">
-        <h3 class="p-3 bg-info text-light">تم حفظ الايصال</h3>
+    <div class="container card askForDelete p-3" id="SafeReceiptDone" style="width: 40%;">
+        <h3 class="p-3 bg-info text-light">تم حفظ الايصال رقم ({{_safeDataService.receiptDoneMsg.recieptNum()}})</h3>
         <hr>
-        <div class="d-flex flex-row-reverse">
-            <button class="btn btn-outline-info mr-2 fadeBtns" id="showAddSafeReceipt_fade"
+        <div class="row">
+            <div class="col">
+                <div class="pt-3 font-weight-bolder px-3"
+                    style="border-radius: 5px; box-shadow: none; background-color: whitesmoke;">
+                    <div class="form-inline">
+                        <p>من | </p>
+                        <p class="text-info pr-2"> {{_safeDataService.receiptDoneMsg.from()}} </p>
+                    </div>
+                    <div class="form-inline">
+                        <p>اجمالى | </p>
+                        <p class="text-info pr-2"> {{_safeDataService.receiptDoneMsg.val}} </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="pt-3 font-weight-bolder px-3"
+                    style="border-radius: 5px; box-shadow: none; background-color: whitesmoke;">
+                    <div class="form-inline">
+                        <p>الى | </p>
+                        <p class="text-info pr-2"> {{_safeDataService.receiptDoneMsg.to()}} </p>
+                    </div>
+                    <div class="form-inline">
+                        <p>ملاحظات | </p>
+                        <p class="text-info pr-2"> {{_safeDataService.receiptDoneMsg.notes}} </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr>
+        <div class="d-flex flex-row">
+            <button class="btn btn-outline-info ml-2 fadeBtns" id="showAddSafeReceipt_fade"
                 (click)="showAddNewRecipt_fade()">ايصال جديد</button>
             <button class="btn btn-outline-secondary" id="hideFadeLayer"
                 (click)="showSafeEnquir_fade()">الرئيسية</button>

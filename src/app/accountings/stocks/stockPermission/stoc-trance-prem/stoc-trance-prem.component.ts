@@ -759,6 +759,13 @@ export class StocTrancePremComponent implements OnInit {
 
   showInvoiceDone() {
     this._theStockComp.ngOnInit();
+    this._stockService.invoiceDoneMsg = {
+      invoiceKind: 'اذن النقل',
+      from: $('#fstStockNameForTrance').val(),
+      to:  $('#sndStockNameForTrance').val(),
+      invoiceVal: parseInt(this.invoiceTotal),
+      invoiceNote: $('#tranceInvoiceNote').val(),
+    }
     this._theStockComp.showFade_newInvoice('fade_showTranceStockPrem');
   };
 

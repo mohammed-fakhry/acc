@@ -760,13 +760,15 @@ export class AddToStockPermissionComponent implements OnInit {
     }; // fst for invoiceInpArry    
   }; // makeAddStockPremArry
 
+  theCustomerName: string;
+
   showInvoiceDone() {
     this._theStockComp.ngOnInit();
     this._stockService.invoiceDoneMsg = {
-      invoiceKind: 'فاتورة شراء',
-      from: this.theCustomerInfo.customerName,
+      invoiceKind: 'فاتورة الشراء',
+      from: $('#customerNameForAdd').val(),
       to: $('#stockNameForAdd').val(),
-      invoiceVal: null,
+      invoiceVal: parseInt(this.invoiceTotal),
       invoiceNote: $('#addInvoiceNote').val(),
     }
     this._theStockComp.showFade_newInvoice('fade_addNewApBtn');
