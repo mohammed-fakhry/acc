@@ -61,7 +61,7 @@ export class ProfitsComponent implements OnInit {
     this.theStock = stock;
     this.theIndex = index;
     this.theStockName = stock.stockName
-
+    this.searchProd = null;
     $('#howIsProfits').show();
     $('#productProfits').hide();
     $('#customersProfits').hide();
@@ -93,6 +93,8 @@ export class ProfitsComponent implements OnInit {
     $('#howIsProfits').hide();
 
     $('#containerLoader').fadeIn();
+
+    $('.sortBtns').attr({'disabled': false})
 
     const getHandleAdd = new Promise((res) => {
       this._stockService.getHandleAddtoStockPrimList().subscribe((data: HandleAddPrimBE[]) => {
@@ -419,6 +421,9 @@ export class ProfitsComponent implements OnInit {
                 }
               },
 
+              profitForSort: ((Math.floor(pricesDetailsArr.sold.avarege - Math.floor(pricesDetailsArr.in.avarege()))) * pricesDetailsArr.sold.totalQty),
+              percForSort: ((((Math.floor(pricesDetailsArr.sold.avarege - Math.floor(pricesDetailsArr.in.avarege()))) * pricesDetailsArr.sold.totalQty) / (pricesDetailsArr.sold.totalPrices)) * 100), // () => Math.floor((prodDetails.profits.profit / prodDetails.sold.qtyVal) * 100),
+              
               profitLastPrice: {
                 val: () => {
                   if (prodDetails.qtyRemain() < 0) {
@@ -600,14 +605,35 @@ export class ProfitsComponent implements OnInit {
 
         this.profitArrCust.push(newObj);
       };
-
     };
-
     $('#customersProfits').show();
     $('#productProfits').hide();
     $('#searchProd').hide();
     //$('#showProfitsPreBtn').hide();
 
+  };
+
+  sortBtnsEffect = (diactive:string, active:string) => {
+    $(`${active}`).attr({'disabled': true});
+    $(`${diactive}`).not(`${active}`).attr({'disabled': false});
+    //$(`${diactive}`).not(`${active}`).removeClass('darkBg');
+    //$(`${active}`).addClass('darkBg');
+  }
+
+  profitFilter = (cond: string) => {
+    //percForSort
+
+    if (cond == 'top') {
+      this.profitArr.sort(this._service.sortArry('profitForSort', 'desc'));
+      this.sortBtnsEffect('.sortBtns','#sortTop');
+    } else if (cond == 'less') {
+      this.profitArr.sort(this._service.sortArry('profitForSort'));
+      this.sortBtnsEffect('.sortBtns','#sortLess');
+    } else if (cond == 'perc') {
+      //let percForSort = 
+      this.profitArr.sort(this._service.sortArry('percForSort', 'desc'));
+      this.sortBtnsEffect('.sortBtns','#sortPers');
+    }
   };
 
 } // end

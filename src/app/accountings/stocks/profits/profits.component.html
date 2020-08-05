@@ -22,8 +22,27 @@
                     </div>
                 </div>
                 <div id="totalProfits" style="display: none;">
+
                     <div class="card mt-2 p-2" id="searchProd">
+                        
                         <input [(ngModel)]="searchProd" placeholder="بحث باسم الصنف" class="form-control mb-2">
+                        <hr>
+                        <h6 class="mb-3 text-center cardHeader">ترتيب الاصناف بحسب الارباح</h6>
+                        <div class="d-flex justify-content-between mb-2">
+                            <button class="btn btn-outline-info sortBtns" id="sortTop"
+                                (click)="profitFilter('top')">
+                                <i class="fa fa-caret-up pl-2"></i>
+                                اعلى</button>
+                            <button class="btn btn-outline-danger sortBtns mx-2" id="sortLess"
+                                (click)="profitFilter('less')">
+                                <i class="fa fa-caret-down pl-2"></i>
+                                اقل</button>
+                            <button class="btn btn-outline-success sortBtns" id="sortPers"
+                                (click)="profitFilter('perc')">
+                                <i class="fa fa-caret-up pl-2"></i>
+                                نسبة</button>
+                        </div>
+
                     </div>
                     <div class="card mt-2 p-2">
                         <table class="table table-hover">
@@ -173,6 +192,11 @@
                                     </thead>
                                     <tbody class="table Body" style="overflow-y: hidden;">
                                         <tr class="bg-secondary text-white">
+                                            <th scope="row">اخر سعر شراء</th>
+
+                                            <td>{{product.in.lastPrice()}}</td>
+                                        </tr>
+                                        <tr class="lightBg">
                                             <th scope="row">متاح</th>
                                             <td>{{product.qtyRemain()}}</td>
                                             <td>{{product.qtyRemainVal}}</td>
@@ -186,11 +210,6 @@
                                             <th scope="row">بيع</th>
                                             <td>{{product.sold.qty}}</td>
                                             <td>{{product.sold.qtyVal}}</td>
-                                        </tr>
-                                        <tr>
-                                            <th class="navHeader" scope="row">اخر سعر شراء</th>
-
-                                            <td class="navHeader">{{product.in.lastPrice()}}</td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -246,6 +265,16 @@
                                     </thead>
                                     <tbody class="table Body" style="overflow-y: hidden;">
 
+                                        <tr class="lightBg">
+                                            <th scope="col" style="flex: 2;">{{product.profits.profitCond()}} رصيد مباع
+                                            </th>
+                                            <td></td>
+                                            <td></td>
+                                            <td>{{product.profits.perc()}}</td>
+                                            <td class="{{product.profits.profitsColor()}}">{{product.profits.profit}}
+                                            </td>
+                                        </tr>
+
                                         <tr class="bottomBorder">
                                             <th scope="row" style="flex: 2;">اخر سعر بيع</th>
                                             <td>{{product.sold.lastPrice()}}</td>
@@ -265,15 +294,7 @@
                                             <td scope="col" class="{{product.recommendedPrice.total.color()}}">
                                                 {{product.recommendedPrice.total.val()}}</td>
                                         </tr>
-                                        <tr class="navHeader">
-                                            <th scope="col" style="flex: 2;">{{product.profits.profitCond()}} رصيد مباع
-                                            </th>
-                                            <td></td>
-                                            <td></td>
-                                            <td>{{product.profits.perc()}}</td>
-                                            <td class="{{product.profits.profitsColor()}}">{{product.profits.profit}}
-                                            </td>
-                                        </tr>
+
                                     </tbody>
                                 </table>
                             </div>
