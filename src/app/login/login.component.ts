@@ -49,6 +49,7 @@ export class LoginComponent implements OnInit {
     }
 
     if (this.logService.isUser == true) { // if true
+      $('#sidebarToggle').show();
       this.router.navigate(['/home']);
       this.logService.checkIsUser();
       //this.logService.isUser = true;

@@ -375,3 +375,16 @@ letter-spacing: 3px
     height: 0%;
   }
 }
+
+.datePrint {display: none;}
+
+@media print {
+  tbody {overflow-y: hidden !important; /* overflow-y: hidden !important; */}
+  tr,td,th {height: fit-content !important;}
+  .panel-body {height: 100% !important; overflow-y: hidden !important;}
+  .printX {display: none !important;}
+  .fa-print {display: none !important;}
+  .HideCol {display: none !important;}
+  .navHeader {color: black !important;}
+  .datePrint {display: block !important;}
+}

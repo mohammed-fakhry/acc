@@ -66,6 +66,8 @@ export class ProfitsComponent implements OnInit {
     $('#productProfits').hide();
     $('#customersProfits').hide();
     $('#totalProfits').hide();
+    $('.chooseBtn').not(`#showStockProfits${this.theIndex}`).removeClass('btn-secondary').addClass('btn-light');
+    $(`#showStockProfits${this.theIndex}`).removeClass('btn-light').addClass('btn-secondary');
 
   };
 
@@ -83,6 +85,8 @@ export class ProfitsComponent implements OnInit {
     this.dateSortTo = null;
     $('#makeDateNullBtn').hide();
   }
+
+  totalProfitClass: string;
 
   showStockProfits(/* stock, index */) {
 
@@ -340,7 +344,8 @@ export class ProfitsComponent implements OnInit {
               totalQty: this._servicesService.sumArry(mainArry.in.qtyArr()),
               lastPrice: () => mainArry.in.pricesArr()[lastIndex_in],
               avarege: () => {
-                if (mainArry.everyDayArrIn().length > 0) {
+
+                if (mainArry.everyDayArrIn().length > 1) {
                   return (this._servicesService.sumArry(mainArry.in.price_X_qty()) / this._servicesService.sumArry(mainArry.in.qtyArr()))
                 } else {
                   return pricesDetailsArr.in.lastPrice()
@@ -376,7 +381,7 @@ export class ProfitsComponent implements OnInit {
 
               in: {
                 qty: pricesDetailsArr.in.totalQty,
-                qtyVal: pricesDetailsArr.in.totalPrices,
+                qtyVal: pricesDetailsArr.in.totalPrices.toFixed(0),
                 maxPrice: pricesDetailsArr.in.maxPrice,
                 minPrice: pricesDetailsArr.in.minPrice,
                 lastPrice: () => mainArry.in.pricesArr()[lastIndex_in],
@@ -501,10 +506,12 @@ export class ProfitsComponent implements OnInit {
       .then(makeHandlePrice).then((profitArray: any[]) => {
 
         let arrTotals = profitArray.map(element => element.profits.profit);
+        
         let arrMin = arrTotals.filter(total => total < 0);
         let arrAdd = arrTotals.filter(total => total > 0);
 
         this.totalProfit = (this._servicesService.sumArry(arrTotals) + this.employeeExpence + this.otherExpence).toLocaleString();
+        this.totalProfitClass = (parseInt( this.totalProfit) < 0) ?  'bg-danger text-white' : 'lightBg';
         this.totalMin = this._servicesService.sumArry(arrMin);
         this.totalAdd = this._servicesService.sumArry(arrAdd);
 

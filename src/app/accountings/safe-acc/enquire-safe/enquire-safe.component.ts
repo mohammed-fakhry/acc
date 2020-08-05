@@ -129,6 +129,7 @@ export class EnquireSafeComponent implements OnInit {
 
   showSafeTranaction(safe: SafeData) {
     this.makeSafeTransaction(safe);
+    this._safeDataService.safeNameForTransaction = safe.safeName;
     $('.safeClass').not('#safeTransaction').hide();
     $('#SafeReportTable').hide();
     $('#safeTransaction').fadeIn('fast');

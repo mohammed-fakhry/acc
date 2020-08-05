@@ -76,29 +76,9 @@ export class MinFrmStockPermissionComponent implements OnInit {
   };
 
   printThisMin() {
-    let show = '#headerMinInv'
-    let hide1 = '#deleteMinInvoice'
-    let hide2 = '#minCallInvoice'
-    let hide3 = '#minNewInvoicetBtn'
-    this._service.printThis(show, hide1, hide2, hide3);
-    $('#minPrimTable').css(
-      { 'height': '100%' }
-    );
-    $('.closeBtn').show();
-    $('.form-control').attr({ 'disabled': true });
-    $('#minAddFilds').hide();
-    $('#printMinPremBtn').hide();
-    //$('.vaildAlert').hide();
-    //window.print()
-    //location.reload()
-  };
 
-  openwindowPrint() {
-    $('#headerMinInv').css('width', '100%')
-    $('.closeBtn').hide();
-    window.print();
-    location.reload();
-  }
+    this._service.printThis();
+  };
 
   reloadLoc() {
     location.reload();
@@ -140,60 +120,51 @@ export class MinFrmStockPermissionComponent implements OnInit {
   stockNameInpt: string;
   custNameInpt: string;
 
-  isMinNameVaild() { // inputValidation
+  isMinNameVaild(i) { // inputValidation
 
     this.deleteMinInvBtnDisabled = true;
     let index: number;
     let found: boolean;
 
-    // let custName = $('#customerNameForMin').val();
-    // let custInfo = this.customers.find(cust => cust.customerName == this.custNameInpt);
-    let stockInfo = this._stockService.stocks.find(stock => stock.stockName == this.stockNameInpt);
+    if (this.invoiceInpArry[i].price != undefined || this.invoiceInpArry[i].qty != undefined) {
 
-    for (let i = 0; i < this.invoiceInpArry.length; i++) {
+      if (this.invoiceInpArry[i].product != undefined || this.invoiceInpArry[i].product != '') {
 
-      if (this.invoiceInpArry[i].price != undefined || this.invoiceInpArry[i].qty != undefined) {
+        if (this.productArr.includes(this.invoiceInpArry[i].product)) {
+          this.invoiceInpArry[i].inpVaild = false;
+          $(`#product${i}`).removeClass('is-invaild');
+        } else {
+          this.invoiceInpArry[i].inpVaild = true;
+          this.invoiceInpArry[i].productVaildMsg = 'خطأ فى اسم الصنف'
+          // product{{i}}
+          $(`#product${i}`).addClass('is-invaild');
+        };
 
-        if (this.invoiceInpArry[i].product != undefined || this.invoiceInpArry[i].product != '') {
-
-          if (this.productArr.includes(this.invoiceInpArry[i].product)) {
-            this.invoiceInpArry[i].inpVaild = false;
-            $(`#product${i}`).removeClass('is-invaild');
-          } else {
-            this.invoiceInpArry[i].inpVaild = true;
-            this.invoiceInpArry[i].productVaildMsg = 'خطأ فى اسم الصنف'
-            // product{{i}}
-            $(`#product${i}`).addClass('is-invaild');
-          };
-
-          if (this.invoiceInpArry[i].Qtyinvaild == true) {
-            this.invoiceInpArry[i].qty = '';
-            this.invoiceInpArry[i].Qtyinvaild = false;
-            $(`#product${i}`).removeClass('is-invaild');
-          };
-
+        if (this.invoiceInpArry[i].Qtyinvaild == true) {
+          this.invoiceInpArry[i].qty = null;
+          this.invoiceInpArry[i].Qtyinvaild = false;
+          $(`#product${i}`).removeClass('is-invaild');
         };
 
       };
 
-      // if productName dublicated
-      let valueArr = this.invoiceInpArry.map((item) => { return item.product });
-      let filtert = valueArr.filter((product) => {
-        return product != undefined
-      })
-      let isDublicate = filtert.some((item, indx) => {
-        index = indx
-        return valueArr.indexOf(item) != indx
-      })
-      if (isDublicate) {
-        found = true
-        break
-      } else {
-        found = false
-      }
+    };
+
+    let valueArr = this.invoiceInpArry.map((item) => { return item.product });
+    let filtert = valueArr.filter((product) => {
+      return product != undefined
+    })
+    let isDublicate = filtert.some((item, indx) => {
+      index = indx
+      return valueArr.indexOf(item) != indx
+    })
+    if (isDublicate) {
+      found = true
+    } else {
+      found = false
     }
 
-    if (index != null) {
+    if (index) {
       if (found == true) {
         this.invoiceInpArry[index].inpVaild = true;
         this.invoiceInpArry[index].productVaildMsg = 'لا يمكن تكرار هذا الصنف'
@@ -204,37 +175,32 @@ export class MinFrmStockPermissionComponent implements OnInit {
       }
     }
 
-    for (let i = 0; i < this.invoiceInpArry.length; i++) {
-      if (this.invoiceInpArry[i].inpVaild == true) {
-        this.isMinInvInvaild = true;
-        break
-      } else if (this.invoiceInpArry[i].inpVaild == false) {
-        this.isMinInvInvaild = false;
-      }
-
-      if (this.invoiceInpArry[i].product == '') {
-
-        if (this.invoiceInpArry[i].price > 0 || this.invoiceInpArry[i].qty >= 0) {
-
-          if (this.invoiceInpArry[i + 1] != undefined) {
-
-            if (this.invoiceInpArry[i + 1].product != undefined || this.invoiceInpArry[i + 1].product != '' || this.invoiceInpArry[i + 1].product != null) {
-              this.stockDetailsIdArr.push(this.invoiceInpArry[i].stockTransactionDetailsId)
-              this.invoiceInpArry.splice(i, 1)
-              //console.log(this.stockDetailsIdArr)
-              this.calcTotals('checkVaild')
-            } else {
-              this.invoiceInpArry[i].price = null;
-              this.invoiceInpArry[i].qty = null;
-
-              this.calcTotals('checkVaild')
-            };
-          };
-        };
-      };
+    if (this.invoiceInpArry[i].inpVaild == true) {
+      this.isMinInvInvaild = true;
+    } else if (this.invoiceInpArry[i].inpVaild == false) {
+      this.isMinInvInvaild = false;
     }
 
+    if (this.invoiceInpArry[i].product == '') {
 
+      //if (this.invoiceInpArry[i].price > 0 || this.invoiceInpArry[i].qty >= 0) {
+
+      //if (this.invoiceInpArry[i + 1] != undefined) {
+
+      if (this.invoiceInpArry[i + 1].product != undefined || this.invoiceInpArry[i + 1].product != '' || this.invoiceInpArry[i + 1].product != null) {
+        this.stockDetailsIdArr.push(this.invoiceInpArry[i].stockTransactionDetailsId)
+        this.invoiceInpArry.splice(i, 1)
+        //console.log(this.stockDetailsIdArr)
+        this.calcTotals(null)
+      } else {
+        this.invoiceInpArry[i].price = null;
+        this.invoiceInpArry[i].qty = null;
+        this.calcTotals(null)
+      };
+
+      //};
+      //};
+    };
 
   } // isMinNameVaild
 
@@ -248,49 +214,45 @@ export class MinFrmStockPermissionComponent implements OnInit {
     return productQtyInfo
   }
 
-  isAddQtyVaild() {
+  isAddQtyVaild(i) {
 
     this.deleteMinInvBtnDisabled = true;
 
-    for (let i = 0; i < this.invoiceInpArry.length; i++) {
-      if (this.invoiceInpArry[i].product != undefined) {
-        if (this.theStockProds.length == 0) {
-          this.invoiceInpArry[i].Qtyinvaild = true;
-          this.invoiceInpArry[i].qtyMsg = `لا يوجد رصيد لهذا الصنف`
-        } else {
-          let theProductQtyInfo = this.getTheProdQty(this.invoiceInpArry[i].product);
+    if (this.invoiceInpArry[i].product != undefined && this.invoiceInpArry[i].product != '') {
+      if (this.theStockProds.length == 0) {
+        this.invoiceInpArry[i].Qtyinvaild = true;
+        this.invoiceInpArry[i].qtyMsg = `لا يوجد رصيد لهذا الصنف`
+      } else {
+        let theProductQtyInfo = this.getTheProdQty(this.invoiceInpArry[i].product);
 
-          if (theProductQtyInfo != undefined) {
+        if (theProductQtyInfo != undefined) {
 
-            if (this.invoiceInpArry[i].product == theProductQtyInfo.productName &&
-              this.invoiceInpArry[i].qty > theProductQtyInfo.productQty) {
+          if (this.invoiceInpArry[i].product == theProductQtyInfo.productName &&
+            this.invoiceInpArry[i].qty > theProductQtyInfo.productQty) {
 
-              if (this.qtyIsOkArry == undefined) {
-                this.invoiceInpArry[i].Qtyinvaild = true;
-                this.invoiceInpArry[i].qtyMsg = `الرصيد المتاح ( ${theProductQtyInfo.productQty} )`
-              } else if (this.qtyIsOkArry[i] == 0) {
-                this.invoiceInpArry[i].Qtyinvaild = true;
-                this.invoiceInpArry[i].qtyMsg = `الرصيد المتاح ( ${theProductQtyInfo.productQty} )`
-              } else if (this.invoiceInpArry[i].qty <= this.qtyIsOkArry[i]) {
-                this.invoiceInpArry[i].Qtyinvaild = false;
-              } else if (this.invoiceInpArry[i].product == theProductQtyInfo.productName
-                && this.invoiceInpArry[i].qty <= theProductQtyInfo.productQty
-                && this.invoiceInpArry[i].inpVaild == false) {
-                this.invoiceInpArry[i].Qtyinvaild = false;
-              };
-
-            } else {
+            if (this.qtyIsOkArry == undefined) {
+              this.invoiceInpArry[i].Qtyinvaild = true;
+              this.invoiceInpArry[i].qtyMsg = `الرصيد المتاح ( ${theProductQtyInfo.productQty} )`
+            } else if (this.qtyIsOkArry[i] == 0) {
+              this.invoiceInpArry[i].Qtyinvaild = true;
+              this.invoiceInpArry[i].qtyMsg = `الرصيد المتاح ( ${theProductQtyInfo.productQty} )`
+            } else if (this.invoiceInpArry[i].qty <= this.qtyIsOkArry[i]) {
               this.invoiceInpArry[i].Qtyinvaild = false;
-            }
+            } else if (this.invoiceInpArry[i].product == theProductQtyInfo.productName
+              && this.invoiceInpArry[i].qty <= theProductQtyInfo.productQty
+              && this.invoiceInpArry[i].inpVaild == false) {
+              this.invoiceInpArry[i].Qtyinvaild = false;
+            };
 
           } else {
-            this.invoiceInpArry[i].Qtyinvaild = true;
-            this.invoiceInpArry[i].qtyMsg = 'لا يوجد رصيد لهذا الصنف'
+            this.invoiceInpArry[i].Qtyinvaild = false;
+          }
 
-          };
+        } else {
+          this.invoiceInpArry[i].Qtyinvaild = true;
+          this.invoiceInpArry[i].qtyMsg = 'لا يوجد رصيد لهذا الصنف'
 
         };
-
       };
     };
 
@@ -300,8 +262,9 @@ export class MinFrmStockPermissionComponent implements OnInit {
         break
       } else {
         this.isMinInvInvaild = false;
-      }
-    }
+      };
+    };
+
   } // isAddQtyVaild
 
   custNameInvaild: boolean;
@@ -319,10 +282,10 @@ export class MinFrmStockPermissionComponent implements OnInit {
             return 'font-weight-bolder text-light bg-info'
           } else {
             return ''
-          }
-        }
-      }
-    })
+          };
+        },
+      };
+    });
   };
 
   custClass: string = '';
@@ -350,10 +313,10 @@ export class MinFrmStockPermissionComponent implements OnInit {
   };
 
   invoiceTotal: string = '0';
-  calcTotals(cond: string) {
+  calcTotals(i) {
 
-    if (cond == 'inpt') {
-      this.isAddQtyVaild();
+    if (i != null) {
+      this.isAddQtyVaild(i);
     };
 
     this.deleteMinInvBtnDisabled = true;
@@ -494,7 +457,7 @@ export class MinFrmStockPermissionComponent implements OnInit {
       this.invNumMin = theInvoiceInfo.invNumber;
 
       this.makeTheStockProds()
-      this.calcTotals('other');
+      this.calcTotals(null);
       this.qtyIsOkArry = [];
       for (let v = 0; v < this.invoiceInpArry.length; v++) {
         this.invoiceInpArry[v].inpVaild = false;
@@ -511,6 +474,8 @@ export class MinFrmStockPermissionComponent implements OnInit {
 
       let cCss = this.customerCss.find(cust => cust.name == theInvoiceInfo.customerName)
       this.custClass = cCss.css();
+
+      this.stockDetailsIdArr = [];
 
     }
     this.deleteMinInvBtnDisabled = false;
@@ -626,10 +591,7 @@ export class MinFrmStockPermissionComponent implements OnInit {
         this._stockService.handleBackEnd = data;
         res(data)
       })
-    })
-
-    getHandle
-      .then(() => this.editStockQtys())
+    }).then(() => this.editStockQtys())
       .then(() => {
 
         this.getTheStockId();

@@ -13,8 +13,8 @@
         <hr>
         <div class="row">
             <div class="col">
-                <div class="pt-3 font-weight-bolder px-3"
-                    style="border-radius: 5px; box-shadow: none; background-color: whitesmoke;">
+                <div class="pt-3 font-weight-bolder px-3 {{_safeDataService.receiptDoneMsg.shadowFst}}"
+                    style="border-radius: 5px; box-shadow: none;">
                     <div class="form-inline">
                         <p>من | </p>
                         <p class="text-info pr-2"> {{_safeDataService.receiptDoneMsg.from()}} </p>
@@ -26,8 +26,8 @@
                 </div>
             </div>
             <div class="col">
-                <div class="pt-3 font-weight-bolder px-3"
-                    style="border-radius: 5px; box-shadow: none; background-color: whitesmoke;">
+                <div class="pt-3 font-weight-bolder px-3 {{_safeDataService.receiptDoneMsg.shadowSnd}}"
+                    style="border-radius: 5px; box-shadow: none;">
                     <div class="form-inline">
                         <p>الى | </p>
                         <p class="text-info pr-2"> {{_safeDataService.receiptDoneMsg.to()}} </p>

@@ -29,22 +29,14 @@
                 (click)="setCustomerRemain()">استعلام</button>
             <div class="headerLeftBorder"></div>
             <div class="col text-center" id="printCustomerList" style="display: none;">
-                <input *ngIf="router.url === '/customers'" [(ngModel)]="searchCust" placeholder="بحث"
+                <input *ngIf="router.url === '/customers'" [(ngModel)]="searchCust" placeholder="بحث باسم العميل"
                     class="form-control mx-3" id="searchCust">
-                <i class="fa fa-expand btn py-2 btn-outline-info text-center" (click)='printThisCustomerList()' style="height: calc(1.5em + .75rem + 2px);"></i>
+                <i class="fa fa-print btn py-2 btn-outline-light text-center" (click)='printThisCustomerList()' style="height: calc(1.5em + .75rem + 2px);"></i>
             </div>
         </div>
     </nav>
 </div>
 <!--customerEnquiry-->
-<div class="closeBtn printBtns">
-    <div>
-        <button class="btn btn-outline-danger" id="reloadLoc" (click)='reloadLoc()'>X</button>
-    </div>
-    <div>
-        <button class="btn btn-outline-secondary" (click)='openwindowPrint()'><i class="fa fa-print"></i></button>
-    </div>
-</div>
 <div class="mainContainer">
     <input style="display: none; margin-right: 20%;" disabled value="{{_service.date_time}}" type="datetime-local"
         class="date_time">
@@ -108,22 +100,21 @@
                         <!--[(ngModel)]="customerDataView.customerAdd"-->
                     </div>
                     <div class="form-group col-md-6">
+                        <label>رصيد اول</label>
+                        <input formControlName="customerPaid" id="customerPaid" class="form-control">
+                    </div>
+                    <!-- <div class="form-group col-md-6">
                         <label>تاريخ التعاقد</label>
                         <input formControlName="customerDateIN" id="customerDateIN" class="form-control">
-                        <!--[(ngModel)]="customerDataView.customerDateIN"-->
-                    </div>
+                    </div> -->
                 </div>
-                <div class="row">
+                <!-- <div class="row">
                     <div class="form-group col-md-6">
                         <label>الوحدة</label>
                         <input formControlName="customerUnit" id="customerUnit" class="form-control">
-                        <!--[(ngModel)]="customerDataView.customerUnit"-->
                     </div>
-                    <!-- <div class="form-group col-md-6">
-                        <label>رصيد اول</label>
-                        <input formControlName="customerPaid" id="customerPaid" class="form-control">
-                    </div> -->
-                </div>
+                    
+                </div> -->
                 <button class="btn btn-outline-primary ml-2" type="submit" id="addNewCustomerBtn"></button>
             </form>
         </div>
@@ -184,14 +175,15 @@
                 <h5 class="px-2 cardHeader">ميزان</h5>
                 <h5 id="balance" class="px-3">{{balance}}</h5>
             </div>
-            <i class="fa fa-expand btn p-3 btn-outline-info text-center" (click)='printThis()'></i>
+            <i class="fa fa-print btn p-3 btn-outline-secondary text-center" (click)='printThis()'></i>
         </div>
-        <div class="panel-body panel-flex-table mt-2 tableWithHeader" id="printCustomerInvArr" style="height: 780px;">
+        <!-- style="height: 780px;" -->
+        <div class="panel-body panel-flex-table mt-2 tableWithHeader" id="printCustomerInvArr" >
             <table class="flex-table table table-hover text-center">
                 <thead class="navHeader text-light text-center">
                     <tr>
                         <th style="flex: 1.5;">التاريخ</th>
-                        <th class="custDet" style="flex: .3;">تفاصيل</th>
+                        <th class="custDet HideCol" style="flex: .3;">تفاصيل</th>
                         <th style="flex: 3;">رقم الفاتورة</th>
                         <th class="text-center">دائن</th>
                         <th class="text-center">مدين</th>
@@ -208,7 +200,7 @@
                         <!-- <td class="text-center" style="flex: .3;" class="custDet"><i
                                 class="fa fa-id-card btn btn-outline-secondary {{invoice.hideBtn}}"
                                 id="showCustomerInvoice" (click)="showCustomerInvoice(invoice)"></i></td> -->
-                        <td class="custDet" style="flex: .3; padding: 0;"><i
+                        <td class="custDet HideCol" style="flex: .3; padding: 0;"><i
                                 class="fa fa-id-card text-center py-2 {{invoice.hideBtn}} textBtn btn-outline-secondary"
                                 (click)="showCustomerInvoice(invoice)"
                                 style="width: 100%; height: 100%; margin: auto;"></i>

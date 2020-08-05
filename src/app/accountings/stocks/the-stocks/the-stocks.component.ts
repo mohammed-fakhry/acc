@@ -332,7 +332,7 @@ export class TheStocksComponent implements OnInit {
     $('#stocksSearch').fadeIn(100);
     this.buttonEffect('#stockBtn');
     this._service.clearForm();
-  }
+  };
 
   showAddNewStock() {
     this.animateToggle('.stocksClass', '#addNewStock');
@@ -345,6 +345,9 @@ export class TheStocksComponent implements OnInit {
     this.animateToggle('.stocksClass', '#profits');
     $('#stocksSearch').hide(100);
     this.buttonEffect('#showProfitsBtn');
+    $('#howIsProfits').hide();
+    $('#productProfits').hide();
+    $('#totalProfits').hide();
     this.makeMinInvArry()
   };
 
@@ -511,7 +514,7 @@ export class TheStocksComponent implements OnInit {
   };
 
   deleteStock() {
-    $('.fadeLayer').hide()
+    $('#theStockFadeLayer').hide()
     this._stockService.deleteStockSer(this._stockService.stockDataView.stockId)
       .subscribe(data => {
         this._stockService.stocks = this._stockService.stocks.filter(u => u !== this._stockService.stockDataView)

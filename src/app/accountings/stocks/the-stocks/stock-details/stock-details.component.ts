@@ -10,35 +10,31 @@ import { ServicesService } from 'src/app/services.service';
 export class StockDetailsComponent implements OnInit {
 
   productSearchTxt:string;
+  today: string;
 
   constructor(public _stockService: StocksService, public _service: ServicesService) {
 
    }
 
   ngOnInit() {
+    this.makeTodayDate()
+  }
+
+  makeTodayDate = () => {
+    let date = Date.now()
+    let toDate = new Date (date)
+    let dateStr = toDate.toUTCString(); //`${toDate.getFullYear()}, ${toDate.getMonth()}, ${toDate.getDay()}, ${toDate.getHours()}, ${toDate.getMinutes()}` //new Date(date)
+    console.log({
+      date: toDate,
+      str: dateStr,
+      result: this._service.setDate_time(dateStr),
+      dateConverted: new Date ('2020-29-6T1:54')
+    })
+    this.today = this._service.setDate_time(dateStr)
   }
 
   expandThisstockDet() {
-    let show = "#stockDetail";
-    let hide1 = '#stockDetHead';
-    let hide2 = '';
-    let hide3 = '';
-    this._service.printThis(show, hide1, hide2, hide3);
-    $('#stockDetailtable').css(
-      { 'height': '100%' }
-    );
-    $('#stockDetail').removeClass('col-md-9').css('margin', 'auto')
-    $('.navHeader').addClass('sticky-top');
-    $('.closeBtn').show();
-    $('.fa-expand').hide();
+    this._service.printThis();
   }
 
-  reloadLoc() {
-    location.reload();
-  }
-  openwindowPrint() {
-    $('#stockDetail').css('width', '100%')
-    window.print();
-    location.reload();
-  }
 }

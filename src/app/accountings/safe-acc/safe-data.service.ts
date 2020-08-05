@@ -17,6 +17,7 @@ export class SafeDataService {
   //safeReceipt_inpts: SafeReceiptInpts;
 
   theWorkerId: number;
+  safeNameForTransaction: string;
 
   // safe transaction
   safeTransactionArr: SafeTransaction[];
@@ -25,6 +26,8 @@ export class SafeDataService {
     recieptNum: () => null,
     from: () => '',
     to: () => '',
+    shadowFst: '',
+    shadowSnd: '',
     val: null,
     notes: ''
   }

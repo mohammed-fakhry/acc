@@ -12,15 +12,6 @@
         </div>
     </div>
 </div>
-<!--printBtns-->
-<div class="closeBtn printBtns">
-    <div>
-        <button class="btn btn-outline-danger" id="reloadLocMin" (click)='reloadLoc()'>X</button>
-    </div>
-    <div>
-        <button class="btn btn-outline-secondary" (click)='openwindowPrint()'><i class="fa fa-print"></i></button>
-    </div>
-</div>
 <!--onlyForm-->
 <div class="card inpCard p-3" id="headerMinInv">
     <div class="form-inline" id="minCallInvoice">
@@ -28,7 +19,7 @@
         <div class="headerLeftBorder mr-2"></div>
         <!--<input [(ngModel)]="searchTxt" placeholder="بحث" class="form-control mx-3" id="addInvoiceSearch">-->
         <input type="search" name="searchTxt" [(ngModel)]="searchTxt" class="form-control mdb-autocomplete mx-3"
-            list="minDatalistInvoiceSearch" id="minInvoiceSearch" (change)="changMinInvoiceBtn()">
+            list="minDatalistInvoiceSearch" id="minInvoiceSearch" placeholder="بحث برقم الفاتورة او اسم العميل" (change)="changMinInvoiceBtn()">
         <datalist id="minDatalistInvoiceSearch">
             <option *ngFor="let invoice of _theStockComp.minInvArry" value="{{invoice.invoiceSearchVal}}">
             </option>
@@ -42,7 +33,7 @@
             <h2 class="cardHeader text-danger">فاتورة بيع</h2>
             <input disabled id="invNumMin" class="text-center" type="text" value="رقم الفاتورة ( {{invNumMin}} )">
             <input [(ngModel)]='_service.date_time' type="datetime-local">
-            <button id="deleteMinInvoice" style="display: none;" class="btn btn-outline-danger"
+            <button id="deleteMinInvoice" style="display: none;" class="btn btn-outline-danger printX"
                 [disabled]='deleteMinInvBtnDisabled' (click)="showDeleteMinInvoice()">حذف
                 الفاتورة</button>
         </div>
@@ -67,9 +58,9 @@
                             <!--<select class="form-control text-center mr-3 p-1" id="customerNameForAdd">
                                 <option *ngFor="let customer of customers">{{customer.customerName}}</option>
                             </select> name="product{{i}}"-->
-                            <input type="search" id="customerNameForMin" class="form-control {{custClass}} mdb-autocomplete p-1"
-                                list="minDatalistCustomer" (change)='isCustNameInvaild()' name="custNameInpt"
-                                [(ngModel)]='custNameInpt'>
+                            <input type="search" id="customerNameForMin"
+                                class="form-control {{custClass}} mdb-autocomplete p-1" list="minDatalistCustomer"
+                                (change)='isCustNameInvaild()' name="custNameInpt" [(ngModel)]='custNameInpt'>
                             <div *ngIf="custNameInvaild" class="text-danger">{{custVaildMsg}}</div>
                             <datalist id="minDatalistCustomer">
                                 <option *ngFor="let customer of customers" value="{{customer.customerName}}">
@@ -81,12 +72,13 @@
                             <input class="form-control p-1" name="addInvoiceNote" id="minInvoiceNote">
                         </div>
                     </div>
-                    <div class="text-center" id="printMinPremBtn">
-                        <i class="fa fa-expand btn btn-outline-primary p-3 text-center" (click)='printThisMin()'></i>
+                    <div class="text-center printX" id="printMinPremBtn">
+                        <i class="fa fa-print btn btn-outline-secondary p-3 text-center" (click)='_service.printThis()'></i>
                     </div>
                 </div>
             </div>
-            <div class="panel-body panel-flex-table invoiceTable" style="height: 530px;" id="minPrimTable">
+            <!-- style="height: 530px;" -->
+            <div class="panel-body panel-flex-table invoiceTable"  id="minPrimTable" style="height: 530px;">
                 <table class="flex-table table">
                     <thead class="navHeader text-white">
                         <tr>
@@ -102,7 +94,7 @@
                             <td style="flex: none; width: 50px;" class="pt-4">{{i + 1}}</td>
                             <td>
                                 <input type="search" name="product{{i}}" [(ngModel)]="inpt.product"
-                                    (change)="isMinNameVaild()" id="product{{i}}" class="form-control mdb-autocomplete"
+                                    (change)="isMinNameVaild(i)" id="product{{i}}" class="form-control mdb-autocomplete"
                                     list="minDatalist1" [disabled]="inputDisabled">
                                 <datalist id="minDatalist1">
                                     <option *ngFor="let product of _stockService.allProducts"
@@ -111,24 +103,24 @@
                                 <div *ngIf="inpt.inpVaild" class="text-danger vaildAlert">{{inpt.productVaildMsg}}</div>
                             </td>
                             <td><input type="number" name="qty{{i}}" [(ngModel)]="inpt.qty" class="form-control"
-                                    (keyup)="calcTotals('inpt')" [disabled]="inputDisabled">
+                                    (keyup)="calcTotals(i)" [disabled]="inputDisabled">
                                 <div *ngIf="inpt.Qtyinvaild" class="text-danger vaildAlert pt-1">{{inpt.qtyMsg}}
                                 </div>
                             </td>
                             <td><input type="number" name="price{{i}}" [(ngModel)]="inpt.price" class="form-control"
-                                    (keyup)="calcTotals('inpt')" [disabled]="inputDisabled"></td>
+                                    (keyup)="calcTotals(i)" [disabled]="inputDisabled"></td>
                             <td class="text-center font-weight-bold">{{inpt.total}}</td>
                             <input name="stockTransactionDetailsId{{i}}" [(ngModel)]="inpt.stockTransactionDetailsId"
                                 class="d-none">
                         </tr>
-                        <button type="button" id="minAddFilds" class="btn btn-dark my-2 mr-1" style="width: 50px;"
+                        <button type="button" id="minAddFilds" class="btn btn-dark my-2 mr-1 printX" style="width: 50px;"
                             (click)="minAddFilds()">+</button>
                     </tbody>
 
                 </table>
             </div>
             <div class="d-flex justify-content-between">
-                <button [disabled]="isMinInvInvaild" class="btn btn-outline-primary mb-1 mt-3" type="submit"
+                <button [disabled]="isMinInvInvaild" class="btn btn-outline-primary mb-1 mt-3 printX" type="submit"
                     id="minNewInvoicetBtn"></button>
                 <div class="form-inline ml-5  mt-3 darkBg text-light py-2 rounded">
                     <h5 class="text-light pr-3">اجمالى الفاتورة : </h5>

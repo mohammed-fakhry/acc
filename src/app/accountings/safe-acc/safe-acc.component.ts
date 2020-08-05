@@ -120,13 +120,13 @@ export class SafeAccComponent implements OnInit {
   showSafeEnquir_fade() {
     this.showSafeEnquir();
     $('#theSafeFadeLayer').fadeOut('fast');
-    $('.askForDelete').fadeOut('fast').removeClass('animate');
+    $('.askForDelete').removeClass('animate');
   }
 
   showAddNewRecipt_fade() {
     this.showAddSafeReceipt();
     $('#theSafeFadeLayer').hide();
-    $('.askForDelete').fadeOut('fast').removeClass('animate');
+    $('.askForDelete').removeClass('animate');
   };
 
   buttonEffect(max: string) {
@@ -151,7 +151,7 @@ export class SafeAccComponent implements OnInit {
     this.getBackendData_Receipt();
     
     //this._service.clearForm();
-    $('#call_SafeRecieptBtn').html('ايصال جديد')
+    $('#call_SafeRecieptBtn').html('ايصال جديد');
     $('.safeClass').not('#safeReceipt').hide();
     $('#safeReceipt').show();
     $('#add_SafeReceiptInside').hide(); // first

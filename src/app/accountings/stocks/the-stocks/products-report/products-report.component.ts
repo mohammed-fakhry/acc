@@ -199,6 +199,8 @@ export class ProductsReportComponent implements OnInit {
             return product.productName === this.productInpt;
           })
 
+        //console.log(this._stockService.HandleAddtoStockPrimArry)
+
         mainArry = theMainArry.filter(product => product.stockId == theStockInfo.stockId || product.sndStockId == theStockInfo.stockId);
 
         for (let i = 0; i < mainArry.length; i++) {
@@ -209,7 +211,7 @@ export class ProductsReportComponent implements OnInit {
           let hourStr = '';
           let minutes = d.getMinutes();
           let minutesStr = '';
-          
+
           //(d.getHours() > 12) ? timeCond = 'Pm' : timeCond = 'Am';
           if (d.getHours() > 12) {
             timeCond = 'Pm'
@@ -219,7 +221,7 @@ export class ProductsReportComponent implements OnInit {
             } else {
               hourStr = `${hour.toString()}`
             }
-            
+
           } else {
             timeCond = 'Am'
             if (hour < 10) {
@@ -236,7 +238,7 @@ export class ProductsReportComponent implements OnInit {
           }
 
           let theObj = {
-            date_time: `${d.getDate()}/${d.getMonth()+1}/${d.getFullYear()}` + ' | ' + `${hourStr}:${minutesStr}${timeCond}`,//  + `${timeCond}`,
+            date_time: `${d.getDate()}/${d.getMonth() + 1}/${d.getFullYear()}` + ' | ' + `${hourStr}:${minutesStr}${timeCond}`,//  + `${timeCond}`,
             invNumber: mainArry[i].invNumber,
             price: mainArry[i].price,
             customerName: mainArry[i].customerName,
@@ -300,7 +302,7 @@ export class ProductsReportComponent implements OnInit {
             this.filteredProducts[f].netQty = this.filteredProducts[f - 1].netQty + this.filteredProducts[f].addQty - this.filteredProducts[f].minQty;
           }
 
-          if (this.filteredProducts[f].netQty < 0) {this.filteredProducts[f].netColor = 'bg-danger'}
+          if (this.filteredProducts[f].netQty < 0) { this.filteredProducts[f].netColor = 'bg-danger' }
 
         };
 
@@ -331,7 +333,7 @@ export class ProductsReportComponent implements OnInit {
     getHandle.then(theMetod).then(() => {
 
       $('#prodDetTable').slideDown('fast');
-      
+
     });
 
   }

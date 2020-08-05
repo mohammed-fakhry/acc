@@ -93,7 +93,7 @@ export class StocTrancePremComponent implements OnInit {
       if (sndStockInfo != undefined) {
         this.theSndStockId = sndStockInfo.stockId;
       }
-      
+
     };
   };
 
@@ -106,24 +106,9 @@ export class StocTrancePremComponent implements OnInit {
   };
 
   printThisTranceInv() {
-    let show = '#headerTranceInv'
-    let hide1 = '#addFildsTrance'
-    let hide2 = '#callTranceInvoice'
-    let hide3 = '#newTranceInvoicetBtn'
-    this._service.printThis(show, hide1, hide2, hide3)
-    $('#trancePrimTable').css(
-      { 'height': '100%' }
-    );
-    $('.closeBtn').show();
-    $('.form-control').attr({ 'disabled': true })
+    this._service.printThis()
   };
 
-  openwindowPrint() {
-    $('#headerTranceInv').css('width', '100%')
-    $('.closeBtn').hide();
-    window.print();
-    location.reload();
-  };
 
   reloadLoc() {
     location.reload();
@@ -144,11 +129,11 @@ export class StocTrancePremComponent implements OnInit {
     let stockInfo = this._stockService.makeStockArry.find(
       stock => stock.stockName == theStock
     );
-    
+
     if (stockInfo != undefined) {
       this.theStockProds = stockInfo.stockProducts;
     };
-    
+
     this.inputDisabled = false;
   };
 
@@ -259,7 +244,7 @@ export class StocTrancePremComponent implements OnInit {
       $('#fstStockNameForTrance').removeClass('bg-info text-white')
     }
 
-    if (sndStockNameForTrance != null && sndStockNameForTrance != '' ) {
+    if (sndStockNameForTrance != null && sndStockNameForTrance != '') {
       if (sndStockNameForTrance.includes('سيف')) {
         $('#sndStockNameForTrance').addClass('bg-info text-white')
       } else {
@@ -270,55 +255,54 @@ export class StocTrancePremComponent implements OnInit {
 
   productNameIdArr: any[];
 
-  isTranceNameVaild() {
+  isTranceNameVaild(i) {
 
     let index: number;
     let found: boolean;
 
-    for (let i = 0; i < this.invoiceInpArry.length; i++) {
-      let productinpt = $(`#product${i}`).val();
-      if (this.productArr.includes(productinpt) || productinpt == '') {
-        this.invoiceInpArry[i].inpVaild = false;
-      } else {
-        this.invoiceInpArry[i].inpVaild = true;
-        this.invoiceInpArry[i].productVaildMsg = 'خطأ فى اسم الصنف'
-      };
-      if (this.invoiceInpArry[i].Qtyinvaild == true) {
-        this.invoiceInpArry[i].qty = null;
-        this.invoiceInpArry[i].price = null;
-        this.invoiceInpArry[i].Qtyinvaild = false;
-      };
+    //for (let i = 0; i < this.invoiceInpArry.length; i++) {
+    //let productinpt = $(`#product${i}`).val();
+    if (this.productArr.includes(this.invoiceInpArry[i].product) || this.invoiceInpArry[i].product == '') {
+      this.invoiceInpArry[i].inpVaild = false;
+    } else {
+      this.invoiceInpArry[i].inpVaild = true;
+      this.invoiceInpArry[i].productVaildMsg = 'خطأ فى اسم الصنف'
+    };
+    if (this.invoiceInpArry[i].Qtyinvaild == true) {
+      this.invoiceInpArry[i].qty = null;
+      this.invoiceInpArry[i].price = null;
+      this.invoiceInpArry[i].Qtyinvaild = false;
+    };
 
-      if (this.invoiceInpArry[i].product != undefined) {
+    if (this.invoiceInpArry[i].product != undefined) {
 
-        let productInfo = this._stockService.allProducts.find(product => product.productName == this.invoiceInpArry[i].product);
+      let productInfo = this._stockService.allProducts.find(product => product.productName == this.invoiceInpArry[i].product);
 
-        let handleInfo = this._stockService.handleBackEnd.find(item => {
-          item.productId == productInfo.productId && item.stockId == this.theFstStockId
-        });
-  
-        if (handleInfo != undefined) {
-          this.invoiceInpArry[i].price = handleInfo.productCost;
-        };
-
-      };
-
-      // if productName dublicated
-      let valueArr = this.invoiceInpArry.map(item => item.product);
-
-      let filtert = valueArr.filter(product => product != undefined);
-
-      let isDublicate = filtert.some((item, indx) => {
-        index = indx
-        return valueArr.indexOf(item) != indx
+      let handleInfo = this._stockService.handleBackEnd.find(item => {
+        item.productId == productInfo.productId && item.stockId == this.theFstStockId
       });
 
-      if (isDublicate) {
-        found = true
-        break
+      if (handleInfo != undefined) {
+        this.invoiceInpArry[i].price = handleInfo.productCost;
       };
 
     };
+
+    // if productName dublicated
+    let valueArr = this.invoiceInpArry.map(item => item.product);
+
+    let filtert = valueArr.filter(product => product != undefined);
+
+    let isDublicate = filtert.some((item, indx) => {
+      index = indx
+      return valueArr.indexOf(item) != indx
+    });
+
+    if (isDublicate) {
+      found = true
+    };
+
+    //};
 
     if (index != null) {
       if (found == true) {
@@ -327,40 +311,39 @@ export class StocTrancePremComponent implements OnInit {
       };
     };
 
-    for (let i = 0; i < this.invoiceInpArry.length; i++) {
-      if (this.invoiceInpArry[i].inpVaild == true) {
-        this.isAddInvVaild = true;
-        break
-      } else {
-        this.isAddInvVaild = false;
-      };
+    //for (let i = 0; i < this.invoiceInpArry.length; i++) {
+    if (this.invoiceInpArry[i].inpVaild == true) {
+      this.isAddInvVaild = true;
+    } else {
+      this.isAddInvVaild = false;
+    };
 
-      if (this.invoiceInpArry[i].product == '') {
-        
-        if (this.invoiceInpArry[i].price > 0 || this.invoiceInpArry[i].qty >= 0) {
-          
-          if (this.invoiceInpArry[i + 1] != undefined) {
-            
-            if (this.invoiceInpArry[i + 1].product != undefined || this.invoiceInpArry[i + 1].product != '' || this.invoiceInpArry[i + 1].product != null) {
-              this.stockDetailsIdArr.push(this.invoiceInpArry[i].stockTransactionDetailsId)
-              this.invoiceInpArry.splice(i, 1)
-              this.calcTotals('checkVaild')
-            } else {
-              this.invoiceInpArry[i].price = null;
-              this.invoiceInpArry[i].qty = null;
-              this.calcTotals('checkVaild')
-            };
+    if (this.invoiceInpArry[i].product == '') {
+
+      if (this.invoiceInpArry[i].price > 0 || this.invoiceInpArry[i].qty >= 0) {
+
+        if (this.invoiceInpArry[i + 1] != undefined) {
+
+          if (this.invoiceInpArry[i + 1].product != undefined || this.invoiceInpArry[i + 1].product != '' || this.invoiceInpArry[i + 1].product != null) {
+            this.stockDetailsIdArr.push(this.invoiceInpArry[i].stockTransactionDetailsId)
+            this.invoiceInpArry.splice(i, 1)
+            this.calcTotals('checkVaild')
+          } else {
+            this.invoiceInpArry[i].price = null;
+            this.invoiceInpArry[i].qty = null;
+            this.calcTotals('checkVaild')
           };
         };
       };
     };
+    //};
   };
 
   calcTotals(cond: string) {
     this.deleteInvTranceBtnDisabled = true;
     if (cond == 'inpt') {
-      this.isAddQtyVaild()
-    }
+      this.isAddQtyVaild();
+    };
 
     this.totalInvoice = [];
     this.invoiceTotal = '0'
@@ -368,7 +351,7 @@ export class StocTrancePremComponent implements OnInit {
     for (let i = 0; i < this.invoiceInpArry.length; i++) {
       if (this.invoiceInpArry[i].qty == null || this.invoiceInpArry[i].price == null) {
         this.invoiceInpArry[i].total = 0;
-        this.totalInvoice.push(this.invoiceInpArry[i].total)
+        this.totalInvoice.push(this.invoiceInpArry[i].total);
       } else {
         this.invoiceInpArry[i].total = this.invoiceInpArry[i].qty * this.invoiceInpArry[i].price;
         this.totalInvoice.push(this.invoiceInpArry[i].total);
@@ -446,7 +429,7 @@ export class StocTrancePremComponent implements OnInit {
       $('#invNumTrance').show();
 
       $('#deleteTranceInvoice').show();
-      this.deleteInvTranceBtnDisabled = false;
+
 
       let invoiceInfo = this._stockService.makeInvoiceArry.find(
         invoice => invoice.invoiceSearchVal == this.searchInVal
@@ -481,7 +464,7 @@ export class StocTrancePremComponent implements OnInit {
 
       this.invNumTrance = invoiceInfo.invNumber;
       this._service.date_time = invoiceInfo.date_time;
-      
+
       for (let d = 0; d < invoiceInfo.invoiceDetails.length; d++) {
         this.invoiceInpArry[d].stockTransactionDetailsId = invoiceInfo.invoiceDetails[d].stockTransactionDetailsId;
         this.invoiceInpArry[d].product = invoiceInfo.invoiceDetails[d].productName;
@@ -510,8 +493,8 @@ export class StocTrancePremComponent implements OnInit {
       this.isAddQtyVaild();
       $('#callTranceInvoice').hide();
       $('#tranceInvoiceForm').slideDown('fast');
-
-      this.deleteInvTranceBtnDisabled = true;
+      this.deleteInvTranceBtnDisabled = false;
+      //this.deleteInvTranceBtnDisabled = true;
     };
   }; // showNewTranceInvoice
 
@@ -762,7 +745,7 @@ export class StocTrancePremComponent implements OnInit {
     this._stockService.invoiceDoneMsg = {
       invoiceKind: 'اذن النقل',
       from: $('#fstStockNameForTrance').val(),
-      to:  $('#sndStockNameForTrance').val(),
+      to: $('#sndStockNameForTrance').val(),
       invoiceVal: parseInt(this.invoiceTotal),
       invoiceNote: $('#tranceInvoiceNote').val(),
     }
@@ -772,7 +755,7 @@ export class StocTrancePremComponent implements OnInit {
   tranceFrmStockPrem() {
     this.makeTranceStockPremArry();
     if (this.stockDetailsIdArr.length != 0) {
-      for (let i = 0; i < this.stockDetailsIdArr.length ; i++) {
+      for (let i = 0; i < this.stockDetailsIdArr.length; i++) {
         this._stockService.deleteStockTransactionDetails(this.stockDetailsIdArr[i]).subscribe();
         console.log('detail id deleted')
       };
@@ -784,13 +767,12 @@ export class StocTrancePremComponent implements OnInit {
   };
 
   showDeleteTranceInvoice() {
-    $('.fadeLayer').show(0);
+    $('#tranceFadeLayer').show(0);
     $('.askForDelete').addClass('animate');
   };
 
   deleteTranceInvoice() {
-    $('.fadeLayer').hide();
-    let stockTransId = $('#tranceStockTransactionId').val();
+    $('#tranceFadeLayer').hide();
 
     for (let i = 0; this.invoiceInpArry.length; i++) {
       if (this.invoiceInpArry[i].stockTransactionDetailsId == undefined) {
@@ -800,9 +782,6 @@ export class StocTrancePremComponent implements OnInit {
         this._stockService.deleteStockTransactionDetails(this.invoiceInpArry[i].stockTransactionDetailsId).subscribe();
       };
     };
-
-    // backEnd
-    //this._stockService.deleteStockTransaction(stockTransId).subscribe();
 
     //this.editStockQtys();
     this._theStockComp.showStocksEnquiry();

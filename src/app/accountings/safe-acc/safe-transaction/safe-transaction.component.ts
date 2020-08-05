@@ -49,33 +49,11 @@ export class SafeTransactionComponent implements OnInit {
 
   printSafeTrance() {
 
-    let show = '#headerSafeReport';
-    let hide1 = '';
-    let hide2 = '';
-    let hide3 = '';
-    this._service.printThis(show, hide1, hide2, hide3);
-
-    $('.closeBtn').show()
-    $('#SafeReportTable').animate(
-      { 'height': '100%' }
-    );
-    $('.stickyInp').css({'right' : 0})
-    $('.navHeader').addClass('sticky-top');
-    $('#printSafeTrance').hide();
-    $('#btmArr').fadeIn();
-  };
-
-  openwindowPrint() {
-    $('.closeBtn').hide();
-    $('.theHeader').hide();
-    $('#headerSafeReport').css('width', '100%')
-    document.documentElement.scrollTop = 0;
     window.print();
-    location.reload();
   };
 
   reloadLoc() {
-    location.reload();
+    //location.reload();
   };
 
   fstDateInvalid: boolean;
@@ -88,7 +66,7 @@ export class SafeTransactionComponent implements OnInit {
     $('#containerLoader').fadeIn();
 
     $('#searchSafeTrance').attr({ 'disabled': false });
-    
+
     //this.searchSafeTrance = '';
 
     let fromDate = $('#fromDateSafeRe').val();
@@ -104,15 +82,38 @@ export class SafeTransactionComponent implements OnInit {
 
     if (this.filterdArr == undefined && fromDate == 'Invalid Date' && toDate == 'Invalid Date') {
       this.filterdArr = this._safeDataService.safeTransactionArr;
+
+      $('#containerLoader').fadeOut(0, () => {
+        $('#SafeReportTable').slideDown('slow');
+      });
+
     } else {
 
       this.filterdArr = this._safeDataService.safeTransactionArr;
 
-      if (fromDate == 'Invalid Date') {
+      if (fromDate == 'Invalid Date' && toDate == 'Invalid Date') {
+
+        this.filterdArr = this._safeDataService.safeTransactionArr;
+
+        $('#containerLoader').fadeOut(0, () => {
+          $('#SafeReportTable').slideDown('slow');
+        });
+
+      } else if (fromDate == 'Invalid Date') {
+
         this.fstDateInvalid = true;
+        $('#containerLoader').fadeOut(0, () => {
+          $('#SafeReportTable').slideUp('fast');
+        });
+
       } else if (toDate == 'Invalid Date') {
+
         this.sndDateInvalid = true;
         this.fstDateInvalid = false;
+        $('#containerLoader').fadeOut(0, () => {
+          $('#SafeReportTable').slideUp('fast');
+        });
+
       } else {
         this.fstDateInvalid = false;
         this.sndDateInvalid = false;
@@ -120,13 +121,19 @@ export class SafeTransactionComponent implements OnInit {
         this.filterdArr = this.filterdArr.filter((date) => {
           return date.date_time > match_fromDate && date.date_time < match_toDate
         });
-        
+
+        $('#containerLoader').fadeOut(0, () => {
+          $('#SafeReportTable').slideDown('slow');
+        });
+
       };
-    };
-    $('#containerLoader').fadeOut(0,() => {
-      $('#SafeReportTable').slideDown('slow');
-    });
-    
+
+    }
+
+    /* $('#containerLoader').fadeOut(0, () => {
+      //$('#SafeReportTable').slideDown('slow');
+    }); */
+
   };
 
 }; // end

@@ -52,7 +52,7 @@ export class CustomerComponent implements OnInit {
     });
 
     $('#hideFadeLayer').click(function () {
-      $('.fadeLayer').fadeOut('fast');
+      $('#customerFadeLayer').fadeOut('fast');
       $('.askForDelete').fadeOut('fast').removeClass('animate')
     });
 
@@ -60,7 +60,6 @@ export class CustomerComponent implements OnInit {
 
     $("#hideInvDet").click(function () {
       $("#customerFadeLayer").fadeOut('fast');
-      //$('.fadeLayer').fadeOut('slow');
       $('.askForDelete').fadeOut('fast').removeClass('animate')
       $('#customerInvDetail').fadeOut('fast').removeClass('animate')
     });
@@ -90,17 +89,17 @@ export class CustomerComponent implements OnInit {
   };
 
   printThis() {
-    let show = "#customerInvDetails";
+    /* let show = "#customerInvDetails";
     let hide1 = '#customerDetails';
     let hide2 = '#customerHeader';
-    let hide3 = '';
-    this._service.printThis(show, hide1, hide2, hide3);
-    $('#printCustomerInvArr').css(
+    let hide3 = ''; */
+    this._service.printThis();
+    /* $('#printCustomerInvArr').css(
       { 'height': '100%' }
     );
     $('.navHeader').addClass('sticky-top');
     $('.date_time').show();
-    $('.closeBtn').show();
+    $('.closeBtn').show(); */
   }
 
   getCurrentDate() {
@@ -169,32 +168,26 @@ export class CustomerComponent implements OnInit {
 
   printThisCustomerList() {
 
-    let Newcustomers = this.custRemainArry.filter((customer) => {
-      return customer.customerRemain != 0 && customer.customerName != 'تست'
-    });
+    const preparePrint = new Promise((res) => {
+      this.getCurrentDate();
+      $('.date_time').show();
+      let Newcustomers = this.custRemainArry.filter((customer) => {
+        return customer.customerRemain != 0 && customer.customerName != 'تست'
+      })
+      /* Newcustomers.sort(function (a, b) {
+        return a.customerRemain - b.customerRemain;
+      }); */
+      res(Newcustomers)
 
-    Newcustomers.sort(function (a, b) {
-      return a.customerRemain - b.customerRemain;
-    });
-    this.custRemainArry = Newcustomers
-
-    let show = "#customerEnquiry";
-    let hide1 = '#customerHeader';
-    let hide2 = '';
-    let hide3 = '';
-    this._service.printThis(show, hide1, hide2, hide3);
-    $('#customerListTable').css(
-      { 'height': '100%' }
-    );
-    $('.date_time').show();
-    $('.closeBtn').show();
-    $('.HideCol').hide();
-    $('.navHeader').addClass('sticky-top');
-    //window.print();
-    this.getCurrentDate();
+    }).then((data: any[]) => {
+      this.custRemainArry = data
+    }).then(() => {
+      setTimeout(this._service.printThis,10)
+      setTimeout(() => {$('.date_time').hide()}, 12)
+    })
 
   }
-
+/* 
   openwindowPrint() {
     document.documentElement.scrollTop = 0;
     $('.closeBtn').hide();
@@ -203,7 +196,7 @@ export class CustomerComponent implements OnInit {
     $(`.printable`).css('width', '100%');
     window.print();
     location.reload();
-  };
+  }; */
 
   reloadLoc() {
     location.reload();
@@ -482,6 +475,7 @@ export class CustomerComponent implements OnInit {
     };
 
     Promise.all([getInvoices, getRecipts, getCustomers]).then(makeCustRem).then(() => {
+      this.custRemainArry.sort((a, b) => a.customerRemain - b.customerRemain);
       $('#containerLoader').fadeOut();
       this.showCustomerEnquiry();
     });
@@ -518,16 +512,12 @@ export class CustomerComponent implements OnInit {
       note: invoice.notes,
       invTotal: this._service.sumArry(this._custService.invTotalArry),
     }
-    if(invoice.transactionType == 2) {
+    if (invoice.transactionType == 2) {
       this._custService.invKindColor = 'text-danger'
     } else {
       this._custService.invKindColor = 'text-info'
     }
-    //this._custService.invKindColor = invoice.
-    /* this._custService.invoiceKind = invoice.invoiceKind;
-    this._custService.date_time = invoice.date_time
-    this._custService.invoiceNum = invoice.invoiceNum
-    this._custService.invTotal = this._service.sumArry(this._custService.invTotalArry); */
+
     $('#customerFadeLayer').show(0);
     $('#customerInvDetail').show().addClass('animate')
   }
@@ -537,7 +527,7 @@ export class CustomerComponent implements OnInit {
     let addBtnVal = $('#addNewCustomerBtn').html()
     if (addBtnVal == 'اضافة') {
 
-      this.customerData.value.customerRemain = this.customerData.value.customerPaid;
+      //this.customerData.value.customerRemain = this.customerData.value.customerPaid;
       this._custService.creatCustomer(this.customerData.value).subscribe()
       this._service.clearForm();
 
@@ -554,13 +544,13 @@ export class CustomerComponent implements OnInit {
   };
 
   askForDelete(customer: Customer) {
-    $('.fadeLayer').show(0)
+    $('#customerFadeLayer').show(0)
     $('.askForDelete').show().addClass('animate')
     this.putCustomerDataValue(customer);
   };
 
   deletCustomer() {
-    $('.fadeLayer').hide()
+    $('#customerFadeLayer').hide()
     this._custService.deleteCustomerSer(this.customerData.value.customerId)
       .subscribe(data => {
         this.customers = this.customers.filter(u => u !== this.customerData.value)

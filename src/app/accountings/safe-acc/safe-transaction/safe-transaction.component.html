@@ -7,37 +7,31 @@
         <div class="col-md-2">
             <div class="card inpCard_row stickyInp">
                 <div class="theHeader p-3">
-                    <div class="form-inline mb-3 bottomBorder pb-3 closeBtn" style="display: none;">
-                        <button class="btn btn-outline-secondary" (click)='openwindowPrint()'><i
-                                class="fa fa-print"></i></button>
-                        <button class="btn btn-outline-danger mr-3" id="reloadLoc" (click)='reloadLoc()'>X</button>
-                    </div>
-                    <div class="d-flex justify-content-between">
-                        <h2 class="cardHeader">تقرير حركة خزنة</h2>
-                        <i id="printSafeTrance" class="fa fa-expand btn p-3 btn-outline-info text-center"
-                            (click)='printSafeTrance()'></i>
-                    </div>
-                    <hr class="text-center">
-                    <!-- <div class="d-flex justify-content-arround"> -->
-                    <div class="form-group">
-                        <label for="fromDateSafeRe">من تاريخ</label>
-                        <input class="form-control p-1" type="date" id="fromDateSafeRe">
-                        <div *ngIf='fstDateInvalid' class="text-danger pt-1">يجب ادخال تاريخ صحيح</div>
-                    </div>
-                    <div class="form-group">
-                        <label for="toDateSafeRe">الى تاريخ</label>
-                        <input class="form-control p-1" type="date" id="toDateSafeRe">
-                        <div *ngIf='sndDateInvalid' class="text-danger pt-1">يجب ادخال تاريخ صحيح</div>
-                    </div>
-                    <div class="form-group">
-                        <label for="searchSafeTrance">بحث</label>
-                        <input disabled [(ngModel)]="searchSafeTrance" name="searchSafeTrance"
-                            placeholder="بحث ببيان الحركة" class="form-control p-1" id="searchSafeTrance">
-                    </div>
+                    <h5 class="cardHeader">{{_safeDataService.safeNameForTransaction}}</h5>
+                    <div class="printX">
+                        <div class="form-group">
+                            <label for="fromDateSafeRe">من تاريخ</label>
+                            <input class="form-control p-1" type="date" id="fromDateSafeRe">
+                            <div *ngIf='fstDateInvalid' class="text-danger pt-1">يجب ادخال تاريخ صحيح</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="toDateSafeRe">الى تاريخ</label>
+                            <input class="form-control p-1" type="date" id="toDateSafeRe">
+                            <div *ngIf='sndDateInvalid' class="text-danger pt-1">يجب ادخال تاريخ صحيح</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="searchSafeTrance">بحث</label>
+                            <input disabled [(ngModel)]="searchSafeTrance" name="searchSafeTrance"
+                                placeholder="بحث ببيان الحركة" class="form-control p-1" id="searchSafeTrance">
+                        </div>
 
-                    <div class="text-center form-inline">
-                        <button style="height: 100%;" (click)='filterByDate()'
-                            class="btn btn-outline-info text-center"><i class="fa fa-filter"></i></button>
+                        <div class="text-center form-inline">
+                            <button style="height: 100%; width: 100px;" (click)='filterByDate()'
+                                class="btn btn-outline-info text-center"><i class="fa fa-filter"></i></button>
+                            <button class="btn mx-2 btn-outline-secondary text-center" (click)='printSafeTrance()'><i
+                                    id="printSafeTrance" class="fa fa-print"></i></button>
+
+                        </div>
                     </div>
                 </div>
             </div>
@@ -45,42 +39,42 @@
         </div>
         <div class="col-md-10">
             <!-- <div class="card darkBg py-1"> -->
-                <div class="card">
-                    <!-- height: 920px; -->
-                    <div class="panel-body panel-flex-table" id="SafeReportTable" style="display: none; ">
-                        <table class="flex-table table table-hover" style="height: 100%;">
-                            <thead class="navHeader text-light">
-                                <tr>
-                                    <!---->
-                                    <th style="width: fit-content; flex: 1.1;">التاريخ</th>
-                                    <th style="flex: .5;">الاذن</th>
-                                    <th style="flex: 1.5;">نوع االحركة</th>
-                                    <th style="flex: 2;">بيان الحركة</th>
-                                    <th class="text-center">مدين</th>
-                                    <th class="text-center">دائن</th>
-                                    <th class="text-center">رصيد</th>
-                                    <th style="flex: 2;">ملاحظات</th>
-                                </tr>
-                            </thead>
-                            <tbody class=" mt-3 tableBody">
-                                <tr *ngFor='let safeRep of filterdArr|safeTranceSearch:searchSafeTrance; let i = index'>
-                                    <td style="width: fit-content; flex: 1.1;">
-                                        {{safeRep.date}}
-                                        <!-- <input disabled value="{{safeRep.date_time}}" type="datetime-local"> -->
-                                    </td>
-                                    <td style="flex: .5;">{{safeRep.safeReceiptId}}</td>
-                                    <td style="flex: 1.5;" class="{{safeRep.receiptKind_color}}">{{safeRep.receiptKind}}
-                                    </td>
-                                    <td style="flex: 2;">{{safeRep.transactionExplain}}</td>
-                                    <td class="text-center">{{safeRep.receiptValIn}}</td>
-                                    <td class="{{safeRep.receiptKind_color}} text-center">{{safeRep.receiptValOut}}</td>
-                                    <td class="darkBg text-center">{{safeRep.safeNet}}</td>
-                                    <td style="flex: 2;">{{safeRep.recieptNote}}</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
+            <div class="card">
+                <!-- height: 920px; -->
+                <div class="panel-body panel-flex-table" id="SafeReportTable" style="display: none; ">
+                    <table class="flex-table table table-hover" style="height: 100%;">
+                        <thead class="navHeader text-light">
+                            <tr>
+                                <!---->
+                                <th style="width: fit-content; flex: 1.1;">التاريخ</th>
+                                <th style="flex: .5;">الاذن</th>
+                                <th style="flex: 1.5;">نوع االحركة</th>
+                                <th style="flex: 2;">بيان الحركة</th>
+                                <th class="text-center">مدين</th>
+                                <th class="text-center">دائن</th>
+                                <th class="text-center">رصيد</th>
+                                <th style="flex: 2;">ملاحظات</th>
+                            </tr>
+                        </thead>
+                        <tbody class=" mt-3 tableBody">
+                            <tr *ngFor='let safeRep of filterdArr|safeTranceSearch:searchSafeTrance; let i = index'>
+                                <td style="width: fit-content; flex: 1.1;">
+                                    {{safeRep.date}}
+                                    <!-- <input disabled value="{{safeRep.date_time}}" type="datetime-local"> -->
+                                </td>
+                                <td style="flex: .5;">{{safeRep.safeReceiptId}}</td>
+                                <td style="flex: 1.5;" class="{{safeRep.receiptKind_color}}">{{safeRep.receiptKind}}
+                                </td>
+                                <td style="flex: 2;">{{safeRep.transactionExplain}}</td>
+                                <td class="text-center">{{safeRep.receiptValIn}}</td>
+                                <td class="{{safeRep.receiptKind_color}} text-center">{{safeRep.receiptValOut}}</td>
+                                <td class="darkBg text-center">{{safeRep.safeNet}}</td>
+                                <td style="flex: 2;">{{safeRep.recieptNote}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
+            </div>
             <!-- </div> -->
         </div>
     </div>

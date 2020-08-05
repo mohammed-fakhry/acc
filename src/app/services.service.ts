@@ -176,30 +176,12 @@ export class ServicesService {
   };
 
 
-  printThis(show: string, hide1: string, hide2: string, hide3: string) {
-
-    $(show).animate({
-      'width': '96%',
-      'hight': '100%',
-      'right': '0px'
-    })//.addClass('wideScreen')
-
-    $('#app-side-bar').hide();
-    $('#sidebarToggle').hide();
-
-    if (hide1 != '') {
-      $(hide1).slideUp(50)
-    };
-    if (hide2 != '') {
-      $(hide2).slideUp(50);
-    };
-    if (hide3 != '') {
-      $(hide3).slideUp(50)
-    };
-
-    $('#mainStockHeader').slideUp(75)
-    $('.vaildAlert').fadeOut();
-
+  printThis() {
+    $('table').removeClass('flex-table');
+    $('.panel-body').removeClass('panel-flex-table');
+    window.print();
+    $('table').addClass('flex-table')
+    $('.panel-body').addClass('panel-flex-table')
   };
 
   clearForm() {

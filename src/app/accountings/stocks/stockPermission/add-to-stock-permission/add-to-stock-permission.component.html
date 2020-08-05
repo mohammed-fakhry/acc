@@ -12,13 +12,7 @@
         </div>
     </div>
 </div>
-<!--printBtns-->
-<div class="closeBtn printBtns">
-    <div><button class="btn btn-outline-danger" id="reloadLocAddPrem" (click)='reloadLoc()'>X</button></div>
-    <div>
-        <button class="btn btn-outline-secondary" (click)='openwindowPrint()'><i class="fa fa-print"></i></button>
-    </div>
-</div>
+
 <!--onlyForm-->
 <div class="card inpCard p-3" id="headerAddInv">
     <div class="form-inline" id="callInvoice">
@@ -26,7 +20,7 @@
         <div class="headerLeftBorder mr-2"></div>
         <!--<input [(ngModel)]="searchTxt" placeholder="بحث" class="form-control mx-3" id="addInvoiceSearch">-->
         <input type="search" name="searchTxt" [(ngModel)]="searchTxt" class="form-control mdb-autocomplete mx-3"
-            list="datalistInvoiceSearch" id="invoiceSearch" (change)="changAddInvoiceBtn()">
+            list="datalistInvoiceSearch" id="invoiceSearch" placeholder="بحث برقم الفاتورة او اسم العميل" (change)="changAddInvoiceBtn()">
         <datalist id="datalistInvoiceSearch">
             <option *ngFor="let invoice of _theStockComp.addInvArry" value="{{invoice.invoiceSearchVal}}">
             </option>
@@ -41,8 +35,8 @@
             <!--<div>{{_service.date_time}}</div>-->
             <!--<div class="text-center">رقم الفاتورة ( {{invNum}} )</div>-->
             <input disabled id="invNum" class="text-center" type="text" value="رقم الفاتورة ( {{invNum}} )">
-            <input [(ngModel)]='date_time' type="datetime-local">
-            <button id="deleteAddInvoice" style="display: none;" class="btn btn-outline-danger"
+            <input [(ngModel)]='date_time' type="datetime-local" (change)="dateChanged()">
+            <button id="deleteAddInvoice" style="display: none;" class="btn btn-outline-danger printX"
                 [disabled]='deleteInvBtnDisabled' (click)="showDeleteAddInvoice()">حذف
                 الفاتورة</button>
         </div>
@@ -78,11 +72,11 @@
                         </div>
                     </div>
                     <div class="text-center m-2" id="printAddPremBtn">
-                        <i class="fa fa-expand btn p-3 btn-outline-info text-center" (click)='printThis()'></i>
+                        <i class="fa fa-print btn p-3 btn-outline-secondary text-center" (click)='printThis()'></i>
                     </div>
                 </div>
             </div>
-            <!--inpts-->
+            <!--inpts - " -->
             <div class="panel-body panel-flex-table invoiceTable" style="height: 530px;" id="addPrimTable">
                 <table class="flex-table table">
                     <thead class="navHeader text-white">
@@ -99,7 +93,7 @@
                             <td style="flex: none; width: 50px;" class="pt-4">{{i + 1}}</td>
                             <td>
                                 <input type="search" name="product{{i}}" [(ngModel)]="inpt.product" id="product{{i}}"
-                                    class="form-control mdb-autocomplete" list="datalist1" (change)="isAddNameVaild()"
+                                    class="form-control mdb-autocomplete" list="datalist1" (change)="isAddNameVaild(i)"
                                     [disabled]="inptDisabled">
                                 <datalist id="datalist1">
                                     <option *ngFor="let product of _stockService.allProducts"
@@ -119,14 +113,14 @@
                             <input name="stockTransactionDetailsId{{i}}" [(ngModel)]="inpt.stockTransactionDetailsId"
                                 class="d-none">
                         </tr>
-                        <div id="addFilds" class="btn btn-dark my-2 mr-1" style="width: 50px;" (click)="addFilds()">+
+                        <div id="addFilds" class="btn btn-dark my-2 mr-1 printX" style="width: 50px;" (click)="addFilds()">+
                         </div>
                     </tbody>
                 </table>
             </div>
             <div class="d-flex justify-content-between">
                 <div class="form-inline">
-                    <button [disabled]="isAddInvVaild" class="btn btn-outline-primary mb-1 mt-3" type="submit"
+                    <button [disabled]="isAddInvVaild" class="btn btn-outline-primary mb-1 mt-3 printX" type="submit"
                         id="addNewInvoicetBtn"></button>
                 </div>
                 <div class="form-inline ml-5  mt-3 darkBg text-light py-2 rounded">

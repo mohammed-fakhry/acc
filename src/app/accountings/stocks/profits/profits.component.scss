@@ -11,8 +11,18 @@ h5 {
 }; */
 
 #totalProfits {
+    
     th,td {
         padding-top: 10px;
-        padding-bottom: 7px; 
+        padding-bottom: 7px;
+        text-align: center;
     }
+}
+thead {
+    //position: relative;
+    top: 0px;
+}
+
+@media print {
+    #productProfits {overflow-y: hidden;}
 }

@@ -79,7 +79,7 @@ export class UnitesComponent implements OnInit {
 
     // Methods
     $('#hideFadeLayer').click(function () {
-      $('.fadeLayer').fadeOut('fast')
+      $('#DelFade').fadeOut('fast')
       $('.askForDelete').fadeOut('fast').removeClass('animate')
     })
     $('#hideCalcLayer').click(function() {

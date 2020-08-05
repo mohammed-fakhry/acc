@@ -16,7 +16,7 @@
                         </datalist>
                         <div *ngIf='productNameVaild' class="text-danger">خطأ فى اسم الصنف</div>
                     </div>
-                    <div class="form-group mt-3">
+                    <div class="form-group mt-3 printX">
                         <label for="stockNameForProdRep">اسم المخزن</label>
                         <select (change)='isStockNameValid()' class="form-control p-1" id="stockNameForProdRep"
                             name="stockNameInp" [(ngModel)]='stockNameInp'>
@@ -24,15 +24,15 @@
                         </select>
                         <div *ngIf='stockNameVaild' class="text-danger">يجب ادخال المخزن</div>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group printX">
                         <label for="fromDate">من تاريخ</label>
                         <input class="form-control p-1" type="date" id="fromDate">
                     </div>
-                    <div class="form-group">
+                    <div class="form-group printX">
                         <label for="toDate">الى تاريخ</label>
                         <input class="form-control p-1" type="date" id="toDate">
                     </div>
-                    <div class="mt-3">
+                    <div class="mt-3 printX">
                         <button [disabled]='prodRepFormInvaild' class="btn btn-outline-primary"
                             (click)='showProductReport()'>عرض
                             التقرير</button>

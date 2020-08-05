@@ -19,7 +19,7 @@
         <div class="headerLeftBorder mr-2"></div>
         <input type="search" name="searchSafeReceiptTxt" [(ngModel)]="searchSafeReceiptTxt"
             class="form-control clearForm mdb-autocomplete mx-3" list="datalist_SafeReceiptSearch"
-            id="SafeReceiptSearch" (keyup)="changAddSafeReceiptBtn()">
+            id="SafeReceiptSearch" placeholder="بحث برقم الايصال" (keyup)="changAddSafeReceiptBtn()">
         <datalist id="datalist_SafeReceiptSearch">
             <option *ngFor="let safeReceipt of _safeDataService.safeReceiptList" value="{{safeReceipt.safeReceiptId}}">
             </option>

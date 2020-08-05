@@ -126,7 +126,7 @@ export class WorkersComponent implements OnInit {
     });
     // hide Fade layer
     $('#hideFadeLayer').click(function () {
-      $('.fadeLayer').fadeOut('fast')
+      $('#workersfadeLayer').fadeOut('fast')
       $('.askForDelete').fadeOut('fast').removeClass('animate')
     })
 
@@ -303,7 +303,7 @@ export class WorkersComponent implements OnInit {
   };
 
   askForDelete(worker: Worker) {
-    $('.fadeLayer').show(0)
+    $('#workersfadeLayer').show(0)
     $('.askForDelete').show().addClass('animate')
     this.putWorkerDataValue(worker);
   };
@@ -322,7 +322,7 @@ export class WorkersComponent implements OnInit {
   };
 
   deletWorker() {
-    $('.fadeLayer').hide()
+    $('#workersfadeLayer').hide()
     this._service.deleteWorkerSer(this.workerData.value.workerId)
       .subscribe(data => {
         this.workers = this.workers.filter(u => u !== this.workerData.value)

@@ -595,11 +595,13 @@ export class SafeReceiptComponent implements OnInit {
       safe => safe.safeId === oldSafe.safeId
     );
 
-    oldSafe.currentSafeVal = newVal
-
-    this._safeDataService.updateSafeData(oldSafe).subscribe();
+    oldSafe.currentSafeVal = newVal;
+    this.theSafeInfo.currentSafeVal = newVal;
+    //this._safeDataService.updateSafeData(oldSafe).subscribe();
     // pass new Value to edit
     this._safeDataService.safeList[i].currentSafeVal = newVal;
+
+    this.safeChanged()
   };
 
   editSecSafeVal(receiptVal: number) { // from old receipt
@@ -611,9 +613,9 @@ export class SafeReceiptComponent implements OnInit {
     // the condition
     if (this.theReceiptInfo.secSafeName != null && this.theReceiptInfo.secSafeName != undefined) {
       if (this.theReceiptKind == 'add') {
-        oldSecSafe.currentSafeVal = oldSecSafe.currentSafeVal + receiptVal;
-      } else if (oldSecSafe != undefined) {
         oldSecSafe.currentSafeVal = oldSecSafe.currentSafeVal - receiptVal;
+      } else if (oldSecSafe != undefined) {
+        oldSecSafe.currentSafeVal = oldSecSafe.currentSafeVal + receiptVal;
       };
 
       if (oldSecSafe != undefined) {
@@ -667,9 +669,9 @@ export class SafeReceiptComponent implements OnInit {
     if (this.theReceiptInfo.AccName != null) {
 
       if (this.theReceiptKind == 'add') {
-        oldAcc.currentAccVal = oldAcc.currentAccVal + receiptVal;
-      } else if (oldAcc != undefined) {
         oldAcc.currentAccVal = oldAcc.currentAccVal - receiptVal;
+      } else if (oldAcc != undefined) {
+        oldAcc.currentAccVal = oldAcc.currentAccVal + receiptVal;
       };
 
       if (oldAcc != undefined) {
@@ -885,6 +887,8 @@ export class SafeReceiptComponent implements OnInit {
         }
       },
 
+      shadowFst: (this.safeReceipt_inpts.receiptKind == 'ايصال استلام نقدية') ? 'inpCard_row' : 'shadow inpCard_row',
+      shadowSnd: (this.safeReceipt_inpts.receiptKind == 'ايصال استلام نقدية') ? 'shadow inpCard_row' : 'inpCard_row',
       val: this.safeReceipt_inpts.receiptVal,
       notes: this.safeReceipt_inpts.recieptNote
     }

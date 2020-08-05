@@ -166,7 +166,7 @@ export class SideBarComponent implements OnInit {
       $('#sidebar').css('height', '0').toggleClass('card');
       $('#fadeEffect').hide()
       $('#sidebarToggle').show();
-    };    
+    };
   };
 
   fadeEffect() {
@@ -174,7 +174,7 @@ export class SideBarComponent implements OnInit {
     $('#sidebar').removeClass("card").css('height', '0')
     $('#fadeEffect').hide()
     $('#sidebarToggle').show()
-  }
+  };
 
   backupMsg: string;
   backupPath: string;
@@ -189,9 +189,7 @@ export class SideBarComponent implements OnInit {
         this.backupPath = data[0]
         res('done')
       });
-    });
-
-    postBackup.then(() => {
+    }).then(() => {
       $('#sidebarToggle').hide();
       $('#containerLoader').fadeOut(0, () => {
         $('#fadeBackupDone').show();
