@@ -63,7 +63,7 @@
                                 (change)='isCustNameInvaild()' name="custNameInpt" [(ngModel)]='custNameInpt'>
                             <div *ngIf="custNameInvaild" class="text-danger">{{custVaildMsg}}</div>
                             <datalist id="minDatalistCustomer">
-                                <option *ngFor="let customer of customers" value="{{customer.customerName}}">
+                                <option *ngFor="let customer of customerCss" value="{{customer.name}}">
                                 </option>
                             </datalist>
                         </div>

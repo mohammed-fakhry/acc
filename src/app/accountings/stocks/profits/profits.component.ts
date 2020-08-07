@@ -451,9 +451,9 @@ export class ProfitsComponent implements OnInit {
                   val: () => prodDetails.profitLastPrice.val() + prodDetails.profits.profit,
                   color: () => {
                     if (prodDetails.profitLastPrice.total.val() >= 0) {
-                      return 'bg-success text-white'
+                      return 'text-success font-weight-bold'
                     } else {
-                      return 'bg-danger text-white'
+                      return 'text-danger font-weight-bold'
                     }
                   }
                 }
@@ -482,9 +482,9 @@ export class ProfitsComponent implements OnInit {
                   val: () => prodDetails.recommendedPrice.profit() + prodDetails.profits.profit,
                   color: () => {
                     if (prodDetails.recommendedPrice.total.val() >= 0) {
-                      return 'bg-success text-white'
+                      return 'text-success font-weight-bold'
                     } else {
-                      return 'bg-danger text-white'
+                      return 'text-danger font-weight-bold'
                     }
                   },
                 },
@@ -616,12 +616,9 @@ export class ProfitsComponent implements OnInit {
   sortBtnsEffect = (diactive:string, active:string) => {
     $(`${active}`).attr({'disabled': true});
     $(`${diactive}`).not(`${active}`).attr({'disabled': false});
-    //$(`${diactive}`).not(`${active}`).removeClass('darkBg');
-    //$(`${active}`).addClass('darkBg');
-  }
+  };
 
   profitFilter = (cond: string) => {
-    //percForSort
 
     if (cond == 'top') {
       this.profitArr.sort(this._service.sortArry('profitForSort', 'desc'));
@@ -630,10 +627,9 @@ export class ProfitsComponent implements OnInit {
       this.profitArr.sort(this._service.sortArry('profitForSort'));
       this.sortBtnsEffect('.sortBtns','#sortLess');
     } else if (cond == 'perc') {
-      //let percForSort = 
       this.profitArr.sort(this._service.sortArry('percForSort', 'desc'));
       this.sortBtnsEffect('.sortBtns','#sortPers');
-    }
+    };
   };
 
 } // end

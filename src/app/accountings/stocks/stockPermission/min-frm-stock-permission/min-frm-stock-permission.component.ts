@@ -94,7 +94,27 @@ export class MinFrmStockPermissionComponent implements OnInit {
   theStockProds: any;
   inputDisabled: boolean = true;
 
+  customerInpArry: Customer[];
+
+  createCustomerInpArry = () => {
+
+    if (this.stockNameInpt != undefined) {
+      if (this.stockNameInpt.includes('حسام')) {
+        this.customerInpArry = this.customers.filter(customer => customer.customerName.includes('- حسام'))
+      } else if (this.stockNameInpt.includes('سيف')) {
+        this.customerInpArry = this.customers.filter(customer => customer.customerName.includes('- سيف'))
+      } else {
+        this.customerInpArry = this.customers
+      }
+    } else {
+      this.customerInpArry = this.customers
+    }
+
+  };
+
   makeTheStockProds() {
+
+    this.makeCustomerCss();
 
     let stockInfo: Stock = this._stockService.stocks.find(stock => stock.stockName == this.stockNameInpt);
 
@@ -110,6 +130,10 @@ export class MinFrmStockPermissionComponent implements OnInit {
     }
 
     this.inputDisabled = false;
+
+    if (this.custNameInpt) {
+      this.isCustNameInvaild();
+    };
   }
 
   stockNameVaild: boolean;
@@ -273,8 +297,11 @@ export class MinFrmStockPermissionComponent implements OnInit {
   customerCss: any[]
 
   makeCustomerCss() {
+
+    this.createCustomerInpArry();
+
     this.custClass = ''
-    this.customerCss = this.customers.map((cust) => {
+    this.customerCss = this.customerInpArry.map((cust) => {
       return {
         name: cust.customerName,
         css: () => {
@@ -291,10 +318,12 @@ export class MinFrmStockPermissionComponent implements OnInit {
   custClass: string = '';
 
   isCustNameInvaild() {
-    let custName = this.custNameInpt //$('#customerNameForMin').val()
+    //this.custNameInpt //$('#customerNameForMin').val()
 
-    for (let i = 0; i < this.customers.length; i++) {
-      if (custName == this.customers[i].customerName) {
+    this.makeCustomerCss();
+
+    for (let i = 0; i < this.customerCss.length; i++) {
+      if (this.custNameInpt == this.customerCss[i].name) {
         this.custNameInvaild = false;
         break
       } else {
@@ -308,8 +337,13 @@ export class MinFrmStockPermissionComponent implements OnInit {
       this.isMinInvInvaild = false;
     };
 
-    let cCss = this.customerCss.find(cust => cust.name == custName)
-    this.custClass = cCss.css();
+    if (!this.custNameInvaild) {
+      let cCss = this.customerCss.find(cust => cust.name == this.custNameInpt)
+      if (cCss) {
+        this.custClass = cCss.css();
+      }
+    };
+
   };
 
   invoiceTotal: string = '0';
@@ -415,6 +449,7 @@ export class MinFrmStockPermissionComponent implements OnInit {
 
       this.inputDisabled = true;
       this.isMinInvInvaild = true;
+      this.custNameInvaild = false;
 
       this._service.clearForm();
       this.resetAddinvoiceValu();
@@ -423,6 +458,8 @@ export class MinFrmStockPermissionComponent implements OnInit {
       $('#minNewInvoicetBtn').html("تعديل الفاتورة");
       $('#deleteMinInvoice').show();
       $('#invNumMin').show();
+      $('#stockNameForAdd').removeClass('bg-info text-white');
+
       this.inputDisabled = false;
 
       //this.isMinInvInvaild = true;

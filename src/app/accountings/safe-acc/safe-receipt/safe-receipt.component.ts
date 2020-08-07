@@ -139,7 +139,9 @@ export class SafeReceiptComponent implements OnInit {
 
   showAddNewSafeReceipt() {
 
-    this.makeCustomerCss()
+    this.filterCustomersForSafe();
+
+    this.makeCustomerCss();
 
     $('#showAddSafeReceipt').attr({ 'disabled': false })
     // getBackendData_Receipt
@@ -369,9 +371,29 @@ export class SafeReceiptComponent implements OnInit {
     this.checkReceiptValid();
   };
 
+  customerInpArry: Customer[];
+
+  filterCustomersForSafe = () => {
+
+    if (this.safeReceipt_inpts.safeName != undefined) {
+      if (this.safeReceipt_inpts.safeName.includes('سيف -')) {
+        this.customerInpArry = this._safeAccComponent.customers.filter(customer => customer.customerName.includes('- سيف'))
+      } else if (this.safeReceipt_inpts.safeName.includes('حسام -')) {
+        this.customerInpArry = this._safeAccComponent.customers.filter(customer => customer.customerName.includes('- حسام'))
+      } else {
+        this.customerInpArry = this._safeAccComponent.customers
+      }
+    } else {
+      this.customerInpArry = this._safeAccComponent.customers
+    }
+
+  }
+
   safeChanged() {
 
     this.theSafeInfo = this.getSafeInfo(this.safeReceipt_inpts.safeName);
+
+    this.filterCustomersForSafe();
 
     if (this.theSafeInfo == undefined) {
 
@@ -445,10 +467,11 @@ export class SafeReceiptComponent implements OnInit {
   theCustomerInfo: Customer;
   customerCss: any[]
 
-
   makeCustomerCss() {
+
+    //this.filterCustomersForSafe();
     this.custClass = ''
-    this.customerCss = this._safeAccComponent.customers.map((cust) => {
+    this.customerCss = this.customerInpArry.map((cust) => {
       return {
         name: cust.customerName,
         css: () => {
@@ -483,9 +506,9 @@ export class SafeReceiptComponent implements OnInit {
       this.safeReceipt_inpts.currentCustomerVal = this.theCustomerInfo.customerRemain;
 
       if (this.safeReceipt_inpts.currentCustomerVal < 0) {
-        $('#currentCustomerVal').css('color', 'red')
+        $('#currentCustomerVal').css('color', 'red');
       } else {
-        $('#currentCustomerVal').css('color', 'black')
+        $('#currentCustomerVal').css('color', 'black');
       };
 
       let cCss = this.customerCss.find(cust => cust.name == this.theCustomerInfo.customerName)
@@ -511,7 +534,7 @@ export class SafeReceiptComponent implements OnInit {
         } else {
           $('#receiptVal').removeClass('is-valid').addClass('is-invalid');
           this.validTests.receiptValValid = true;
-          this.validTests.receiptValValidMsg = 'الرصيد لا يسمح'
+          this.validTests.receiptValValidMsg = 'الرصيد لا يسمح';
         }
 
       } else {
@@ -522,7 +545,7 @@ export class SafeReceiptComponent implements OnInit {
         } else {
           $('#receiptVal').removeClass('is-valid').addClass('is-invalid');
           this.validTests.receiptValValid = true;
-          this.validTests.receiptValValidMsg = 'الرصيد لا يسمح'
+          this.validTests.receiptValValidMsg = 'الرصيد لا يسمح';
         };
 
       };
@@ -544,7 +567,7 @@ export class SafeReceiptComponent implements OnInit {
           } else {
             $('#receiptVal').removeClass('is-valid').addClass('is-invalid');
             this.validTests.receiptValValid = true;
-            this.validTests.receiptValValidMsg = 'الرصيد لا يسمح'
+            this.validTests.receiptValValidMsg = 'الرصيد لا يسمح';
           };
 
         } else {
@@ -570,7 +593,7 @@ export class SafeReceiptComponent implements OnInit {
     if (this.safeReceipt_inpts.receiptVal == null || this.safeReceipt_inpts.receiptVal == 0) {
       $('#receiptVal').removeClass('is-valid').addClass('is-invalid');
       this.validTests.receiptValValid = true;
-      this.validTests.receiptValValidMsg = 'يجب ادخال القيمة'
+      this.validTests.receiptValValidMsg = 'يجب ادخال القيمة';
     };
 
     this.checkReceiptValid();

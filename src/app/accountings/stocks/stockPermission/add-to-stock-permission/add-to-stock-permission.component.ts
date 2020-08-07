@@ -37,6 +37,8 @@ export class AddToStockPermissionComponent implements OnInit {
 
   date_time: string;
 
+  thestockName: string;
+
   constructor(public _stockService: StocksService, public formBuilder: FormBuilder,
     public _service: ServicesService, public _custService: CustomerService, public _theStockComp: TheStocksComponent) { }
 
@@ -174,25 +176,25 @@ export class AddToStockPermissionComponent implements OnInit {
     this.isInvoiceVaild();
   }
 
-  stockChanged() {
+  customerInpArry: Customer[];
 
-    let name = $('#stockNameForAdd').val();
+  createCustomerInpArry = () => {
 
-    this.deleteInvBtnDisabled = true;
-    if ($('#stockNameForAdd').val() == '-') {
-      this.stockNameVaild = true;
-      this.inptDisabled = true;
+    if (this.thestockName != undefined) {
+      if (this.thestockName.includes('حسام')) {
+        this.customerInpArry = this.customers.filter(customer => customer.customerName.includes('- حسام'))
+      } else if (this.thestockName.includes('سيف')) {
+        this.customerInpArry = this.customers.filter(customer => customer.customerName.includes('- سيف'))
+      } else {
+        this.customerInpArry = this.customers
+      }
     } else {
-      this.stockNameVaild = false;
-      this.inptDisabled = false;
+      this.customerInpArry = this.customers
     }
 
-    if (name.includes('سيف')) {
-      $('#stockNameForAdd').addClass('bg-info text-white')
-    } else {
-      $('#stockNameForAdd').removeClass('bg-info text-white')
-    }
   };
+
+
 
   customerVaild: boolean;
   custVaildMsg: string;
@@ -201,9 +203,11 @@ export class AddToStockPermissionComponent implements OnInit {
 
   makeCustomerCss() {
 
+    this.createCustomerInpArry();
+
     this.custClass = ''
 
-    this.customerCss = this.customers.map((cust) => {
+    this.customerCss = this.customerInpArry.map((cust) => {
       return {
         name: cust.customerName,
         css: () => {
@@ -217,17 +221,52 @@ export class AddToStockPermissionComponent implements OnInit {
     })
   };
 
+  stockChanged() {
+
+    //this.createCustomerInpArry();
+    this.makeCustomerCss()
+    //let name = $('#stockNameForAdd').val();
+    this.deleteInvBtnDisabled = true;
+    if ($('#stockNameForAdd').val() == '-') {
+      this.stockNameVaild = true;
+      this.inptDisabled = true;
+    } else {
+      this.stockNameVaild = false;
+      this.inptDisabled = false;
+    }
+    if (this.thestockName != undefined) {
+      if (this.thestockName.includes('سيف')) {
+        $('#stockNameForAdd').addClass('bg-info text-white')
+      } else {
+        $('#stockNameForAdd').removeClass('bg-info text-white');
+      }
+    }
+    if (this.theCustomerName) {
+      this.isCustomerVaild();
+    }
+  };
+
 
   custClass: string = '';
   isCustomerVaild() {
 
-    let customerNameForAddVal = $('#customerNameForAdd').val()
-    if (this.customers.length == 0) {
+    //let customerNameForAddVal = $('#customerNameForAdd').val()
+
+    this.makeCustomerCss();
+
+    console.log({
+      stockName: this.thestockName,
+      custName: this.theCustomerName,
+      custArry: this.customerInpArry
+    })
+
+    if (this.customerCss.length == 0) {
       this.customerVaild = true
       this.custVaildMsg = "لا يوجد هذا الاسم"
     } else {
-      for (let i = 0; i < this.customers.length; i++) {
-        if (customerNameForAddVal == this.customers[i].customerName) {
+
+      for (let i = 0; i < this.customerCss.length; i++) {
+        if (this.theCustomerName == this.customerCss[i].name) {
           this.customerVaild = false;
           break
         } else {
@@ -251,8 +290,13 @@ export class AddToStockPermissionComponent implements OnInit {
       this.isAddInvVaild = true;
     };
 
-    let cCss = this.customerCss.find(cust => cust.name == customerNameForAddVal)
-    this.custClass = cCss.css();
+    if (!this.customerVaild) {
+      let cCss = this.customerCss.find(cust => cust.name == this.theCustomerName);
+      if (cCss) {
+        this.custClass = cCss.css();
+      }
+
+    };
 
   };
 
@@ -296,8 +340,8 @@ export class AddToStockPermissionComponent implements OnInit {
   theCustomerId: number;
 
   getTheCustomerId() {
-    let theCustomer = $('#customerNameForAdd').val();
-    let customerInfo = this.customers.find(cust => cust.customerName == theCustomer)
+    //let theCustomer = $('#customerNameForAdd').val();
+    let customerInfo = this.customers.find(cust => cust.customerName == this.theCustomerName)
     this.theCustomerId = customerInfo.customerId;
   };
 
@@ -766,8 +810,8 @@ export class AddToStockPermissionComponent implements OnInit {
     this._theStockComp.ngOnInit();
     this._stockService.invoiceDoneMsg = {
       invoiceKind: 'فاتورة الشراء',
-      from: $('#customerNameForAdd').val(),
-      to: $('#stockNameForAdd').val(),
+      from: this.theCustomerName, //$('#customerNameForAdd').val(),
+      to: this.thestockName, //$('#stockNameForAdd').val(),
       invoiceVal: parseInt(this.invoiceTotal),
       invoiceNote: $('#addInvoiceNote').val(),
     }
@@ -829,17 +873,20 @@ export class AddToStockPermissionComponent implements OnInit {
       let currentDate = new Date(currentDateNow)
       this._service.makeTime_date(currentDate);
       this.date_time = this._service.date_time;
+
       $('#invNum').hide();
       $('#callInvoice').hide();
       $('#addInvoiceForm').slideDown('fast');
       $('#addNewInvoicetBtn').html("تسجيل");
       $('#deleteAddInvoice').hide();
       $('#stockTransactionId').val('')
+      $('#stockNameForAdd').removeClass('bg-info text-white');
 
       this.resetAddinvoiceValu()
       this._service.clearForm();
       this.inptDisabled = true;
       this.isAddInvVaild = true;
+      this.customerVaild = false; 
 
     } else if (callInvoiceBtnVal == "بحث") {
       // add fildes if the inputArry < invoiceArry
@@ -868,7 +915,7 @@ export class AddToStockPermissionComponent implements OnInit {
 
       $('#stockTransactionId').val(theInvoice.stockTransactionId)
       $('#stockNameForAdd').val(theInvoice.stockName);
-      $('#customerNameForAdd').val(theInvoice.customerName);
+      this.theCustomerName = theInvoice.customerName //$('#customerNameForAdd').val(theInvoice.customerName);
       $('#addInvoiceNote').val(theInvoice.notes);
 
       let cCss = this.customerCss.find(cust => cust.name == theInvoice.customerName)

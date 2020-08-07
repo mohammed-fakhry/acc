@@ -152,7 +152,7 @@
                             <div *ngIf="validTests.customerValid" class="text-danger mt-2">{{validTests.custValidMsg}}
                             </div>
                             <datalist id="datalistCustomer">
-                                <option *ngFor="let customer of _safeAccComponent.customers"
+                                <option *ngFor="let customer of customerInpArry"
                                     value="{{customer.customerName}}">
                                 </option>
                             </datalist>

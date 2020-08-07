@@ -20,7 +20,8 @@
         <div class="headerLeftBorder mr-2"></div>
         <!--<input [(ngModel)]="searchTxt" placeholder="بحث" class="form-control mx-3" id="addInvoiceSearch">-->
         <input type="search" name="searchTxt" [(ngModel)]="searchTxt" class="form-control mdb-autocomplete mx-3"
-            list="datalistInvoiceSearch" id="invoiceSearch" placeholder="بحث برقم الفاتورة او اسم العميل" (change)="changAddInvoiceBtn()">
+            list="datalistInvoiceSearch" id="invoiceSearch" placeholder="بحث برقم الفاتورة او اسم العميل"
+            (change)="changAddInvoiceBtn()">
         <datalist id="datalistInvoiceSearch">
             <option *ngFor="let invoice of _theStockComp.addInvArry" value="{{invoice.invoiceSearchVal}}">
             </option>
@@ -50,7 +51,8 @@
                         <!--stockName-->
                         <div class="col m-2">
                             <label for="stockNameForAdd">اسم المخزن</label>
-                            <select class="form-control p-1" id="stockNameForAdd" (change)="stockChanged()">
+                            <select class="form-control p-1" id="stockNameForAdd" (change)="stockChanged()"
+                                name="thestockName" [(ngModel)]="thestockName">
                                 <option *ngFor="let stock of _stockService.stocks">{{stock.stockName}}</option>
                             </select>
                             <div *ngIf="stockNameVaild" class="text-danger pr-1 vaildAlert">لايوجد هذا المخزن</div>
@@ -59,12 +61,13 @@
                         <div class="col m-2">
                             <label for="customerNameForAdd">اسم المورد</label>
                             <input type="search" id="customerNameForAdd" (change)="isCustomerVaild()"
-                                class="form-control mdb-autocomplete p-1 {{custClass}}" list="datalistCustomer" name="theCustomerName" [(ngModel)]='theCustomerName'>
-                            <div *ngIf="customerVaild" class="text-danger">{{custVaildMsg}}</div>
+                                class="form-control mdb-autocomplete p-1 {{custClass}}" list="datalistCustomer"
+                                name="theCustomerName" [(ngModel)]='theCustomerName'>
                             <datalist id="datalistCustomer">
                                 <option *ngFor="let customer of customerCss" value="{{customer.name}}">
                                 </option>
                             </datalist>
+                            <div *ngIf="customerVaild" class="text-danger">{{custVaildMsg}}</div>
                         </div>
                         <div class="col m-2">
                             <label for="addInvoiceNote">ملاحظات</label>
@@ -113,7 +116,8 @@
                             <input name="stockTransactionDetailsId{{i}}" [(ngModel)]="inpt.stockTransactionDetailsId"
                                 class="d-none">
                         </tr>
-                        <div id="addFilds" class="btn btn-dark my-2 mr-1 printX" style="width: 50px;" (click)="addFilds()">+
+                        <div id="addFilds" class="btn btn-dark my-2 mr-1 printX" style="width: 50px;"
+                            (click)="addFilds()">+
                         </div>
                     </tbody>
                 </table>
