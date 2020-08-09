@@ -1,8 +1,14 @@
 .card {
-    tr {
-        td,
-        th {
-            height: auto;
-        }
-    }
+  tr {
+      td,
+      th {
+          height: auto;
+      }
+  }
 }
+
+/* #addInvoiceForm {
+  transition: 2000ms;
+  //height: fit-content;
+} */
+

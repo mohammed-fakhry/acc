@@ -34,11 +34,12 @@ export class LoginService {
 
   checkIsUser() {
     if (this.isUser == true) {
-      $('#sideBar').removeClass('d-none');
-      $('#logOut').show();
+      //$('#sideBar').hide();//removeClass('d-none');
+      $('#app-side-bar').show()
+      //$('#logOut').removeClass('navHeader');
       $('#sidebarToggle').show().addClass('pFixed sticky-top');
     } else {
-      $('#app-side-bar').addClass('d-none');
+      $('#app-side-bar').hide()//addClass('d-none');
       $('#sidebarToggle').hide()
     }
   }

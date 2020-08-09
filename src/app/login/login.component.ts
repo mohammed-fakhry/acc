@@ -16,7 +16,7 @@ export class LoginComponent implements OnInit {
     userPassword: new FormControl()
   });
 
-  currentRoute:string = this.logService.checkCurrentRoute();
+  currentRoute: string = this.logService.checkCurrentRoute();
 
   constructor(private router: Router, private logService: LoginService) { }
 
@@ -44,18 +44,14 @@ export class LoginComponent implements OnInit {
       if (this.users[i].userName == this.userData.controls.userName.value && this.users[i].userPassword == this.userData.controls.userPassword.value) {
         this.logService.isUser = true;
         sessionStorage.setItem('y', 'y')
+        this.router.navigate(['/home']);
+        //$('#sidebarToggle').hide();
+        this.logService.checkIsUser();
         break;
+      } else {
+        $('.form-control').addClass('is-invalid')
+        $('.invalid-feedback').removeClass('d-none')
       }
-    }
-
-    if (this.logService.isUser == true) { // if true
-      $('#sidebarToggle').show();
-      this.router.navigate(['/home']);
-      this.logService.checkIsUser();
-      //this.logService.isUser = true;
-    } else { // if false
-      $('.form-control').addClass('is-invalid')
-      $('.invalid-feedback').removeClass('d-none')
     }
 
   } // logIn

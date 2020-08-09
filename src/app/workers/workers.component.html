@@ -143,7 +143,7 @@
     <!--workerEnquiry-->
     <div class="card  mt-3 workerClass" id="workerEnquiry">
         <!-- style="height: 930px;" -->
-        <div class="panel-body panel-flex-table" >
+        <div class="panel-body panel-flex-table">
             <table class="flex-table table table-hover">
                 <thead class="navHeader text-light">
                     <tr>
@@ -202,53 +202,29 @@
                 <tbody>
                     <tr>
                         <td>حضور</td>
-                        <td><input [(ngModel)]="fst" (change)="reCount()" type="time" class="form-control"></td>
-                        <td><input [(ngModel)]="snd" (change)="reCount()" type="time" class="form-control"></td>
-                        <td><input [(ngModel)]="thrd" (change)="reCount()" type="time" class="form-control"></td>
-                        <td><input [(ngModel)]="forth" (change)="reCount()" type="time" class="form-control"></td>
-                        <td><input [(ngModel)]="fif" (change)="reCount()" type="time" class="form-control"></td>
-                        <td><input [(ngModel)]="six" (change)="reCount()" type="time" class="form-control"></td>
-                        <td><input [(ngModel)]="sev" (change)="reCount()" type="time" class="form-control"></td>
+                        <td *ngFor="let inp of checkInpArry.in; let i = index">
+                            <input name="in{{i}}" [(ngModel)]="inp.val" (change)="reCount()" type="time"
+                                class="form-control">
+                        </td>
                     </tr>
                     <tr>
                         <td>انصراف</td>
-                        <td><input [(ngModel)]="fstO" (change)="reCount()" type="time" class="form-control"></td>
-                        <td><input [(ngModel)]="sndO" (change)="reCount()" type="time" class="form-control"></td>
-                        <td><input [(ngModel)]="thrdO" (change)="reCount()" type="time" class="form-control"></td>
-                        <td><input [(ngModel)]="forthO" (change)="reCount()" type="time" class="form-control"></td>
-                        <td><input [(ngModel)]="fifO" (change)="reCount()" type="time" class="form-control"></td>
-                        <td><input [(ngModel)]="sixO" (change)="reCount()" type="time" class="form-control"></td>
-                        <td><input [(ngModel)]="sevO" (change)="reCount()" type="time" class="form-control"></td>
+                        <td *ngFor="let inp of checkInpArry.out; let i = index">
+                            <input name="out{{i}}" [(ngModel)]="inp.val" (change)="reCount()" type="time"
+                                class="form-control">
+                        </td>
                     </tr>
                     <tr style="border-top: solid 5px black;">
                         <td>تأخير | غياب</td>
-                        <td>{{checkInDailyMinutes[0]}}</td>
-                        <td>{{checkInDailyMinutes[1]}}</td>
-                        <td>{{checkInDailyMinutes[2]}}</td>
-                        <td>{{checkInDailyMinutes[3]}}</td>
-                        <td>{{checkInDailyMinutes[4]}}</td>
-                        <td>{{checkInDailyMinutes[5]}}</td>
-                        <td>{{checkInDailyMinutes[6]}}</td>
+                        <td *ngFor="let inp of checkInpArry.delayes; let i = index">{{inp.val}}</td>
                     </tr>
                     <tr>
                         <td>وقت اضافى</td>
-                        <td>{{checkOutDailyMinutes[0]}}</td>
-                        <td>{{checkOutDailyMinutes[1]}}</td>
-                        <td>{{checkOutDailyMinutes[2]}}</td>
-                        <td>{{checkOutDailyMinutes[3]}}</td>
-                        <td>{{checkOutDailyMinutes[4]}}</td>
-                        <td>{{checkOutDailyMinutes[5]}}</td>
-                        <td>{{checkOutDailyMinutes[6]}}</td>
+                        <td *ngFor="let inp of checkInpArry.extraTime; let i = index">{{inp.val}}</td>
                     </tr>
                     <tr style="border-top: solid 2px black;">
                         <td>صافى دقائق</td>
-                        <td>{{dailyResultDArry[0]}}</td>
-                        <td>{{dailyResultDArry[1]}}</td>
-                        <td>{{dailyResultDArry[2]}}</td>
-                        <td>{{dailyResultDArry[3]}}</td>
-                        <td>{{dailyResultDArry[4]}}</td>
-                        <td>{{dailyResultDArry[5]}}</td>
-                        <td>{{dailyResultDArry[6]}}</td>
+                        <td *ngFor="let inp of checkInpArry.netWorkedminutes; let i = index">{{inp.val}}</td>
                     </tr>
                 </tbody>
             </table>

@@ -39,16 +39,16 @@ export class SideBarComponent implements OnInit {
     this.url = this.currentUrl.slice(this.ind);
 
     $(".mainBtns").click(function () {
+      //this.logService.reternlog()
       //$('#sidebar').animate({ height: `${sidebarBtnsHeight + 20}px` });
       $(this).removeClass('btn-light').addClass('navHeader')
       $(this).next().slideToggle(100);
       $("#sidebar .secDiv").not($(this).next()).slideUp(100);
       $('#sidebar').css('height', 'auto')
-      $('.mainBtns').not($(this)).not('#logOut').not('#MainSettingBtn').removeClass('navHeader').addClass('btn-light');
+      $('.mainBtns').not($(this)).not('#MainSettingBtn').removeClass('navHeader').addClass('btn-light');
     });
 
     // make active button old code
-
 
     if (this.dBUrls.includes(this.url)) {
       this.mainRoute = 'Db'
@@ -63,8 +63,10 @@ export class SideBarComponent implements OnInit {
     } else {
       this.mainRoute = 'false'
       $('#sidebar .secDiv').hide();
-      $('#sidBar h3').not('#logOut').removeClass('navHeader').addClass('btn-light')
+      $('#sidBar h3').removeClass('navHeader').addClass('btn-light')
     };
+
+    //console.log('stillinside')
 
     // active main btn
     for (let i = 0; i <= this.htmlDbItemsBtns.length; i++) {
@@ -99,6 +101,7 @@ export class SideBarComponent implements OnInit {
   }; // ngOnInit
 
   secButtonClick(btnId) {
+    this.logService.reternlog()
     $(`#${btnId}`).removeClass('btn-light').addClass('btn-secondary')// .next().slideToggle(500);
     $("#sidebar .secButton").not(`#${btnId}`).removeClass('btn-secondary').addClass('btn-light');
     this.sidebarToggle();
@@ -110,10 +113,6 @@ export class SideBarComponent implements OnInit {
     this.logService.isUser = false;
     this.router.navigate(['/logIn']);
     this.logService.checkIsUser();
-    //this.logService.changeIsUser();
-    $('#logOut').hide();
-    //$('#sidebarToggle').hide();
-    //location.reload();
   };
 
   // new effects
@@ -125,7 +124,7 @@ export class SideBarComponent implements OnInit {
 
     const sideHight = (idStr: String) => {
       $('#sidebar').css('height', 'auto') 
-      $('.mainBtns').not($(`${idStr}`)).not('#logOut').not('#MainSettingBtn').removeClass('navHeader').addClass('btn-light');
+      $('.mainBtns').not($(`${idStr}`)).not('#MainSettingBtn').removeClass('navHeader').addClass('btn-light');
       $(`${idStr}`).next().show()
       $(`${idStr}`).removeClass('btn-light').addClass('navHeader')
       $('#sidebar .secDiv').not($(`${idStr}`).next()).hide()
@@ -143,7 +142,7 @@ export class SideBarComponent implements OnInit {
     } else {
       this.mainRoute = 'false'
       $('#sidebar .secDiv').hide();
-      $('#sidBar h3').not('#logOut').removeClass('navHeader').addClass('btn-light')
+      $('#sidBar h3').removeClass('navHeader').addClass('btn-light')
     };
     
     let sidebarBtnsHeight = $('#sidebarBtns').height()

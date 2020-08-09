@@ -33,11 +33,11 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
+                                <tr class="textBtn" (click)="profitFilter('top')">
                                     <th scope="row">ارباح</th>
                                     <td class="bg-success text-light">{{totalAdd}}</td>
                                 </tr>
-                                <tr>
+                                <tr class="textBtn" (click)="profitFilter('less')">
                                     <th scope="row">خسائر</th>
                                     <td class="bg-danger text-light">{{totalMin}}</td>
                                 </tr>
@@ -70,25 +70,22 @@
                             <button class="btn btn-outline-info sortBtns" id="sortTop" (click)="profitFilter('top')">
                                 <i class="fa fa-caret-up pl-2"></i>
                                 <span>اعلى ربح</span>
-                                </button>
+                            </button>
                             <button class="btn btn-outline-danger sortBtns mx-2" id="sortLess"
                                 (click)="profitFilter('less')">
                                 <i class="fa fa-caret-down pl-2"></i>
                                 <span>اقل ربح</span>
-                                </button>
+                            </button>
                             <button class="btn btn-outline-success sortBtns" id="sortPers"
                                 (click)="profitFilter('perc')">
                                 <i class="fa fa-caret-up pl-2"></i>
                                 <span>نسبة الربحية</span>
-                                </button>
+                            </button>
                         </div>
 
                     </div>
                 </div>
             </div>
-            <!-- <div class="stickyInp cardBorderY"> -->
-
-            <!-- </div> -->
         </div>
         <!-- cardBorderY -->
         <div class="col-md-5 card inpCard_row pb-3" style="display: none;" id="howIsProfits">
@@ -256,9 +253,6 @@
                                 style="height: 100%; margin-top: 0px; margin-bottom: 5px;">
                                 <table class="flex-table table">
                                     <thead class="bg-secondary text-white">
-                                        <!-- <tr class="navHeader text-center">
-                                            <th>تفاصيل الارباح</th>
-                                        </tr> -->
                                         <tr class="navHeader text-center">
                                             <th scope="col" style="flex: 2;">بيان</th>
                                             <th scope="col">سعر</th>
@@ -266,8 +260,6 @@
                                             <th scope="col">ربحية</th>
                                             <th scope="col">اجمالى ربح</th>
                                         </tr>
-                                        
-                                        
                                     </thead>
                                     <tbody class="table Body" style="overflow-y: hidden;">
                                         <tr class="bg-secondary text-white">
@@ -299,7 +291,6 @@
                                             <td scope="col" class="{{product.recommendedPrice.total.color()}}">
                                                 {{product.recommendedPrice.total.val()}}</td>
                                         </tr>
-
                                     </tbody>
                                 </table>
                             </div>

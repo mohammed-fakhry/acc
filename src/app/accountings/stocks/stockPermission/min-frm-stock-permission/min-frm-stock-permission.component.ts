@@ -320,7 +320,7 @@ export class MinFrmStockPermissionComponent implements OnInit {
   isCustNameInvaild() {
     //this.custNameInpt //$('#customerNameForMin').val()
 
-    this.makeCustomerCss();
+    //this.makeCustomerCss();
 
     for (let i = 0; i < this.customerCss.length; i++) {
       if (this.custNameInpt == this.customerCss[i].name) {

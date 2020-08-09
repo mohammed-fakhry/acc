@@ -24,49 +24,10 @@ export class WorkersComponent implements OnInit {
   netMinutes: number;
   moneyOut: number = 0;
   // delay variables
+
   result: number = 0;
-  sunResult: any;
-  monResult: any;
-  tusResult: any;
-  wedResult: any;
-  thuResult: any;
-  friResult: any;
-  satResult: any;
-  checkInDailyMinutes: any[] = [this.sunResult, this.monResult, this.tusResult, this.wedResult, this.thuResult, this.friResult, this.satResult]
-  // total delayes
+
   resultO: number = 0;
-  sunResultO: any;
-  monResultO: any;
-  tusResultO: any;
-  wedResultO: any;
-  thuResultO: any;
-  friResultO: any;
-  satResultO: any;
-  checkOutDailyMinutes: any[] = [this.sunResultO, this.monResultO, this.tusResultO, this.wedResultO, this.thuResultO, this.friResultO, this.satResultO]
-  // netminutes
-  resultD: number = 0;
-  sunResultD: any;
-  monResultD: any;
-  tusResultD: any;
-  wedResultD: any;
-  thuResultD: any;
-  friResultD: any;
-  satResultD: any;
-  dailyResultDArry: any[] = [this.sunResultD, this.monResultD, this.thuResultD, this.wedResultD, this.thuResultD, this.friResultD, this.satResultD]
-
-  // this.minutes(Number for day) // (O) for checkOut
-  minutes1: number; minutes2: number; minutes3: number; minutes4: number; minutes5: number; minutes6: number; minutes7: number;
-  minutesArry: any[] = [this.minutes1, this.minutes2, this.minutes3, this.minutes4, this.minutes5, this.minutes6, this.minutes7]
-
-  minutesO1: number; minutesO2: number; minutesO3: number; minutesO4: number; minutesO5: number; minutesO6: number; minutesO7: number;
-  minutesOArry: any[] = [this.minutesO1, this.minutesO2, this.minutesO3, this.minutesO4, this.minutesO5, this.minutesO6, this.minutesO7];
-
-  // input variables
-  fst: string; snd: string; thrd: string; forth: string; fif: string; six: string; sev: string // checkIn variables
-  CheckInInputsArry: string[]; // = [this.fst, this.snd, this.thrd, this.forth, this.fif, this.six, this.sev]
-
-  fstO: string; sndO: string; thrdO: string; forthO: string; fifO: string; sixO: string; sevO: string // checkOut variables
-  CheckOutInputsArry: any[]; // = [this.fifO, this.sndO, this.thrdO, this.forthO, this.fifO, this.sixO, this.sevO]
 
   condTest: any[] = [undefined, null, "غياب", "NaN", ""] // condetion test arry
 
@@ -231,19 +192,17 @@ export class WorkersComponent implements OnInit {
 
   buttonEffect(max: string, min: string) {
     $(max).removeClass("btn-outline-info").addClass("btn-outline-secondary").animate({ fontSize: '1.5em' }, 50);
-    $(max).attr({'disabled' : true});
+    $(max).attr({ 'disabled': true });
 
     $(min).removeClass('btn-outline-secondary').addClass('btn-outline-info').animate({ fontSize: '1em' }, 50);
-    $(min).attr({'disabled' : false});
+    $(min).attr({ 'disabled': false });
   };
 
   showWorkerSetting() {
     this._service.getWorkerRules().subscribe((dataRules: WorkerRules[]) => {
       this.rulesFromSql = dataRules;
     });
-    this.buttonEffect('#showAddWorkerBtn','#workerEnquirybtn');
-    // $('#showAddWorkerBtn').removeClass('btn-outline-secondary').addClass('btn-outline-info').animate({ fontSize: '1em' }, 50);
-    // $('#workerEnquirybtn').removeClass('btn-outline-secondary').addClass('btn-outline-info').animate({ fontSize: '1em' }, 50);
+    this.buttonEffect('#showAddWorkerBtn', '#workerEnquirybtn');
     $('.workerClass').not('#workerSetting').hide();
     $('#workerSetting').show();
     this.WorkerRuleResult = this.rulesFromSql[0];
@@ -264,21 +223,7 @@ export class WorkersComponent implements OnInit {
       workerCheckIN: new FormControl('', [Validators.required]),
       workerCheckOut: new FormControl('', [Validators.required]),
     })
-    /*
-    this.workerDataView = {
-      workerId: null,
-      workerName: null,
-      workerTell: null,
-      workerAdd: null,
-      workerJopCateg: null,
-      workerJop: null,
-      workerFbCode: null,
-      workerJopDate: null,
-      workerSalary: null,
-      workerYearVacation: null,
-      workerCheckIN: null,
-      workerCheckOut: null,
-    };*/
+
   };
 
   // CRUD Functions
@@ -313,10 +258,9 @@ export class WorkersComponent implements OnInit {
     $('#addWorker').show();
     $('#addNewWorkerBtn').html('تعديل');
     $('#addWorker h2:first').html('تعديل بيانات موظف');
-    //this.workerDataView = worker;
-    this.buttonEffect('#showAddWorkerBtn','#workerEnquirybtn');
-    // $('#showAddWorkerBtn').removeClass('btn-outline-secondary').addClass('btn-outline-info').animate({ fontSize: '1em' }, 50);
-    // $('#workerEnquirybtn').removeClass('btn-outline-secondary').addClass('btn-outline-info').animate({ fontSize: '1em' }, 50);
+
+    this.buttonEffect('#showAddWorkerBtn', '#workerEnquirybtn');
+
     $('#workerSearch').hide(100)
     this.putWorkerDataValue(worker);
   };
@@ -334,11 +278,8 @@ export class WorkersComponent implements OnInit {
     this.resetValues();
     $('#addNewWorkerBtn').html('اضافة');
     $('#addWorker h2:first').html('اضافة بيانات موظف');
-    this.buttonEffect('#showAddWorkerBtn','#workerEnquirybtn');
-    // $('#showAddWorkerBtn').removeClass("btn-outline-info").addClass("btn-outline-secondary").animate({ fontSize: '1.5em' }, 50);
-    // $('#showAddWorkerBtn').attr({'disabled' : true});
-    // $('#workerEnquirybtn').removeClass('btn-outline-secondary').addClass('btn-outline-info').animate({ fontSize: '1em' }, 50);
-    // $('#workerEnquirybtn').attr({'disabled' : false});
+    this.buttonEffect('#showAddWorkerBtn', '#workerEnquirybtn');
+
     $('.workerClass').not('#addWorker').hide();
     $('#addWorker').show();
     $('#workerSearch').hide(100);
@@ -346,14 +287,12 @@ export class WorkersComponent implements OnInit {
 
   showWorkerCard(worker: Worker) {
     this.putWorkerDataValue(worker);
-    //this.workerDataView = worker;
-    // this.buttonEffect('#showAddWorkerBtn','#workerEnquirybtn');
 
     $('#showAddWorkerBtn').removeClass('btn-outline-secondary').addClass('btn-outline-info').animate({ fontSize: '1em' }, 50);
     $('#workerEnquirybtn').removeClass('btn-outline-secondary').addClass('btn-outline-info').animate({ fontSize: '1em' }, 50);
-    $('#workerEnquirybtn').attr({'disabled' : false});
-    $('#showAddWorkerBtn').attr({'disabled' : false});
-    
+    $('#workerEnquirybtn').attr({ 'disabled': false });
+    $('#showAddWorkerBtn').attr({ 'disabled': false });
+
     $('.workerClass').not('#workerDetails').hide();
     $('#workerDetails').show();
     $('#workerSearch').hide(100)
@@ -362,37 +301,79 @@ export class WorkersComponent implements OnInit {
   showWorkerEnquiry() {
     $('.workerClass').not('#workerEnquiry').hide();
     $('#workerEnquiry').show();
-    this.buttonEffect('#workerEnquirybtn','#showAddWorkerBtn');
-    // $('#workerEnquirybtn').removeClass("btn-outline-info").addClass("btn-outline-secondary").animate({ fontSize: '1.5em' }, 50);
-    // $('#showAddWorkerBtn').removeClass('btn-outline-secondary').addClass('btn-outline-info').animate({ fontSize: '1em' }, 50);
-    // $('#workerEnquirybtn').attr({'disabled' : true});
-    // $('#showAddWorkerBtn').attr({'disabled' : false});
+    this.buttonEffect('#workerEnquirybtn', '#showAddWorkerBtn');
     $('#workerSearch').show(100);
   };
 
+  checkInpArry = {
+    in: [
+      { val: null, day: 'sun' },
+      { val: null, day: 'mon' },
+      { val: null, day: 'tus' },
+      { val: null, day: 'wed' },
+      { val: null, day: 'thur' },
+      { val: null, day: 'fri' },
+      { val: null, day: 'sat' }
+    ],
+    out: [
+      { val: null, day: 'sun' },
+      { val: null, day: 'mon' },
+      { val: null, day: 'tus' },
+      { val: null, day: 'wed' },
+      { val: null, day: 'thur' },
+      { val: null, day: 'fri' },
+      { val: null, day: 'sat' }
+    ],
+    delayes: [
+      { val: null, day: 'sun' },
+      { val: null, day: 'mon' },
+      { val: null, day: 'tus' },
+      { val: null, day: 'wed' },
+      { val: null, day: 'thur' },
+      { val: null, day: 'fri' },
+      { val: null, day: 'sat' }
+    ],
+    extraTime: [
+      { val: null, day: 'sun' },
+      { val: null, day: 'mon' },
+      { val: null, day: 'tus' },
+      { val: null, day: 'wed' },
+      { val: null, day: 'thur' },
+      { val: null, day: 'fri' },
+      { val: null, day: 'sat' }
+    ],
+    netWorkedminutes: [
+      { val: null, day: 'sun' },
+      { val: null, day: 'mon' },
+      { val: null, day: 'tus' },
+      { val: null, day: 'wed' },
+      { val: null, day: 'thur' },
+      { val: null, day: 'fri' },
+      { val: null, day: 'sat' }
+    ],
+    minutesArry: [null, null, null, null, null, null, null],
+    minutesOArry: [null, null, null, null, null, null, null]
+  }
+
   showSalaryCount(worker: Worker) {
     this.putWorkerDataValue(worker);
-    //this.workerDataView = worker;
-    $('#salaryCount h4:first').val(worker.workerCheckIN);
-    $('#salaryCount h4:first').next().val(worker.workerCheckOut);
-    $('#salaryCount h4:first').next().next().val(worker.workerSalary);
-    //this.buttonEffect('#showAddWorkerBtn','#workerEnquirybtn');
     $('#showAddWorkerBtn').removeClass('btn-outline-secondary').addClass('btn-outline-info').animate({ fontSize: '1em' }, 50);
     $('#workerEnquirybtn').removeClass('btn-outline-secondary').addClass('btn-outline-info').animate({ fontSize: '1em' }, 50);
-    $('#workerEnquirybtn').attr({'disabled' : false});
-    $('#showAddWorkerBtn').attr({'disabled' : false});
+    $('#workerEnquirybtn').attr({ 'disabled': false });
+    $('#showAddWorkerBtn').attr({ 'disabled': false });
     $('.workerClass').not('#salaryCount').hide();
     $('#salaryCount').show();
     $('#workerSearch').hide(100)
-    for (let i = 0; i < this.checkInDailyMinutes.length; i++) {
-      this.checkInDailyMinutes[i] = 0;
-      this.checkOutDailyMinutes[i] = 0;
-      this.dailyResultDArry[i] = 0;
-    };
+    for (let i = 0; i < 7; i++) {
+      this.checkInpArry.in[i].val = worker.workerCheckIN;
+      this.checkInpArry.out[i].val = worker.workerCheckOut;
+      this.checkInpArry.delayes[i].val = null;
+      this.checkInpArry.extraTime[i].val = null;
+      this.checkInpArry.netWorkedminutes[i].val = null;
+      this.checkInpArry.minutesArry[i] = null;
+      this.checkInpArry.minutesOArry[i] = null;
+    }
     this.total = 0; this.netSalary = 0; this.counter = 0; this.net = 0; this.totalDisc = 0; // reset values
-
-    this.snd = worker.workerCheckIN; this.thrd = worker.workerCheckIN; this.forth = worker.workerCheckIN; this.fif = worker.workerCheckIN; this.six = worker.workerCheckIN; this.sev = worker.workerCheckIN // checkIn variables
-    this.sndO = worker.workerCheckOut; this.thrdO = worker.workerCheckOut; this.forthO = worker.workerCheckOut; this.fifO = worker.workerCheckOut; this.sixO = worker.workerCheckOut; this.sevO = worker.workerCheckOut // checkOut variables
   }
 
   // defult start and end time
@@ -450,8 +431,6 @@ export class WorkersComponent implements OnInit {
       endTimeOut = new Date(1, 1, 3, b1, b2, 0);
     }
 
-    this.CheckInInputsArry = [this.fst, this.snd, this.thrd, this.forth, this.fif, this.six, this.sev]
-    this.CheckOutInputsArry = [this.fstO, this.sndO, this.thrdO, this.forthO, this.fifO, this.sixO, this.sevO]
     let weekDays: number = 7
 
     // start Minutes
@@ -460,21 +439,21 @@ export class WorkersComponent implements OnInit {
     let timeOutArry: any[] = []; // output times as a date
 
     for (let i = 0; i < weekDays; i++) {
-      if (this.condTest.includes(this.CheckInInputsArry[i])) {
+      if (this.condTest.includes(this.checkInpArry.in[i].val)) {
         let start = '0:0'
         timeStartArr.push(start)
       } else {
-        let start = this.CheckInInputsArry[i].split(':');
+        let start = this.checkInpArry.in[i].val.split(':');
         let s1: number = parseInt(start[0]);
         let s2: number = parseInt(start[1]);
         let timeStart = new Date(1, 1, 2, s1, s2, 0);
         timeStartArr.push(timeStart)
       }
-      if (this.condTest.includes(this.CheckOutInputsArry[i])) {
+      if (this.condTest.includes(this.checkInpArry.out[i].val)) {
         let start2 = '0:0'
         timeOutArry.push(start2)
       } else {
-        let start2 = this.CheckOutInputsArry[i].split(':');
+        let start2 = this.checkInpArry.out[i].val.split(':');
         let sO1: number = parseInt(start2[0]);
         let sO2: number = parseInt(start2[1]);
         let timeOut = new Date(1, 1, 2, sO1, sO2, 0);
@@ -484,57 +463,57 @@ export class WorkersComponent implements OnInit {
 
     // start Minutes
     for (let i = 0; i < weekDays; i++) {
-      if (this.condTest.includes(this.CheckInInputsArry[i])) {
-        this.minutesArry[i] = 'غياب'
+      if (this.condTest.includes(this.checkInpArry.in[i].val)) {
+        this.checkInpArry.minutesArry[i] = 'غياب'
       } else {
-        this.minutesArry[i] = this.diff_minutes(endTime, timeStartArr[i])
+        this.checkInpArry.minutesArry[i] = this.diff_minutes(endTime, timeStartArr[i])
       }
     };
     // end Minutes
     for (let i = 0; i < weekDays; i++) {
-      if (this.condTest.includes(this.CheckOutInputsArry[i])) {
-        this.minutesOArry[i] = 'غياب'
+      if (this.condTest.includes(this.checkInpArry.out[i].val)) {
+        this.checkInpArry.minutesOArry[i] = 'غياب'
       } else {
-        let start2 = this.CheckOutInputsArry[i].split(':');
+        let start2 = this.checkInpArry.out[i].val.split(':');
         let sO1: number = parseInt(start2[0]);
         let sO2: number = parseInt(start2[1]);
         let timeOut = new Date(1, 1, 3, sO1, sO2, 0);
         if (timeOutArry[i] < timeStartArr[i]) { // handle 24 hour
           timeOutArry[i] = timeOut
         }
-        this.minutesOArry[i] = this.diff_minutes(timeOutArry[i], endTimeOut)
+        this.checkInpArry.minutesOArry[i] = this.diff_minutes(timeOutArry[i], endTimeOut)
       }
     };
 
     // start minutes result
     for (let i = 0; i < weekDays; i++) {
-      if (this.condTest.includes(this.CheckInInputsArry[i]) || (this.minutesArry[i] * -1) >= this.rulesFromSql[0].allDayDisc) {
-        this.checkInDailyMinutes[i] = 'غياب'
-      } else if ((this.minutesArry[i] * -1) > this.rulesFromSql[0].halfDayDisc) {
-        this.checkInDailyMinutes[i] = (this.netMinutes * -1) / 2
+      if (this.condTest.includes(this.checkInpArry.in[i].val) || (this.checkInpArry.minutesArry[i] * -1) >= this.rulesFromSql[0].allDayDisc) {
+        this.checkInpArry.delayes[i].val = 'غياب'
+      } else if ((this.checkInpArry.minutesArry[i] * -1) > this.rulesFromSql[0].halfDayDisc) {
+        this.checkInpArry.delayes[i].val = (this.netMinutes * -1) / 2
       } else {
-        this.checkInDailyMinutes[i] = this.minutesArry[i]
+        this.checkInpArry.delayes[i].val = this.checkInpArry.minutesArry[i]
       }
     };
     // end minutes result
     for (let i = 0; i < weekDays; i++) {
-      if (this.condTest.includes(this.CheckOutInputsArry[i])) {
-        this.checkOutDailyMinutes[i] = 'غياب'
-      } else if (this.minutesOArry[i] < (this.rulesFromSql[0].outEarlyTime * -1)) {
-        this.checkOutDailyMinutes[i] = (this.netMinutes * -1) / 2
-      } else if (this.minutesOArry[i] < this.rulesFromSql[0].authOverTime && this.minutesOArry[i] > 0) {
-        this.checkOutDailyMinutes[i] = 0;
+      if (this.condTest.includes(this.checkInpArry.out[i].val)) {
+        this.checkInpArry.extraTime[i].val = 'غياب'
+      } else if (this.checkInpArry.minutesOArry[i] < (this.rulesFromSql[0].outEarlyTime * -1)) {
+        this.checkInpArry.extraTime[i].val = (this.netMinutes * -1) / 2
+      } else if (this.checkInpArry.minutesOArry[i] < this.rulesFromSql[0].authOverTime && this.checkInpArry.minutesOArry[i] > 0) {
+        this.checkInpArry.extraTime[i].val = 0;
       } else {
-        this.checkOutDailyMinutes[i] = this.minutesOArry[i]
+        this.checkInpArry.extraTime[i].val = this.checkInpArry.minutesOArry[i]
       }
     };
 
     // net minutes result
     for (let i = 0; i < weekDays; i++) {
-      if (this.condTest.includes(this.checkInDailyMinutes[i]) || this.condTest.includes(this.checkOutDailyMinutes[i])) {
-        this.dailyResultDArry[i] = 'غياب'
+      if (this.condTest.includes(this.checkInpArry.delayes[i].val) || this.condTest.includes(this.checkInpArry.extraTime[i].val)) {
+        this.checkInpArry.netWorkedminutes[i].val = 'غياب'
       } else {
-        this.dailyResultDArry[i] = this.checkInDailyMinutes[i] + this.checkOutDailyMinutes[i]
+        this.checkInpArry.netWorkedminutes[i].val = this.checkInpArry.delayes[i].val + this.checkInpArry.extraTime[i].val
       }
     }
 
@@ -549,40 +528,30 @@ export class WorkersComponent implements OnInit {
       minuteCost = (salary / 6 / this.netMinutes)
     };
 
-    let workedMinutesSun: number;
-    let workedMinutesMon: number;
-    let workedMinutesTus: number;
-    let workedMinutesWed: number;
-    let workedMinutesThu: number;
-    let workedMinutesFri: number;
-    let workedMinutesSat: number;
-    let allWorkedMinutes: number;
-    let dailyWorkedMinutes: any[] = [workedMinutesSun, workedMinutesMon, workedMinutesTus, workedMinutesWed, workedMinutesThu, workedMinutesFri, workedMinutesSat]
+    let dailyWorkedMinutes: any[] = [0, 0, 0, 0, 0, 0, 0]
 
     for (let i = 0; i < weekDays; i++) {
-      if (this.condTest.includes(this.dailyResultDArry[i])) {
-        dailyWorkedMinutes[i] = 0
-      } else {
-        dailyWorkedMinutes[i] = this.netMinutes + this.dailyResultDArry[i]
+      if (!this.condTest.includes(this.checkInpArry.netWorkedminutes[i].val)) {
+        dailyWorkedMinutes[i] = this.netMinutes + this.checkInpArry.netWorkedminutes[i].val
       };
     };
 
     // total delay minutes
     let resultArry: any[] = [0, 0, 0, 0, 0, 0, 0];
     for (let i = 0; i < weekDays; i++) {
-      if (this.condTest.includes(this.checkInDailyMinutes[i])) {
+      if (this.condTest.includes(this.checkInpArry.delayes[i].val)) {
         resultArry[i] = 0;
       } else {
-        resultArry[i] = this.checkInDailyMinutes[i];
+        resultArry[i] = this.checkInpArry.delayes[i].val;
       }
     }
     // total OverTime minutes
     let resultOutArry: any[] = [0, 0, 0, 0, 0, 0, 0];
     for (let i = 0; i < weekDays; i++) {
-      if (this.condTest.includes(this.checkOutDailyMinutes[i])) {
+      if (this.condTest.includes(this.checkInpArry.extraTime[i].val)) {
         resultOutArry[i] = 0;
       } else {
-        resultOutArry[i] = this.checkOutDailyMinutes[i];
+        resultOutArry[i] = this.checkInpArry.extraTime[i].val;
       }
     }
 
@@ -591,13 +560,13 @@ export class WorkersComponent implements OnInit {
       this.counter = 0;
     }
     for (let i = 0; i < weekDays; i++) {
-      if (this.dailyResultDArry[i] == 'غياب') {
+      if (this.checkInpArry.netWorkedminutes[i].val == 'غياب') {
         this.counter++;
       }
     }
 
     // totals
-    allWorkedMinutes = this.sumArry(dailyWorkedMinutes);
+    let allWorkedMinutes = this.sumArry(dailyWorkedMinutes);
     this.total = Math.floor(allWorkedMinutes * minuteCost);
     this.result = this.sumArry(resultArry);
     this.resultO = this.sumArry(resultOutArry);

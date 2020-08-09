@@ -572,7 +572,7 @@ export class ProfitsComponent implements OnInit {
         .filter(h => (h.transactionType == 2 && h.stockId == stock.stockId) && h.date_time < match_toDate && h.date_time > match_fromDate)
     };
 
-    console.log(this.filtered)
+    //console.log(this.filtered)
 
     //let stockProds = this.profitArr.filter(prod => prod.productId) //this._stockService.handleBackEnd.filter(stockF => stockF.stockId == stock.stockId)
 
@@ -629,7 +629,7 @@ export class ProfitsComponent implements OnInit {
     } else if (cond == 'perc') {
       this.profitArr.sort(this._service.sortArry('percForSort', 'desc'));
       this.sortBtnsEffect('.sortBtns','#sortPers');
-    };
+    }
   };
 
 } // end

@@ -10,6 +10,7 @@ import { InvoiceInp } from 'src/app/accountings/invoice-inp';
 import { TheStocksComponent } from '../../the-stocks/the-stocks.component';
 import { StockTransactionD } from '../../stock-transaction-d';
 import { StockTransaction } from '../../stock-transaction';
+import { stat } from 'fs';
 //import { CustomerComponent } from 'src/app/customer/customer.component';
 
 @Component({
@@ -38,11 +39,54 @@ export class AddToStockPermissionComponent implements OnInit {
   date_time: string;
 
   thestockName: string;
+  theInvoiceNote: string;
+  stockTransactionId: any;
+
+  domElements = {
+    inpt: {
+      stockNameForAdd: document.querySelector('#stockNameForAdd'),
+      invoiceSearch: document.querySelector('#invoiceSearch'),
+    },
+
+    btn: {
+      callInvoiceBtn: document.querySelector('#callInvoiceBtn'),
+      addNewInvoicetBtn: document.querySelector('#addNewInvoicetBtn'),
+      deleteAddInvoice: document.querySelector('#deleteAddInvoice') as HTMLElement
+    },
+
+    html: {
+      invNum: document.querySelector('#invNum') as HTMLElement,
+      callInvoice: document.querySelector('#callInvoice') as HTMLElement,
+      addInvoiceForm: document.querySelector('#addInvoiceForm') as HTMLElement,
+      fadeLayerAP: document.querySelector('#fadeLayerAP') as HTMLElement,
+      askForDelete: document.querySelector('.askForDelete') as HTMLElement
+    }
+
+  }
 
   constructor(public _stockService: StocksService, public formBuilder: FormBuilder,
     public _service: ServicesService, public _custService: CustomerService, public _theStockComp: TheStocksComponent) { }
 
   ngOnInit() {
+
+    this.domElements = {
+      inpt: {
+        stockNameForAdd: document.querySelector('#stockNameForAdd'),
+        invoiceSearch: document.querySelector('#invoiceSearch'),
+      },
+      btn: {
+        callInvoiceBtn: document.querySelector('#callInvoiceBtn'),
+        addNewInvoicetBtn: document.querySelector('#addNewInvoicetBtn'),
+        deleteAddInvoice: document.querySelector('#deleteAddInvoice')
+      },
+      html: {
+        invNum: document.querySelector('#invNum'),
+        callInvoice: document.querySelector('#callInvoice'),
+        addInvoiceForm: document.querySelector('#addInvoiceForm'),
+        fadeLayerAP: document.querySelector('#fadeLayerAP'),
+        askForDelete: document.querySelector('.askForDelete')
+      }
+    }
 
     this.addToStockPremData = this.formBuilder.group({
       stockName: [''],
@@ -201,12 +245,13 @@ export class AddToStockPermissionComponent implements OnInit {
 
   customerCss: any[]
 
-  makeCustomerCss() {
+  makeCustomerCss(statu = 'defult') {
 
-    this.createCustomerInpArry();
-
+    if (statu == 'defult') {
+      this.createCustomerInpArry();
+    }
+    //this.createCustomerInpArry();
     this.custClass = ''
-
     this.customerCss = this.customerInpArry.map((cust) => {
       return {
         name: cust.customerName,
@@ -227,7 +272,7 @@ export class AddToStockPermissionComponent implements OnInit {
     this.makeCustomerCss()
     //let name = $('#stockNameForAdd').val();
     this.deleteInvBtnDisabled = true;
-    if ($('#stockNameForAdd').val() == '-') {
+    if (this.thestockName == '-' /* $('#stockNameForAdd').val() == '-' */) {
       this.stockNameVaild = true;
       this.inptDisabled = true;
     } else {
@@ -236,9 +281,11 @@ export class AddToStockPermissionComponent implements OnInit {
     }
     if (this.thestockName != undefined) {
       if (this.thestockName.includes('سيف')) {
-        $('#stockNameForAdd').addClass('bg-info text-white')
+        this.domElements.inpt.stockNameForAdd.classList.add('bg-info', 'text-white');
+        //$('#stockNameForAdd').addClass('bg-info text-white')
       } else {
-        $('#stockNameForAdd').removeClass('bg-info text-white');
+        this.domElements.inpt.stockNameForAdd.classList.remove('bg-info', 'text-white');
+        //$('#stockNameForAdd').removeClass('bg-info text-white');
       }
     }
     if (this.theCustomerName) {
@@ -251,14 +298,12 @@ export class AddToStockPermissionComponent implements OnInit {
   isCustomerVaild() {
 
     //let customerNameForAddVal = $('#customerNameForAdd').val()
-
-    this.makeCustomerCss();
-
-    console.log({
+    //this.makeCustomerCss('customerInp');
+    /* console.log({
       stockName: this.thestockName,
       custName: this.theCustomerName,
       custArry: this.customerInpArry
-    })
+    }) */
 
     if (this.customerCss.length == 0) {
       this.customerVaild = true
@@ -295,7 +340,6 @@ export class AddToStockPermissionComponent implements OnInit {
       if (cCss) {
         this.custClass = cCss.css();
       }
-
     };
 
   };
@@ -347,9 +391,9 @@ export class AddToStockPermissionComponent implements OnInit {
 
   getTheStockId() {
     // get the stockId
-    let theStock = $('#stockNameForAdd').val();
+    //let theStock = $('#stockNameForAdd').val();
     for (let i = 0; i < this._stockService.stocks.length; i++) {
-      if (theStock == this._stockService.stocks[i].stockName) {
+      if (this.thestockName == this._stockService.stocks[i].stockName) {
         this.theStockId = this._stockService.stocks[i].stockId;
         break
       };
@@ -365,14 +409,16 @@ export class AddToStockPermissionComponent implements OnInit {
 
   checkAllArry: number;
 
-  searchInVal: string = '';
+  //searchInVal: string = '';
   // changAddInvoiceBtn
   changAddInvoiceBtn() {
-    this.searchInVal = $('#invoiceSearch').val();
-    if (this.searchInVal == '') {
-      $('#callInvoiceBtn').html("فاتورة جديدة");
+    //this.searchTxt = $('#invoiceSearch').val();
+    if (this.searchTxt == '') {
+      this.domElements.btn.callInvoiceBtn.innerHTML = 'فاتورة جديدة'
+      //$('#callInvoiceBtn').html("فاتورة جديدة");
     } else {
-      $('#callInvoiceBtn').html("بحث");
+      this.domElements.btn.callInvoiceBtn.innerHTML = 'بحث'
+      //$('#callInvoiceBtn').html("بحث");
     }
   };
 
@@ -388,7 +434,7 @@ export class AddToStockPermissionComponent implements OnInit {
     });
 
     //this.getTheStockId();
-    let BtnSubmitHtml = $('#addNewInvoicetBtn').html(); // to check if invoice for update or add
+    //let this.domElements.btn.addNewInvoicetBtn.innerHTML = $('#addNewInvoicetBtn').html(); // to check if invoice for update or add
     let theProductId: number;
     let postStockPridgeObj: StockPridge = {
       stockProductId: null,
@@ -401,7 +447,7 @@ export class AddToStockPermissionComponent implements OnInit {
     let productTotalsPriceAvr: number;
     let allProductQty: number;
 
-    if (BtnSubmitHtml == "تعديل الفاتورة") {
+    if (this.domElements.btn.addNewInvoicetBtn.innerHTML == "تعديل الفاتورة") {
 
       this.theCustomerInfo = this.getCustomerInfo(this.ivoiceItemesForEdit[0].customerId);
 
@@ -425,7 +471,7 @@ export class AddToStockPermissionComponent implements OnInit {
           productCost: this.ivoiceItemesForEdit[v].price,
           productQty: parseInt(this.ivoiceItemesForEdit[v].Qty),
           productPrice: null,
-        }
+        };
 
         if (getHandleBackEndInfo == undefined) {
           this._stockService.postStockPridge(postStockPridgeObj).subscribe();
@@ -502,7 +548,7 @@ export class AddToStockPermissionComponent implements OnInit {
       this._custService.updateCustomerSer(this.theCustomerInfo).subscribe();
     };
 
-    let BtnSubmitHtml = $('#addNewInvoicetBtn').html(); // to check if invoice for update or add
+    //let this.domElements.btn.addNewInvoicetBtn.innerHTML = $('#addNewInvoicetBtn').html(); // to check if invoice for update or add
     let allProductQty: number;
     let productTotalsPriceAvr: number;
 
@@ -511,6 +557,12 @@ export class AddToStockPermissionComponent implements OnInit {
       let postStockPridgeObj = new StockPridge();
       let stockTransactionD = new StockTransactionD();
 
+      // if not productName to delete stocktransactionDetail
+      //for (let d = 0; d < this.invoiceInpArry.length; d++) {
+      if (this.invoiceInpArry[i].stockTransactionDetailsId !== undefined && this.invoiceInpArry[i].product == '') {
+        this._stockService.deleteStockTransactionDetails(this.invoiceInpArry[i].stockTransactionDetailsId).subscribe();
+      };
+      //}
       if (this.invoiceInpArry[i].product != undefined && this.invoiceInpArry[i].product != '' && this.invoiceInpArry[i].qty != 0) {
 
         let getProductInfo = this._stockService.allProducts.find(product => product.productName === this.invoiceInpArry[i].product)
@@ -576,7 +628,7 @@ export class AddToStockPermissionComponent implements OnInit {
           };
 
           // edite Or Add
-          if (BtnSubmitHtml == "تعديل الفاتورة") {
+          if (this.domElements.btn.addNewInvoicetBtn.innerHTML == "تعديل الفاتورة") {
             stockTransactionD.stockTransactionDetailsId = this.invoiceInpArry[i].stockTransactionDetailsId;
             this._stockService.UpdateStockTransactionDetails(stockTransactionD).subscribe();
             //console.log(stockTransactionD)
@@ -586,15 +638,8 @@ export class AddToStockPermissionComponent implements OnInit {
               //console.log(stockTransactionD)
               //console.log('third')
             }
-            // if not productName to delete stocktransactionDetail
-            for (let d = 0; d < this.invoiceInpArry.length; d++) {
-              if (this.invoiceInpArry[d].stockTransactionDetailsId !== undefined && this.invoiceInpArry[d].product == '') {
-                this._stockService.deleteStockTransactionDetails(this.invoiceInpArry[d].stockTransactionDetailsId).subscribe();
-                //console.log(stockTransactionD)
-                //console.log('fourth')
-              }
-            }
-          } else if (BtnSubmitHtml == "تسجيل") {
+
+          } else if (this.domElements.btn.addNewInvoicetBtn.innerHTML == "تسجيل") {
             this._stockService.creatStockTransactionDetails(stockTransactionD).subscribe(); // for invoice DB
             //console.log(stockTransactionD)
             //console.log('fifth')
@@ -674,7 +719,7 @@ export class AddToStockPermissionComponent implements OnInit {
       this._custService.updateCustomerSer(this.theCustomerInfo).subscribe();
     };
 
-    let BtnSubmitHtml = $('#addNewInvoicetBtn').html(); // to check if invoice for update or add
+    //let this.domElements.btn.addNewInvoicetBtn.innerHTML = $('#addNewInvoicetBtn').html(); // to check if invoice for update or add
     let allProductQty: number;
     let productTotalsPriceAvr: number;
 
@@ -752,7 +797,7 @@ export class AddToStockPermissionComponent implements OnInit {
           };
 
           // edite Or Add
-          if (BtnSubmitHtml == "تعديل الفاتورة") {
+          if (this.domElements.btn.addNewInvoicetBtn.innerHTML == "تعديل الفاتورة") {
             stockTransactionD.stockTransactionDetailsId = this.invoiceInpArry[i].stockTransactionDetailsId;
             this._stockService.UpdateStockTransactionDetails(stockTransactionD).subscribe();
             //console.log(stockTransactionD)
@@ -770,7 +815,7 @@ export class AddToStockPermissionComponent implements OnInit {
                 //console.log('fourth')
               }
             }
-          } else if (BtnSubmitHtml == "تسجيل") {
+          } else if (this.domElements.btn.addNewInvoicetBtn.innerHTML == "تسجيل") {
             this._stockService.creatStockTransactionDetails(stockTransactionD).subscribe(); // for invoice DB
             //console.log(stockTransactionD)
             //console.log('fifth')
@@ -813,7 +858,7 @@ export class AddToStockPermissionComponent implements OnInit {
       from: this.theCustomerName, //$('#customerNameForAdd').val(),
       to: this.thestockName, //$('#stockNameForAdd').val(),
       invoiceVal: parseInt(this.invoiceTotal),
-      invoiceNote: $('#addInvoiceNote').val(),
+      invoiceNote: this.theInvoiceNote,
     }
     this._theStockComp.showFade_newInvoice('fade_addNewApBtn');
   };
@@ -825,7 +870,6 @@ export class AddToStockPermissionComponent implements OnInit {
     if (this.stockDetailsIdArr.length != 0) {
       for (let i = 0; i < this.stockDetailsIdArr.length; i++) {
         this._stockService.deleteStockTransactionDetails(this.stockDetailsIdArr[i]).subscribe();
-        console.log('detail id deleted')
       };
     }
   };
@@ -855,7 +899,7 @@ export class AddToStockPermissionComponent implements OnInit {
       this.productArr.push(this._stockService.allProducts[p].productName)
     };
 
-    let callInvoiceBtnVal: string = $('#callInvoiceBtn').html();
+    //let this.domElements.btn.callInvoiceBtn.innerHTML: string = $('#callInvoiceBtn').html();
     this.invoiceInpArry = [];
     this.ivoiceItemesForEdit = [];
     // to add 5 fildes
@@ -867,37 +911,38 @@ export class AddToStockPermissionComponent implements OnInit {
       this.invoiceInpArry.push(this.invoiceInp);
     }
 
-    if (callInvoiceBtnVal == "فاتورة جديدة") {
+    if (this.domElements.btn.callInvoiceBtn.innerHTML == "فاتورة جديدة") {
 
       let currentDateNow = Date.now() //new Date()
       let currentDate = new Date(currentDateNow)
       this._service.makeTime_date(currentDate);
       this.date_time = this._service.date_time;
 
-      $('#invNum').hide();
-      $('#callInvoice').hide();
-      $('#addInvoiceForm').slideDown('fast');
-      $('#addNewInvoicetBtn').html("تسجيل");
-      $('#deleteAddInvoice').hide();
-      $('#stockTransactionId').val('')
-      $('#stockNameForAdd').removeClass('bg-info text-white');
+      this.domElements.html.invNum.style.display = 'none'; //$('#invNum').hide();
+      this.domElements.html.callInvoice.style.display = 'none'; //$('#callInvoice').hide();
+      //this.domElements.html.addInvoiceForm.style.height = '100%'; //$('#addInvoiceForm').slideDown('fast');
+      this.domElements.btn.addNewInvoicetBtn.innerHTML = 'تسجيل'; //$('#addNewInvoicetBtn').html("تسجيل");
+      this.domElements.btn.deleteAddInvoice.style.display = 'none'; //$('#deleteAddInvoice').hide();
+      this.stockTransactionId = '', //$('#stockTransactionId').val('')
+      this.domElements.inpt.stockNameForAdd.classList.remove('bg-info', 'text-white'); //$('#stockNameForAdd').removeClass('bg-info text-white');
 
       this.resetAddinvoiceValu()
       this._service.clearForm();
       this.inptDisabled = true;
       this.isAddInvVaild = true;
-      this.customerVaild = false; 
+      this.customerVaild = false;
 
-    } else if (callInvoiceBtnVal == "بحث") {
+    } else if (this.domElements.btn.callInvoiceBtn.innerHTML == "بحث") {
       // add fildes if the inputArry < invoiceArry
-      $('#addNewInvoicetBtn').html("تعديل الفاتورة");
-      $('#deleteAddInvoice').show();
-      $('#invNum').show();
+      this.domElements.btn.addNewInvoicetBtn.innerHTML = 'تعديل الفاتورة';  //$('#addNewInvoicetBtn').html("تعديل الفاتورة");
+      this.domElements.btn.deleteAddInvoice.style.display = 'inline'; //$('#deleteAddInvoice').show();
+      this.domElements.html.invNum.style.display = 'inline'; //$('#invNum').show();
+
       this.inptDisabled = false;
       this.isAddInvVaild = true;
 
       for (let i = 0; i < this._stockService.makeInvoiceArry.length; i++) { // add fields if the invoice details > 7 inpts
-        if (this._stockService.makeInvoiceArry[i].invoiceSearchVal == this.searchInVal) {
+        if (this._stockService.makeInvoiceArry[i].invoiceSearchVal == this.searchTxt) {
           if (this._stockService.makeInvoiceArry[i].invoiceDetails.length > this.invoiceInpArry.length) {
             let countDif: number = this._stockService.makeInvoiceArry[i].invoiceDetails.length - this.invoiceInpArry.length;
             for (let c = 0; c < countDif; c++) {
@@ -910,13 +955,13 @@ export class AddToStockPermissionComponent implements OnInit {
       this.resetAddinvoiceValu();
 
       let theInvoice = this._stockService.makeInvoiceArry.find(
-        invoice => invoice.invoiceSearchVal == this.searchInVal
+        invoice => invoice.invoiceSearchVal == this.searchTxt
       );
 
-      $('#stockTransactionId').val(theInvoice.stockTransactionId)
-      $('#stockNameForAdd').val(theInvoice.stockName);
-      this.theCustomerName = theInvoice.customerName //$('#customerNameForAdd').val(theInvoice.customerName);
-      $('#addInvoiceNote').val(theInvoice.notes);
+      this.stockTransactionId = theInvoice.stockTransactionId; //$('#stockTransactionId').val(theInvoice.stockTransactionId)
+      this.thestockName = theInvoice.stockName; //$('#stockNameForAdd').val(theInvoice.stockName);
+      this.theCustomerName = theInvoice.customerName; //$('#customerNameForAdd').val(theInvoice.customerName);
+      this.theInvoiceNote = theInvoice.notes; //$('#addInvoiceNote').val(theInvoice.notes);
 
       let cCss = this.customerCss.find(cust => cust.name == theInvoice.customerName)
       this.custClass = cCss.css();
@@ -935,20 +980,22 @@ export class AddToStockPermissionComponent implements OnInit {
       this.calcTotals();
       this.deleteInvBtnDisabled = false;
     };
-    $('#callInvoice').hide();
+    this.domElements.html.callInvoice.style.display = 'none';
+    //this.domElements.html.addInvoiceForm.style.display = 'block'; //$('#callInvoice').hide();
+    //this.domElements.html.addInvoiceForm.style.height = '100%';
     $('#addInvoiceForm').slideDown('fast');
 
   }; // showAddNewInvoice
 
   showDeleteAddInvoice() {
-    $('#fadeLayerAP').show(0);
+    this.domElements.html.fadeLayerAP.style.display = 'block' //$('#fadeLayerAP').show(0);
     $('.askForDelete').addClass('animate');
   };
 
   deleteAddInvoice() {
-    $('#fadeLayerAP').hide();
+    this.domElements.html.fadeLayerAP.style.display = 'none' //$('#fadeLayerAP').hide();
     $('.askForDelete').removeClass('animate');
-    let stockTransId = $('#stockTransactionId').val();
+    //let stockTransId = $('#stockTransactionId').val();
     for (let i = 0; this.invoiceInpArry.length; i++) {
       if (this.invoiceInpArry[i].stockTransactionDetailsId == undefined) {
         break
@@ -957,7 +1004,7 @@ export class AddToStockPermissionComponent implements OnInit {
         this._stockService.deleteStockTransactionDetails(this.invoiceInpArry[i].stockTransactionDetailsId).subscribe();
       };
     };
-    this._stockService.deleteStockTransaction(stockTransId).subscribe();
+    this._stockService.deleteStockTransaction(this.stockTransactionId).subscribe();
     this.editStockQtys();
     //location.reload();
     this._theStockComp.showStocksEnquiry();

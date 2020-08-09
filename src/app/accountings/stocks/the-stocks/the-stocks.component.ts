@@ -391,6 +391,8 @@ export class TheStocksComponent implements OnInit {
       });
     });
 
+    let addInvoiceForm = document.querySelector('#addInvoiceForm') as HTMLElement
+
     Promise.all([StockTrance, Handle, getProds])
       .then((res) => this.addInvArry = this.createTheInvoiceArry(1, res[0], res[1]))
       .then(() => {
@@ -399,6 +401,10 @@ export class TheStocksComponent implements OnInit {
         this.buttonEffect('#premissionBtn');
         // hide invoice addForm
         $('#callInvoice').show();
+        //addInvoiceForm.style.display = 'none'
+        //addInvoiceForm.classList.remove('animate')
+        //addInvoiceForm.style.height = '0px'
+        //document.querySelector('#addInvoiceForm').style
         $('#addInvoiceForm').hide();
         $('#callInvoiceBtn').html("فاتورة جديدة");
 
