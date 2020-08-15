@@ -84,6 +84,23 @@ export class MinFrmStockPermissionComponent implements OnInit {
     location.reload();
   };
 
+  checkENU = (theVal: string, cond: string, way = 'notEqual') => { // cond = or || and
+
+    let res: boolean = (way == 'notEqual') ? true : false
+    let rev: boolean = (way == 'notEqual') ? false : true
+
+    if (cond == 'and') {
+      if (theVal != undefined && theVal !== '' && theVal !== null) {
+        return res
+      }
+    } else if (cond == 'or') {
+      if (theVal != undefined || theVal !== '' || theVal !== null) {
+        return res
+      }
+    }
+    return rev
+  };
+
   minAddFilds() {
     this.invoiceInp = new InvoiceInp();
     this.invoiceInp.total = 0;
@@ -210,18 +227,28 @@ export class MinFrmStockPermissionComponent implements OnInit {
       //if (this.invoiceInpArry[i].price > 0 || this.invoiceInpArry[i].qty >= 0) {
 
       //if (this.invoiceInpArry[i + 1] != undefined) {
-
-      if (this.invoiceInpArry[i + 1].product != undefined || this.invoiceInpArry[i + 1].product != '' || this.invoiceInpArry[i + 1].product != null) {
-        this.stockDetailsIdArr.push(this.invoiceInpArry[i].stockTransactionDetailsId)
-        this.invoiceInpArry.splice(i, 1)
-        //console.log(this.stockDetailsIdArr)
-        this.calcTotals(null)
+      let subBtn = $('#minNewInvoicetBtn').html()
+      if (subBtn == 'تعديل الفاتورة') {
+        if (this.invoiceInpArry[i + 1].product != undefined || this.invoiceInpArry[i + 1].product != '' || this.invoiceInpArry[i + 1].product != null) {
+          this.stockDetailsIdArr.push(this.invoiceInpArry[i].stockTransactionDetailsId)
+          this.invoiceInpArry.splice(i, 1)
+          //console.log(this.stockDetailsIdArr)
+          this.calcTotals(null)
+        } else {
+          this.invoiceInpArry[i].price = null;
+          this.invoiceInpArry[i].qty = null;
+          this.invoiceInpArry[i].total = 0;
+          this.calcTotals(null)
+        };
       } else {
-        this.invoiceInpArry[i].price = null;
-        this.invoiceInpArry[i].qty = null;
-        this.calcTotals(null)
-      };
-
+        if (this.invoiceInpArry[i + 1].product != undefined || this.invoiceInpArry[i + 1].product != '' || this.invoiceInpArry[i + 1].product != null) {
+          this.invoiceInpArry.splice(i, 1)
+        } else {
+          this.invoiceInpArry[i].price = null;
+          this.invoiceInpArry[i].qty = null;
+          this.invoiceInpArry[i].total = 0;
+        }
+      }
       //};
       //};
     };
@@ -349,22 +376,35 @@ export class MinFrmStockPermissionComponent implements OnInit {
   invoiceTotal: string = '0';
   calcTotals(i) {
 
-    if (i != null) {
-      this.isAddQtyVaild(i);
-    };
-
     this.deleteMinInvBtnDisabled = true;
     this.totalInvoice = []
     this.invoiceTotal = '0'
-    for (let i = 0; i < this.invoiceInpArry.length; i++) {
-      if (this.invoiceInpArry[i].qty == null || this.invoiceInpArry[i].price == null) {
-        this.invoiceInpArry[i].total = 0;
-        this.totalInvoice.push(this.invoiceInpArry[i].total)
+
+    if (i != null) {
+      this.isAddQtyVaild(i);
+      if (this.invoiceInpArry[i].price > 0 && this.checkENU(this.invoiceInpArry[i].qty, 'and', 'equal')) {
+        this.invoiceInpArry[i].Qtyinvaild = true;
+        this.invoiceInpArry[i].qtyMsg = `لا يمكن ترك الكمية فارغة`
       } else {
-        this.invoiceInpArry[i].total = this.invoiceInpArry[i].qty * this.invoiceInpArry[i].price
-        this.totalInvoice.push(this.invoiceInpArry[i].total)
-      };
-    };
+        this.invoiceInpArry[i].Qtyinvaild = false;
+        this.isAddInvVaild = false;
+      }
+      if (this.invoiceInpArry[i].Qtyinvaild == false) {
+        if (this.invoiceInpArry[i].price > 0) {
+          this.invoiceInpArry[i].total = this.invoiceInpArry[i].qty * this.invoiceInpArry[i].price
+        };
+      }
+    } else {
+      for (let l = 0; l < this.invoiceInpArry.length; l++) {
+        if (this.invoiceInpArry[l].qty && this.invoiceInpArry[l].price) {
+          this.invoiceInpArry[l].total = this.invoiceInpArry[l].qty * this.invoiceInpArry[l].price;
+          this.totalInvoice = [...this.totalInvoice, this.invoiceInpArry[l].total]
+        }
+      }
+    }
+
+    this.totalInvoice = this.invoiceInpArry.map(inv => inv.total);
+
     let total: any = this.sumArry(this.totalInvoice)
     this.invoiceTotal = total;
   } // calcTotals
@@ -465,11 +505,10 @@ export class MinFrmStockPermissionComponent implements OnInit {
       //this.isMinInvInvaild = true;
       let theInvoiceInfo = this._stockService.makeInvoiceArry.find(invoice => invoice.invoiceSearchVal == this.searchInVal);
 
-      if (theInvoiceInfo.invoiceDetails.length > this.invoiceInpArry.length) {
-        let countDif: number = theInvoiceInfo.invoiceDetails.length - this.invoiceInpArry.length;
-        for (let c = 0; c < countDif; c++) {
-          this.minAddFilds();
-        };
+      this.invoiceInpArry = [];
+
+      for (let i = 0; i < theInvoiceInfo.invoiceDetails.length; i++) {
+        this.minAddFilds()
       };
 
       //this.resetAddinvoiceValu();
@@ -990,12 +1029,21 @@ export class MinFrmStockPermissionComponent implements OnInit {
     let stockTransId = $('#minStockTransactionId').val();
 
     for (let i = 0; this.invoiceInpArry.length; i++) {
-      if (this.invoiceInpArry[i].stockTransactionDetailsId == undefined) {
+
+      if (this.invoiceInpArry[i]) {
+        if (this.invoiceInpArry[i].stockTransactionDetailsId != undefined) {
+          this._stockService.deleteStockTransactionDetails(this.invoiceInpArry[i].stockTransactionDetailsId).subscribe();
+        };
+        if (this.invoiceInpArry[i].stockTransactionDetailsId == undefined) {
+          break
+        }
+      } else {
+        break
+      }
+      /* if (this.invoiceInpArry[i].stockTransactionDetailsId == undefined) {
         break
       };
-      if (this.invoiceInpArry[i].stockTransactionDetailsId != undefined) {
-        this._stockService.deleteStockTransactionDetails(this.invoiceInpArry[i].stockTransactionDetailsId).subscribe();
-      };
+       */
     };
 
     this._stockService.deleteStockTransaction(stockTransId).subscribe();

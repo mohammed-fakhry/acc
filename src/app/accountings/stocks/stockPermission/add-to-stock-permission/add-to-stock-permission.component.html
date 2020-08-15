@@ -104,13 +104,13 @@
                                 </datalist>
                                 <div *ngIf="inpt.inpVaild" class="text-danger vaildAlert">{{inpt.productVaildMsg}}</div>
                             </td>
-                            <td><input type="number" name="qty{{i}}" [(ngModel)]="inpt.qty" class="form-control"
-                                    id="qty{{i}}" (change)="calcTotals()" [disabled]="inptDisabled">
-                                <div *ngIf="inpt.Qtyinvaild" class="text-danger vaildAlert">لا يوجد رصيد لهذا الصنف
+                            <td><input type="number" name="qty{{i}}" [(ngModel)]="inpt.qty" class="form-control mt-2"
+                                    id="qty{{i}}" (keyup)="calcTotals(i)" [disabled]="inptDisabled">
+                                <div *ngIf="inpt.Qtyinvaild" class="text-danger vaildAlert">{{inpt.qtyMsg}}
                                 </div>
                             </td>
                             <td><input type="number" name="price{{i}}" [(ngModel)]="inpt.price" class="form-control"
-                                    (keyup)="calcTotals()" [disabled]="inptDisabled">
+                                    (keyup)="calcTotals(i)" [disabled]="inptDisabled">
                             </td>
                             <td class="text-center font-weight-bold">{{inpt.total}}</td>
                             <input name="stockTransactionDetailsId{{i}}" [(ngModel)]="inpt.stockTransactionDetailsId"

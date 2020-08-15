@@ -197,21 +197,23 @@
 
                                             <td>{{product.in.lastPrice()}}</td>
                                         </tr>
-                                        <tr class="lightBg">
-                                            <th scope="row">متاح</th>
-                                            <td>{{product.qtyRemain()}}</td>
-                                            <td>{{product.qtyRemainVal}}</td>
-                                        </tr>
+                                        
                                         <tr>
                                             <th scope="row">شراء</th>
                                             <td>{{product.in.qty}}</td>
                                             <td>{{product.in.qtyVal}}</td>
                                         </tr>
-                                        <tr>
+                                        <tr class="darkGrayBg">
                                             <th scope="row">بيع</th>
                                             <td>{{product.sold.qty}}</td>
                                             <td>{{product.sold.qtyVal}}</td>
                                         </tr>
+                                        <tr>
+                                            <th scope="row">متاح</th>
+                                            <td>{{product.qtyRemain()}}</td>
+                                            <td>{{product.qtyRemainVal}}</td>
+                                        </tr>
+                                        
                                     </tbody>
                                 </table>
                             </div>

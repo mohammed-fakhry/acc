@@ -36,6 +36,7 @@ import { SafeTransactionComponent } from './accountings/safe-acc/safe-transactio
 import { SafeTranceSearchPipe } from './accountings/safe-trance-search.pipe';
 import { ProfitsComponent } from './accountings/stocks/profits/profits.component';
 import { SearchProdProfitPipe } from './search-prod-profit.pipe';
+import { HashLocationStrategy, LocationStrategy } from '@angular/common'
 
 @NgModule({
   declarations: [
@@ -80,7 +81,7 @@ import { SearchProdProfitPipe } from './search-prod-profit.pipe';
     FormsModule,
     HttpClientModule
   ],
-  providers: [],
+  providers: [{provide: LocationStrategy, useClass: HashLocationStrategy}],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

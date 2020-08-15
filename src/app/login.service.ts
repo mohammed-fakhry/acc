@@ -54,6 +54,7 @@ export class LoginService {
   reternlog() {
     if (this.isUser == false) {
       this.router.navigate(['/logIn'])
+      //console.log(this.check)
     }
   }
 

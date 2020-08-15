@@ -139,6 +139,23 @@ export class StocTrancePremComponent implements OnInit {
 
   qtyIsOkArry: any[];
 
+  checkENU = (theVal: string, cond: string, way = 'notEqual') => { // cond = or || and
+
+    let res: boolean = (way == 'notEqual') ? true : false
+    let rev: boolean = (way == 'notEqual') ? false : true
+
+    if (cond == 'and') {
+      if (theVal != undefined && theVal !== '' && theVal !== null) {
+        return res
+      }
+    } else if (cond == 'or') {
+      if (theVal != undefined || theVal !== '' || theVal !== null) {
+        return res
+      }
+    }
+    return rev
+  };
+
   isAddQtyVaild() {
 
     let fstStockNameForTrance = $('#fstStockNameForTrance').val();
@@ -154,6 +171,7 @@ export class StocTrancePremComponent implements OnInit {
 
           if (theProductQtyInfo != undefined) {
             if (this.invoiceInpArry[i].product == theProductQtyInfo.productName && this.invoiceInpArry[i].qty > theProductQtyInfo.productQty) {
+
               if (this.qtyIsOkArry == undefined) {
                 this.invoiceInpArry[i].Qtyinvaild = true;
                 this.invoiceInpArry[i].qtyMsg = `الرصيد المتاح ( ${theProductQtyInfo.productQty} )`
@@ -320,21 +338,34 @@ export class StocTrancePremComponent implements OnInit {
 
     if (this.invoiceInpArry[i].product == '') {
 
-      if (this.invoiceInpArry[i].price > 0 || this.invoiceInpArry[i].qty >= 0) {
+      let subBtn = $('#newTranceInvoicetBtn').html()
+      if (subBtn == 'تعديل الاذن') {
+        if (this.invoiceInpArry[i].price > 0 || this.invoiceInpArry[i].qty >= 0) {
 
-        if (this.invoiceInpArry[i + 1] != undefined) {
+          if (this.invoiceInpArry[i + 1] != undefined) {
 
-          if (this.invoiceInpArry[i + 1].product != undefined || this.invoiceInpArry[i + 1].product != '' || this.invoiceInpArry[i + 1].product != null) {
-            this.stockDetailsIdArr.push(this.invoiceInpArry[i].stockTransactionDetailsId)
-            this.invoiceInpArry.splice(i, 1)
-            this.calcTotals('checkVaild')
-          } else {
-            this.invoiceInpArry[i].price = null;
-            this.invoiceInpArry[i].qty = null;
-            this.calcTotals('checkVaild')
+            if (this.invoiceInpArry[i + 1].product != undefined || this.invoiceInpArry[i + 1].product != '' || this.invoiceInpArry[i + 1].product != null) {
+              this.stockDetailsIdArr.push(this.invoiceInpArry[i].stockTransactionDetailsId)
+              this.invoiceInpArry.splice(i, 1)
+              this.calcTotals('checkVaild')
+            } else {
+              this.invoiceInpArry[i].price = null;
+              this.invoiceInpArry[i].qty = null;
+              this.invoiceInpArry[i].total = 0;
+              this.calcTotals('checkVaild')
+            };
           };
         };
-      };
+      } else {
+        if (this.invoiceInpArry[i + 1].product != undefined || this.invoiceInpArry[i + 1].product != '' || this.invoiceInpArry[i + 1].product != null) {
+          this.invoiceInpArry.splice(i, 1)
+        } else {
+          this.invoiceInpArry[i].price = null;
+          this.invoiceInpArry[i].qty = null;
+          this.invoiceInpArry[i].total = 0;
+        }
+      }
+
     };
     //};
   };
@@ -349,6 +380,13 @@ export class StocTrancePremComponent implements OnInit {
     this.invoiceTotal = '0'
 
     for (let i = 0; i < this.invoiceInpArry.length; i++) {
+      if (this.invoiceInpArry[i].price > 0 && this.checkENU(this.invoiceInpArry[i].qty, 'and', 'equal')) {
+        this.invoiceInpArry[i].Qtyinvaild = true;
+        this.invoiceInpArry[i].qtyMsg = `لا يمكن ترك الكمية فارغة`
+      } else {
+        this.invoiceInpArry[i].Qtyinvaild = false;
+        this.isAddInvVaild = false;
+      }
       if (this.invoiceInpArry[i].qty == null || this.invoiceInpArry[i].price == null) {
         this.invoiceInpArry[i].total = 0;
         this.totalInvoice.push(this.invoiceInpArry[i].total);
@@ -435,11 +473,10 @@ export class StocTrancePremComponent implements OnInit {
         invoice => invoice.invoiceSearchVal == this.searchInVal
       );
 
-      if (invoiceInfo.invoiceDetails.length > this.invoiceInpArry.length) {
-        let countDif: number = invoiceInfo.invoiceDetails.length - this.invoiceInpArry.length;
-        for (let c = 0; c < countDif; c++) {
-          this.addFilds();
-        };
+      this.invoiceInpArry = [];
+
+      for (let i = 0; i < invoiceInfo.invoiceDetails.length; i++) {
+        this.addFilds()
       };
 
       this.resetTranceinvoiceValu();
@@ -775,11 +812,15 @@ export class StocTrancePremComponent implements OnInit {
     $('#tranceFadeLayer').hide();
 
     for (let i = 0; this.invoiceInpArry.length; i++) {
-      if (this.invoiceInpArry[i].stockTransactionDetailsId == undefined) {
+      if (this.invoiceInpArry[i]) {
+        if (this.invoiceInpArry[i].stockTransactionDetailsId == undefined) {
+          break
+        };
+        if (this.invoiceInpArry[i].stockTransactionDetailsId != undefined) {
+          this._stockService.deleteStockTransactionDetails(this.invoiceInpArry[i].stockTransactionDetailsId).subscribe();
+        };
+      } else {
         break
-      };
-      if (this.invoiceInpArry[i].stockTransactionDetailsId != undefined) {
-        this._stockService.deleteStockTransactionDetails(this.invoiceInpArry[i].stockTransactionDetailsId).subscribe();
       };
     };
 

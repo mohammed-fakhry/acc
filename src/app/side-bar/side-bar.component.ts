@@ -107,7 +107,7 @@ export class SideBarComponent implements OnInit {
     this.sidebarToggle();
   }
 
-  logOut() {
+  gO() {
     //this.logService.isUser = false;
     sessionStorage.removeItem('y')
     this.logService.isUser = false;
