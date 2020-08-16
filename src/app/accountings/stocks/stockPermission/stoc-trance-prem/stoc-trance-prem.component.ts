@@ -384,8 +384,10 @@ export class StocTrancePremComponent implements OnInit {
         this.invoiceInpArry[i].Qtyinvaild = true;
         this.invoiceInpArry[i].qtyMsg = `لا يمكن ترك الكمية فارغة`
       } else {
-        this.invoiceInpArry[i].Qtyinvaild = false;
-        this.isAddInvVaild = false;
+        if (this.invoiceInpArry[i].qtyMsg == `لا يمكن ترك الكمية فارغة`) {
+          this.invoiceInpArry[i].Qtyinvaild = false;
+          this.isAddInvVaild = false;
+        }
       }
       if (this.invoiceInpArry[i].qty == null || this.invoiceInpArry[i].price == null) {
         this.invoiceInpArry[i].total = 0;

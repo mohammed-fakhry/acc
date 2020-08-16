@@ -11,6 +11,7 @@ import { TheStocksComponent } from '../../the-stocks/the-stocks.component';
 import { StockTransactionD } from '../../stock-transaction-d';
 import { StockTransaction } from '../../stock-transaction';
 import { Stock } from 'src/app/accountings/stock';
+import { equal } from 'assert';
 //import { CustomerComponent } from 'src/app/customer/customer.component';
 
 @Component({
@@ -62,6 +63,11 @@ export class AddToStockPermissionComponent implements OnInit {
       askForDelete: document.querySelector('.askForDelete') as HTMLElement
     }
 
+  }
+
+  btnValid = {
+    cond: true,
+    msg: null
   }
 
   constructor(public _stockService: StocksService, public formBuilder: FormBuilder,
@@ -179,13 +185,14 @@ export class AddToStockPermissionComponent implements OnInit {
     } else {
       this.invoiceInpArry[i].inpVaild = true;
       this.invoiceInpArry[i].productVaildMsg = 'خطأ فى اسم الصنف'
-    }
+    };
+
     let valueArr = this.invoiceInpArry.map((item) => { return item.product });
 
-    let filtert = valueArr.filter((product) => {
+    let filtered = valueArr.filter((product) => {
       return product != undefined
     })
-    let isDublicate = filtert.some((item, indx) => {
+    let isDublicate = filtered.some((item, indx) => {
       index = indx
       return valueArr.indexOf(item) != indx
     })
@@ -381,6 +388,7 @@ export class AddToStockPermissionComponent implements OnInit {
           this.isAddInvVaild = true;
         } else {
           this.isAddInvVaild = false;
+          this.btnValid.cond = true
         }
       }
     }
@@ -394,7 +402,16 @@ export class AddToStockPermissionComponent implements OnInit {
     this.totalInvoice = [];
     this.invoiceTotal = '0';
 
+    if (!this.btnValid.cond) {
+      this.isInvoiceVaild()
+    };
+    
+
     if (i != null) {
+
+      if (this.invoiceInpArry[i].Qtyinvaild) {
+        this.isInvoiceVaild()
+      };
 
       if (this.invoiceInpArry[i].price > 0 && this.checkENU(this.invoiceInpArry[i].qty, 'and', 'equal')) {
         this.invoiceInpArry[i].Qtyinvaild = true;
@@ -894,6 +911,54 @@ export class AddToStockPermissionComponent implements OnInit {
 
   theCustomerName: string;
 
+  /* 
+    inpVaild:boolean;
+    Qtyinvaild:boolean;
+  */
+
+  checkFinalValid = () => {
+
+    if (this.checkENU(this.thestockName, 'and', 'equal') || this.checkENU(this.theCustomerName, 'and', 'equal')) {
+
+      if (this.checkENU(this.thestockName, 'and', 'equal')) {
+        this.stockNameVaild = true
+      }
+      if (this.checkENU(this.theCustomerName, 'and', 'equal')) {
+        this.customerVaild = true
+        this.custVaildMsg = 'يجب ادخال اسم العميل'
+      }
+      this.btnValid.cond = false
+      this.btnValid.msg = 'برجاء مراجعة اخطاء الفاتورة قبل التسجيل'
+
+    } else {
+
+      for (let i = 0; i < this.invoiceInpArry.length; i++) {
+        if (this.checkENU(this.invoiceInpArry[i].product, 'and')) {
+          this.calcTotals(i);
+          if (this.invoiceInpArry[i].Qtyinvaild) {
+            if (this.invoiceInpArry[i].Qtyinvaild == true) {
+              this.btnValid.cond = false
+              this.invoiceInpArry[i].qtyMsg = 'يجب ادخال عدد صالح'
+              break
+            } else {
+              this.btnValid.cond = true
+            };
+          };
+        };
+      };
+
+      if (this.isAddInvVaild == true) {
+        this.btnValid.cond = false
+        this.btnValid.msg = 'برجاء مراجعة اخطاء الفاتورة قبل التسجيل'
+      } else {
+        //console.log('functionWorking')
+        this.addToStockPrem()
+      }
+    }
+
+    //return (this.btnValid.cond == true) ? true : false;
+  };
+
   showInvoiceDone() {
     this._theStockComp.ngOnInit();
     this._stockService.invoiceDoneMsg = {
@@ -937,6 +1002,9 @@ export class AddToStockPermissionComponent implements OnInit {
     this._theStockComp.testBackend(); // to make stockArry
     this.productArr = []
     this.invoiceTotal = "0"
+    this.btnValid.cond = true
+    this.thestockName = null;
+    this.theCustomerName = null;
 
     for (let p = 0; p < this._stockService.allProducts.length; p++) {
       this.productArr.push(this._stockService.allProducts[p].productName)

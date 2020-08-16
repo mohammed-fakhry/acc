@@ -28,6 +28,11 @@ export class MinFrmStockPermissionComponent implements OnInit {
   deleteMinInvBtnDisabled: boolean;
   stockDetailsIdArr: any;
 
+  btnValid = {
+    cond: true,
+    msg: null
+  }
+
   constructor(public _stockService: StocksService, public formBuilder: FormBuilder,
     public _service: ServicesService, public _custService: CustomerService, public _theStockComp: TheStocksComponent) { }
 
@@ -373,6 +378,22 @@ export class MinFrmStockPermissionComponent implements OnInit {
 
   };
 
+  isInvoiceVaild() {
+    if (this.custNameInvaild || this.stockNameVaild) {
+      this.isAddInvVaild = true;
+    } else {
+      for (let i = 0; i < this.invoiceInpArry.length; i++) {
+        if (this.invoiceInpArry[i].inpVaild || this.invoiceInpArry[i].Qtyinvaild) {
+          this.isAddInvVaild = true;
+        } else {
+          this.isAddInvVaild = false;
+          this.btnValid.cond = true
+        }
+      }
+    }
+    this.deleteMinInvBtnDisabled = true;
+  }
+
   invoiceTotal: string = '0';
   calcTotals(i) {
 
@@ -380,11 +401,21 @@ export class MinFrmStockPermissionComponent implements OnInit {
     this.totalInvoice = []
     this.invoiceTotal = '0'
 
+    if (!this.btnValid.cond) {
+      this.isInvoiceVaild()
+    };
+
     if (i != null) {
+
+      if (this.invoiceInpArry[i].Qtyinvaild) {
+        this.isInvoiceVaild()
+      };
+      
       this.isAddQtyVaild(i);
       if (this.invoiceInpArry[i].price > 0 && this.checkENU(this.invoiceInpArry[i].qty, 'and', 'equal')) {
         this.invoiceInpArry[i].Qtyinvaild = true;
         this.invoiceInpArry[i].qtyMsg = `لا يمكن ترك الكمية فارغة`
+        this.isMinInvInvaild = true;
       } else {
         this.invoiceInpArry[i].Qtyinvaild = false;
         this.isAddInvVaild = false;
@@ -468,6 +499,9 @@ export class MinFrmStockPermissionComponent implements OnInit {
     let callInvoiceBtnVal: string = $('#minCallInvoiceBtn').html();
     this.invoiceInpArry = [];
     this.ivoiceItemesForEdit = [];
+
+    this.stockNameInpt = null;
+    this.custNameInpt = null;
 
     for (let i = 0; i < 10; i++) {
       this.invoiceInp = new InvoiceInp();
@@ -1000,16 +1034,59 @@ export class MinFrmStockPermissionComponent implements OnInit {
     this._theStockComp.showFade_newInvoice('fade_minNewApBtn');
   };
 
+  checkFinalValid = () => {
+
+    if (this.checkENU(this.stockNameInpt, 'and', 'equal') || this.checkENU(this.custNameInpt, 'and', 'equal')) {
+
+      if (this.checkENU(this.stockNameInpt, 'and', 'equal')) {
+        this.stockNameVaild = true
+      }
+      if (this.checkENU(this.custNameInpt, 'and', 'equal')) {
+        this.custNameInvaild = true
+        this.custVaildMsg = 'يجب ادخال اسم العميل'
+      }
+      this.btnValid.cond = false
+      this.btnValid.msg = 'برجاء مراجعة اخطاء الفاتورة قبل التسجيل'
+
+    } else {
+
+      for (let i = 0; i < this.invoiceInpArry.length; i++) {
+        if (this.checkENU(this.invoiceInpArry[i].product, 'and')) {
+          this.calcTotals(i);
+          if (this.invoiceInpArry[i].Qtyinvaild) {
+            if (this.invoiceInpArry[i].Qtyinvaild == true) {
+              this.btnValid.cond = false
+              this.invoiceInpArry[i].qtyMsg = 'يجب ادخال عدد صالح'
+              break
+            } else {
+              this.btnValid.cond = true
+            };
+          };
+        };
+      };
+
+      if (this.isMinInvInvaild == true) {
+        this.btnValid.cond = false
+        this.btnValid.msg = 'برجاء مراجعة اخطاء الفاتورة قبل التسجيل'
+      } else {
+        this.btnValid.cond = true
+        //console.log('functionWorking')
+        this.minFrmStockPrem()
+      }
+    }
+
+    //return (this.btnValid.cond == true) ? true : false;
+  };
+
   minFrmStockPrem() {
     this.makeMinStockPremArry();
     this.showInvoiceDone();
-
     // delete invDetail when delete the productName
     if (this.stockDetailsIdArr != undefined) {
       if (this.stockDetailsIdArr.length != 0) {
         for (let i = 0; i < this.stockDetailsIdArr.length; i++) {
           this._stockService.deleteStockTransactionDetails(this.stockDetailsIdArr[i]).subscribe();
-          console.log('detail id deleted')
+          //console.log('detail id deleted')
         };
       }
     }

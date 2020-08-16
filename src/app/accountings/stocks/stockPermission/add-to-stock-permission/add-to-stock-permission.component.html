@@ -43,7 +43,7 @@
         </div>
         <hr>
         <!--[formGroup]='addToStockPremData'-->
-        <form (ngSubmit)="addToStockPrem()">
+        <form (ngSubmit)="checkFinalValid()">
             <div class="form-group">
                 <div class="d-flex justify-content-between">
                     <input id="stockTransactionId" name='stockTransactionId' [(ngModel)]="stockTransactionId" class="d-none">
@@ -104,9 +104,9 @@
                                 </datalist>
                                 <div *ngIf="inpt.inpVaild" class="text-danger vaildAlert">{{inpt.productVaildMsg}}</div>
                             </td>
-                            <td><input type="number" name="qty{{i}}" [(ngModel)]="inpt.qty" class="form-control mt-2"
+                            <td><input type="number" name="qty{{i}}" [(ngModel)]="inpt.qty" class="form-control"
                                     id="qty{{i}}" (keyup)="calcTotals(i)" [disabled]="inptDisabled">
-                                <div *ngIf="inpt.Qtyinvaild" class="text-danger vaildAlert">{{inpt.qtyMsg}}
+                                <div *ngIf="inpt.Qtyinvaild" class="text-danger vaildAlert mt-2">{{inpt.qtyMsg}}
                                 </div>
                             </td>
                             <td><input type="number" name="price{{i}}" [(ngModel)]="inpt.price" class="form-control"
@@ -122,6 +122,7 @@
                     </tbody>
                 </table>
             </div>
+            <div *ngIf="!btnValid.cond" class="text-danger">{{btnValid.msg}}</div>
             <div class="d-flex justify-content-between">
                 <div class="form-inline">
                     <button [disabled]="isAddInvVaild" class="btn btn-outline-primary mb-1 mt-3 printX" type="submit"
