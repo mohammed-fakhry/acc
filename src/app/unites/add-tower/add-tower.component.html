@@ -1,0 +1,25 @@
+<div class="card p-3 mt-2">
+    <div class="p-3">
+        <h2 class="pb-3 cardHeader">اضافة بيانات برج</h2>
+        <hr>
+        <form (ngSubmit)='addNewTower()' class="pt-3">
+            <div class="form-row">
+                <input id="towerId" name="towerId" class="d-none" [(ngModel)]='towerData.towerId'>
+                <div class="row">
+                    <div class="col">
+                        <label for="towerName">اسم البرج</label>
+                        <input class="form-control" type="text" id="TowerName" name="towerName"
+                            [(ngModel)]='towerData.towerName'>
+                    </div>
+                    <div class="col">
+                        <label for="towerStage">اسم المرحلة</label>
+                        <input class="form-control" type="text" id="towerStage" name="towerStage"
+                            [(ngModel)]='towerData.towerStage'>
+                    </div>
+                </div>
+            </div>
+            <button [disabled]='addTowerInvalid' class="btn btn-outline-info mt-3 ml-2" type="submit"
+                id="addNewTowerBtn">اضافة</button>
+        </form>
+    </div>
+</div>

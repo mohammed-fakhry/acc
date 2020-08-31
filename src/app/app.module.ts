@@ -36,7 +36,16 @@ import { SafeTransactionComponent } from './accountings/safe-acc/safe-transactio
 import { SafeTranceSearchPipe } from './accountings/safe-trance-search.pipe';
 import { ProfitsComponent } from './accountings/stocks/profits/profits.component';
 import { SearchProdProfitPipe } from './search-prod-profit.pipe';
-import { HashLocationStrategy, LocationStrategy } from '@angular/common'
+import { HashLocationStrategy, LocationStrategy } from '@angular/common';
+import { AddTowerComponent } from './unites/add-tower/add-tower.component';
+import { TowerDetailsComponent } from './unites/tower-details/tower-details.component';
+import { TowerEnquireComponent } from './unites/tower-enquire/tower-enquire.component';
+import { AddContractComponent } from './unites/add-contract/add-contract.component';
+import { ClientsComponent } from './clients/clients.component';
+import { AddClientComponent } from './clients/add-client/add-client.component';
+import { EnquireClientsComponent } from './clients/enquire-clients/enquire-clients.component';
+import { SearchClientPipe } from './search-client.pipe';
+import { ClientDetailsComponent } from './clients/client-details/client-details.component';
 
 @NgModule({
   declarations: [
@@ -73,6 +82,15 @@ import { HashLocationStrategy, LocationStrategy } from '@angular/common'
     SafeTranceSearchPipe,
     ProfitsComponent,
     SearchProdProfitPipe,
+    AddTowerComponent,
+    TowerDetailsComponent,
+    TowerEnquireComponent,
+    AddContractComponent,
+    ClientsComponent,
+    AddClientComponent,
+    EnquireClientsComponent,
+    SearchClientPipe,
+    ClientDetailsComponent,
   ],
   imports: [
     BrowserModule,

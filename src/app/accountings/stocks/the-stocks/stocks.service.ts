@@ -15,7 +15,7 @@ import { StockTransactionList } from '../../stock-transaction-list';
 })
 export class StocksService {
 
-  stocks:any[];
+  stocks:Stock[];
   stockData: FormGroup;
   stockDataView: Stock = {
     stockId: null,
@@ -71,7 +71,7 @@ export class StocksService {
   HandleAddtoStockPrimArry: HandleAddPrimBE[];
 
   // defult url
-  url: string = 'http://localhost/accounting/'
+  url: string = localStorage.getItem('tmpDB'); //'http://localhost/accounting/'
 
   stockDataViewVal() {
     return this.stockDataView;

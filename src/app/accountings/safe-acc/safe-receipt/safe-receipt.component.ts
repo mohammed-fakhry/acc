@@ -38,6 +38,10 @@ export class SafeReceiptComponent implements OnInit {
 
   };
 
+  print() {
+    window.print()
+  }
+
   getSafeInfo_backEnd() {
     this._safeDataService.getSafes().subscribe((data: SafeData[]) => {
       this.theSafeList = data;
@@ -157,6 +161,7 @@ export class SafeReceiptComponent implements OnInit {
       $('#AccName').removeClass('is-invalid').removeClass('is-valid');
       $('#addNewSafeReceipt').html('حفظ الايصال');
       $('#deleteSafeReceipt').hide();
+      $('#receiptEditing').hide();
 
       this.validTests.receiptValValid = false;
       this.safeReceipt_inpts.receiptVal = null;
@@ -165,6 +170,8 @@ export class SafeReceiptComponent implements OnInit {
     } else {
 
       $('#addNewSafeReceipt').html('تعديل الايصال');
+
+      $('#receiptEditing').show();
 
       this.theReceiptInfo = this.getTheReceiptInfo(this.searchSafeReceiptTxt);
 
@@ -419,9 +426,9 @@ export class SafeReceiptComponent implements OnInit {
       };
 
       if (this.safeReceipt_inpts.safeName.includes('سيف')) {
-        $('#safeNameReceipt').addClass('bg-info text-white')
+        $('#safeNameReceipt').addClass('lightBg')
       } else {
-        $('#safeNameReceipt').removeClass('bg-info text-white')
+        $('#safeNameReceipt').removeClass('lightBg')
       }
 
 
@@ -454,9 +461,9 @@ export class SafeReceiptComponent implements OnInit {
 
     if (this.safeReceipt_inpts.AccName != undefined) {
       if (this.safeReceipt_inpts.AccName.includes('سيف')) {
-        $('#AccName').addClass('bg-info text-white')
+        $('#AccName').addClass('lightBg')
       } else {
-        $('#AccName').removeClass('bg-info text-white')
+        $('#AccName').removeClass('lightBg')
       }
     };
 
@@ -476,7 +483,7 @@ export class SafeReceiptComponent implements OnInit {
         name: cust.customerName,
         css: () => {
           if (cust.customerName.includes('- سيف')) {
-            return 'font-weight-bolder text-light bg-info pr-2'
+            return 'font-weight-bolder lightBg pr-2'
           } else {
             return ''
           }
@@ -661,25 +668,26 @@ export class SafeReceiptComponent implements OnInit {
     );
 
     // the condition
-    if (this.theReceiptInfo.customerId != null) {
-      if (this.theReceiptKind == 'add') {
-        oldCustomer.customerRemain = oldCustomer.customerRemain + receiptVal;
-      } else if (oldCustomer != undefined) {
-        oldCustomer.customerRemain = oldCustomer.customerRemain - receiptVal;
+    if (oldCustomer) {
+      if (this.theReceiptInfo.customerId != null) {
+        if (this.theReceiptKind == 'add') {
+          oldCustomer.customerRemain = oldCustomer.customerRemain + receiptVal;
+        } else if (oldCustomer != undefined) {
+          oldCustomer.customerRemain = oldCustomer.customerRemain - receiptVal;
+        };
+
+        if (oldCustomer != undefined) {
+          let indx = this._safeAccComponent.customers.findIndex(
+            i => i.customerId === oldCustomer.customerId
+          );
+
+          this._custService.updateCustomerSer(oldCustomer).subscribe();
+          // pass new Value to edit
+          this._safeAccComponent.customers[indx].customerRemain = oldCustomer.customerRemain;
+        }
+
       };
-
-      if (oldCustomer != undefined) {
-        let indx = this._safeAccComponent.customers.findIndex(
-          i => i.customerId === oldCustomer.customerId
-        );
-
-        this._custService.updateCustomerSer(oldCustomer).subscribe();
-        // pass new Value to edit
-        this._safeAccComponent.customers[indx].customerRemain = oldCustomer.customerRemain;
-      }
-
-    };
-
+    }
   };
 
   editOtherAccVal(receiptVal: number) { // from old receipt
@@ -871,7 +879,7 @@ export class SafeReceiptComponent implements OnInit {
     this._safeAccComponent.ngOnInit();
 
     let lastIndex = this._safeDataService.safeReceiptList.length - 1
-    console.log(this._safeDataService.safeReceiptList[lastIndex].safeReceiptId)
+    //console.log(this._safeDataService.safeReceiptList[lastIndex].safeReceiptId)
 
     let resultCheck: string;
     if (this.safeReceipt_inpts.transactionAccKind == 'عميل') {
@@ -894,24 +902,30 @@ export class SafeReceiptComponent implements OnInit {
         };
       },
 
-      from: () => {
-        if (this.safeReceipt_inpts.receiptKind == 'ايصال صرف نقدية') {
-          return this.safeReceipt_inpts.safeName
-        } else {
-          return resultCheck
-        }
+      from: {
+        text: () => {
+          if (this.safeReceipt_inpts.receiptKind == 'ايصال صرف نقدية') {
+            return this.safeReceipt_inpts.safeName
+          } else {
+            return resultCheck
+          }
+        },
+        css: (this.safeReceipt_inpts.receiptKind == 'ايصال استلام نقدية') ? 'text-light' : 'text-info',
       },
 
-      to: () => {
-        if (this.safeReceipt_inpts.receiptKind == 'ايصال استلام نقدية') {
-          return this.safeReceipt_inpts.safeName
-        } else {
-          return resultCheck
-        }
+      to: {
+        text: () => {
+          if (this.safeReceipt_inpts.receiptKind == 'ايصال استلام نقدية') {
+            return this.safeReceipt_inpts.safeName
+          } else {
+            return resultCheck
+          }
+        },
+        css: (this.safeReceipt_inpts.receiptKind == 'ايصال استلام نقدية') ? 'text-info' : 'text-light',
       },
 
-      shadowFst: (this.safeReceipt_inpts.receiptKind == 'ايصال استلام نقدية') ? 'inpCard_row' : 'shadow inpCard_row',
-      shadowSnd: (this.safeReceipt_inpts.receiptKind == 'ايصال استلام نقدية') ? 'shadow inpCard_row' : 'inpCard_row',
+      fstCss: (this.safeReceipt_inpts.receiptKind == 'ايصال استلام نقدية') ? 'bg-info text-light' : 'inpCard_row',
+      sndCss: (this.safeReceipt_inpts.receiptKind == 'ايصال استلام نقدية') ? 'inpCard_row' : 'bg-info text-light',
       val: this.safeReceipt_inpts.receiptVal,
       notes: this.safeReceipt_inpts.recieptNote
     }

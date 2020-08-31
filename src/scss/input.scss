@@ -1,0 +1,33 @@
+.inpNoShadow {
+  border-radius: 5px;
+  box-shadow: none;
+  padding: 10px 20px;
+  color: white;
+  background-color: rgba(72, 144, 199, 0.541);
+}
+
+.stickyInp {
+  position: sticky;
+  top: 100px;
+}
+
+.inpCard {
+  background-color: whitesmoke;
+  margin-right: 20px;
+  margin-left: 20px;
+  box-shadow: $shadow;
+}
+
+.inpCard_row {
+  background-color: whitesmoke;
+  box-shadow: $shadow;
+  border-radius: 5px;
+}
+
+.form-control {
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  border-bottom: solid 1px rgb(195, 195, 195);
+  background-color: whitesmoke;
+}

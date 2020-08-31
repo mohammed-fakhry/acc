@@ -146,9 +146,9 @@ export class MinFrmStockPermissionComponent implements OnInit {
 
     // stockNameForMin
     if (this.stockNameInpt.includes('سيف')) {
-      $('#stockNameForMin').addClass('bg-info text-white')
+      $('#stockNameForMin').addClass('lightBg')
     } else {
-      $('#stockNameForMin').removeClass('bg-info text-white')
+      $('#stockNameForMin').removeClass('lightBg')
     }
 
     this.inputDisabled = false;
@@ -199,16 +199,16 @@ export class MinFrmStockPermissionComponent implements OnInit {
     let valueArr = this.invoiceInpArry.map((item) => { return item.product });
     let filtert = valueArr.filter((product) => {
       return product != undefined
-    })
+    });
     let isDublicate = filtert.some((item, indx) => {
       index = indx
       return valueArr.indexOf(item) != indx
-    })
+    });
     if (isDublicate) {
       found = true
     } else {
       found = false
-    }
+    };
 
     if (index) {
       if (found == true) {
@@ -218,18 +218,16 @@ export class MinFrmStockPermissionComponent implements OnInit {
       } else if (found == false) {
         this.invoiceInpArry[index].inpVaild = false;
         $(`#product${index}`).removeClass('is-invaild');
-      }
-    }
+      };
+    };
 
     if (this.invoiceInpArry[i].inpVaild == true) {
       this.isMinInvInvaild = true;
     } else if (this.invoiceInpArry[i].inpVaild == false) {
       this.isMinInvInvaild = false;
-    }
+    };
 
     if (this.invoiceInpArry[i].product == '') {
-
-      //if (this.invoiceInpArry[i].price > 0 || this.invoiceInpArry[i].qty >= 0) {
 
       //if (this.invoiceInpArry[i + 1] != undefined) {
       let subBtn = $('#minNewInvoicetBtn').html()
@@ -312,14 +310,11 @@ export class MinFrmStockPermissionComponent implements OnInit {
       };
     };
 
-    for (let i = 0; i < this.invoiceInpArry.length; i++) {
-      if (this.invoiceInpArry[i].Qtyinvaild == true) {
-        this.isMinInvInvaild = true;
-        break
-      } else {
-        this.isMinInvInvaild = false;
-      };
-    };
+    if (this.invoiceInpArry[i].price > 0 && this.checkENU(this.invoiceInpArry[i].qty, 'and', 'equal')) {
+      this.invoiceInpArry[i].Qtyinvaild = true;
+      this.invoiceInpArry[i].qtyMsg = `لا يمكن ترك الكمية فارغة`
+      this.isMinInvInvaild = true;
+    }
 
   } // isAddQtyVaild
 
@@ -338,7 +333,7 @@ export class MinFrmStockPermissionComponent implements OnInit {
         name: cust.customerName,
         css: () => {
           if (cust.customerName.includes('- سيف')) {
-            return 'font-weight-bolder text-light bg-info'
+            return 'font-weight-bolder lightBg'
           } else {
             return ''
           };
@@ -380,13 +375,13 @@ export class MinFrmStockPermissionComponent implements OnInit {
 
   isInvoiceVaild() {
     if (this.custNameInvaild || this.stockNameVaild) {
-      this.isAddInvVaild = true;
+      this.isMinInvInvaild = true;
     } else {
       for (let i = 0; i < this.invoiceInpArry.length; i++) {
         if (this.invoiceInpArry[i].inpVaild || this.invoiceInpArry[i].Qtyinvaild) {
-          this.isAddInvVaild = true;
+          this.isMinInvInvaild = true;
         } else {
-          this.isAddInvVaild = false;
+          this.isMinInvInvaild = false;
           this.btnValid.cond = true
         }
       }
@@ -410,16 +405,8 @@ export class MinFrmStockPermissionComponent implements OnInit {
       if (this.invoiceInpArry[i].Qtyinvaild) {
         this.isInvoiceVaild()
       };
-      
       this.isAddQtyVaild(i);
-      if (this.invoiceInpArry[i].price > 0 && this.checkENU(this.invoiceInpArry[i].qty, 'and', 'equal')) {
-        this.invoiceInpArry[i].Qtyinvaild = true;
-        this.invoiceInpArry[i].qtyMsg = `لا يمكن ترك الكمية فارغة`
-        this.isMinInvInvaild = true;
-      } else {
-        this.invoiceInpArry[i].Qtyinvaild = false;
-        this.isAddInvVaild = false;
-      }
+      
       if (this.invoiceInpArry[i].Qtyinvaild == false) {
         if (this.invoiceInpArry[i].price > 0) {
           this.invoiceInpArry[i].total = this.invoiceInpArry[i].qty * this.invoiceInpArry[i].price
@@ -432,6 +419,8 @@ export class MinFrmStockPermissionComponent implements OnInit {
           this.totalInvoice = [...this.totalInvoice, this.invoiceInpArry[l].total]
         }
       }
+
+      
     }
 
     this.totalInvoice = this.invoiceInpArry.map(inv => inv.total);

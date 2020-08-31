@@ -34,6 +34,7 @@ export class TheStocksComponent implements OnInit {
   ngOnInit() {
 
     this.logService.logStart(); this.logService.reternlog();
+    
     // getStocks data from backEnd
     this._service.handleTableHeight();
 
@@ -57,6 +58,7 @@ export class TheStocksComponent implements OnInit {
 
   getBackendData() {
     // get handle BackEnd
+    this._stockService.url = localStorage.getItem('tmpDB');
     this._stockService.getHandleBackEnd().subscribe((data: HandleBackEnd[]) => {
       this._stockService.handleBackEnd = data;
     });
@@ -75,12 +77,14 @@ export class TheStocksComponent implements OnInit {
   };
 
   getStockTransactionArr() {
+    this._stockService.url = localStorage.getItem('tmpDB');
     this._stockService.getStockTransactionList().subscribe((data: StockTransaction[]) => {
       this._stockService.stockTransactionArr = data;
     });
   };
 
   getHandlePrimList() {
+    this._stockService.url = localStorage.getItem('tmpDB');
     this._stockService.getHandleAddtoStockPrimList().subscribe((data: HandleAddPrimBE[]) => {
       this._stockService.HandleAddtoStockPrimArry = data;
     });
@@ -307,8 +311,8 @@ export class TheStocksComponent implements OnInit {
   };
 
   buttonEffect(max: string) {
-    $(max).removeClass("btn-outline-info").addClass("btn-outline-secondary").animate({ fontSize: '1.5em' }, 50);
-    $('.headerMainBtn').not(max).removeClass('btn-outline-secondary').addClass('btn-outline-info').animate({ fontSize: '1em' }, 50);
+    $(max).removeClass("btn-light").addClass("btn-outline-secondary").animate({ fontSize: '1.5em' }, 50);
+    $('.headerMainBtn').not(max).removeClass('btn-outline-secondary').addClass('btn-light').animate({ fontSize: '1em' }, 50);
   };
 
   animateToggle(hide: string, show: string) {

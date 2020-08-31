@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { SideEffectService } from '../side-effect.service';
-import { Router, NavigationEnd } from '@angular/router';
+import { Router } from '@angular/router';
 import { LoginService } from '../login.service';
 import { ServicesService } from '../services.service';
-import { stringify } from 'querystring';
 
 @Component({
   selector: 'app-side-bar',
@@ -23,20 +22,52 @@ export class SideBarComponent implements OnInit {
   safeAccBtn = $('#safeAccBtn');
   settBtn = $('#SettBtn');
   stocksBtn = $('#stocksBtn');
+  clientsBtn = $('#clientsBtn')
   //safeAcc
-  htmlDbItemsBtns: any[] = [this.workersBtn, this.unitesBtn]
-  dBUrls: any[] = ['/workers', '/unites'] // dataBaseUrls
+  htmlDbItemsBtns: any[] = [this.workersBtn, this.unitesBtn, this.clientsBtn]
+  dBUrls: any[] = ['/workers', '/unites', '/clients'] // dataBaseUrls
 
   htmlAccItemsBtns: any[] = [this.customerBtn, this.stocksBtn, this.safeAccBtn];
   accUrls: any[] = ['/customers', '/stocks', '/safe-acc'];
+  urlBTnArr: any[];
+
 
   constructor(public _sideBarEffect: SideEffectService, public router: Router, public logService: LoginService, public _service: ServicesService) { }
 
   ngOnInit() {
 
+    this.urlBTnArr = [
+      {
+        btn: $('#workersBtn'),
+        url: '/workers'
+      },
+      {
+        btn: $('#unitesBtn'),
+        url: '/unites'
+      },
+      {
+        btn: $('#clientsBtn'),
+        url: '/clients'
+      },
+      {
+        btn: $('#customersBtn'),
+        url: '/customers'
+      },
+      {
+        btn: $('#stocksBtn'),
+        url: '/stocks'
+      },
+      {
+        btn: $('#safeAccBtn'),
+        url: '/safe-acc'
+      },
+    ]
+
     this.currentUrl = window.location.href;
     this.ind = this.currentUrl.lastIndexOf("/");
     this.url = this.currentUrl.slice(this.ind);
+
+    this.activeSecBtn()
 
     $(".mainBtns").click(function () {
       //this.logService.reternlog()
@@ -93,12 +124,17 @@ export class SideBarComponent implements OnInit {
         $('.tableWithHeader').css('height', '860px')
       } else {
         $('.panel-body').not('.invoiceTable').not('.standTable').not('.tableWithHeader').css('height', '820px')
-        $('.tableWithHeader').css('height', '780px')
+        $('.tableWithHeader').css('height', '740px')
         $('.invoiceTable').css('height', '530px')
       };
     });
 
   }; // ngOnInit
+
+  activeSecBtn() {
+    let btnInfo = this.urlBTnArr.find(btn => btn.url == this.url);
+    btnInfo.btn.removeClass('btn-light').addClass('btn-secondary');
+  }
 
   secButtonClick(btnId) {
     this.logService.reternlog()
@@ -112,6 +148,7 @@ export class SideBarComponent implements OnInit {
     sessionStorage.removeItem('y')
     this.logService.isUser = false;
     this.router.navigate(['/logIn']);
+    //localStorage.removeItem('tmpDB')
     this.logService.checkIsUser();
   };
 
@@ -123,7 +160,7 @@ export class SideBarComponent implements OnInit {
     this.url = this.currentUrl.slice(this.ind);
 
     const sideHight = (idStr: String) => {
-      $('#sidebar').css('height', 'auto') 
+      $('#sidebar').css('height', 'auto')
       $('.mainBtns').not($(`${idStr}`)).not('#MainSettingBtn').removeClass('navHeader').addClass('btn-light');
       $(`${idStr}`).next().show()
       $(`${idStr}`).removeClass('btn-light').addClass('navHeader')
@@ -144,11 +181,11 @@ export class SideBarComponent implements OnInit {
       $('#sidebar .secDiv').hide();
       $('#sidBar h3').removeClass('navHeader').addClass('btn-light')
     };
-    
+
     let sidebarBtnsHeight = $('#sidebarBtns').height()
     let sidebarToggleLPosition = $('#sidebarToggle').position();
     let sidebarToggleHeight = sidebarToggleLPosition.top
-    
+
     $('#sidebar').css({
       'marginTop': `${sidebarToggleHeight + 15}px`,
       'marginRight': '15px'

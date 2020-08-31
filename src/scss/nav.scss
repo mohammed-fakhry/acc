@@ -1,0 +1,16 @@
+.navbar h1 {
+  margin-right: 30px;
+  color: white; // teal;
+}
+
+.navHeader {
+  color: white;
+  background-color: $primaryBg;
+}
+
+.theNav {
+  z-index: 2;
+  position: sticky;
+  padding-right: 10px;
+  top: 0px;
+}

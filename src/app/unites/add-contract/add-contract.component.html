@@ -1,0 +1,560 @@
+<!-- addContract -->
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-xl-4 col-lg-12">
+            <div class="p-3 card inpCard_row mt-3" id="contractInpts" style="position: sticky; top: 100px">
+                <div class="d-flex justify-content-between">
+                    <h2 class="cardHeader">اضافة عقد جديد</h2>
+                    <button class="btn btn-outline-secondary" (click)='openwindowPrint();'><i
+                            class="fa fa-print"></i></button>
+                </div>
+                <hr>
+                <form (ngSubmit)="addNewContract()">
+                    <div>
+                        <input id="contractId" style="display: none;" name="contractId"
+                            [(ngModel)]='_unitService.contractInpts.contractId'>
+                        <!-- client -->
+                        <div class="form-row">
+                            <!-- clientInfo -->
+                            <div class="col">
+                                <label for="clientName_contract">اسم العميل</label>
+                                <input type="search" id="clientName_contract" class="form-control mdb-autocomplete pr-4"
+                                    name="clientName" list="contractClient"
+                                    [(ngModel)]='_unitService.contractInpts.clientName'
+                                    (ngModelChange)='clientNameChanged()'>
+                                <datalist id="contractClient">
+                                    <option *ngFor="let client of clients" value="{{client.clientName}}">
+                                    </option>
+                                </datalist>
+                                <div *ngIf='_unitService.contractVaildInpts.clientNameVaild' class="text-danger">
+                                    {{_unitService.contractVaildInpts.clientNameMsg}}</div>
+                            </div>
+                            <!-- clientNationNum -->
+                            <!-- <div class="col text-center">
+                                <label for="clientNationNum" class="text-info cardHeader">الرقم القومى</label>
+                                <h4 id="clientNationNum" class="text-info text-center">
+                                    {{_unitService.contractInpts.clientNationNum}}
+                                </h4>
+                            </div> -->
+                        </div>
+                        <hr>
+                        <!-- unit -->
+                        <div class="form-row mt-3">
+                            <!-- unitInfo -->
+                            <!-- _unitService.towerInfoArr -->
+                            <div class="col">
+                                <label for="towerinfo">اسم البرج</label>
+                                <input type="search" id="towerinfo" class="form-control mdb-autocomplete pr-4"
+                                    name="towerinfo" list="towerInfoList"
+                                    [(ngModel)]='_unitService.contractInpts.towerinfo'
+                                    (ngModelChange)='towerinfoChanged()'>
+                                <datalist id="towerInfoList">
+                                    <option *ngFor="let tower of _unitService.towerInfoArr" value="{{tower.name}}">
+                                    </option>
+                                </datalist>
+                                <div *ngIf='_unitService.contractVaildInpts.towerinfoVaild' class="text-danger">
+                                    {{_unitService.contractVaildInpts.towerinfoMsg}}</div>
+                            </div>
+                            <!-- unitNumber_contract -->
+                            <div class="col">
+                                <label for="unitNumber_contract">رقم الوحدة</label>
+                                <input type="search" id="unitNumber_contract" class="form-control mdb-autocomplete p-1"
+                                    name="unitNumber" [disabled]='_unitService.lockedInputs.unitLocked'
+                                    list="unitInfoList" [(ngModel)]='_unitService.contractInpts.unitNumber'
+                                    (ngModelChange)='unitNumberChanged()'>
+                                <datalist id="unitInfoList">
+                                    <option *ngFor="let unit of filteredUnits" value="{{unit.unitNum}}">
+                                    </option>
+                                </datalist>
+                                <div *ngIf='_unitService.contractVaildInpts.unitNumberVaild' class="text-danger">
+                                    {{_unitService.contractVaildInpts.unitNumberMsg}}</div>
+                            </div>
+                            <!-- prepaidPerc -->
+                            <div class="col">
+                                <label for="prepaidPerc">نسبة المقدمة</label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <input type="number" id="prepaidPerc" class="form-control" name="prepaidPerc"
+                                            [disabled]='_unitService.lockedInputs.prepaidPercLocked'
+                                            [(ngModel)]='_unitService.contractInpts.prepaidPerc' placeholder="مئوية"
+                                            (ngModelChange)='prepaidPercChanged()'>
+                                        <span class="input-group-text">%</span>
+                                    </div>
+                                </div>
+                                <div *ngIf='_unitService.contractVaildInpts.prepaidPercVaild' class="text-danger">
+                                    {{_unitService.contractVaildInpts.prepaidPercMsg}}</div>
+                            </div>
+                            <!-- remainTimeLong -->
+                            <!-- [disabled]='_unitService.lockedInputs' -->
+                            <!-- <div class="col">
+                                <label for="remainTimeLong">مدة السداد</label>
+                                <input type="number" id="remainTimeLong" class="form-control" name="remainTimeLong"
+                                    [disabled]='_unitService.lockedInputs.prepaidPercLocked'
+                                    [(ngModel)]='_unitService.contractInpts.remainTimeLong' placeholder="عدد الشهور"
+                                    (ngModelChange)='remainTimeLongChanged()'>
+                                <div *ngIf='_unitService.contractVaildInpts.remainTimeLongVaild' class="text-danger">
+                                    {{_unitService.contractVaildInpts.remainTimeLongVaild}}</div>
+                            </div> -->
+                            <!-- checkQtys -->
+                            <!-- [disabled]='_unitService.lockedInputs' -->
+                        </div>
+                        <div class="form-row mt-3">
+                            <div class="col">
+                                <label for="checkQtys">عدد الشيكات</label>
+                                <input type="number" id="checkQtys" class="form-control" name="checkQtys"
+                                    [disabled]='_unitService.lockedInputs.prepaidPercLocked'
+                                    [(ngModel)]='_unitService.contractInpts.checkQtys'
+                                    (ngModelChange)='checkQtysChanged()'>
+                                <div *ngIf='_unitService.contractVaildInpts.checkQtysVaild' class="text-danger">
+                                    {{_unitService.contractVaildInpts.checkQtysMsg}}</div>
+                            </div>
+                            <div class="col">
+                                <label for="dataBegain_contract">تبدأ من</label>
+                                <input type="date" class="form-control" name="dateBegain"
+                                    [(ngModel)]='_unitService.contractInpts.dateBegain' (change)='checkQtysChanged()'>
+                            </div>
+                            <!-- <div class="col">
+                                <label for="dataBegain_contract">الى تاريخ</label>
+                                <input disabled type="date" class="form-control" name="dateEnd"
+                                    [(ngModel)]='_unitService.contractInpts.dateEnd'>
+                            </div> -->
+                        </div>
+                        <hr>
+                        <div>
+                            <label for="contractNote">ملاحظات</label>
+                            <input name="contractNote" [(ngModel)]='_unitService.contractInpts.contractNote'
+                                id="contractNote" cols="30" rows="10" class="form-control">
+                        </div>
+                    </div>
+                    <hr>
+                    <button type="submit" class="btn btn-outline-primary">تسجيل بيانات العقد</button>
+                </form>
+                <hr>
+                <div>
+                    <table class="table table-hover">
+                        <thead class="navHeader text-light">
+                            <tr>
+                                <th>سعر المتر للوحدة</th>
+                                <th>مساحة الوحدة</th>
+                                <th>اجمالى سعر الوحدة</th>
+                                <th>قيمة المقدمة</th>
+                                <th>مستحق الدفع</th>
+                                <th>قيمة الشيك</th>
+                            </tr>
+                        </thead>
+                        <tbody class="mt-3">
+                            <tr>
+                                <td>{{_unitService.contractInpts.unitPrice}}</td>
+                                <td>{{_unitService.contractInpts.unitExtent}}</td>
+                                <td>{{_unitService.contractInpts.unitTotalPrice}}</td>
+                                <td>{{_unitService.contractInpts.prepaidCash}}</td>
+                                <td>{{_unitService.contractInpts.remainCash}}</td>
+                                <td>{{_unitService.contractInpts.checksValue}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <!-- <div class="card p-2">
+
+            </div> -->
+        </div>
+        <!-- theContract -->
+        <div class="col-xl-8 col-lg-12 mt-3 mb-5" id="theContract">
+            <div id="theContractText" class="card p-3 mt-2" style="border: solid 1px black;">
+                <div class="d-flex justify-content-between header">
+                    <div class="contractHeader">
+                        <img src="../../../assets/contract/contractLogo.jpg" alt="cotractLogo">
+                        <h4 class="text-center">الريتاج لتقسيم الاراضى</h4>
+                    </div>
+                    <div class="m-4">
+                        <h4 class="text-center">الوحدة رقم ( {{_unitService.contractInpts.unitNumber}} )</h4>
+                        <h4 class="text-center">برج رقم ( {{_unitService.contractInpts.towerinfo}} )</h4>
+                    </div>
+                </div>
+                <hr>
+                <div>
+                    <h1 class="text-center">عقــد بيـــع إبتدائي لشقــة سكنية</h1>
+                </div>
+                <div class="mt-5">
+                    <h5>انه فى يوم {{this._unitService.todayName}} الموافق {{_unitService.TodayDate}}</h5>
+                    <h5>تم تحرير هذا العقد بين كلاً من :-</h5>
+                    <!-- طرف اول بائع -->
+                    <div class="mt-2">
+                        <h5 class="text-center font-weight-bold">(طرف أول بائع)</h5>
+                        <h5 class="font-weight-bold">أولاً: شركة الريتاج لتقسيم الاراضي ( حاتم حسين علي ) </h5>
+                        <h5 id="tarafAwal_h" (click)='editSecText("#tarafAwal_textarea", "#tarafAwal_h")'>
+                            {{tarafAwalText}}</h5>
+                        <div id="tarafAwal_textarea" style="display: none;">
+                            <textarea class="form-control" name="tarafAwalText" rows="5"
+                                [(ngModel)]='tarafAwalText'></textarea>
+                            <button class="btn btn-outline-info mt-3"
+                                (click)='editSecText("#tarafAwal_h" , "#tarafAwal_textarea")'>حفظ التعديلات</button>
+                        </div>
+                    </div>
+                    <!-- طرف ثانى مشترى -->
+                    <div class="mt-2">
+                        <h5 class="text-center font-weight-bold">(طرف ثانى مشترى)</h5>
+
+                        <div class="form-inline">
+                            <h5 class="font-weight-bold pl-1"> ثانياً:السيد/ </h5>
+                            <h5 class="font-weight-bold contVar">{{_unitService.contractInpts.clientName}}</h5>
+                        </div>
+                        <div class="form-inline">
+                            <h5 id="nationId_h" class="pl-1" (click)='editSecText("#nationId_textarea", "#nationId_h")'>
+                                مصرى {{relig}} و يحمل بطاقة رقم / </h5>
+                            <h5 class="contVar">{{_unitService.contractInpts.clientNationNum}}</h5>
+                        </div>
+                        <div id="nationId_textarea" style="display: none;">
+                            <select id="inputState" class="form-control" name='relig' [(ngModel)]='relig'
+                                style="width: 150px; height: 50px;"
+                                (change)='editSecText("#nationId_h" , "#nationId_textarea")'>
+                                <option>مسلم</option>
+                                <option>مسيحى</option>
+                            </select>
+                        </div>
+                        <div class="form-inline">
+                            <h5 class="pl-1">والمقيم في / </h5>
+                            <h5 class="contVar">{{this._unitService.contractInpts.clientAdress}}</h5>
+                        </div>
+                        <div class="form-inline">
+                            <h5 class="pl-1">ت / </h5>
+                            <h5 class="contVar">{{this._unitService.contractInpts.clientTell}}</h5>
+                        </div>
+
+
+                    </div>
+                </div>
+                <!-- تمهيد tamheedSecText -->
+                <div class="mt-3">
+                    <h5 class="text-center font-weight-bold">تمهيد</h5>
+                    <h5 id="tamheed_h" class="mt-2" (click)='editSecText("#tamheed_textarea", "#tamheed_h")'>
+                        {{tamheedSecText}}</h5>
+                    <!-- id="" cols="30" rows="10"-->
+                    <div id="tamheed_textarea" style="display: none;">
+                        <textarea class="form-control" name="tamheedSecText" rows="5"
+                            [(ngModel)]='tamheedSecText'></textarea>
+                        <button class="btn btn-outline-info mt-3"
+                            (click)='editSecText("#tamheed_h" , "#tamheed_textarea")'>حفظ التعديلات</button>
+                    </div>
+                </div>
+                <!-- البند الاول -->
+                <div class="mt-3">
+                    <h5 class="text-center font-weight-bold">البنـد الأول</h5>
+                    <h5 class="mt-2">يعتبر التمهيد السابق جزء لا يتجزأ من هذا العقد ومتمماً ومكملاً له ولكل بنوده. </h5>
+                </div>
+                <!-- البند الثانى secBandText -->
+                <div class="mt-3">
+                    <h5 class="text-center font-weight-bold">البنـد الثانى</h5>
+                    <p id="secBand" class="mt-2" (click)='editSecText("#secBand_textarea", "#secBand")'
+                        style="display: inline;">
+                        {{secBandText.fst}}
+                        <span class="contVar">{{_unitService.contractInpts.unitNumber}}</span>
+                        {{secBandText.sec}}
+                        <span class="contVar">{{unitFloarText}}</span>
+                        {{secBandText.third}}
+                        <span class="contVar">{{_unitService.contractInpts.towerinfo}}</span>
+                        {{secBandText.four}}
+                        <span class="contVar">{{_unitService.contractInpts.unitExtent}}</span>
+                        {{secBandText.five}}
+                    </p>
+                    <!-- id="" cols="30" rows="10"-->
+                    <div id="secBand_textarea" style="display: none;">
+                        <textarea class="form-control" name="secBandText" rows="5"
+                            [(ngModel)]='secBandText.fst'></textarea>
+                        <textarea class="form-control" name="secBandText" rows="5"
+                            [(ngModel)]='secBandText.five'></textarea>
+                        <button class="btn btn-outline-info mt-3"
+                            (click)='editSecText("#secBand" , "#secBand_textarea")'>حفظ التعديلات</button>
+                    </div>
+                </div>
+                <!-- البند الثالث thrdBandText -->
+                <div class="mt-3">
+                    <h5 class="text-center font-weight-bold">البنـد الثالث</h5>
+                    <div id="thrdBand" (click)='editSecText("#thrdBand_textarea", "#thrdBand")'>
+                        <h5 class="mt-2">
+                            {{thrdBandText.fstLine}}</h5>
+                        <h5 class="mt-2">
+                            {{thrdBandText.sndLine.title}}</h5>
+                        <h5>ويلتزم الطرف الثاني بشأن الأجزاء المشتركة بما يلي :</h5>
+                        <!-- conditions -->
+                        <div>
+                            <h5 class="mt-1 mr-3">
+                                {{thrdBandText.sndLine.fstCond}}</h5>
+                            <h5 class="mr-3">
+                                {{thrdBandText.sndLine.sndCond}}</h5>
+                            <h5 class="mr-3">
+                                {{thrdBandText.sndLine.thrdCond}}</h5>
+                            <h5 class="mr-3">
+                                {{thrdBandText.sndLine.fourthCond}}</h5>
+                            <h5 class="mr-3">
+                                {{thrdBandText.sndLine.fifthCond}}</h5>
+                            <h5 class="mr-3">
+                                {{thrdBandText.sndLine.sixCond}}</h5>
+                        </div>
+                    </div>
+                    <div id="thrdBand_textarea" style="display: none;">
+                        <textarea class="form-control" name="fstLine" rows="1"
+                            [(ngModel)]='thrdBandText.fstLine'></textarea>
+                        <textarea class="form-control" name="title" rows="5"
+                            [(ngModel)]='thrdBandText.sndLine.title'></textarea>
+                        <!-- conditions -->
+                        <textarea class="form-control" name="fstCond" rows="1"
+                            [(ngModel)]='thrdBandText.sndLine.fstCond'></textarea>
+                        <textarea class="form-control" name="sndCond" rows="1"
+                            [(ngModel)]='thrdBandText.sndLine.sndCond'></textarea>
+                        <textarea class="form-control" name="thrdCond" rows="1"
+                            [(ngModel)]='thrdBandText.sndLine.thrdCond'></textarea>
+                        <textarea class="form-control" name="fourthCond" rows="1"
+                            [(ngModel)]='thrdBandText.sndLine.fourthCond'></textarea>
+                        <textarea class="form-control" name="fifthCond" rows="1"
+                            [(ngModel)]='thrdBandText.sndLine.fifthCond'></textarea>
+                        <textarea class="form-control" name="sixCond" rows="1"
+                            [(ngModel)]='thrdBandText.sndLine.sixCond'></textarea>
+                        <!-- submit -->
+                        <button class="btn btn-outline-info mt-3"
+                            (click)='editSecText("#thrdBand" , "#thrdBand_textarea")'>حفظ التعديلات</button>
+                    </div>
+                </div>
+                <!-- البند الرابع fourthBandText -->
+                <div class="mt-3">
+                    <h5 class="text-center font-weight-bold">البنـد الرابع</h5>
+                    <p class="form-inline text-center">
+                        <span>{{fourthBandText.fstLine}}</span>
+                        <span>{{fourthBandText.paymentInfo.mainDetail_1}}</span>
+                        <span class="contVar">({{_unitService.contractInpts.unitTotalPrice}} جنيها مصريا لاغير)</span>
+                        <!-- <span>{{fourthBandText.paymentInfo.mainDetail_2}}</span> -->
+                        <span class="contVar">(فقط {{NumInwords}} جم)</span>
+                        <span>{{fourthBandText.paymentInfo.mainDetail_3}}</span>
+                        <span>{{fourthBandText.paymentInfo.paidDetail_1}}</span>
+                        <span class="contVar">({{this._unitService.contractInpts.prepaidCash}} جنيها مصريا لاغير)</span>
+                        <!-- <span>{{fourthBandText.paymentInfo.paidDetail_2}}</span> -->
+                        <span class="contVar">(فقط {{prepaidCashInWords}} جم)</span>
+                        <!-- <span>{{fourthBandText.paymentInfo.paidDetail_3}}</span> -->
+                        <span>{{fourthBandText.paymentInfo.remPaidDetail_1}}</span>
+                        <span class="contVar">({{this._unitService.contractInpts.remainCash}} جنيها مصريا لاغير)</span>
+                        <!-- <span>{{fourthBandText.paymentInfo.remPaidDetail_2}}</span> -->
+                        <span class="contVar">(فقط {{remainCashStr}} جم)</span>
+                        <span>{{fourthBandText.paymentInfo.remPaidDetail_3}}</span>
+                    </p>
+                    <!-- <h5>{{fourthBandText.paymentInfo.paidDetail}}</h5>
+                    <h5>{{fourthBandText.paymentInfo.remPaidDetail}}</h5> -->
+                    <!-- checkTable -->
+                    <div class="row">
+                        <div class="col">
+                            <table class="table">
+                                <thead class="thead-dark">
+                                    <tr>
+                                        <th scope="col">م</th>
+                                        <th scope="col">قيمة القسط</th>
+                                        <th scope="col">تاريخ الاستحقاق</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let check of fstCheckArr">
+                                        <th scope="row">{{check.serial}}</th>
+                                        <td>{{check.val}}</td>
+                                        <td>{{check.date}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="col">
+                            <table class="table text-center">
+                                <thead class="thead-dark">
+                                    <tr>
+                                        <th scope="col">م</th>
+                                        <th scope="col">قيمة القسط</th>
+                                        <th scope="col">تاريخ الاستحقاق</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let check of secCheckArr">
+                                        <th scope="row">{{check.serial}}</th>
+                                        <td>{{check.val}}</td>
+                                        <td>{{check.date}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div>
+                        <div id="fourthBandText"
+                            (click)='editSecText("#fourthBandText_paragraphRemain" , "#fourthBandText")'>
+                            <h5>{{fourthBandText.paragraphFstLine}}</h5>
+                            <h5>{{fourthBandText.paragraphSec}}</h5>
+                            <h5>{{fourthBandText.paragraphEnd}}</h5>
+                        </div>
+                        <div id="fourthBandText_paragraphRemain" style="display: none;">
+                            <textarea class="form-control" name="fourthBandText_paragraphSec" rows="5"
+                                [(ngModel)]='fourthBandText.paragraphSec'></textarea>
+                            <textarea class="form-control" name="fourthBandText_paragraphEnd" rows="5"
+                                [(ngModel)]='fourthBandText.paragraphEnd'></textarea>
+                            <button class="btn btn-outline-info mt-3"
+                                (click)='editSecText("#fourthBandText" , "#fourthBandText_paragraphRemain")'>حفظ
+                                التعديلات</button>
+                        </div>
+                    </div>
+                </div>
+                <!-- البند الخامس fifthBandText -->
+                <div class="mt-3">
+                    <h5 class="text-center font-weight-bold">البنـد الخامس</h5>
+                    <div id="fifthBandText" (click)='editSecText("#fifthBand_Textarea" , "#fifthBandText")'>
+                        <h5>{{fifthBandText.firstSec}}</h5>
+                        <h5>{{fifthBandText.secSec}}</h5>
+                    </div>
+                    <div id="fifthBand_Textarea" style="display: none;">
+                        <textarea class="form-control" name="fifthBandText_firstSec" rows="5"
+                            [(ngModel)]='fifthBandText.firstSec'></textarea>
+                        <textarea class="form-control" name="fifthBandText_secSec" rows="5"
+                            [(ngModel)]='fifthBandText.secSec'></textarea>
+                        <button class="btn btn-outline-info mt-3"
+                            (click)='editSecText("#fifthBandText" , "#fifthBand_Textarea")'>حفظ
+                            التعديلات</button>
+                    </div>
+                </div>
+                <!-- البند السادس fifthBandText -->
+                <div class="mt-3">
+                    <h5 class="text-center font-weight-bold">البنـد السادس</h5>
+                    <h5 id="sixBandText" (click)='editSecText("#sixBand_Textarea" , "#sixBandText")'>{{sixBand}}</h5>
+                    <div id="sixBand_Textarea" style="display: none;">
+                        <textarea class="form-control" name="sixBandText_secSec" rows="5"
+                            [(ngModel)]='sixBand'></textarea>
+                        <button class="btn btn-outline-info mt-3"
+                            (click)='editSecText("#sixBandText" , "#sixBand_Textarea")'>حفظ
+                            التعديلات</button>
+                    </div>
+                </div>
+                <!-- البند السابع sevnthhBandText -->
+                <div class="mt-3">
+                    <h5 class="text-center font-weight-bold">البنـد السابع</h5>
+                    <h5 id="sevBandText" (click)='editSecText("#sevBand_Textarea" , "#sevBandText")'>{{sevBand}}</h5>
+                    <div id="sevBand_Textarea" style="display: none;">
+                        <textarea class="form-control" name="sevBandText_secSec" rows="5"
+                            [(ngModel)]='sevBand'></textarea>
+                        <button class="btn btn-outline-info mt-3"
+                            (click)='editSecText("#sevBandText" , "#sevBand_Textarea")'>حفظ
+                            التعديلات</button>
+                    </div>
+                </div>
+                <!-- البند الثامن eightnthhBandText -->
+                <div class="mt-3">
+                    <h5 class="text-center font-weight-bold">البنـد الثامن</h5>
+                    <h5 id="eightBandText" (click)='editSecText("#eightBand_Textarea" , "#eightBandText")'>{{eightBand}}
+                    </h5>
+                    <div id="eightBand_Textarea" style="display: none;">
+                        <textarea class="form-control" name="eightBandText_secSec" rows="5"
+                            [(ngModel)]='eightBand'></textarea>
+                        <button class="btn btn-outline-info mt-3"
+                            (click)='editSecText("#eightBandText" , "#eightBand_Textarea")'>حفظ
+                            التعديلات</button>
+                    </div>
+                </div>
+                <!-- البند التاسع ninethhBandText -->
+                <div class="mt-3">
+                    <h5 class="text-center font-weight-bold">البنـد التاسع</h5>
+                    <h5 id="nineBandText" (click)='editSecText("#nineBand_Textarea" , "#nineBandText")'>{{nineBand}}
+                    </h5>
+                    <div id="nineBand_Textarea" style="display: none;">
+                        <textarea class="form-control" name="nineBandText_secSec" rows="5"
+                            [(ngModel)]='nineBand'></textarea>
+                        <button class="btn btn-outline-info mt-3"
+                            (click)='editSecText("#nineBandText" , "#nineBand_Textarea")'>حفظ
+                            التعديلات</button>
+                    </div>
+                </div>
+                <!-- البند العاشر tenthhBandText -->
+                <div class="mt-3">
+                    <h5 class="text-center font-weight-bold">البنـد العاشر</h5>
+                    <h5 id="tenBandText" (click)='editSecText("#tenBand_Textarea" , "#tenBandText")'>{{tenBand}}
+                    </h5>
+                    <div id="tenBand_Textarea" style="display: none;">
+                        <textarea class="form-control" name="tenBandText_secSec" rows="5"
+                            [(ngModel)]='tenBand'></textarea>
+                        <button class="btn btn-outline-info mt-3"
+                            (click)='editSecText("#tenBandText" , "#tenBand_Textarea")'>حفظ
+                            التعديلات</button>
+                    </div>
+                </div>
+                <!-- البند الحادى عشر eleventhhBandText -->
+                <div class="mt-3">
+                    <h5 class="text-center font-weight-bold">البنـد الحادى عشر</h5>
+                    <h5 id="elevenBandText" (click)='editSecText("#elevenBand_Textarea" , "#elevenBandText")'>
+                        {{elevenBand}}
+                    </h5>
+                    <div id="elevenBand_Textarea" style="display: none;">
+                        <textarea class="form-control" name="elevenBandText_secSec" rows="5"
+                            [(ngModel)]='elevenBand'></textarea>
+                        <button class="btn btn-outline-info mt-3"
+                            (click)='editSecText("#elevenBandText" , "#elevenBand_Textarea")'>حفظ
+                            التعديلات</button>
+                    </div>
+                </div>
+                <!-- البند الثانى عشر twelvethhBandText -->
+                <!-- <div class="mt-3">
+                    <h5 class="text-center font-weight-bold">البنـد الثانى عشر</h5>
+                    <h5 id="twelveBandText" (click)='editSecText("#twelveBand_Textarea" , "#twelveBandText")'>
+                        {{twelveBand}}
+                    </h5>
+                    <div id="twelveBand_Textarea" style="display: none;">
+                        <textarea class="form-control" name="twelveBandText_secSec" rows="5"
+                            [(ngModel)]='twelveBand'></textarea>
+                        <button class="btn btn-outline-info mt-3"
+                            (click)='editSecText("#twelveBandText" , "#twelveBand_Textarea")'>حفظ
+                            التعديلات</button>
+                    </div>
+                </div> -->
+                <!-- البند الثالث عشر therteenthhBandText -->
+                <div class="mt-3">
+                    <h5 class="text-center font-weight-bold">البنـد الثالث عشر</h5>
+                    <h5 id="therteenBandText" (click)='editSecText("#therteenBand_Textarea" , "#therteenBandText")'>
+                        {{therteenBand}}
+                    </h5>
+                    <div id="therteenBand_Textarea" style="display: none;">
+                        <textarea class="form-control" name="therteenBandText_secSec" rows="5"
+                            [(ngModel)]='therteenBand'></textarea>
+                        <button class="btn btn-outline-info mt-3"
+                            (click)='editSecText("#therteenBandText" , "#therteenBand_Textarea")'>حفظ
+                            التعديلات</button>
+                    </div>
+                </div>
+                <!-- البند الرابع عشر fourteenthhBandText -->
+                <div class="mt-3">
+                    <h5 class="text-center font-weight-bold">البنـد الرابع عشر</h5>
+                    <h5 id="fourteenBandText" (click)='editSecText("#fourteenBand_Textarea" , "#fourteenBandText")'>
+                        {{fourteenBand}}
+                    </h5>
+                    <div id="fourteenBand_Textarea" style="display: none;">
+                        <textarea class="form-control" name="fourteenBandText_secSec" rows="5"
+                            [(ngModel)]='fourteenBand'></textarea>
+                        <button class="btn btn-outline-info mt-3"
+                            (click)='editSecText("#fourteenBandText" , "#fourteenBand_Textarea")'>حفظ
+                            التعديلات</button>
+                    </div>
+                </div>
+                <hr>
+                <h5 class="text-center mt-3">و الله خير الشاهدين</h5>
+                <div class="row">
+                    <div class="col">
+                        <h5 class="text-center font-weight-bold">الطرف الاول البائع</h5>
+                        <h5 id="coNameLastText" (click)='editSecText("#coNameLast_Textarea" , "#coNameLastText")'>
+                            {{coNameLast}}
+                        </h5>
+                        <div id="coNameLast_Textarea" style="display: none;">
+                            <textarea class="form-control" name="coNameLastText_secSec" rows="1"
+                                [(ngModel)]='coNameLast'></textarea>
+                            <button class="btn btn-outline-info mt-3"
+                                (click)='editSecText("#coNameLastText" , "#coNameLast_Textarea")'>حفظ
+                                التعديلات</button>
+                        </div>
+                        <h5>التوقيع /</h5>
+                    </div>
+                    <div class="col">
+                        <h5 class="text-center font-weight-bold">الطرف الثانى المشترى</h5>
+                        <h5>الاسم /</h5>
+                        <h5>التوقيع /</h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>

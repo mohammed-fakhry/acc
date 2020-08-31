@@ -1,0 +1,18 @@
+.contVar {
+    color: rgb(45, 129, 194); //rgb(72, 143, 199); //teal;
+    padding: 0 5px;
+}
+
+p {
+    font-size: 20px;
+};
+
+@media print {
+    //.contractHeader { height: 20px; page-break-before: always; page-break-after: always; margin: 20px;}
+    #contractInpts  {display: none;}
+    .font-weight-bold {padding : 20px;}
+};
+
+@page { margin-top: 20px;}
+
+//@page :first { size: A4; margin: 20px 0; }

@@ -1,0 +1,39 @@
+.datePrint {
+    display: none;
+}
+
+@media print {
+    tbody {
+        overflow-y: hidden !important;
+    }
+
+    tr,
+    td,
+    th {
+        height: fit-content !important;
+    }
+
+    .panel-body {
+        height: 100% !important;
+        overflow-y: hidden !important;
+    }
+
+    .navHeader {
+        color: black !important;
+    }
+
+    .printX,
+    .fa-print,
+    .HideCol,
+    .theNav,
+    .datePrint,
+    .btn {
+        display: none !important;
+    }
+
+    .inpCard {
+        tbody .form-control {
+            border: none;
+        }
+    }
+}

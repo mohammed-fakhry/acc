@@ -28,10 +28,26 @@ export class CustomerComponent implements OnInit {
   customerReceiptArr: CustomerReceipt[];
   custRemainArry: any[];
 
+  // domElements
+  balanceContain: HTMLElement;
+  customerFadeLayer: HTMLElement;
+  printCustomerList: HTMLElement;
+  customerInvDetails: HTMLElement;
+  addCustomer: HTMLElement;
+  customerEnquiry: HTMLElement;
+
   constructor(public formBuilder: FormBuilder, public _service: ServicesService, public _custService: CustomerService,
     public router: Router, public logService: LoginService, public _stockService: StocksService, public _safeDataService: SafeDataService) { }
 
   ngOnInit() {
+
+    // domElements
+    this.balanceContain = document.querySelector('#balanceContain') as HTMLElement;
+    this.customerFadeLayer = document.querySelector('#customerFadeLayer') as HTMLElement;
+    this.printCustomerList = document.querySelector('#printCustomerList') as HTMLElement;
+    this.customerInvDetails = document.querySelector('#customerInvDetails') as HTMLElement;
+    this.addCustomer = document.querySelector('#addCustomer') as HTMLElement;
+    this.customerEnquiry = document.querySelector('#customerEnquiry') as HTMLElement;
 
     this.logService.logStart(); this.logService.reternlog();
 
@@ -56,27 +72,34 @@ export class CustomerComponent implements OnInit {
       $('.askForDelete').fadeOut('fast').removeClass('animate')
     });
 
-    //$("#customerEnquirybtn").attr("disabled", 'true');
-
     $("#hideInvDet").click(function () {
       $("#customerFadeLayer").fadeOut('fast');
       $('.askForDelete').fadeOut('fast').removeClass('animate')
       $('#customerInvDetail').fadeOut('fast').removeClass('animate')
     });
 
-    //this.setCustomerRemain()
+    this.balanceContain.addEventListener('mouseover', e => {
+      $('#balanceInfo').hide()
+      $('#cancelBalance').show();
+      this.balanceContain.style.border = 'solid 1px red'
+      this.balanceContain.classList.remove('infoCard')
+    })
 
+    this.balanceContain.addEventListener('mouseout', e => {
+      $('#cancelBalance').hide();
+      $('#balanceInfo').show()
+      this.balanceContain.classList.add('infoCard')
+      this.balanceContain.style.border = 'none'
+    })
   };
 
   getCustomerData_BackEnd() {
 
+    this._custService.url = localStorage.getItem('tmpDB');
+
     this._custService.getCustomer().subscribe((data: Customer[]) => {
       this.customers = data;
     });
-
-    this._stockService.getStockTransactionList().subscribe((data: StockTransaction[]) => {
-      this._stockService.stockTransactionArr = data;
-    })
 
     this._custService.getCustomerInvArr().subscribe((data: CustomerInvArry[]) => {
       this.customersInvoices = data
@@ -85,21 +108,16 @@ export class CustomerComponent implements OnInit {
     this._custService.getCustomerReceipts().subscribe((data: CustomerReceipt[]) => {
       this.customerReceiptArr = data
     })
+    
+    this._stockService.url = localStorage.getItem('tmpDB');
+    this._stockService.getStockTransactionList().subscribe((data: StockTransaction[]) => {
+      this._stockService.stockTransactionArr = data;
+    })
 
   };
 
   printThis() {
-    /* let show = "#customerInvDetails";
-    let hide1 = '#customerDetails';
-    let hide2 = '#customerHeader';
-    let hide3 = ''; */
     this._service.printThis();
-    /* $('#printCustomerInvArr').css(
-      { 'height': '100%' }
-    );
-    $('.navHeader').addClass('sticky-top');
-    $('.date_time').show();
-    $('.closeBtn').show(); */
   }
 
   getCurrentDate() {
@@ -113,16 +131,17 @@ export class CustomerComponent implements OnInit {
 
   markCell(i, cell: string) {
 
-    $('#balanceContain').show();
+    this.balanceContain.style.display = 'block'
+
     const element = document.querySelector(`#${cell}${i}`);
-    $(`#${cell}${i}`).toggleClass('darkBg');
+    $(`#${cell}${i}`).toggleClass('lightBg');
 
     let dirIn = 'invoiceTotalAdd'
     let dirOut = 'invoiceTotalMin'
 
     let num = 0;
 
-    let cond = element.classList.contains("darkBg")
+    let cond = element.classList.contains("lightBg")
 
     if (cond) {
 
@@ -154,6 +173,7 @@ export class CustomerComponent implements OnInit {
 
     if (this.cellArry.length == 0) {
       this.balance = 0
+      this.balanceContain.style.display = 'none'
     } else {
       this.balance = this._service.sumArry(this.cellArry)
     };
@@ -166,6 +186,15 @@ export class CustomerComponent implements OnInit {
 
   };
 
+  clearMarkedCells = () => {
+    this.balanceContain.style.display = 'none'
+    this.cellArry = []
+    for (let i = 0; i < this.customerInvArry.length; i++) {
+      $(`#invoiceTotalAdd${i}`).removeClass('lightBg');
+      $(`#invoiceTotalMin${i}`).removeClass('lightBg');
+    }
+  }
+
   printThisCustomerList() {
 
     const preparePrint = new Promise((res) => {
@@ -174,33 +203,17 @@ export class CustomerComponent implements OnInit {
       let Newcustomers = this.custRemainArry.filter((customer) => {
         return customer.customerRemain != 0 && customer.customerName != 'تست'
       })
-      /* Newcustomers.sort(function (a, b) {
-        return a.customerRemain - b.customerRemain;
-      }); */
+
       res(Newcustomers)
 
     }).then((data: any[]) => {
       this.custRemainArry = data
     }).then(() => {
-      setTimeout(this._service.printThis,10)
-      setTimeout(() => {$('.date_time').hide()}, 12)
+      setTimeout(this._service.printThis, 10)
+      setTimeout(() => { $('.date_time').hide() }, 12)
     })
 
   }
-/* 
-  openwindowPrint() {
-    document.documentElement.scrollTop = 0;
-    $('.closeBtn').hide();
-    //custDet
-    $('.custDet').hide();
-    $(`.printable`).css('width', '100%');
-    window.print();
-    location.reload();
-  }; */
-
-  reloadLoc() {
-    location.reload();
-  };
 
   putCustomerDataValue(customer) {
     this.customerData = new FormGroup({
@@ -351,16 +364,16 @@ export class CustomerComponent implements OnInit {
       if (c == 0) {
         this.customerInvArry[c].netTotal = parseInt(this.customerInvArry[c].invoiceTotalMin) - parseInt(this.customerInvArry[c].invoiceTotalAdd);
         if (this.customerInvArry[c].netTotal < 0) {
-          this.customerInvArry[c].netTotalColor = 'lightBg text-danger'
+          this.customerInvArry[c].netTotalColor = 'smokeBg text-danger'
         } else {
-          this.customerInvArry[c].netTotalColor = 'lightBg text-dark'
+          this.customerInvArry[c].netTotalColor = 'smokeBg text-dark'
         }
       } else {
         this.customerInvArry[c].netTotal = parseInt(this.customerInvArry[c - 1].netTotal) - parseInt(this.customerInvArry[c].invoiceTotalAdd) + parseInt(this.customerInvArry[c].invoiceTotalMin)
         if (this.customerInvArry[c].netTotal < 0) {
-          this.customerInvArry[c].netTotalColor = 'lightBg text-danger'
+          this.customerInvArry[c].netTotalColor = 'smokeBg text-danger'
         } else {
-          this.customerInvArry[c].netTotalColor = 'lightBg text-dark'
+          this.customerInvArry[c].netTotalColor = 'smokeBg text-dark'
         }
       }
     }
@@ -479,7 +492,6 @@ export class CustomerComponent implements OnInit {
       $('#containerLoader').fadeOut();
       this.showCustomerEnquiry();
     });
-
   };
 
   showCustomerInvoice(invoice) {
@@ -518,7 +530,7 @@ export class CustomerComponent implements OnInit {
       this._custService.invKindColor = 'text-info'
     }
 
-    $('#customerFadeLayer').show(0);
+    this.customerFadeLayer.style.display = 'block'
     $('#customerInvDetail').show().addClass('animate')
   }
 
@@ -544,13 +556,13 @@ export class CustomerComponent implements OnInit {
   };
 
   askForDelete(customer: Customer) {
-    $('#customerFadeLayer').show(0)
+    this.customerFadeLayer.style.display = 'block'
     $('.askForDelete').show().addClass('animate')
     this.putCustomerDataValue(customer);
   };
 
   deletCustomer() {
-    $('#customerFadeLayer').hide()
+    this.customerFadeLayer.style.display = 'none'
     this._custService.deleteCustomerSer(this.customerData.value.customerId)
       .subscribe(data => {
         this.customers = this.customers.filter(u => u !== this.customerData.value)
@@ -558,17 +570,18 @@ export class CustomerComponent implements OnInit {
   };
 
   buttonEffect(max: string, min: string) {
-    $(max).removeClass("btn-outline-info").addClass("btn-outline-secondary").animate({ fontSize: '1.5em' }, 50);
+    $(max).removeClass("btn-light").addClass("btn-outline-secondary").animate({ fontSize: '1.5em' }, 50);
     $(max).attr({ "disabled": true });
 
-    $(min).removeClass('btn-outline-secondary').addClass('btn-outline-info').animate({ fontSize: '1em' }, 50);
+    $(min).removeClass('btn-outline-secondary').addClass('btn-light').animate({ fontSize: '1em' }, 50);
     $(min).attr({ "disabled": false });
   };
 
   showUpdateCustomer(customer: Customer) {
-    $('#printCustomerList').hide(150)
+    this.printCustomerList.style.display = 'none'
     $('.customerClass').not('#addCustomer').hide();
-    $('#addCustomer').show();
+
+    this.addCustomer.style.display = 'block'
     $('#addNewCustomerBtn').html('تعديل');
     $('#addCustomer h2:first').html('تعديل بيانات عميل');
     this.putCustomerDataValue(customer);
@@ -578,8 +591,9 @@ export class CustomerComponent implements OnInit {
   customerRemainColor: string
   showCustomerCard(customer: Customer) {
 
-    $('#printCustomerList').hide(150)
-    $('#balanceContain').hide();
+    this.printCustomerList.style.display = 'none';
+    this.balanceContain.style.display = 'none'
+
     this.putCustomerDataValue(customer);
     this.cellArry = [];
     this.balance = 0;
@@ -589,20 +603,20 @@ export class CustomerComponent implements OnInit {
     } else {
       this.customerRemainColor = 'text-dark'
     }
-    $('#showAddCustomerBtn').removeClass('btn-outline-secondary').addClass('btn-outline-info').animate({ fontSize: '1em' }, 50);
-    $('#customerEnquirybtn').removeClass('btn-outline-secondary').addClass('btn-outline-info').animate({ fontSize: '1em' }, 50);
+    $('#showAddCustomerBtn').removeClass('btn-outline-secondary').addClass('btn-light').animate({ fontSize: '1em' }, 50);
+    $('#customerEnquirybtn').removeClass('btn-outline-secondary').addClass('btn-light').animate({ fontSize: '1em' }, 50);
     $("#customerEnquirybtn").attr({ "disabled": false });
     $("#showAddCustomerBtn").attr({ "disabled": false });
     $('.customerClass').not('#customerDetails').hide();
-    $('#customerInvDetails').show();
+    this.customerInvDetails.style.display = 'block';
   }
 
   ShowAddNewCustomer() {
     this._service.clearForm();
-    $('#printCustomerList').hide(150)
+    this.printCustomerList.style.display = 'none'
     this.restValues()
     $('.customerClass').not('#addCustomer').hide();
-    $('#addCustomer').show();
+    this.addCustomer.style.display = 'block';
     $('#addNewCustomerBtn').html('اضافة');
     $('#addCustomer h2:first').html('اضافة بيانات عميل');
     this.buttonEffect('#showAddCustomerBtn', '#customerEnquirybtn');
@@ -623,9 +637,10 @@ export class CustomerComponent implements OnInit {
 
   showCustomerEnquiry() {
     this.searchCust = null;
-    $('#printCustomerList').show(150)
+    this.printCustomerList.style.display = 'block';
     $('.customerClass').not('#customerEnquiry').hide();
-    $('#customerEnquiry').show();
+
+    this.customerEnquiry.style.display = 'block';
     this.buttonEffect('#customerEnquirybtn', '#showAddCustomerBtn');
   };
 }

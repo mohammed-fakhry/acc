@@ -8,67 +8,138 @@
             <button class="btn btn-danger mr-2" id="deletWorker" (click)="deletUnit()">نعم</button>
             <button class="btn btn-outline-info" id="hideFadeLayer">الغاء</button>
         </div>
-
     </div>
 </div>
 <!--header-class="fa fa-calculator-->
-<!-- style="height: 70px;" -->
-<div class="navHeader theNav cardHeader">
+<div class="navHeader cardHeader theNav">
     <nav class="navbar">
-        <div class="form-inline">
-            <h1 class="px-2">الوحدات</h1>
-            <div class="headerLeftBorder"></div>
-            <button class="btn btn-outline-info ml-2 mx-2" id="showAddUnitBtn" (click)="showAddUnit()">اضافة</button>
-            <button style="font-size: 1.5em;" class="btn btn-outline-secondary ml-2 mx-2" id="unitEnquirybtn"
-                (click)="showUnitEnquiry()" disabled>استعلام</button>
-            <div class="headerLeftBorder"></div>
-            <input *ngIf="router.url === '/unites'" [(ngModel)]="searchTxt" placeholder="بحث" class="form-control mx-3"
-                id="unitSearch">
+        <div class="d-flex justify-content-between">
+            <div class="form-inline">
+                <h1 class="px-2">الوحدات</h1>
+                <div class="headerLeftBorder"></div>
+                <!--Enquire_Towers-->
+                <div class="dropdown">
+                    <button class="btn btn-outline-secondary dropdown-toggle mx-2" type="button" id="mainEnquir_Towers"
+                        style="font-size: 1.5em;" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        الاستعلام
+                    </button>
+                    <div class="dropdown-menu p-1" aria-labelledby="dropdownMenuButton">
+                        <button class="dropdown-item btn-secondary text-right" id="TowerEnquirybtn"
+                            (click)="showTowerEnquiry()">استعلام
+                            الابراج</button>
+                        <button class="dropdown-item btn-secondary text-right" id="unitEnquirybtn"
+                            (click)="showUnitEnquiry()">استعلام
+                            الوحدات</button>
+                    </div>
+                </div>
+                <!--Add_Towers-->
+                <div class="dropdown">
+                    <button class="btn btn-light dropdown-toggle mx-2" type="button" id="mainAdd_Towers"
+                        style="font-size: 1em;" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        اضافة
+                    </button>
+                    <div class="dropdown-menu p-1" aria-labelledby="dropdownMenuButton">
+                        <button class="dropdown-item btn-secondary text-right" id="showAddUnitBtn"
+                            (click)="showAddUnit()">اضافة
+                            وحدة</button>
+                        <button disabled class="dropdown-item btn-secondary text-right" id="showAddTowerBtn"
+                            (click)='showAddTower()'>اضافة
+                            برج</button>
+                    </div>
+                </div>
+                <!--cotracts-->
+                <div class="dropdown">
+                    <button class="btn btn-light dropdown-toggle mx-2" type="button" id="mainContracts"
+                        style="font-size: 1em;" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        العقود
+                    </button>
+                    <div class="dropdown-menu p-1" aria-labelledby="dropdownMenuButton">
+                        <button class="dropdown-item btn-secondary text-right" id="showAddContract"
+                            (click)="showAddContract()">عقد
+                            جديد</button>
+                        <button class="dropdown-item btn-secondary text-right" id="showContractsDetailsBtn"
+                            (click)='showContractsDetail()'>بيانات
+                            العقود</button>
+                    </div>
+                </div>
+                <div class="headerLeftBorder"></div>
+                <input style="display: none;" type="search" [(ngModel)]="searchTxt" name="searchTxt"
+                    placeholder="بحث الوحدات" class="form-control mx-3" id="unitSearch">
+                <i class="fa fa-calculator btn py-2 btn-outline-light text-center mx-2" id="showcalculatorBtn"
+                    (click)="showcalculator()" style="height: calc(1.5em + .75rem + 2px);"></i>
+            </div>
         </div>
-        <button class="btn btn-outline-info ml-2 mx-2 p-3" id="showcalculatorBtn" (click)="showcalculator()"><i
-                class="fa fa-calculator"></i></button>
     </nav>
 </div>
-
 <!--addUnit-->
 <div class="container-fluid mainContainer mt-3 unitsClass" id="addUnit">
     <div class="inpCard card p-3">
         <h2 class="pb-3 cardHeader">اضافة بيانات وحدة</h2>
-        <form [formGroup]='unitData' (ngSubmit)="addNewUnit()" class="pt-3">
+        <hr>
+        <form (ngSubmit)="addNewUnit()" class="pt-3">
             <div class="row">
-                <input formControlName="unitId" id="unitId" class="form-control d-none">
-                <div class="form-group col-md-6">
-                    <label>رقم الوحدة</label>
-                    <input formControlName="unitNum" [(ngModel)]="unitDataView.unitNum" id="unitNum"
-                        class="form-control">
+                <input id="unitId" class="form-control d-none">
+                <div class="col">
+                    <div class="form-group">
+                        <label>رقم البرج</label>
+                        <input type="search" name="unitBuildingNum" [(ngModel)]="unitBuildingNum" id="unitBuildingNum"
+                            class="form-control mdb-autocomplete" list="datalist1"
+                            (ngModelChange)='generateUnitSerial()'>
+                        <datalist id="datalist1">
+                            <option *ngFor="let tower of choosTowerArr" value="{{tower.name}}">
+                            </option>
+                        </datalist>
+                    </div>
                 </div>
-                <div class="form-group col-md-6">
-                    <label>العمارة</label>
-                    <input formControlName="unitBuildingNum" [(ngModel)]="unitDataView.unitBuildingNum"
-                        id="unitBuildingNum" class="form-control">
+                <div class="col">
+                    <div class="form-group">
+                        <label for="unitFloar">الطابق</label>
+                        <input type="number" name='unitFloar' [(ngModel)]="unitDataView.unitFloar" id="unitFloar"
+                            class="form-control" (ngModelChange)='generateUnitSerial()'>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-group">
+                        <label for="apartNum">رقم الوحدة</label>
+                        <input type="number" name="apartNum" [(ngModel)]="unitDataView.apartNum" class="form-control"
+                            (ngModelChange)='generateUnitSerial()'>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-group" id="unitNum">
+                        <label for="unitNum">مسلسل الوحدة</label>
+                        <input disabled name="unitNum" [(ngModel)]="unitDataView.unitNum" class="form-control"
+                            style="direction: ltr;">
+                    </div>
                 </div>
             </div>
             <div class="row">
-                <div class="form-group col-md-6">
+                <div class="form-group col">
                     <label>المساحة</label>
-                    <input formControlName="unitExtent" [(ngModel)]="unitDataView.unitExtent" id="unitExtent"
+                    <input type="number" name="unitExtent" [(ngModel)]="unitDataView.unitExtent" id="unitExtent"
                         class="form-control">
                 </div>
-                <div class="form-group col-md-6">
-                    <label>السعر</label>
-                    <input formControlName="unitPrice" [(ngModel)]="unitDataView.unitPrice" id="unitPrice" type="number"
+                <div class="form-group col">
+                    <label>السعر بالمتر</label>
+                    <input name="unitPrice" [(ngModel)]="unitDataView.unitPrice" id="unitPrice" type="number"
                         class="form-control">
+                </div>
+                <div class="col">
+                    <label for="theClientName">اسم العميل</label>
+                    <input type="search" name="theClientName" [(ngModel)]='unitDataView.clientName' id="theClientName"
+                        (ngModelChange)="isClientNameValid()"
+                        class="form-control mdb-autocomplete p-1 {{clientValid.class}}" list="datalistClients">
+                    <datalist id="datalistClients">
+                        <option *ngFor="let client of clients" value="{{client.clientName}}">
+                        </option>
+                    </datalist>
+                    <div *ngIf="!clientValid.cond" class="text-danger mt-2">{{clientValid.msg}}</div>
                 </div>
             </div>
-            <div class="row">
+            <div class="row d-none">
                 <div class="form-group col-md-6">
                     <label>الشركة</label>
-                    <input formControlName="unitCompany" [(ngModel)]="unitDataView.unitCompany" id="unitCompany"
-                        class="form-control">
-                </div>
-                <div class="form-group col-md-6">
-                    <label>ميعاد التسليم</label>
-                    <input formControlName="unitDate" [(ngModel)]="unitDataView.unitDate" id="unitDate"
+                    <input name="unitCompany" [(ngModel)]="unitDataView.unitCompany" id="unitCompany"
                         class="form-control">
                 </div>
             </div>
@@ -77,47 +148,50 @@
     </div>
 </div>
 <!--unitEnquiry-->
-<div class="container-fluid mainContainer unitsClass mt-3" id="unitEnquiry" style="display: block;">
+<div class="container-fluid mainContainer unitsClass mt-3" id="unitEnquiry">
     <div class="card">
         <div class="panel-body panel-flex-table">
             <table class="flex-table table table-hover">
                 <thead class="navHeader text-light">
                     <tr>
                         <th>رقم الوحدة</th>
-                        <th>العمارة</th>
+                        <th>رقم البرج</th>
+                        <th style="flex: 0.25;">الطابق</th>
                         <th>المساحة</th>
-                        <th>السعر</th>
-                        <th>الشركة</th>
-                        <th>ميعاد التسليم</th>
-                        <th>تعديل</th>
-                        <th>حذف</th>
+                        <th>السعر بالمتر</th>
+                        <!-- <th>الشركة</th> -->
+                        <th>اجمالى السعر</th>
+                        <th style="flex: 2;">المالك</th>
+                        <th style="flex: 0.5;">تعديل</th>
+                        <!-- <th>حذف</th> -->
                     </tr>
                 </thead>
                 <tbody class=" mt-3 tableBody">
                     <tr *ngFor="let unit of unites|unitSearch:searchTxt">
                         <td>{{unit.unitNum}}</td>
-                        <td>{{unit.unitBuildingNum}}</td>
+                        <td>{{unit.towerName}} - {{unit.towerStage}}</td>
+                        <td style="flex: 0.25;">{{unit.unitFloar}}</td>
                         <td>{{unit.unitExtent}}</td>
                         <td>{{unit.unitPrice}}</td>
-                        <td>{{unit.unitCompany}}</td>
-                        <td>{{unit.unitDate}}</td>
-                        <td class="textBtn btn-outline-success ml-2" id="showUpdateUnit" (click)="showUpdateUnit(unit)"><i
-                                class="fa fa-edit"></i></td>
-                        <td class="textBtn btn-outline-danger ml-2" (click)="askForDeleteUnit(unit)"><i class="fa fa-trash"></i>
-                        </td>
+                        <!-- <td>{{unit.unitCompany}}</td> -->
+                        <td>{{unit.unitPrice * unit.unitExtent}}</td>
+                        <td style="flex: 2;">{{unit.clientName}}</td>
+                        <td class="textBtn btn-outline-success ml-2" id="showUpdateUnit" (click)="showUpdateUnit(unit)"
+                            style="flex: 0.5;">
+                            <i class="fa fa-edit"></i></td>
+                        <!-- <td class="textBtn btn-outline-danger ml-2" (click)="askForDeleteUnit(unit)"><i
+                                class="fa fa-trash"></i>
+                        </td> -->
                     </tr>
                 </tbody>
             </table>
         </div>
     </div>
-    
+
 </div>
 <!--calculator--->
 <div class="fadeLayer" id="calcFade" style="display: none; padding-top: 10%;">
-    <div class="container  card p-3 mt-2" id="calculator">
-        <div>
-            <button class="btn btn-danger mb-3" id="hideCalcLayer">×</button>
-        </div>
+    <div class="container card p-3 mt-2" id="calculator" style="margin: auto;">
         <div class="row">
             <div class="form-group col-md-2 col-sm-6">
                 <label class="settinLable p-2">المساحة</label>
@@ -143,7 +217,7 @@
                     <div class="input-group-append">
                         <span class="input-group-text">مئوية</span>
                     </div>
-                    <input type="number" class="form-control" [(ngModel)]='preMoney' (keyup)='calcRemain()'>
+                    <input type="number" class="form-control" [(ngModel)]='preMoney'>
                 </div>
             </div>
             <div class="form-group col-md-2 col-sm-6">
@@ -152,48 +226,59 @@
                     <div class="input-group-append">
                         <span class="input-group-text">سنة</span>
                     </div>
-                    <input type="number" class="form-control" [(ngModel)]='years' (keyup)='calcRemain()'>
+                    <input type="number" class="form-control" [(ngModel)]='years'>
                 </div>
             </div>
         </div>
         <div class="mt-2">
             <button class="btn btn-outline-info" (click)='calcRemain()'>احسب</button>
         </div>
-        <table class="table mt-2 table-hover" style="width: 100%;">
-            <thead class="bg-dark text-light">
-                <tr>
-                    <th>
-                        <h5>اجمالى السعر</h5>
-                    </th>
-                    <th>
-                        <h5>المقدمة</h5>
-                    </th>
-                    <th>
-                        <h5>المتبقى</h5>
-                    </th>
-                    <th>
-                        <h5>الاقساط</h5>
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td class="bigNum font-weight-bold">
-                        <h3>{{totalPrice}}</h3>
-                    </td>
-                    <td class="bigNum font-weight-bold">
-                        <h3>{{preMoneyResult}}</h3>
-                    </td>
-                    <td class="bigNum font-weight-bold">
-                        <h3>{{remainPrice}}</h3>
-                    </td>
-                    <td class="bigNum font-weight-bold">
-                        <h3>{{remainPaid}}</h3>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-
+        <div>
+            <div class="panel-body panel-flex-table standTable" style="height: 100%;">
+                <table class="flex-table table mt-2 table-hover">
+                    <thead class="navHeader">
+                        <tr>
+                            <th>
+                                اجمالى السعر
+                            </th>
+                            <th>
+                                المقدمة
+                            </th>
+                            <th>
+                                المتبقى
+                            </th>
+                            <th>
+                                الاقساط
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="bigNum font-weight-bold">
+                                {{totalPrice}}
+                            </td>
+                            <td class="bigNum font-weight-bold">
+                                {{preMoneyResult}}
+                            </td>
+                            <td class="bigNum font-weight-bold">
+                                {{remainPrice}}
+                            </td>
+                            <td class="bigNum font-weight-bold">
+                                {{remainPaid}}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div>
+            <button class="btn btn-outline-danger mb-3" id="hideCalcLayer">الغاء</button>
+        </div>
     </div>
-
 </div>
+<!--TowerEnquire-->
+<app-tower-enquire class="unitsClass mt-2" id="towerEnquire" style="display: block;"></app-tower-enquire>
+<!--addTower-->
+<app-add-tower class="unitsClass mt-2" id="addTower"></app-add-tower>
+<!-- addContract -->
+<app-add-contract class="unitsClass mt-2" id="addContract"></app-add-contract>

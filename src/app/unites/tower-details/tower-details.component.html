@@ -1,0 +1,43 @@
+<!--towersDetails-->
+<div class="card" id="towersDetails">
+    <div class="d-flex justify-content-between">
+        <div class="form-inline col">
+            <!-- <button class="btn btn-outline-secondary backBtn" (click)='_unitesComponent.showTowerEnquiry()'>-</button> -->
+            <h2 class="cardHeader mr-2">برج ( {{_unitService.theTowerInfo.towerName}} )</h2>
+            <h2 class="cardHeader mr-2">- مرحلة ( {{_unitService.theTowerInfo.towerStage}} )</h2>
+        </div>
+        <input [(ngModel)]="searchTxt" name="searchTxt" placeholder="بحث الوحدات"
+                class="form-control mr-2 col" id="unitSearch_inTower">
+    </div>
+    
+    <hr>
+    <div class="panel-body panel-flex-table tableWithHeader">
+        <table class="flex-table table table-hover">
+            <thead class="navHeader text-light">
+                <tr>
+                    <!-- <th>رقم البرج</th> -->
+                    <!-- <th>المرحلة</th> -->
+                    <th style="flex: none; width: 150px">رقم الوحدة</th>
+                    <th style="flex: 0.75;">مساحة الوحدة</th>
+                    <th>سعر المتر</th>
+                    <th>اجمالى سعر الوحدة</th>
+                    <th style="flex: 2.5;">المالك</th>
+                    <th style="flex: 0.5;">تعديل</th>
+                </tr>
+            </thead>
+            <tbody class=" mt-3 tableBody">
+                <tr *ngFor="let unit of _unitService.towerUnits|unitSearch:searchTxt">
+                    <!-- <td>{{unit.towerName}}</td> -->
+                    <!-- <td>{{unit.towerStage}}</td> -->
+                    <td style="flex: none; width: 150px">{{unit.unitNum}}</td>
+                    <td style="flex: 0.75;">{{unit.unitExtent}}</td>
+                    <td>{{unit.unitPrice}}</td>
+                    <td>{{unit.unitPrice * unit.unitExtent}}</td>
+                    <td style="flex: 2.5;">{{unit.clientName}}</td>
+                    <td class="textBtn btn-outline-success ml-2" id="showTowerDetails"
+                            (click)="editUnit(unit)" style="flex: 0.5;"><i class="fa fa-edit"></i></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

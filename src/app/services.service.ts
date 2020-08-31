@@ -36,7 +36,7 @@ export class ServicesService {
       $('.tableWithHeader').css('height', '860px')
     } else {
       $('.panel-body').not('.invoiceTable').not('.standTable').not('.tableWithHeader').css('height', '820px')
-      $('.tableWithHeader').css('height', '780px')
+      $('.tableWithHeader').css('height', '740px')
       $('.invoiceTable').css('height', '530px')
     }
   }
@@ -191,7 +191,7 @@ export class ServicesService {
   };
 
   // defult url
-  url: string = 'http://localhost/accounting/'
+  url: string = localStorage.getItem('tmpDB'); //'http://localhost/accounting/'
 
   getWorker() {
     return this.http.get<Worker[]>(`${this.url}list.php`);

@@ -37,6 +37,9 @@
                 <button id="workersBtn" routerLink="/workers" (click)='secButtonClick("workersBtn")'
                     class="secButton btn btn-light text-right" style="font-size: 1em;"><i
                         class="fa fa-user fa-lg px-2"></i>العاملين</button>
+                <!-- ClientsBtn -->
+                <button id="clientsBtn" routerLink="/clients" (click)='secButtonClick("clientsBtn")'
+                    class="secButton btn btn-light text-right"><i class="fa fa-users fa-lg px-2"></i>العملاء</button>
                 <button id="unitesBtn" routerLink="/unites" (click)='secButtonClick("unitesBtn")'
                     class="secButton btn btn-light text-right" style="font-size: 1em;"><i
                         class="fa fa-building fa-lg px-2"></i>الوحدات</button>
@@ -54,7 +57,7 @@
                         style="font-size: 1 em;"></i>الخزنة</button>
                 <button id="customersBtn" routerLink="/customers" (click)='secButtonClick("customersBtn")'
                     class="secButton btn btn-light text-right" style="font-size: 1em;"><i
-                        class="fa fa-users fa-lg px-2"></i>العملاء</button>
+                        class="fa fa-users fa-lg px-2"></i>موردين المخازن</button>
             </div>
             <hr class="text-center text-dark">
             <!--MainSettingBtn-->
@@ -62,10 +65,10 @@
                 style="border: solid 1px rgb(26, 51, 70);"><i class="fa fa-cog pl-2"></i>الاعدادات</button>
             <div class="my-1 secDiv">
                 <button class="secButton btn btn-light text-success text-right" id="backupBtn" (click)="backup()"><i
-                    class="fa fa-cog pl-2"></i>انشاء
-                نسخة احتياطية</button>
-            <button class="secButton btn btn-light text-right" id="MainSettingBtn" routerLink="/MainSetting"><i
-                    class="fa fa-cog pl-2"></i>الاعدادات العامة</button>
+                        class="fa fa-cog pl-2"></i>انشاء
+                    نسخة احتياطية</button>
+                <button class="secButton btn btn-light text-right" id="MainSettingBtn" routerLink="/MainSetting"><i
+                        class="fa fa-cog pl-2"></i>الاعدادات العامة</button>
             </div>
         </div>
     </div>

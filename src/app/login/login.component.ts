@@ -3,6 +3,8 @@ import { FormControl, FormGroup } from '@angular/forms';
 import * as $ from 'jquery';
 import { Router } from '@angular/router';
 import { LoginService } from '../login.service';
+import { UserData } from '../user-data';
+import { ServicesService } from '../services.service';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -10,26 +12,26 @@ import { LoginService } from '../login.service';
 })
 export class LoginComponent implements OnInit {
 
-  users: any[];
-  userData = new FormGroup({
-    userName: new FormControl(''),
-    userPassword: new FormControl()
-  });
+  users: UserData[];
+  /* userData = new FormGroup({
+    name: new FormControl(''),
+    auth: new FormControl()
+  }); */
+
+  user = {
+    name: null,
+    auth: null,
+  }
 
   currentRoute: string = this.logService.checkCurrentRoute();
 
-  constructor(private router: Router, private logService: LoginService) { }
+  constructor(private router: Router, private logService: LoginService,public _service:ServicesService) { }
 
   ngOnInit() {
 
-    this.logService.getUsers().subscribe((data: Worker[]) => { // get all userNames
+    this.logService.getUsers().subscribe((data: UserData[]) => { // get all names
       this.users = data;
     });
-
-    /*if (this.logService.check) {
-      this.logService.isUser = true;
-      this.logService.checkIsUser();
-    }*/
 
     if (this.logService.isUser == true) {
       this.router.navigate(['/home'])
@@ -39,19 +41,22 @@ export class LoginComponent implements OnInit {
 
 
   //check = localStorage.getItem('y')
-  logIn() {
-    for (let i = 0; i < this.users.length; i++) {
-      if (this.users[i].userName == this.userData.controls.userName.value && this.users[i].userPassword == this.userData.controls.userPassword.value) {
-        this.logService.isUser = true;
-        sessionStorage.setItem('y', 'y')
-        this.router.navigate(['/home']);
-        //$('#sidebarToggle').hide();
-        this.logService.checkIsUser();
-        break;
-      } else {
-        $('.form-control').addClass('is-invalid')
-        $('.invalid-feedback').removeClass('d-none')
+  log() {
+    let found = this.users.find(user => user.name === this.user.name);
+    if (found) {
+      if (found.name == 'mohammed') {
+        localStorage.setItem('tmpDB', 'http://localhost/accounting/');
+      } else if (found.name === 'ali') {
+        localStorage.setItem('tmpDB', 'http://localhost/accountings_ali/');
       }
+      sessionStorage.setItem('y', `${found.prem}`);
+      this.logService.isUser = true;
+      
+      this.router.navigate(['/home']);
+      this.logService.checkIsUser();
+    } else {
+      $('.form-control').addClass('is-invalid');
+      $('.invalid-feedback').removeClass('d-none');
     }
 
   } // logIn

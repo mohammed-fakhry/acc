@@ -1,0 +1,49 @@
+<!--addClient-->
+<div class="mt-3 card inpCard">
+    <div class="p-3">
+        <h2 class="pb-3 cardHeader" id="addClientHeader">اضافة بيانات عميل</h2>
+        <hr>
+        <form (ngSubmit)="addNewClient()">
+            <div>
+                <input id="clientId" style="display: none;" name="clientId" [(ngModel)]='_clientServiceService.clientData.clientId'>
+                <!-- name - Tell -->
+                <div class="form-row">
+                    <div class="col">
+                        <!-- clientName -->
+                        <label for="clientName">اسم العميل</label>
+                        <input type="text" id="clientName" class="form-control" name="clientName"
+                            [(ngModel)]='_clientServiceService.clientData.clientName' (ngModelChange)='nameChanged()'>
+                        <div *ngIf='_clientServiceService.clientInptValid.clientNameValid' class="text-danger">{{_clientServiceService.clientInptValid.clientNameMsg}}</div>
+                    </div>
+                    <!-- clientTell -->
+                    <div class="col">
+                        <label for="clientTell">رقم الهاتف</label>
+                        <input type="text" id="clientTell" class="form-control" name="clientTell"
+                            [(ngModel)]='_clientServiceService.clientData.clientTell' (change)='tellChanged()'>
+                        <div class="text-danger" *ngIf='_clientServiceService.clientInptValid.clientTellVaild'>
+                            {{_clientServiceService.clientInptValid.clientTellMsg}}</div>
+                    </div>
+                </div>
+
+                <div class="form-row mt-3">
+                    <div class="col">
+                        <!-- clientAddress -->
+                        <label for="clientAddress">العنوان</label>
+                        <input type="text" id="clientAddress" class="form-control" name="clientAddress"
+                            [(ngModel)]='_clientServiceService.clientData.clientAddress' (change)='addressChanged()'>
+                        <div *ngIf='_clientServiceService.clientInptValid.clientAddressVaild' class="text-danger">{{_clientServiceService.clientInptValid.clientAddressMsg}}</div>
+                    </div>
+                    <div class="col">
+                        <!-- clientNationNum -->
+                        <label for="clientNationNum">الرقم القومى</label>
+                        <input type="text" id="clientNationNum" class="form-control" name="clientNationNum"
+                            [(ngModel)]='_clientServiceService.clientData.clientNationNum' (change)='nationNumChanged()'>
+                        <div *ngIf='_clientServiceService.clientInptValid.clientNationNumValid' class="text-danger">
+                            {{_clientServiceService.clientInptValid.clientNationNumMsg}}</div>
+                    </div>
+                </div>
+            </div>
+            <button class="btn btn-outline-info mt-3 ml-2" type="submit" id="addNewClientBtn">اضافة</button>
+        </form>
+    </div>
+</div>

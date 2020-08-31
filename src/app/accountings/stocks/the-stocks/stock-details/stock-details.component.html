@@ -1,8 +1,7 @@
-
 <!---->
 <div class="container-fluid">
     <div class="row">
-        <div class="col-md-3" id="stockDetHead">
+        <div class="col-md-12 col-lg-3 mb-2" id="stockDetHead">
             <!-- cardBorderY -->
             <h5 class="px-3 datePrint">{{today}}</h5>
             <div class="stickyInp">
@@ -12,10 +11,9 @@
                         <button class="btn btn-outline-secondary text-center mb-1 mx-2 printX"
                             (click)='expandThisstockDet()'><i class="fa fa-print"></i></button>
                     </div>
-
                     <hr>
                     <!---->
-                    <div class="form-inline mt-3">
+                    <div class="form-inline">
                         <h5 class="cardHeader">العنوان : </h5>
                         <h5 class="mr-2">{{_stockService.makeStockArryView.stockPlace}}</h5>
                     </div>
@@ -33,18 +31,16 @@
                         <input placeholder="بحث باسم الصنف" class="form-control col printX" type="search"
                             [(ngModel)]='productSearchTxt'>
                     </div>
-
                 </div>
-
             </div>
         </div>
-        <div class="col-md-9" id="stockDetail">
+        <div class="col-md-12 col-lg-9" id="stockDetail">
             <!--table-->
             <!-- <div class="cardBorderY"> -->
             <div class="card">
                 <div class="panel-body panel-flex-table" id="stockDetailtable">
                     <table class="flex-table table table-hover">
-                        <thead class="navHeader text-light">
+                        <thead class="navHeader">
                             <tr>
                                 <th>اسم الصنف</th>
                                 <th>العدد</th>

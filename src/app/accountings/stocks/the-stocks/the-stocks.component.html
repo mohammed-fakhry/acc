@@ -1,7 +1,7 @@
 <!--fadeLayer-->
 <div class="fadeLayer" id="theStockFadeLayer">
     <div class="container p-3 card askForDelete" style="display: none; width: 35%;" id="askForDeleteStock">
-        <h3 class="p-3 bg-danger text-light">تحذير!</h3> <!-- تحذير! هل انت متأكد من حذف -->
+        <h3 class="p-3 alert alert-danger">تحذير!</h3> <!-- تحذير! هل انت متأكد من حذف -->
         <h6>هل انت متأكد من حذف {{_stockService.stockDataView.stockName}}</h6>
         <!-- <h4 class="mb-2">
             {{_stockService.stockDataView.stockName}}
@@ -9,7 +9,7 @@
         <p class="smokeBg p-2">{{deleteMsg}}</p>
         <hr>
         <div class="d-flex flex-row-reverse">
-            <button class="btn btn-danger mr-2" id="deleteStock" (click)="deleteStock()">نعم</button>
+            <button class="btn btn-outline-danger mr-2" id="deleteStock" (click)="deleteStock()">نعم</button>
             <button class="btn btn-outline-info" id="hideFadeLayer">الغاء</button>
         </div>
     </div>
@@ -19,7 +19,7 @@
         <hr>
         <div class="row">
             <div class="col">
-                <div class="pt-3 font-weight-bolder px-3" style="border-radius: 5px; box-shadow: none; background-color: whitesmoke;">
+                <div class="pt-3 font-weight-bolder px-3 doneInfo">
                     <div class="form-inline">
                         <p>من | </p>
                         <p class="text-info pr-2"> {{_stockService.invoiceDoneMsg.from}} </p>
@@ -31,7 +31,7 @@
                 </div>
             </div>
             <div class="col">
-                <div class="pt-3 font-weight-bolder px-3" style="border-radius: 5px; box-shadow: none; background-color: whitesmoke;">
+                <div class="pt-3 font-weight-bolder px-3 doneInfo">
                     <div class="form-inline">
                         <p>الى | </p>
                         <p class="text-info pr-2"> {{_stockService.invoiceDoneMsg.to}} </p>
@@ -43,7 +43,6 @@
                 </div>
             </div>
         </div>
-        
         <hr>
         <div class="d-flex flex-row">
             <!--fade_addNewApBtn-->
@@ -95,7 +94,7 @@
             <!--premissionInvoice-->
             <!-- style="height: 70px;" -->
             <div class="dropdown">
-                <button class="btn btn-outline-info dropdown-toggle mx-2 headerMainBtn" type="button" id="premissionBtn"
+                <button class="btn btn-light dropdown-toggle mx-2 headerMainBtn" type="button" id="premissionBtn"
                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     فواتير
                 </button>
@@ -108,7 +107,7 @@
                         (click)="showTranceStockPrem()">اذن مخزن</button>
                 </div>
             </div>
-            <button class="btn btn-outline-info mx-2 headerMainBtn" id="showProfitsBtn"
+            <button class="btn btn-light mx-2 headerMainBtn" id="showProfitsBtn"
                 (click)="showProfits()">الارباح</button>
             <button class="btn btn-success mx-2 d-none" id="testBtn" (click)='testbtn()'>test</button>
             <div class="headerLeftBorder"></div>

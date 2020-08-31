@@ -247,7 +247,7 @@ export class ProductsReportComponent implements OnInit {
             minQty: 0,
             addQty: 0,
             netQty: 0,
-            netColor: 'darkBg',
+            netColor: 'text-dark',
             theDate: d.getTime(),
             note: mainArry[i].notes,
           };
@@ -302,7 +302,7 @@ export class ProductsReportComponent implements OnInit {
             this.filteredProducts[f].netQty = this.filteredProducts[f - 1].netQty + this.filteredProducts[f].addQty - this.filteredProducts[f].minQty;
           }
 
-          if (this.filteredProducts[f].netQty < 0) { this.filteredProducts[f].netColor = 'bg-danger' }
+          if (this.filteredProducts[f].netQty < 0) { this.filteredProducts[f].netColor = 'text-danger' }
 
         };
 

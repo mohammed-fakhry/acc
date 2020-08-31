@@ -1,6 +1,6 @@
 export class UserData {
-    userId: number;
-    userName: string;
-    userPassword: string;
-    userPremission: string;
+    id: number;
+    name: string;
+    auth: string;
+    prem: number;
 }

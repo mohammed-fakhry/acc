@@ -1,0 +1,27 @@
+.cardHeader {
+  color: $primaryBg; //rgb(72, 143, 199);
+  font-weight: bold;
+  padding-right: 10px;
+}
+
+.card {
+  border: none;
+  padding-top: 20px;
+  margin-right: 0px;
+  margin-left: 0px;
+  border-radius: 5px;
+  border-top: solid 1.2px $darkBg;
+  border-bottom: solid 1.2px $darkBg;
+}
+
+.infoCard {
+  background-color: $lightBg;
+  border-radius: 5px;
+}
+
+.doneInfo {
+  border-radius: 5px;
+  box-shadow: none;
+  background-color: rgb(245, 245, 245);
+  border: rgb(226, 226, 226) solid 1px;
+}

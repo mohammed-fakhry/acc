@@ -94,6 +94,7 @@ export class WorkersComponent implements OnInit {
   } // ngOnInit
 
   getBackendData() {
+    this._service.url = localStorage.getItem('tmpDB');
     this._service.getWorker().subscribe((data: Worker[]) => {
       this.workers = data;
     })
@@ -191,18 +192,23 @@ export class WorkersComponent implements OnInit {
   };
 
   buttonEffect(max: string, min: string) {
-    $(max).removeClass("btn-outline-info").addClass("btn-outline-secondary").animate({ fontSize: '1.5em' }, 50);
+    $(max).removeClass("btn-light").addClass("btn-outline-secondary").animate({ fontSize: '1.5em' }, 50);
     $(max).attr({ 'disabled': true });
 
-    $(min).removeClass('btn-outline-secondary').addClass('btn-outline-info').animate({ fontSize: '1em' }, 50);
+    $(min).removeClass('btn-outline-secondary').addClass('btn-light').animate({ fontSize: '1em' }, 50);
     $(min).attr({ 'disabled': false });
   };
+
+  activeAllBtns() {
+    $('.headerMainBtn').removeClass('btn-outline-secondary').addClass('btn-light').animate({ fontSize: '1em' }, 50);
+    $('.headerMainBtn').attr({ 'disabled': false });
+  }
 
   showWorkerSetting() {
     this._service.getWorkerRules().subscribe((dataRules: WorkerRules[]) => {
       this.rulesFromSql = dataRules;
     });
-    this.buttonEffect('#showAddWorkerBtn', '#workerEnquirybtn');
+    this.activeAllBtns()
     $('.workerClass').not('#workerSetting').hide();
     $('#workerSetting').show();
     this.WorkerRuleResult = this.rulesFromSql[0];
@@ -288,8 +294,8 @@ export class WorkersComponent implements OnInit {
   showWorkerCard(worker: Worker) {
     this.putWorkerDataValue(worker);
 
-    $('#showAddWorkerBtn').removeClass('btn-outline-secondary').addClass('btn-outline-info').animate({ fontSize: '1em' }, 50);
-    $('#workerEnquirybtn').removeClass('btn-outline-secondary').addClass('btn-outline-info').animate({ fontSize: '1em' }, 50);
+    $('#showAddWorkerBtn').removeClass('btn-outline-secondary').addClass('btn-light').animate({ fontSize: '1em' }, 50);
+    $('#workerEnquirybtn').removeClass('btn-outline-secondary').addClass('btn-light').animate({ fontSize: '1em' }, 50);
     $('#workerEnquirybtn').attr({ 'disabled': false });
     $('#showAddWorkerBtn').attr({ 'disabled': false });
 
@@ -357,8 +363,8 @@ export class WorkersComponent implements OnInit {
 
   showSalaryCount(worker: Worker) {
     this.putWorkerDataValue(worker);
-    $('#showAddWorkerBtn').removeClass('btn-outline-secondary').addClass('btn-outline-info').animate({ fontSize: '1em' }, 50);
-    $('#workerEnquirybtn').removeClass('btn-outline-secondary').addClass('btn-outline-info').animate({ fontSize: '1em' }, 50);
+    $('#showAddWorkerBtn').removeClass('btn-outline-secondary').addClass('btn-light').animate({ fontSize: '1em' }, 50);
+    $('#workerEnquirybtn').removeClass('btn-outline-secondary').addClass('btn-light').animate({ fontSize: '1em' }, 50);
     $('#workerEnquirybtn').attr({ 'disabled': false });
     $('#showAddWorkerBtn').attr({ 'disabled': false });
     $('.workerClass').not('#salaryCount').hide();
@@ -586,7 +592,7 @@ export class WorkersComponent implements OnInit {
 
   reCount() {
     this.counter = 0
-    $('#sunResult').removeClass('bg-success bg-danger')
+    $('#sunResult').removeClass('alert-success alert-danger')
   }
 
 } //---------------------end

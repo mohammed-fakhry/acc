@@ -4,7 +4,7 @@
 <!--headerSafeReport-->
 <div class="container-fluid" id="headerSafeReport">
     <div class="row">
-        <div class="col-md-2">
+        <div class="col-md-12 col-lg-2">
             <div class="card inpCard_row stickyInp">
                 <div class="theHeader p-3">
                     <h5 class="cardHeader">{{_safeDataService.safeNameForTransaction}}</h5>
@@ -30,14 +30,12 @@
                                 class="btn btn-outline-info text-center"><i class="fa fa-filter"></i></button>
                             <button class="btn mx-2 btn-outline-secondary text-center" (click)='printSafeTrance()'><i
                                     id="printSafeTrance" class="fa fa-print"></i></button>
-
                         </div>
                     </div>
                 </div>
             </div>
-
         </div>
-        <div class="col-md-10">
+        <div class="col-md-12 col-lg-10">
             <!-- <div class="card darkBg py-1"> -->
             <div class="card">
                 <!-- height: 920px; -->
@@ -68,7 +66,7 @@
                                 <td style="flex: 2;">{{safeRep.transactionExplain}}</td>
                                 <td class="text-center">{{safeRep.receiptValIn}}</td>
                                 <td class="{{safeRep.receiptKind_color}} text-center">{{safeRep.receiptValOut}}</td>
-                                <td class="darkBg text-center">{{safeRep.safeNet}}</td>
+                                <td class="smokeBg text-center">{{safeRep.safeNet}}</td>
                                 <td style="flex: 2;">{{safeRep.recieptNote}}</td>
                             </tr>
                         </tbody>

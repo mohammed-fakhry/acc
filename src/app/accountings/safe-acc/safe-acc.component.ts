@@ -25,7 +25,6 @@ export class SafeAccComponent implements OnInit {
     public _service: ServicesService, public _custService: CustomerService) { }
 
   ngOnInit() {
-
     this.logService.logStart(); this.logService.reternlog();
     this.getBackendData_Receipt();
     this._service.handleTableHeight();
@@ -71,24 +70,28 @@ export class SafeAccComponent implements OnInit {
   };
 
   getOtheAccInfo_backEnd() {
+    this._service.url = localStorage.getItem('tmpDB');
     this._service.getOtherAccSer().subscribe((data: OtherAcc[]) => {
       this.otherAcc = data;
     });
   };
 
   getSafeInfo_backEnd() {
+    this._safeDataService.url = localStorage.getItem('tmpDB');
     this._safeDataService.getSafes().subscribe((data: SafeData[]) => {
       this._safeDataService.safeList = data;
     });
   };
 
   getCustomerData_backEnd() {
+    this._custService.url = localStorage.getItem('tmpDB');
     this._custService.getCustomer().subscribe((data: Customer[]) => {
       this.customers = data;
     });
   };
 
   getReceiptData_backEnd() {
+    this._safeDataService.url = localStorage.getItem('tmpDB');
     this._safeDataService.getSafesReceipt().subscribe((data: SafeReceiptInpts[]) => {
       this._safeDataService.safeReceiptList = data;
     })
@@ -130,8 +133,8 @@ export class SafeAccComponent implements OnInit {
   };
 
   buttonEffect(max: string) {
-    $(max).removeClass("btn-outline-info").addClass("btn-outline-secondary").animate({ fontSize: '1.5em' }, 50);
-    $('.headerMainBtn').not(max).removeClass('btn-outline-secondary').addClass('btn-outline-info').animate({ fontSize: '1em' }, 50);
+    $(max).removeClass("btn-light").addClass("btn-outline-secondary").animate({ fontSize: '1.5em' }, 50);
+    $('.headerMainBtn').not(max).removeClass('btn-outline-secondary').addClass('btn-light').animate({ fontSize: '1em' }, 50);
 
     $('.headerMainBtn').not(max).attr({ 'disabled': false });
     $(max).attr({ 'disabled': true });

@@ -1,7 +1,7 @@
 <!--table-->
 <div class="container-fluid">
     <div class="row" style="padding-left: 20px;">
-        <div class="col-md-2 printX">
+        <div class="col-md-12 col-lg-2 printX">
             <div class="stickyInp">
                 <div class="card">
                     <!--   -->
@@ -22,36 +22,37 @@
                     </div>
                 </div>
                 <div id="totalProfits" style="display: none;">
-
-
                     <div class="card mt-2 p-2">
-                        <table class="table table-hover">
+                        <table class="table">
                             <thead class="navHeader">
                                 <tr>
                                     <th scope="col">بيان</th>
                                     <th scope="col">قيمة</th>
                                 </tr>
                             </thead>
+                            <div style="height: 5px;"></div>
                             <tbody>
-                                <tr class="textBtn" (click)="profitFilter('top')">
-                                    <th scope="row">ارباح</th>
-                                    <td class="bg-success text-light">{{totalAdd}}</td>
+                                <tr class="textBtn alert-success" (click)="profitFilter('top')">
+                                    <td scope="row">ارباح</td>
+                                    <td>{{totalAdd}}</td>
                                 </tr>
-                                <tr class="textBtn" (click)="profitFilter('less')">
-                                    <th scope="row">خسائر</th>
-                                    <td class="bg-danger text-light">{{totalMin}}</td>
+                                <tr class="textBtn alert-danger" (click)="profitFilter('less')">
+                                    <td scope="row">خسائر</td>
+                                    <td>{{totalMin}}</td>
                                 </tr>
-                                <tr class="smokeBg">
+                                <div style="height: 5px;"></div>
+                                <tr class="alert-warning">
                                     <th scope="row">مصاريف عمال</th>
                                     <td>{{employeeExpence}}</td>
                                 </tr>
-                                <tr class="bottomBorder smokeBg" style="border-bottom: solid 2px black;">
+                                <tr class="bottomBorder alert-warning" style="border-bottom: solid 2px black;">
                                     <th scope="row">مصاريف متنوعة</th>
                                     <td>{{otherExpence}}</td>
                                 </tr>
-                                <tr>
+                                <div style="height: 5px;"></div>
+                                <tr class="{{totalProfitClass}}">
                                     <th scope="row">صافى</th>
-                                    <td class="{{totalProfitClass}} p-2">{{totalProfit}}</td>
+                                    <td class="p-2">{{totalProfit}}</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -63,26 +64,29 @@
 
                     <div class="card mt-2 p-2" id="searchProd">
 
-                        <input [(ngModel)]="searchProd" placeholder="بحث باسم الصنف" class="form-control mb-2">
+                        <input type="search" [(ngModel)]="searchProd" placeholder="بحث باسم الصنف"
+                            class="form-control mb-2" (ngModelChange)='hideSortProducts()'>
                         <hr>
-                        <h6 class="mb-3 text-center cardHeader">ترتيب الاصناف بحسب الارباح</h6>
-                        <div class="d-flex justify-content-between mb-2">
-                            <button class="btn btn-outline-info sortBtns" id="sortTop" (click)="profitFilter('top')">
-                                <i class="fa fa-caret-up pl-2"></i>
-                                <span>اعلى ربح</span>
-                            </button>
-                            <button class="btn btn-outline-danger sortBtns mx-2" id="sortLess"
-                                (click)="profitFilter('less')">
-                                <i class="fa fa-caret-down pl-2"></i>
-                                <span>اقل ربح</span>
-                            </button>
-                            <button class="btn btn-outline-success sortBtns" id="sortPers"
-                                (click)="profitFilter('perc')">
-                                <i class="fa fa-caret-up pl-2"></i>
-                                <span>نسبة الربحية</span>
-                            </button>
+                        <div id="sortProducts">
+                            <h6 class="mb-3 text-center cardHeader">ترتيب الاصناف بحسب الارباح</h6>
+                            <div class="d-flex justify-content-between mb-2">
+                                <button class="btn btn-outline-info sortBtns" id="sortTop"
+                                    (click)="profitFilter('top')">
+                                    <i class="fa fa-caret-up pl-2"></i>
+                                    <span>اعلى ربح</span>
+                                </button>
+                                <button class="btn btn-outline-danger sortBtns mx-2" id="sortLess"
+                                    (click)="profitFilter('less')">
+                                    <i class="fa fa-caret-down pl-2"></i>
+                                    <span>اقل ربح</span>
+                                </button>
+                                <button class="btn btn-outline-success sortBtns" id="sortPers"
+                                    (click)="profitFilter('perc')">
+                                    <i class="fa fa-caret-up pl-2"></i>
+                                    <span>نسبة الربحية</span>
+                                </button>
+                            </div>
                         </div>
-
                     </div>
                 </div>
             </div>
@@ -112,16 +116,16 @@
                 </div>
             </div>
             <div>
-                <button class="btn btn-outline-info" (click)='showStockProfits()'>عرض الارباح</button>
+                <button class="btn btn-outline-primary" (click)='showStockProfits()'>عرض الارباح</button>
             </div>
         </div>
         <!-- productProfits -->
         <!-- cardBorderY -->
-        <div class="col-md-10 pt-3 smokeBg card" style="display: none; overflow-y: auto;" id="productProfits">
+        <div class="col-md-12 col-lg-10 pt-3 smokeBg card" style="display: none; overflow-y: auto;" id="productProfits">
             <div id="profitDetails" class="panel-body" style="height: 950px;">
                 <div *ngFor='let product of profitArr|searchProdProfit:searchProd; let i = index'
                     class="row mb-3 bg-light" style="padding: 10px 0;">
-                    <div class="col-md-1 darkGrayBg shadow-lg" style="text-align: center; border-radius: 5px;">
+                    <div class="col-md-1 {{product.profits.productCss()}} shadow" style="text-align: center; border-radius: 5px;">
                         <div class="text-center">
                             <h4 class="text-center pt-3">{{product.name}}</h4>
                         </div>
@@ -138,7 +142,7 @@
                                     </thead>
                                     <tbody class="table Body" style="overflow-y: hidden;">
                                         <div id="soldProds">
-                                            <tr class="bg-secondary text-white">
+                                            <tr class="alert-dark">
                                                 <td></td>
                                                 <th scope="row">
                                                     شراء
@@ -157,12 +161,12 @@
                                             </tr>
                                             <!--  -->
                                             <tr class="text-primary">
-                                                <th class="darkGrayBg">
+                                                <th class="alert-secondary">
                                                     <i class="fa fa-sort"></i>
                                                     متوسط
                                                 </th>
-                                                <td class="darkGrayBg">{{product.in.avr}}</td>
-                                                <td class="darkGrayBg">{{product.sold.avr}}</td>
+                                                <td class="alert-secondary">{{product.in.avr}}</td>
+                                                <td class="alert-secondary">{{product.sold.avr}}</td>
                                             </tr>
                                             <tr class="text-danger">
                                                 <th>
@@ -192,18 +196,17 @@
                                         </tr>
                                     </thead>
                                     <tbody class="table Body" style="overflow-y: hidden;">
-                                        <tr class="bg-secondary text-white">
-                                            <th scope="row">اخر سعر شراء</th>
-
+                                        <tr class="alert-dark">
+                                            <th style="flex: 2;" scope="row">اخر سعر شراء</th>
                                             <td>{{product.in.lastPrice()}}</td>
                                         </tr>
-                                        
+
                                         <tr>
                                             <th scope="row">شراء</th>
                                             <td>{{product.in.qty}}</td>
                                             <td>{{product.in.qtyVal}}</td>
                                         </tr>
-                                        <tr class="darkGrayBg">
+                                        <tr class="alert-secondary">
                                             <th scope="row">بيع</th>
                                             <td>{{product.sold.qty}}</td>
                                             <td>{{product.sold.qtyVal}}</td>
@@ -213,7 +216,7 @@
                                             <td>{{product.qtyRemain()}}</td>
                                             <td>{{product.qtyRemainVal}}</td>
                                         </tr>
-                                        
+
                                     </tbody>
                                 </table>
                             </div>
@@ -254,7 +257,7 @@
                             <div class="panel-body panel-flex-table standTable"
                                 style="height: 100%; margin-top: 0px; margin-bottom: 5px;">
                                 <table class="flex-table table">
-                                    <thead class="bg-secondary text-white">
+                                    <thead class="alert-dark">
                                         <tr class="navHeader text-center">
                                             <th scope="col" style="flex: 2;">بيان</th>
                                             <th scope="col">سعر</th>
@@ -264,13 +267,13 @@
                                         </tr>
                                     </thead>
                                     <tbody class="table Body" style="overflow-y: hidden;">
-                                        <tr class="bg-secondary text-white">
+                                        <tr class="{{product.profits.profitsColor()}}">
                                             <th scope="col" style="flex: 2;">{{product.profits.profitCond()}} رصيد مباع
                                             </th>
                                             <td></td>
                                             <td></td>
                                             <td>{{product.profits.perc()}}</td>
-                                            <td class="{{product.profits.profitsColor()}}">{{product.profits.profit}}
+                                            <td>{{product.profits.profit}}
                                             </td>
                                         </tr>
                                         <tr>
@@ -285,7 +288,7 @@
                                         </tr>
                                         <tr style="border-top: black solid 1px;"
                                             *ngIf="product.profitLastPrice.total.val() < product.recommendedPrice.total.val()"
-                                            class="darkGrayBg">
+                                            class="alert-secondary">
                                             <th scope="row" style="flex: 2;">سعر موصى به</th>
                                             <td>{{product.recommendedPrice.price()}}</td>
                                             <td>{{product.recommendedPrice.profit()}}</td>
@@ -301,7 +304,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-10" id='customersProfits' style="display: none;">
+        <div class="col-md-12 col-lg-10" id='customersProfits' style="display: none;">
             <!-- <div class="cardBorderY"> -->
             <div class="card" id="profitDetails">
                 <!-- style="height: 950px;" -->

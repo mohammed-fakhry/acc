@@ -36,7 +36,7 @@ export class CustomerService {
   constructor(private http: HttpClient) { }
 
   // defult url
-  url: string = 'http://localhost/accounting/'
+  url: string = localStorage.getItem('tmpDB'); //'http://localhost/accounting/'
 
   getCustomer() {
     return this.http.get<Customer[]>(`${this.url}customerList.php`);

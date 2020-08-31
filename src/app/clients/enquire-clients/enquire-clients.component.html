@@ -1,0 +1,31 @@
+<div class="card mt-3">
+    <div class="d-flex justify-content-between px-2">
+        <h2 class="cardHeader">بيانات العملاء</h2>
+        <div>
+            <input type="search" name="searchClient" [(ngModel)]="searchClient" placeholder="بحث باسم العميل" class="form-control printX"
+                id="searchClient">
+        </div>
+    </div>
+    <hr>
+    <div class="panel-body panel-flex-table tableWithHeader">
+        <table class="flex-table table table-hover">
+            <thead class="navHeader text-light">
+                <tr>
+                    <th>اسم العميل</th>
+                    <th>رقم الهاتف</th>
+                    <th>العنوان</th>
+                    <th class="printX">تعديل</th>
+                </tr>
+            </thead>
+            <tbody class=" mt-3 tableBody">
+                <tr *ngFor="let client of _clientService.clients|searchClient:searchClient;">
+                    <td class="textBtn btn-outline-secondary" (click)='showClientDetails(client)'>{{client.clientName}}</td>
+                    <td>{{client.clientTell}}</td>
+                    <td>{{client.clientAddress}}</td>
+                    <td class="textBtn btn-outline-success ml-2 printX" id="showCliebtDetails"
+                        (click)="editClientDetails(client)"><i class="fa fa-edit"></i></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

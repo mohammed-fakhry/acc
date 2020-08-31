@@ -8,6 +8,7 @@ import { UnitesComponent } from './unites/unites.component';
 import { MainSettingComponent } from './main-setting/main-setting.component';
 import { TheStocksComponent } from './accountings/stocks/the-stocks/the-stocks.component';
 import { SafeAccComponent } from './accountings/safe-acc/safe-acc.component';
+import { ClientsComponent } from './clients/clients.component';
 
 
 const routes: Routes = [
@@ -17,6 +18,7 @@ const routes: Routes = [
   {path:'workers', component:WorkersComponent},
   {path:'workers/:id', component:WorkersComponent},
   {path:'customers', component:CustomerComponent},
+  {path:'clients', component:ClientsComponent},
   {path:'unites', component:UnitesComponent},
   {path:'MainSetting', component:MainSettingComponent},
   {path:'stocks', component:TheStocksComponent},

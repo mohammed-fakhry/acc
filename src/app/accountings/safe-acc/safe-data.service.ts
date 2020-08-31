@@ -21,20 +21,28 @@ export class SafeDataService {
 
   // safe transaction
   safeTransactionArr: SafeTransaction[];
+  cellArry: any[]
 
   receiptDoneMsg = {
     recieptNum: () => null,
-    from: () => '',
-    to: () => '',
-    shadowFst: '',
-    shadowSnd: '',
+    from: {
+      text: () => '',
+      css: ''
+    },
+    
+    to: {
+      text: () => '',
+      css: ''
+    },
+    fstCss: '',
+    sndCss: '',
     val: null,
     notes: ''
   }
 
   constructor(private http: HttpClient) { }
 
-  url: string = 'http://localhost/accounting/';
+  url: string = localStorage.getItem('tmpDB'); //'http://localhost/accounting/';
 
   creatSafe(safe: SafeData) {
     return this.http.post(`${this.url}postSafe.php`, safe)

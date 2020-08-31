@@ -24,11 +24,13 @@ export class ProfitsComponent implements OnInit {
   stockInfo: Stock;
   searchProd: string;
 
+  sortProducts: HTMLElement;
+
   constructor(public _stockService: StocksService,
     public _theStocksComponent: TheStocksComponent, public _servicesService: ServicesService, public _safeDataService: SafeDataService, public _service: ServicesService) { }
 
   ngOnInit() {
-
+    this.sortProducts = document.querySelector('#sortProducts') as HTMLElement;
   };
 
   stockProdArr: any[];
@@ -54,7 +56,7 @@ export class ProfitsComponent implements OnInit {
 
   theStock: Stock;
   theIndex: number;
-  theStockName: string = ''
+  theStockName: string = '';
 
   showProfitOptions(stock, index) {
 
@@ -66,9 +68,16 @@ export class ProfitsComponent implements OnInit {
     $('#productProfits').hide();
     $('#customersProfits').hide();
     $('#totalProfits').hide();
-    $('.chooseBtn').not(`#showStockProfits${this.theIndex}`).removeClass('btn-secondary').addClass('btn-light');
-    $(`#showStockProfits${this.theIndex}`).removeClass('btn-light').addClass('btn-secondary');
+    $('.chooseBtn').not(`#showStockProfits${this.theIndex}`).removeClass('lightBg').addClass('btn-light');
+    $(`#showStockProfits${this.theIndex}`).removeClass('btn-light').addClass('lightBg');
 
+  };
+
+  //window.getComputedStyle(x).display === "none"
+  hideSortProducts() {
+    if (window.getComputedStyle(this.sortProducts).display !== "none") {
+      this.sortProducts.style.display = 'none';
+    };
   };
 
   dateSortFrom: any;
@@ -94,7 +103,9 @@ export class ProfitsComponent implements OnInit {
 
     $('#containerLoader').fadeIn();
 
-    $('.sortBtns').attr({'disabled': false})
+    $('.sortBtns').attr({ 'disabled': false })
+
+    this.sortProducts.style.display = 'block'
 
     const getHandleAdd = new Promise((res) => {
       this._stockService.getHandleAddtoStockPrimList().subscribe((data: HandleAddPrimBE[]) => {
@@ -199,6 +210,7 @@ export class ProfitsComponent implements OnInit {
           }
           otherAccTotals.push(receiptVal_acc)
         }
+
         this.otherExpence = this._service.sumArry(otherAccTotals);
 
 
@@ -225,7 +237,13 @@ export class ProfitsComponent implements OnInit {
           }
           otherAccTotals.push(receiptVal_acc)
         }
+
         this.otherExpence = this._service.sumArry(otherAccTotals);
+        console.log({
+          arr: otherAccArry,
+          totalArr: otherAccTotals,
+          total: this.otherExpence
+        })
       }
 
     };
@@ -372,7 +390,7 @@ export class ProfitsComponent implements OnInit {
               name: stockProds[i].productName,
               productId: stockProds[i].productId,
               qtyRemain: () => (pricesDetailsArr.in.totalQty - pricesDetailsArr.sold.totalQty),
-              qtyRemainVal: ((pricesDetailsArr.in.totalQty - pricesDetailsArr.sold.totalQty) * Math.floor(pricesDetailsArr.in.avarege())),
+              qtyRemainVal: parseFloat(((pricesDetailsArr.in.totalQty - pricesDetailsArr.sold.totalQty) * Math.floor(pricesDetailsArr.in.avarege())).toFixed(2)),
               onlyProfitMsg: () => {
                 if (this.filtered) {
                   return `كمية بيع | ${pricesDetailsArr.sold.totalQty}`
@@ -383,7 +401,7 @@ export class ProfitsComponent implements OnInit {
 
               in: {
                 qty: pricesDetailsArr.in.totalQty,
-                qtyVal: pricesDetailsArr.in.totalPrices.toFixed(0),
+                qtyVal: parseFloat(pricesDetailsArr.in.totalPrices.toFixed(1)),
                 maxPrice: pricesDetailsArr.in.maxPrice,
                 minPrice: pricesDetailsArr.in.minPrice,
                 lastPrice: () => mainArry.in.pricesArr()[lastIndex_in],
@@ -392,7 +410,7 @@ export class ProfitsComponent implements OnInit {
 
               sold: {
                 qty: pricesDetailsArr.sold.totalQty,
-                qtyVal: pricesDetailsArr.sold.totalPrices,
+                qtyVal: parseFloat(pricesDetailsArr.sold.totalPrices.toFixed(1)),
                 maxPrice: pricesDetailsArr.sold.maxPrice,
                 minPrice: pricesDetailsArr.sold.minPrice,
                 lastPrice: () => mainArry.sold.pricesArr()[lastIndex_Sold],
@@ -410,20 +428,21 @@ export class ProfitsComponent implements OnInit {
                 },
                 profitsColor: () => {
                   if (prodDetails.profits.profit < 0) {
-                    return 'bg-danger text-light'
+                    return 'alert-danger'
                   } else {
-                    return 'bg-success text-light'
+                    return 'alert-success'
                   }
                 },
                 perc: () => {
                   let perc = Math.floor((prodDetails.profits.profit / prodDetails.sold.qtyVal) * 100)
                   return `${perc}%`
-                }
+                },
+                productCss: () => (prodDetails.profits.profit < 0) ? 'alert-danger' : 'navHeader'
               },
 
               profitForSort: ((Math.floor(pricesDetailsArr.sold.avarege - Math.floor(pricesDetailsArr.in.avarege()))) * pricesDetailsArr.sold.totalQty),
               percForSort: ((((Math.floor(pricesDetailsArr.sold.avarege - Math.floor(pricesDetailsArr.in.avarege()))) * pricesDetailsArr.sold.totalQty) / (pricesDetailsArr.sold.totalPrices)) * 100), // () => Math.floor((prodDetails.profits.profit / prodDetails.sold.qtyVal) * 100),
-              
+
               profitLastPrice: {
                 val: () => {
                   if (prodDetails.qtyRemain() < 0) {
@@ -511,12 +530,12 @@ export class ProfitsComponent implements OnInit {
       .then(makeHandlePrice).then((profitArray: any[]) => {
 
         let arrTotals = profitArray.map(element => element.profits.profit);
-        
+
         let arrMin = arrTotals.filter(total => total < 0);
         let arrAdd = arrTotals.filter(total => total > 0);
 
         this.totalProfit = (this._servicesService.sumArry(arrTotals) + this.employeeExpence + this.otherExpence).toLocaleString();
-        this.totalProfitClass = (parseInt( this.totalProfit) < 0) ?  'bg-danger text-white' : 'lightBg';
+        this.totalProfitClass = (parseInt(this.totalProfit) < 0) ? 'alert-danger' : 'alert-info';
         this.totalMin = this._servicesService.sumArry(arrMin);
         this.totalAdd = this._servicesService.sumArry(arrAdd);
 
@@ -600,8 +619,8 @@ export class ProfitsComponent implements OnInit {
           colorTotal: ''
         };
 
-        (newObj.unitProfit < 0) ? newObj.color = 'bg-danger text-white' : newObj.color = 'bg-success text-white';
-        (newObj.totalProfit < 0) ? newObj.colorTotal = 'bg-danger text-white' : newObj.colorTotal = 'text-dark';
+        (newObj.unitProfit < 0) ? newObj.color = 'alert-danger' : newObj.color = 'alert-success';
+        (newObj.totalProfit < 0) ? newObj.colorTotal = 'alert-danger' : newObj.colorTotal = 'text-dark';
 
         this.profitArrCust.push(newObj);
       };
@@ -613,22 +632,22 @@ export class ProfitsComponent implements OnInit {
 
   };
 
-  sortBtnsEffect = (diactive:string, active:string) => {
-    $(`${active}`).attr({'disabled': true});
-    $(`${diactive}`).not(`${active}`).attr({'disabled': false});
+  sortBtnsEffect = (diactive: string, active: string) => {
+    $(`${active}`).attr({ 'disabled': true });
+    $(`${diactive}`).not(`${active}`).attr({ 'disabled': false });
   };
 
   profitFilter = (cond: string) => {
 
     if (cond == 'top') {
       this.profitArr.sort(this._service.sortArry('profitForSort', 'desc'));
-      this.sortBtnsEffect('.sortBtns','#sortTop');
+      this.sortBtnsEffect('.sortBtns', '#sortTop');
     } else if (cond == 'less') {
       this.profitArr.sort(this._service.sortArry('profitForSort'));
-      this.sortBtnsEffect('.sortBtns','#sortLess');
+      this.sortBtnsEffect('.sortBtns', '#sortLess');
     } else if (cond == 'perc') {
       this.profitArr.sort(this._service.sortArry('percForSort', 'desc'));
-      this.sortBtnsEffect('.sortBtns','#sortPers');
+      this.sortBtnsEffect('.sortBtns', '#sortPers');
     }
   };
 

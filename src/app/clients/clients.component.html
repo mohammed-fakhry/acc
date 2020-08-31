@@ -1,0 +1,30 @@
+<!--fadeLayer-->
+<div class="fadeLayer" id="theClientsFadeLayer">
+    <div class="container p-3 card askForDelete" style="display: none;">
+        <h3 class="p-3 bg-danger text-light">هل انت متأكد من حذف</h3>
+        <hr>
+        <!--<div class="d-flex flex-row-reverse">
+            <button class="btn btn-danger mr-2" id="deleteStock" (click)="deleteStock()">نعم</button>
+            <button class="btn btn-info" id="hideFadeLayer">الغاء</button>
+        </div>-->
+    </div>
+</div>
+<!--header-->
+<div class="p-1 navHeader theNav" id="mainClientsHeader">
+    <nav class="navbar">
+        <div class="form-inline">
+            <h1 class="px-2">العملاء</h1>
+            <div class="headerLeftBorder"></div>
+            <button style="font-size: 1.5em;" class="btn btn-outline-secondary ml-2 mx-2 headerMainBtn"
+                id="showClientsBtn" (click)="showClientsEnquir()" disabled>استعلام</button>
+            <button class="btn btn-light ml-2 mx-2 headerMainBtn"
+                id="showAddClient" (click)="showAddClient('new')">اضافة</button>
+        </div>
+    </nav>
+</div>
+<!-- enquireClient -->
+<app-enquire-clients id="enquireClient" class="clientsClass mainContainer" style="display: block;"></app-enquire-clients>
+<!-- addClient -->
+<app-add-client id="addClient" class="clientsClass mainContainer"></app-add-client>
+<!-- clientDetails -->
+<app-client-details id="clientDetails" class="clientsClass mainContainer"></app-client-details>

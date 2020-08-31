@@ -5,6 +5,12 @@ import { FormGroup, FormBuilder } from '@angular/forms';
 import { UnitData } from '../unit-data';
 import { UnitService } from '../unit.service';
 import { ServicesService } from '../services.service';
+import { TowerData } from '../tower-data';
+import { ContractData } from '../contract-data';
+import { ContractVaildInpts } from '../contract-vaild-inpts';
+import { ContractInpts } from '../contract-inpts';
+import { ClientServiceService } from '../client-service.service';
+import { ClientsData } from '../clients-data';
 
 @Component({
   selector: 'app-unites',
@@ -22,164 +28,348 @@ export class UnitesComponent implements OnInit {
   remainPrice: number;
   remainPaid: number;
   preMoneyResult: number;
-  searchTxt:string;
-  
+  searchTxt: string;
+
   // addUnit vars
-  unitData: FormGroup;
   unitDataView: UnitData;
   unites: UnitData[];
-  addBtnVal:string;
+  addBtnVal: string;
+  //unitQtys: number;
+  //fstUnitNum: number;
+  unitBuildingNum: string;
+
+  // towerData
+  towerDataArr: TowerData[];
+  choosTowerArr: any[];
+  // towerDetails
+  theTowerInfo: TowerData;
+  towerUnits: UnitData[] = [];
+
+  // clientsData
+  clients: ClientsData[];
 
   calcRemain() {
-    console.time('calc')
     this.totalPrice = this.metrPrice * this.apartWidth;
     this.preMoneyResult = (this.totalPrice * this.preMoney) / 100;
     this.remainPrice = this.totalPrice - this.preMoneyResult;
     this.remainPaid = Math.ceil(this.remainPrice / this.years / 12);
-    //this.remainPaid = this.remainPrice / this.years / 12
-    console.timeEnd('calc')
-  };
+  }
   constructor(public router: Router, public logService: LoginService,
-     public formBuilder: FormBuilder , public unitService: UnitService,
-     public _service: ServicesService) { }
+    public formBuilder: FormBuilder, public _unitService: UnitService,
+    public _service: ServicesService, public _clientService: ClientServiceService) { }
 
   ngOnInit() {
-    
+
     this.logService.logStart(); this.logService.reternlog();
-    /*if (this.logService.isUser == false) {
-      this.router.navigate(['/logIn'])
-    }*/
 
     // getUnites
-    this.unitService.getUnites().subscribe((data: UnitData[]) => {
+    this._unitService.url = localStorage.getItem('tmpDB');
+    this._unitService.getUnites().subscribe((data: UnitData[]) => {
       this.unites = data;
-    })
+    });
 
     // unitData Model
-    this.unitDataView = {
-      unitId: null,
-      unitNum: null,
-      unitBuildingNum: null,
-      unitExtent: null,
-      unitPrice: null,
-      unitCompany: null,
-      unitDate: null,
-    }
+    this.unitDataView = new UnitData();
 
-    // unitData FormGroup
-    this.unitData = this.formBuilder.group({
-      unitId: [''],
-      unitNum: [''],
-      unitBuildingNum: [''],
-      unitExtent: [''],
-      unitPrice: [''],
-      unitCompany: [''],
-      unitDate: [''],
+    // getTowers
+    this._unitService.getTowers().subscribe((data: TowerData[]) => {
+      this.towerDataArr = data;
     });
+
+    // getClients
+    this._clientService.url = localStorage.getItem('tmpDB');
+    this._clientService.getClients().subscribe((data: ClientsData[]) => {
+      this.clients = data
+    })
 
     // Methods
     $('#hideFadeLayer').click(function () {
-      $('#DelFade').fadeOut('fast')
-      $('.askForDelete').fadeOut('fast').removeClass('animate')
+      $('.fadeLayer').hide()
+      $('.askForDelete').removeClass('animate')
     })
-    $('#hideCalcLayer').click(function() {
-      $('#calcFade').fadeOut('fast')
-      $('#calculator').fadeOut('fast').removeClass('animate');
+    $('#hideCalcLayer').click(function () {
+      $('#calcFade').hide()
+      $('#calculator').removeClass('animate');
       this._service.clearForm();
     })
-  } // ngOnInit
 
-  buttonEffect(max: string, min: string) {
-    $(max).removeClass("btn-outline-info").addClass("btn-outline-secondary").animate({ fontSize: '1.5em' }, 50);
-    $(max).attr({'disabled' : true});
+    this._service.handleTableHeight();
+  }; // ngOnInit
 
-    $(min).removeClass('btn-outline-secondary').addClass('btn-outline-info').animate({ fontSize: '1em' }, 50);
-    $(min).attr({'disabled' : false});
+  buttonEffect(max: string, min: string, min2: string) {
+    $(max).removeClass("btn-light").addClass("btn-outline-secondary").animate({ fontSize: '1.5em' }, 50);
+    $(min).removeClass('btn-outline-secondary').addClass('btn-light').animate({ fontSize: '1em' }, 50);
+    $(min2).removeClass('btn-outline-secondary').addClass('btn-light').animate({ fontSize: '1em' }, 50);
   };
 
   // show Methods
   showAddUnit() {
     this._service.clearForm();
     this.resetValues();
+
+    this.choosTowerArr = this.towerDataArr.map((tower) => {
+      return { name: `${tower.towerName} - ${tower.towerStage}`, id: tower.towerId, stadge: tower.towerStage, alpha: tower.towerName }
+    });
+
     $('.unitsClass').not('#addUnit').hide();
     $('#addUnit').show();
     $('#unitSearch').hide(100);
     $('#addNewUnitBtn').html('اضافة');
     $('#addUnit h2:first').html('اضافة بيانات وحدة');
-    this.buttonEffect('#showAddUnitBtn','#unitEnquirybtn');
-    //$('#showAddUnitBtn').removeClass("btn-outline-info").addClass("btn-outline-secondary").animate({ fontSize: '1.5em' }, 50);
-    //$('#unitEnquirybtn').removeClass('btn-outline-secondary').addClass('btn-outline-info').animate({ fontSize: '1em' }, 50);
-    //$('#showAddUnitBtn').attr({'disabled' : true});
-    //$('#unitEnquirybtn').attr({'disabled' : false});
-  }
-
-  showUnitEnquiry() {
-    $('.unitsClass').not('#unitEnquiry').hide();
-    $('#unitEnquiry').show();
-    $('#unitSearch').show(100);
-    this.buttonEffect('#unitEnquirybtn','#showAddUnitBtn');
-    // $('#unitEnquirybtn').removeClass("btn-outline-info").addClass("btn-outline-secondary").animate({ fontSize: '1.5em' }, 50);
-    // $('#showAddUnitBtn').removeClass('btn-outline-secondary').addClass('btn-outline-info').animate({ fontSize: '1em' }, 50);
-    // $('#showAddUnitBtn').attr({'disabled' : false});
-    // $('#unitEnquirybtn').attr({'disabled' : true});
+    this.buttonEffect('#mainAdd_Towers', '#mainEnquir_Towers', '#mainContracts');
   };
 
-  showUpdateUnit(unit) {
-    $('.unitsClass').not('#addUnit').hide();
-    $('#addUnit').show();
+  showAddContract() {
+
+    this._unitService.getUnites().subscribe((data: UnitData[]) => {
+      this.unites = data;
+    });
+
+    //this._service.clearForm();
+    $('.unitsClass').not('#addContract').hide();
+    $('#addContract').show();
     $('#unitSearch').hide(100);
-    $('#addNewUnitBtn').html('تعديل');
-    $('#addUnit h2:first').html('تعديل بيانات وحدة');
+    this.buttonEffect('#mainContracts', '#mainAdd_Towers', '#mainEnquir_Towers');
+    // reset inptVals
+    this._unitService.contractData = new ContractData();
+    this._unitService.contractVaildInpts = new ContractVaildInpts();
+    this._unitService.contractInpts = new ContractInpts();
+    // lock unready inpts
+    this._unitService.lockedInputs = {
+      unitLocked: true,
+      prepaidPercLocked: true,
+    };
+    $('.form-control').removeClass('is-invalid')
+
+    this._unitService.towerInfoArr = this.towerDataArr.map((tower) => {
+      return { name: `${tower.towerName} - ${tower.towerStage}`, id: tower.towerId, stadge: tower.towerStage }
+    });
+
+    // get the name of day
+    let today_Date = Date.now();
+    let d = new Date(today_Date);
+    this._unitService.todayName = this._unitService.days[d.getDay()];
+    //console.log(d.getDay())
+
+    let day = d.getDate();
+    let month = d.getMonth() + 1;
+    let year = d.getFullYear();
+    this._unitService.TodayDate = `${day} / ${month} / ${year}`
+  };
+
+  showAddTower() {
+    this._service.clearForm();
+    $('.unitsClass').not('#addTower').hide();
+    $('#addTower').show();
+    $('#unitSearch').hide(100);
+    this.buttonEffect('#mainAdd_Towers', '#mainEnquir_Towers', '#mainContracts');
+  };
+
+  showUnitEnquiry() {
+
+    $('#containerLoader').fadeIn();
+    this.unites = []
+
+    const getUnites = new Promise((res) => {
+      this._unitService.getUnites().subscribe((data: UnitData[]) => {
+        //this.unites = data;
+        res(data)
+      });
+    })
+
+    getUnites.then((data: UnitData[]) => this.unites = data).then(() => {
+      this.unites.sort(this._service.sortArry('unitNum'))
+
+      $('.unitsClass').not('#unitEnquiry').hide();
+      $('#unitEnquiry').show();
+      $('#unitSearch').show(100);
+      this.buttonEffect('#mainEnquir_Towers', '#mainAdd_Towers', '#mainContracts');
+      $('#containerLoader').fadeOut();
+    })
+  };
+
+  showTowerEnquiry() {
+    $('.unitsClass').not('#towerEnquire').hide();
+    $('#towerEnquire').show();
+    $('#unitSearch').hide(100);
+    this.buttonEffect('#mainEnquir_Towers', '#mainAdd_Towers', '#mainContracts');
+  };
+
+  clientValid = {
+    cond: true,
+    msg: '',
+    class: ''
+  };
+
+
+  showUpdateUnit(unit: UnitData) {
+
     this.unitDataView = unit;
-    this.buttonEffect('#showAddUnitBtn','#unitEnquirybtn');
-    // $('#showAddUnitBtn').removeClass('btn-outline-secondary').addClass('btn-outline-info').animate({ fontSize: '1em' }, 50);
-    // $('#unitEnquirybtn').removeClass('btn-outline-secondary').addClass('btn-outline-info').animate({ fontSize: '1em' }, 50);
-    // $('#showAddUnitBtn').attr({'disabled' : false});
-    // $('#unitEnquirybtn').attr({'disabled' : false});
+
+    const mapTower = new Promise((res) => {
+      this.choosTowerArr = this.towerDataArr.map((tower) => {
+        return {
+          name: `${tower.towerName} - ${tower.towerStage}`,
+          id: tower.towerId,
+          stadge: tower.towerStage,
+          alpha: tower.towerName
+        }
+      });
+      res(this.choosTowerArr)
+    }).then(() => {
+      //clientInpt validation
+      this.clientValid.cond = true
+      this.clientValid.class = ''
+
+      this.unitBuildingNum = `${unit.towerName} - ${unit.towerStage}`;
+      $('#unitBuildingNum').val(this.unitBuildingNum);
+
+      $('#addNewUnitBtn').html('تعديل');
+      $('#addUnit h2:first').html('تعديل بيانات وحدة');
+      $('.unitsClass').not('#addUnit').hide();
+      $('#addUnit').show();
+      $('#unitSearch').hide(100);
+      //$('#unitDateHead').show();
+      this.buttonEffect('#mainAdd_Towers', '#mainEnquir_Towers', '#mainContracts');
+    })
+
   };
 
 
   resetValues() {
-    this.unitData = this.formBuilder.group({
-      unitId: [''],
-      unitNum: [''],
-      unitBuildingNum: [''],
-      unitExtent: [''],
-      unitPrice: [''],
-      unitCompany: [''],
-      unitDate: [''],
-    });
-    this.unitDataView = {
-      unitId: null,
-      unitNum: null,
-      unitBuildingNum: null,
-      unitExtent: null,
-      unitPrice: null,
-      unitCompany: null,
-      unitDate: null,
-    };
-  }
-  // crud
-  addNewUnit() {
-    this.addBtnVal = $('#addNewUnitBtn').html()
-    if(this.addBtnVal = 'اضافة') {
-      this.unitService.creatUnit(this.unitData.value).subscribe();
-      this._service.clearForm()
-    } else if (this.addBtnVal = 'تعديل') {
-      this.unitService.updateUnit(this.unitDataView).subscribe(() => {
-      });
-    };
+    this.unitDataView = new UnitData();
   };
+
+  //apartNum: number;
+
+  generateUnitSerial() {
+
+    let towerInfo = this.choosTowerArr.find(tower => tower.name == this.unitBuildingNum);
+
+    let theStrings = {
+      towerNum: () => {
+        if (towerInfo) {
+          if (towerInfo.alpha.length > 1) {
+            return towerInfo.alpha
+          } else {
+            return `0${towerInfo.alpha}`
+          }
+        } else {
+          return ''
+        };
+      },
+      stage: () => {
+        if (towerInfo) {
+          if (towerInfo.stadge == 'أ') {
+            return '1'
+          } else if (towerInfo.stadge == 'ب') {
+            return '2'
+          } else if (towerInfo.stadge == 'ج') {
+            return '3'
+          } else { return '' }
+        } else {
+          return ''
+        }
+      },
+      floor: () => {
+        if (this.unitDataView.unitFloar == null) {
+          return ''
+        }
+        if (this.unitDataView.unitFloar >= 0) {
+          if (this.unitDataView.unitFloar > 9) {
+            return `${this.unitDataView.unitFloar}`
+          } else {
+            return `0${this.unitDataView.unitFloar}`
+          }
+        } else {
+          return ''
+        }
+      },
+      apartNum: () => {
+        if (this.unitDataView.apartNum == null) {
+          return ''
+        }
+        if (this.unitDataView.apartNum >= 0) {
+          if (this.unitDataView.apartNum > 9) {
+            return `${this.unitDataView.apartNum}`
+          } else {
+            return `0${this.unitDataView.apartNum}`
+          }
+        } else {
+          return ''
+        }
+      }
+    };
+
+    this.unitDataView.unitNum = `1${theStrings.towerNum()}${theStrings.stage()}${theStrings.floor()}${theStrings.apartNum()}`;
+  };
+
+  //theClientName: string;
+  isClientNameValid = () => {
+
+    let clientInfo = this.clients.find(client => client.clientName == this.unitDataView.clientName);
+
+    if (clientInfo) {
+      this.unitDataView.clientId = clientInfo.clientId;
+      this.clientValid.cond = true
+      this.clientValid.class = ''
+    } else {
+      this.clientValid = {
+        cond: false,
+        msg: 'خطأ فى اسم العميل',
+        class: 'is-invalid pr-4'
+      }
+    }
+
+  }
+
+  addNewUnit() {
+
+    this.addBtnVal = $('#addNewUnitBtn').html();
+
+    let towerInfo = this.choosTowerArr.find(tower => tower.name == this.unitBuildingNum);
+
+    this.unitDataView.towerId = towerInfo.id;
+    this.unitDataView.towerStage = towerInfo.stadge;
+    this.unitDataView.towerName = towerInfo.alpha;
+
+    if (this.clientValid.cond) {
+      if (this.addBtnVal == 'اضافة') {
+
+        this._unitService.creatUnit(this.unitDataView).subscribe(() => {
+          //console.log('added')
+        },
+          error => {
+            //console.log(error.status);
+            if (error.status == 201) {
+              this.showUnitEnquiry();
+              this._service.clearForm();
+            }
+          }
+        );
+
+      } else if (this.addBtnVal == 'تعديل') {
+
+        this._unitService.updateUnit(this.unitDataView).subscribe(() => {
+          //console.log('added')
+          // this.showUnitEnquiry();
+          this.showTowerEnquiry();
+          //this._service.clearForm();
+        });
+      };
+    };
+
+  }; //addNewUnit
 
   askForDeleteUnit(unit: UnitData) {
     $('#DelFade').show(0)
-    $('.askForDelete').show().addClass('animate')
+    $('.askForDelete').addClass('animate')
     this.unitDataView = unit;
   };
 
   deletUnit() {
     $('#DelFade').hide()
-    this.unitService.deleteUnitSer(this.unitDataView.unitId)
+    this._unitService.deleteUnitSer(this.unitDataView.unitId)
       .subscribe(data => {
         this.unites = this.unites.filter(u => u !== this.unitDataView)
       });
@@ -187,7 +377,11 @@ export class UnitesComponent implements OnInit {
 
   showcalculator() {
     $('#calcFade').show(0);
-    $('#calculator').show().addClass('animate')
+    $('#calculator').addClass('animate')
+  };
+
+  showContractsDetail = () => {
+    
   }
 } // end
 

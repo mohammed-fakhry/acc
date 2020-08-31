@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import { Router } from '@angular/router';
+import { UserData } from './user-data';
 
 @Injectable({
   providedIn: 'root'
@@ -59,7 +60,7 @@ export class LoginService {
   }
 
   getUsers() {
-    return this.http.get<Worker[]>('http://localhost/accounting/getUsers.php');
+    return this.http.get<UserData[]>('http://localhost/auth/getUsers.php');
   }
 
 }

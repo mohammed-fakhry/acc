@@ -10,6 +10,7 @@ import { StockPridge } from '../../stock-pridge';
 import { StockTransactionD } from '../../stock-transaction-d';
 import { StockTransaction } from '../../stock-transaction';
 import { ProductsClass } from '../../products-class';
+import { Stock } from 'src/app/accountings/stock';
 
 @Component({
   selector: 'app-stoc-trance-prem',
@@ -26,6 +27,9 @@ export class StocTrancePremComponent implements OnInit {
   invoiceInp: InvoiceInp;
   ivoiceItemesForEdit: any[];
   totalInvoice: any[];
+  // stocks
+  firstStockInp: string;
+  secondStockInp: string;
   // validation
   inptDisabled: boolean;
   isAddInvVaild: boolean;
@@ -40,8 +44,8 @@ export class StocTrancePremComponent implements OnInit {
 
   ngOnInit() {
 
-    $('#hideFadeLayerMP').click(function () {
-      $('.hideFadeLayerMP').fadeOut('fast');
+    $('#hideFadeLayerTP').click(function () {
+      $('#tranceFadeLayer').fadeOut('fast');
       $('.askForDelete').removeClass('animate')
     })
 
@@ -411,6 +415,8 @@ export class StocTrancePremComponent implements OnInit {
   };
 
   invNumTrance: number;
+  stockInfo: Stock;
+  secStockInfo: Stock;
 
   showNewTranceInvoice() {
 
@@ -483,19 +489,28 @@ export class StocTrancePremComponent implements OnInit {
 
       this.resetTranceinvoiceValu();
 
-      let stockInfo = this._stockService.stocks.find(stock => stock.stockId == invoiceInfo.stockId)
-      let secStockInfo = this._stockService.stocks.find(stock => stock.stockId == invoiceInfo.sndStockId)
+      this.stockInfo = this._stockService.stocks.find(stock => stock.stockId == invoiceInfo.stockId)
+      this.secStockInfo = this._stockService.stocks.find(stock => stock.stockId == invoiceInfo.sndStockId)
+
+      if (!this.stockInfo) {
+        this.stockInfo = new Stock();
+      };
+      if (!this.secStockInfo) {
+        this.secStockInfo = new Stock();
+      };
 
       if (invoiceInfo.stockId == 1) {
         $('#fstStockNameForTrance').val('اذن اضافة');
+        this.stockInfo.stockName = 'اذن اضافة'
       } else {
-        $('#fstStockNameForTrance').val(stockInfo.stockName);
+        $('#fstStockNameForTrance').val(this.stockInfo.stockName);
       };
 
       if (invoiceInfo.sndStockId == 1) {
         $('#sndStockNameForTrance').val('اذن خصم');
+        this.secStockInfo.stockName = 'اذن خصم'
       } else {
-        $('#sndStockNameForTrance').val(secStockInfo.stockName);
+        $('#sndStockNameForTrance').val(this.secStockInfo.stockName);
       };
 
       $('#tranceStockTransactionId').val(invoiceInfo.stockTransactionId);

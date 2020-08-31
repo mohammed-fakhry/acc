@@ -2,8 +2,7 @@
 <div class="fadeLayer" id="customerFadeLayer">
     <!--askForDelete-->
     <div class="container p-3 card askForDelete" style="display: none;">
-        <h3 class="p-3 bg-danger text-light">هل انت متأكد من حذف</h3>
-        <hr>
+        <h3 class="p-3 alert alert-danger">هل انت متأكد من حذف</h3>
         <h4 class="mb-4">{{customerData.value.customerName}}</h4>
         <div class="d-flex flex-row-reverse">
             <button class="btn btn-danger mr-2" id="deletCustomer" (click)="deletCustomer()">نعم</button>
@@ -21,17 +20,16 @@
     <nav class="navbar">
         <div class="form-inline">
             <button class="btn btn-outline-success d-none" (click)='makeCustomerInvArry()'>test</button>
-            <h1 class="px-2" style="font-weight: bold;">العملاء</h1>
+            <h1 class="px-2" style="font-weight: bold;">موردين المخازن</h1>
             <div class="headerLeftBorder"></div>
-            <button class="btn btn-outline-info mx-2" id="showAddCustomerBtn"
-                (click)="ShowAddNewCustomer()">اضافة</button>
-            <button class="btn btn-outline-info mx-2" id="customerEnquirybtn"
-                (click)="setCustomerRemain()">استعلام</button>
+            <button class="btn btn-light mx-2" id="showAddCustomerBtn" (click)="ShowAddNewCustomer()">اضافة</button>
+            <button class="btn btn-light mx-2" id="customerEnquirybtn" (click)="setCustomerRemain()">استعلام</button>
             <div class="headerLeftBorder"></div>
             <div class="col text-center" id="printCustomerList" style="display: none;">
-                <input *ngIf="router.url === '/customers'" [(ngModel)]="searchCust" placeholder="بحث باسم العميل"
-                    class="form-control mx-3" id="searchCust">
-                <i class="fa fa-print btn py-2 btn-outline-light text-center" (click)='printThisCustomerList()' style="height: calc(1.5em + .75rem + 2px);"></i>
+                <input *ngIf="router.url === '/customers'" type="search" [(ngModel)]="searchCust"
+                    placeholder="بحث باسم العميل" class="form-control mx-3" id="searchCust">
+                <i class="fa fa-print btn py-2 btn-outline-light text-center" (click)='printThisCustomerList()'
+                    style="height: calc(1.5em + .75rem + 2px);"></i>
             </div>
         </div>
     </nav>
@@ -42,11 +40,11 @@
         class="date_time">
     <div class="card mt-3 customerClass printable" id="customerEnquiry">
         <!-- style="height: 930px;" -->
-        <div class="panel-body panel-flex-table" id="customerListTable" >
+        <div class="panel-body panel-flex-table" id="customerListTable">
             <table class="flex-table table table-hover">
                 <thead class="navHeader text-light">
                     <tr>
-                        <th>الاسم</th>
+                        <th style="flex: 1.5;">الاسم</th>
                         <th>حساب</th>
                         <!-- <th>تليفون</th> -->
                         <!--<th class="d-none">الوحدة</th>-->
@@ -59,7 +57,7 @@
                 <tbody class="mt-3">
                     <tr *ngFor="let customer of custRemainArry|searchCustomer:searchCust; let i=index">
                         <td class="{{customer.nameColor()}} textBtn" id="showCustomerCard"
-                            (click)="showCustomerCard(customer)">{{customer.customerName}}</td>
+                            (click)="showCustomerCard(customer)" style="flex: 1.5;">{{customer.customerName}}</td>
                         <td id="remain{{i}}" class="{{customer.color()}}">{{customer.remain()}}</td>
                         <!-- <td>{{customer.customerTell}}</td> -->
                         <!--<td class="d-none">{{customer.customerUnit}}</td>-->
@@ -68,8 +66,9 @@
                                 (click)="showCustomerCard(customer)"><i class="fa fa-id-card"></i></button></td> -->
                         <td class="textBtn btn-outline-success ml-2 HideCol" id="showUpdatecustomer"
                             (click)="showUpdateCustomer(customer)"><i class="fa fa-edit"></i></td>
-                        <td class="textBtn btn-outline-danger ml-2 HideCol" aria-disabled="true" id="askDeletcustomerBtn"
-                            (click)="askForDelete(customer)" style="display: none;"><i class="fa fa-trash"></i></td>
+                        <td class="textBtn btn-outline-danger ml-2 HideCol" aria-disabled="true"
+                            id="askDeletcustomerBtn" (click)="askForDelete(customer)" style="display: none;"><i
+                                class="fa fa-trash"></i></td>
                     </tr>
                 </tbody>
             </table>
@@ -168,17 +167,23 @@
         <div class="d-flex justify-content-around">
             <h3 class="card-title cardHeader">حساب {{customerData.value.customerName}}</h3>
             <div class="form-inline">
-                <h5 class="cardHeader">اجمالى مستحق : </h5>                
+                <h5 class="cardHeader">اجمالى مستحق : </h5>
                 <h5 class="{{customerRemainColor}} mr-2" id="customerRemain">{{customerData.value.customerRemain}}</h5>
             </div>
-            <div id="balanceContain" class="form-inline inpCard printX" style="display: none; border-radius: 5px; padding: 0px;">
-                <h5 class="px-2 cardHeader">ميزان</h5>
-                <h5 id="balance" class="px-3">{{balance}}</h5>
+            <div id="balanceContain" class="infoCard textBtn pt-2" style="display: none; border-radius: 5px;"
+                (click)="clearMarkedCells()">
+                <div id='balanceInfo'>
+                    <div class="d-flex justify-content-between">
+                        <h5 class="px-2">ميزان</h5>
+                        <h5 id="balance" class="px-3">{{balance}}</h5>
+                    </div>
+                </div>
+                <h3 id="cancelBalance" class="text-center text-danger" style="display: none;">الغاء</h3>
             </div>
             <i class="fa fa-print btn p-3 btn-outline-secondary text-center" (click)='printThis()'></i>
         </div>
         <!-- style="height: 780px;" -->
-        <div class="panel-body panel-flex-table mt-2 tableWithHeader" id="printCustomerInvArr" >
+        <div class="panel-body panel-flex-table mt-2 tableWithHeader" id="printCustomerInvArr">
             <table class="flex-table table table-hover text-center">
                 <thead class="navHeader text-light text-center">
                     <tr>
@@ -208,8 +213,10 @@
                         <td style="flex: 3;" id="invoiceNum{{i}}" class="{{invoice.invKindColor}}">
                             {{invoice.invoiceKind}} رقم :
                             {{invoice.invoiceNum}}</td>
-                        <td class="text-center invCell" id="invoiceTotalAdd{{i}}" (click)='markCell(i, "invoiceTotalAdd")'>{{invoice.invoiceTotalAdd}}</td>
-                        <td class="text-center invCell" id="invoiceTotalMin{{i}}" (click)='markCell(i, "invoiceTotalMin")'>{{invoice.invoiceTotalMin}}</td>
+                        <td class="text-center invCell" id="invoiceTotalAdd{{i}}"
+                            (click)='markCell(i, "invoiceTotalAdd")'>{{invoice.invoiceTotalAdd}}</td>
+                        <td class="text-center invCell" id="invoiceTotalMin{{i}}"
+                            (click)='markCell(i, "invoiceTotalMin")'>{{invoice.invoiceTotalMin}}</td>
                         <td id="netTotal{{i}}" class="{{invoice.netTotalColor}} text-center">
                             {{invoice.netTotal}}
                         </td>
