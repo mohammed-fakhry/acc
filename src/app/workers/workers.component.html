@@ -1,7 +1,7 @@
 <!--fadeLayer-->
 <div class="fadeLayer" id="workersfadeLayer">
     <div class="container p-3 card askForDelete">
-        <h3 class="p-3 alert alert-danger">هل انت متأكد من حذف</h3>
+        <h3 class="p-3 alert dangerBg">هل انت متأكد من حذف</h3>
         <div class="row">
             <div class="col">
                 <div class="pt-3 font-weight-bolder px-3 doneInfo">
@@ -31,7 +31,7 @@
         <hr>
         <!-- <h4 class="mb-2">{{workerData.value.workerName}}</h4> -->
         <div class="d-flex flex-row-reverse">
-            <button class="btn btn-outline-danger mr-2" id="deletWorker" (click)="deletWorker()">نعم</button>
+            <button class="btn btnDanger mr-2" id="deletWorker" (click)="deletWorker()">نعم</button>
             <button class="btn btn-outline-info" id="hideFadeLayer">الغاء</button>
         </div>
 
@@ -160,7 +160,7 @@
                     </div>
                 </div>
                 <hr>
-                <button class="btn btn-outline-primary ml-2" [disabled]="workerData.invalid" type="submit"
+                <button class="btn btnPrimary ml-2" [disabled]="workerData.invalid" type="submit"
                     id="addNewWorkerBtn"></button>
             </form>
 
@@ -440,7 +440,7 @@
                 </div>
                 <!---->
                 <div class="pt-4 mt-3" style="border-top: solid 1.5px teal;">
-                    <button class="btn btn-outline-primary ml-2" type="submit" id="saveSettingBtn">حفظ الاعدادات</button>
+                    <button class="btn btnPrimary ml-2" type="submit" id="saveSettingBtn">حفظ الاعدادات</button>
                 </div>
             </form>
         </div>

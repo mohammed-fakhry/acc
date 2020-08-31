@@ -1,7 +1,7 @@
 <!--fadeLayer-->
 <div class="fadeLayer" id="tranceFadeLayer">
     <div class="container p-3 card askForDelete">
-        <h3 class="p-3 alert alert-danger">هل انت متأكد من حذف</h3>
+        <h3 class="p-3 alert dangerBg">هل انت متأكد من حذف</h3>
         <div class="row">
             <div class="col">
                 <div class="pt-3 font-weight-bolder px-3 doneInfo">
@@ -30,7 +30,7 @@
         </div>
         <hr>
         <div class="d-flex flex-row-reverse">
-            <button class="btn btn-outline-danger mr-2" id="deleteTrancePrem" (click)="deleteTranceInvoice()">نعم</button>
+            <button class="btn btnDanger mr-2" id="deleteTrancePrem" (click)="deleteTranceInvoice()">نعم</button>
             <button class="btn btn-outline-info" id="hideFadeLayerTP">الغاء</button>
         </div>
     </div>
@@ -47,7 +47,7 @@
             <option *ngFor="let invoice of _theStockComp.tranceInvArry" value="{{invoice.invoiceSearchVal}}">
             </option>
         </datalist>
-        <button class="btn btn-outline-primary ml-2" type="submit" id="callTranceInvoiceBtn"
+        <button class="btn btnPrimary ml-2" type="submit" id="callTranceInvoiceBtn"
             (click)="showNewTranceInvoice()">اذن
             جديد</button>
     </div>
@@ -56,7 +56,7 @@
             <h2 class="cardHeader">اذن نقل</h2>
             <input disabled id="invNumTrance" class="text-center" type="text" value="رقم الفاتورة ( {{invNumTrance}} )">
             <input [(ngModel)]='_service.date_time' type="datetime-local">
-            <button id="deleteTranceInvoice" style="display: none;" class="btn btn-outline-danger printX"
+            <button id="deleteTranceInvoice" style="display: none;" class="btn btnDanger printX"
                 [disabled]='deleteInvTranceBtnDisabled' (click)="showDeleteTranceInvoice()">حذف
                 الاذن</button>
         </div>
@@ -123,12 +123,12 @@
                                 <div *ngIf="inpt.inpVaild" class="text-danger vaildAlert">{{inpt.productVaildMsg}}</div>
                             </td>
                             <td><input type="number" name="qty{{i}}" [(ngModel)]="inpt.qty" class="form-control"
-                                    id="qty{{i}}" (keyup)="calcTotals('inpt')" [disabled]="inptDisabled">
+                                    id="qty{{i}}" (keyup)="calcTotals(i)" [disabled]="inptDisabled">
                                 <div *ngIf="inpt.Qtyinvaild" class="text-danger vaildAlert">{{inpt.qtyMsg}}
                                 </div>
                             </td>
                             <td><input type="number" name="price{{i}}" [(ngModel)]="inpt.price" class="form-control"
-                                    (change)="calcTotals('inpt')">
+                                    (change)="calcTotals(i)">
                             </td>
                             <td class="text-center font-weight-bold pt-4">{{inpt.total}}</td>
                             <input name="stockTransactionDetailsId{{i}}" [(ngModel)]="inpt.stockTransactionDetailsId"
@@ -141,7 +141,7 @@
                 </table>
             </div>
             <div class="d-flex justify-content-between">
-                <button [disabled]="isAddInvVaild" class="btn btn-outline-primary mb-1 mt-3 printX" type="submit"
+                <button [disabled]="isAddInvVaild" class="btn btnPrimary mb-1 mt-3 printX" type="submit"
                     id="newTranceInvoicetBtn"></button>
                 <div class="form-inline ml-5 mt-3 darkBg text-light py-2 rounded">
                     <h5 class="text-light pr-3">اجمالى الفاتورة : </h5>

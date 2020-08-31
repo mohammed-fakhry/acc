@@ -1,7 +1,7 @@
 <!--fadeLayer-->
 <div class="fadeLayer" id="theStockFadeLayer">
     <div class="container p-3 card askForDelete" style="display: none; width: 35%;" id="askForDeleteStock">
-        <h3 class="p-3 alert alert-danger">تحذير!</h3> <!-- تحذير! هل انت متأكد من حذف -->
+        <h3 class="p-3 alert dangerBg">تحذير!</h3> <!-- تحذير! هل انت متأكد من حذف -->
         <h6>هل انت متأكد من حذف {{_stockService.stockDataView.stockName}}</h6>
         <!-- <h4 class="mb-2">
             {{_stockService.stockDataView.stockName}}
@@ -9,12 +9,12 @@
         <p class="smokeBg p-2">{{deleteMsg}}</p>
         <hr>
         <div class="d-flex flex-row-reverse">
-            <button class="btn btn-outline-danger mr-2" id="deleteStock" (click)="deleteStock()">نعم</button>
+            <button class="btn btnDanger mr-2" id="deleteStock" (click)="deleteStock()">نعم</button>
             <button class="btn btn-outline-info" id="hideFadeLayer">الغاء</button>
         </div>
     </div>
     <div class="container card p-3 askForDelete" style="display: none; width: 40%;" id="stockPerDone">
-        <h3 class="bg-info text-white p-3">تم تسجيل "{{_stockService.invoiceDoneMsg.invoiceKind}}"</h3>
+        <h3 class="navHeader p-3">تم تسجيل "{{_stockService.invoiceDoneMsg.invoiceKind}}"</h3>
         <!--  -->
         <hr>
         <div class="row">
@@ -46,13 +46,13 @@
         <hr>
         <div class="d-flex flex-row">
             <!--fade_addNewApBtn-->
-            <button class="btn btn-outline-info ml-2 fadeBtns" id="fade_addNewApBtn"
+            <button class="btn btnPrimary ml-2 fadeBtns" id="fade_addNewApBtn"
                 (click)="showAddToStockPrem_fade()">فاتورة شراء جديدة</button>
             <!--fade_minNewApBtn-->
-            <button class="btn btn-outline-info ml-2 fadeBtns" id="fade_minNewApBtn"
+            <button class="btn btnPrimary ml-2 fadeBtns" id="fade_minNewApBtn"
                 (click)="showMinToStockPrem_fade()">فاتورة بيع جديدة</button>
             <!--fade_showTranceStockPrem-->
-            <button class="btn btn-outline-info ml-2 fadeBtns" id="fade_showTranceStockPrem"
+            <button class="btn btnPrimary ml-2 fadeBtns" id="fade_showTranceStockPrem"
                 (click)="showTranceStockPrem_fade()">اذن مخزن جديد</button>
             <!--backToTheStart-showTranceStockPrem-->
             <button class="btn btn-outline-secondary" id="Hidefade_addNewApBtn"

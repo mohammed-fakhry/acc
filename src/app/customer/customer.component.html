@@ -2,7 +2,7 @@
 <div class="fadeLayer" id="customerFadeLayer">
     <!--askForDelete-->
     <div class="container p-3 card askForDelete" style="display: none;">
-        <h3 class="p-3 alert alert-danger">هل انت متأكد من حذف</h3>
+        <h3 class="p-3 alert dangerBg">هل انت متأكد من حذف</h3>
         <h4 class="mb-4">{{customerData.value.customerName}}</h4>
         <div class="d-flex flex-row-reverse">
             <button class="btn btn-danger mr-2" id="deletCustomer" (click)="deletCustomer()">نعم</button>
@@ -114,7 +114,7 @@
                     </div>
                     
                 </div> -->
-                <button class="btn btn-outline-primary ml-2" type="submit" id="addNewCustomerBtn"></button>
+                <button class="btn btnPrimary ml-2" type="submit" id="addNewCustomerBtn"></button>
             </form>
         </div>
     </div>

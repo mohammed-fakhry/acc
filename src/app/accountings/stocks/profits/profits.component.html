@@ -36,7 +36,7 @@
                                     <td scope="row">ارباح</td>
                                     <td>{{totalAdd}}</td>
                                 </tr>
-                                <tr class="textBtn alert-danger" (click)="profitFilter('less')">
+                                <tr class="textBtn dangerBg" (click)="profitFilter('less')">
                                     <td scope="row">خسائر</td>
                                     <td>{{totalMin}}</td>
                                 </tr>
@@ -57,7 +57,7 @@
                             </tbody>
                         </table>
                         <hr>
-                        <button *ngIf='filtered' class="btn btn-outline-primary m-2" id="showProfitsPreBtn"
+                        <button *ngIf='filtered' class="btn btnPrimary m-2" id="showProfitsPreBtn"
                             (click)='toggleStockProfits(stockInfo)'>تفاصيل حركة
                             البيع</button>
                     </div>
@@ -75,7 +75,7 @@
                                     <i class="fa fa-caret-up pl-2"></i>
                                     <span>اعلى ربح</span>
                                 </button>
-                                <button class="btn btn-outline-danger sortBtns mx-2" id="sortLess"
+                                <button class="btn btnDanger sortBtns mx-2" id="sortLess"
                                     (click)="profitFilter('less')">
                                     <i class="fa fa-caret-down pl-2"></i>
                                     <span>اقل ربح</span>
@@ -116,7 +116,7 @@
                 </div>
             </div>
             <div>
-                <button class="btn btn-outline-primary" (click)='showStockProfits()'>عرض الارباح</button>
+                <button class="btn btnPrimary" (click)='showStockProfits()'>عرض الارباح</button>
             </div>
         </div>
         <!-- productProfits -->

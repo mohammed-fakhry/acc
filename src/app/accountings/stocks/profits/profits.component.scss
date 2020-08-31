@@ -1,18 +1,6 @@
-/* .card {
-    tr {
-        th,td {
-            text-align: center;
-            height: 43px;
-    }
-}};
-
-h5 {
-    text-align: center;
-}; */
-
 #totalProfits {
-    
-    th,td {
+    th,
+    td {
         padding-top: 10px;
         padding-bottom: 7px;
         text-align: center;
@@ -23,6 +11,12 @@ thead {
     top: 0px;
 }
 
+.textBtn :active {
+    background-color: white;
+}
+
 @media print {
-    #productProfits {overflow-y: hidden;}
+    #productProfits {
+        overflow-y: hidden;
+    }
 }

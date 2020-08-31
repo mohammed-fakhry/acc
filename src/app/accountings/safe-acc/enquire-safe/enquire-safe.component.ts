@@ -12,10 +12,12 @@ import { ServicesService } from 'src/app/services.service';
 })
 export class EnquireSafeComponent implements OnInit {
 
+  balanceContain: HTMLElement;
+
   constructor(public _safeDataService: SafeDataService, public _safeAccComponent: SafeAccComponent, public _service: ServicesService) { }
 
   ngOnInit() {
-
+    this.balanceContain = document.querySelector('#balanceContain') as HTMLElement;
   }
 
   fillData(safe) {
@@ -32,8 +34,8 @@ export class EnquireSafeComponent implements OnInit {
     $('#addNewSafeBtn').html('تعديل')
     $('.safeClass').not('#addSafe').hide();
     $('#addSafe').show();
-    $('#showAddSafeBtn').removeClass("btn-outline-info").addClass("btn-outline-secondary").animate({ fontSize: '1.5em' }, 50);
-    $('.headerMainBtn').not('#showAddSafeBtn').removeClass('btn-outline-secondary').addClass('btn-outline-info').animate({ fontSize: '1em' }, 50);
+    $('#showAddSafeBtn').removeClass("btn-light").addClass("btn-outline-secondary").animate({ fontSize: '1.5em' }, 50);
+    $('.headerMainBtn').not('#showAddSafeBtn').removeClass('btn-outline-secondary').addClass('btn-light').animate({ fontSize: '1em' }, 50);
     $('.headerMainBtn').attr({ 'disabled': false });
   };
 
@@ -132,10 +134,11 @@ export class EnquireSafeComponent implements OnInit {
     this._safeDataService.safeNameForTransaction = safe.safeName;
     $('.safeClass').not('#safeTransaction').hide();
     $('#SafeReportTable').hide();
+    this.balanceContain.style.display = 'none'
     $('#safeTransaction').fadeIn('fast');
     $('.headerMainBtn').attr({ 'disabled': false });
-    //$('#showAddSafeBtn').removeClass("btn-outline-info").addClass("btn-outline-secondary").animate({ fontSize: '1.5em' }, 50);
-    $('.headerMainBtn').removeClass('btn-outline-secondary').addClass('btn-outline-info').animate({ fontSize: '1em' }, 50);
+    //$('#showAddSafeBtn').removeClass("btn-light").addClass("btn-outline-secondary").animate({ fontSize: '1.5em' }, 50);
+    $('.headerMainBtn').removeClass('btn-outline-secondary').addClass('btn-light').animate({ fontSize: '1em' }, 50);
   };
 
 }

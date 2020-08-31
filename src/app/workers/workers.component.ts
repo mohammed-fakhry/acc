@@ -592,7 +592,7 @@ export class WorkersComponent implements OnInit {
 
   reCount() {
     this.counter = 0
-    $('#sunResult').removeClass('alert-success alert-danger')
+    $('#sunResult').removeClass('alert-success dangerBg')
   }
 
 } //---------------------end

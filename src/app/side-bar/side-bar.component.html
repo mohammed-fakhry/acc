@@ -1,6 +1,6 @@
 <div id="fadeBackupDone" (click)="fadeEffect()" class="fadeLayer">
     <div class="container p-3 card askForDelete" style="display: none;" id="backupDone">
-        <h1 class="p-3 bg-info text-white">تم حفظ النسخة الاحتياطية</h1>
+        <h1 class="p-3 navHeader">تم حفظ النسخة الاحتياطية</h1>
         <table class="table">
             <tbody>
                 <tr>
@@ -13,7 +13,8 @@
                 </tr>
             </tbody>
         </table>
-        <button class="btn btn-outline-info" id="hideBackupDone" (click)='hideBackUpDone()'>تم</button>
+        <button class="btn btnPrimary" id="hideBackupDone" (click)='hideBackUpDone()'>تم</button>
+
     </div>
 </div>
 <div id="fadeEffect" (click)="fadeEffect()" class="fadeLayer"></div>
@@ -27,7 +28,7 @@
         <div id="sidebarBtns" style="display: none;">
             <!--style="display: none;"-->
             <!--logOut-->
-            <button class="btn btn-outline-danger" id="logOut" (click)="gO()">تسجيل
+            <button class="btn btnDanger" id="logOut" (click)="gO()">تسجيل
                 الخروج</button>
             <hr class="text-center text-dark">
             <!--dbBtn-->

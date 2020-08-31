@@ -36,6 +36,11 @@ export class StocTrancePremComponent implements OnInit {
   fstStockNameVaild: boolean;
   sndStockNameVaild: boolean;
 
+  btnValid = {
+    cond: true,
+    msg: null
+  }
+
   deleteInvTranceBtnDisabled: boolean;
   stockDetailsIdArr: any;
 
@@ -124,15 +129,21 @@ export class StocTrancePremComponent implements OnInit {
 
   makeTheStockProds() {
 
-    this.deleteInvTranceBtnDisabled = true;
+    /* this.deleteInvTranceBtnDisabled = true;
     this._theStockComp.testBackend();
-    let theStock = $('#fstStockNameForTrance').val();
+    
     this.theStockProd = {};
     this.theStockProds = [];
 
     let stockInfo = this._stockService.makeStockArry.find(
       stock => stock.stockName == theStock
-    );
+    ); */
+    let theStock = $('#fstStockNameForTrance').val();
+    let stockInfo: Stock = this._stockService.stocks.find(stock => stock.stockName == theStock);
+
+    this._theStockComp.getStockTrance.then((data: any[]) => {
+      this.theStockProds = this._theStockComp.stockProdFactory(stockInfo)
+    });
 
     if (stockInfo != undefined) {
       this.theStockProds = stockInfo.stockProducts;
@@ -160,7 +171,7 @@ export class StocTrancePremComponent implements OnInit {
     return rev
   };
 
-  isAddQtyVaild() {
+  isAddQtyVaild(i) {
 
     let fstStockNameForTrance = $('#fstStockNameForTrance').val();
 
@@ -374,8 +385,24 @@ export class StocTrancePremComponent implements OnInit {
     //};
   };
 
-  calcTotals(cond: string) {
+  isInvoiceVaild() {
+    if (this.fstStockNameVaild || this.sndStockNameVaild) {
+      this.isAddInvVaild = true;
+    } else {
+      for (let i = 0; i < this.invoiceInpArry.length; i++) {
+        if (this.invoiceInpArry[i].inpVaild || this.invoiceInpArry[i].Qtyinvaild) {
+          this.isAddInvVaild = true;
+        } else {
+          this.isAddInvVaild = false;
+          this.btnValid.cond = true
+        }
+      }
+    }
     this.deleteInvTranceBtnDisabled = true;
+  }
+
+  calcTotals(i) {
+    /* this.deleteInvTranceBtnDisabled = true;
     if (cond == 'inpt') {
       this.isAddQtyVaild();
     };
@@ -401,6 +428,42 @@ export class StocTrancePremComponent implements OnInit {
         this.totalInvoice.push(this.invoiceInpArry[i].total);
       };
     };
+
+    let total: any = this.sumArry(this.totalInvoice)
+    this.invoiceTotal = total; */
+
+    this.deleteInvTranceBtnDisabled = true;
+    this.totalInvoice = []
+    this.invoiceTotal = '0'
+
+    if (!this.btnValid.cond) {
+      this.isInvoiceVaild()
+    };
+
+    if (i != null) {
+
+      if (this.invoiceInpArry[i].Qtyinvaild) {
+        this.isInvoiceVaild()
+      };
+      this.isAddQtyVaild(i);
+      
+      if (this.invoiceInpArry[i].Qtyinvaild == false) {
+        if (this.invoiceInpArry[i].price > 0) {
+          this.invoiceInpArry[i].total = this.invoiceInpArry[i].qty * this.invoiceInpArry[i].price
+        };
+      }
+    } else {
+      for (let l = 0; l < this.invoiceInpArry.length; l++) {
+        if (this.invoiceInpArry[l].qty && this.invoiceInpArry[l].price) {
+          this.invoiceInpArry[l].total = this.invoiceInpArry[l].qty * this.invoiceInpArry[l].price;
+          this.totalInvoice = [...this.totalInvoice, this.invoiceInpArry[l].total]
+        }
+      }
+
+      
+    }
+
+    this.totalInvoice = this.invoiceInpArry.map(inv => inv.total);
 
     let total: any = this.sumArry(this.totalInvoice)
     this.invoiceTotal = total;
@@ -529,7 +592,7 @@ export class StocTrancePremComponent implements OnInit {
       this.ivoiceItemesForEdit = invoiceInfo.invoiceDetails;
       //
       this.makeTheStockProds();
-      this.calcTotals('inpt');
+      this.calcTotals(null);
 
       this.qtyIsOkArry = [];
 
@@ -544,7 +607,6 @@ export class StocTrancePremComponent implements OnInit {
         //this.invoiceInpArry[v].Qtyinvaild = false;
       }
 
-      this.isAddQtyVaild();
       $('#callTranceInvoice').hide();
       $('#tranceInvoiceForm').slideDown('fast');
       this.deleteInvTranceBtnDisabled = false;

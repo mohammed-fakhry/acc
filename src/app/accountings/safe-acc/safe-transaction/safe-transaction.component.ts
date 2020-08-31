@@ -12,23 +12,15 @@ import { SafeTransaction } from '../safe-transaction';
 export class SafeTransactionComponent implements OnInit {
 
   searchSafeTrance: string;
+  balance: number;
+  balanceContain: HTMLElement;
 
   constructor(public _safeAccComponent: SafeAccComponent, public _safeDataService: SafeDataService, public _service: ServicesService) { }
 
   ngOnInit() {
 
-    /* $(window).scroll( () => {
-
-      let scrolling = $(this).scrollTop();
-
-      if (scrolling >= 50) {
-        $("#topArr").fadeIn();
-      } else {
-        $("#topArr").fadeOut()
-      };
-
-    }) */
-
+    this.balanceContain = document.querySelector('#balanceContain') as HTMLElement;
+    this._safeDataService.cellArry = []
     //topArrow
     $("#topArr").click(function () { // scrollTop Button
 
@@ -48,13 +40,67 @@ export class SafeTransactionComponent implements OnInit {
   };
 
   printSafeTrance() {
-
+    $('#safeNamePrint').show();
+    $('#transactionExplain').removeClass('col-md-10').addClass('container-fluid')
     window.print();
+    $('#safeNamePrint').hide()
+    $('#transactionExplain').addClass('col-md-10').removeClass('container-fluid')
   };
 
-  reloadLoc() {
-    //location.reload();
-  };
+  markCell = (i, cell: string) => {
+
+    this.balanceContain.style.display = 'block'
+    const element = document.querySelector(`#${cell}${i}`);
+    $(`#${cell}${i}`).toggleClass('lightBg');
+
+    let dirIn = 'receiptValIn'
+    let dirOut = 'receiptValOut'
+
+    let num = 0;
+
+    let cond = element.classList.contains("lightBg")
+
+    if (cond) {
+
+      if (dirIn == cell) {
+        num = - this.filterdArr[i].receiptValIn
+        this._safeDataService.cellArry.push(num)
+      } else if (dirOut == cell) {
+        num = this.filterdArr[i].receiptValOut
+        this._safeDataService.cellArry.push(num)
+      };
+      $(`#${cell}${i}`).css('cursor', 'grabbing')
+
+    } else {
+
+      let index: number;
+
+      if (dirIn == cell) {
+        num = - this.filterdArr[i].receiptValIn
+        index = this._safeDataService.cellArry.findIndex(theCell => theCell == num);
+        this._safeDataService.cellArry.splice(index, 1)
+      } else if (dirOut == cell) {
+        num = this.filterdArr[i].receiptValOut;
+        index = this._safeDataService.cellArry.findIndex(theCell => theCell == num);
+        this._safeDataService.cellArry.splice(index, 1)
+      };
+      $(`#${cell}${i}`).css('cursor', 'grab')
+
+    };
+
+    if (this._safeDataService.cellArry.length == 0) {
+      this.balance = 0
+    } else {
+      this.balance = this._service.sumArry(this._safeDataService.cellArry)
+    };
+
+    if (this.balance < 0) {
+      $('#balance').css('color', 'red')
+    } else {
+      $('#balance').css('color', 'black')
+    };
+
+  }
 
   fstDateInvalid: boolean;
   sndDateInvalid: boolean;
@@ -62,6 +108,9 @@ export class SafeTransactionComponent implements OnInit {
   filterdArr: SafeTransaction[];
 
   filterByDate() {
+
+    this._safeDataService.cellArry = []
+    this.balanceContain.style.display = 'none'
 
     $('#containerLoader').fadeIn();
 

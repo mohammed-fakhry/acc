@@ -125,26 +125,31 @@ export class EnquireStocksComponent implements OnInit {
       return new Promise((res) => {
 
         let filterd = tranceArr.filter(trance => trance.stockId == stock.stockId || trance.sndStockId == stock.stockId);
+        let filterdProdsId = [...new Set(filterd.map(prod => prod.productId))];
+        
 
-        for (let i = 0; i < this._stockService.allProducts.length; i++) {
+        for (let i = 0; i < filterdProdsId.length; i++) {
+
+          let prodInfo = this._stockService.allProducts.find(prod => prod.productId == filterdProdsId[i]);
+          let handleProduct = this._stockService.handleBackEnd.find(prod => prod.productId == filterdProdsId[i] && prod.stockId == stock.stockId)
 
           if (filterd != undefined) {
 
             let addProdArry =
               filterd.filter(trance => {
-                return (trance.productId == this._stockService.allProducts[i].productId && trance.transactionType == 1)
-                  || (trance.productId == this._stockService.allProducts[i].productId && trance.transactionType == 3 && trance.sndStockId == stock.stockId)
+                return (trance.productId == filterdProdsId[i] && trance.transactionType == 1)
+                  || (trance.productId == filterdProdsId[i] && trance.transactionType == 3 && trance.sndStockId == stock.stockId)
               });
 
             let minProdArry =
               filterd.filter(trance => {
-                return (trance.productId == this._stockService.allProducts[i].productId && trance.transactionType == 2)
-                  || (trance.productId == this._stockService.allProducts[i].productId && trance.transactionType == 3 && trance.sndStockId != stock.stockId)
+                return (trance.productId == filterdProdsId[i] && trance.transactionType == 2)
+                  || (trance.productId == filterdProdsId[i] && trance.transactionType == 3 && trance.sndStockId != stock.stockId)
               });
 
             let productDet = { // the main object
 
-              productName: this._stockService.allProducts[i].productName,
+              productName: prodInfo.productName,
 
               in: {
                 qty: () => {
@@ -185,14 +190,19 @@ export class EnquireStocksComponent implements OnInit {
                   }
                 }
               },
-              
+
             }; // productDet
+            if (handleProduct.productQty != productDet.remain.qty()) {
+              handleProduct.productQty = productDet.remain.qty();
+              this._stockService.updateStockPridge(handleProduct).subscribe();
+            }
 
             products = [...products, productDet];
           };
         };
 
         this._stockService.productsFromStockArryView = products.filter(product => product.remain.qty() != 0);
+        //console.log(this._stockService.productsFromStockArryView)
 
         res(this._stockService.productsFromStockArryView);
       });

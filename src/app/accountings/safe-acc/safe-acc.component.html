@@ -1,11 +1,11 @@
 <!--fadeLayer-->
 <div class="fadeLayer" id="theSafeFadeLayer">
     <div class="container p-3 card askForDelete" style="display: none;">
-        <h3 class="p-3 alert-danger">هل انت متأكد من حذف</h3>
+        <h3 class="p-3 dangerBg">هل انت متأكد من حذف</h3>
         <hr>
     </div>
     <div class="container card askForDelete p-3" id="SafeReceiptDone" style="width: 40%;">
-        <h3 class="p-3 bg-info text-light">تم حفظ الايصال رقم ({{_safeDataService.receiptDoneMsg.recieptNum()}})</h3>
+        <h3 class="p-3 navHeader">تم حفظ الايصال رقم ({{_safeDataService.receiptDoneMsg.recieptNum()}})</h3>
         <hr>
         <div class="row">
             <div class="col">
@@ -37,7 +37,7 @@
         </div>
         <hr>
         <div class="d-flex flex-row">
-            <button class="btn btn-outline-info ml-2 fadeBtns" id="showAddSafeReceipt_fade"
+            <button class="btn primaryBtn ml-2 fadeBtns" id="showAddSafeReceipt_fade"
                 (click)="showAddNewRecipt_fade()">ايصال جديد</button>
             <button class="btn btn-outline-secondary" id="hideFadeLayer"
                 (click)="showSafeEnquir_fade()">الرئيسية</button>

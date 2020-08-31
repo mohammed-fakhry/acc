@@ -1,7 +1,7 @@
 <!--fadeLayer-->
 <div class="fadeLayer" id="fadeLayerAP">
     <div class="container p-3 card askForDelete">
-        <h3 class="p-3 alert alert-danger">هل انت متأكد من حذف</h3>
+        <h3 class="p-3 alert dangerBg">هل انت متأكد من حذف</h3>
         <div class="row">
             <div class="col">
                 <div class="pt-3 font-weight-bolder px-3 doneInfo">
@@ -30,7 +30,7 @@
         </div>
         <hr>
         <div class="d-flex flex-row-reverse">
-            <button class="btn btn-outline-danger mr-2" id="deleteAddPrem" (click)="deleteAddInvoice()">نعم</button>
+            <button class="btn btnDanger mr-2" id="deleteAddPrem" (click)="deleteAddInvoice()">نعم</button>
             <button class="btn btn-outline-info" id="hideFadeLayerAP">الغاء</button>
         </div>
     </div>
@@ -49,7 +49,7 @@
             <option *ngFor="let invoice of _theStockComp.addInvArry" value="{{invoice.invoiceSearchVal}}">
             </option>
         </datalist>
-        <button class="btn btn-outline-primary ml-2" type="submit" id="callInvoiceBtn" (click)="showAddNewInvoice()">فاتورة
+        <button class="btn btnPrimary ml-2" type="submit" id="callInvoiceBtn" (click)="showAddNewInvoice()">فاتورة
             جديدة</button>
     </div>
 
@@ -60,7 +60,7 @@
             <!--<div class="text-center">رقم الفاتورة ( {{invNum}} )</div>-->
             <input disabled id="invNum" class="text-center" type="text" value="رقم الفاتورة ( {{invNum}} )">
             <input [(ngModel)]='date_time' type="datetime-local" (change)="dateChanged()">
-            <button id="deleteAddInvoice" style="display: none;" class="btn btn-outline-danger printX"
+            <button id="deleteAddInvoice" style="display: none;" class="btn btnDanger printX"
                 [disabled]='deleteInvBtnDisabled' (click)="showDeleteAddInvoice()">حذف
                 الفاتورة</button>
         </div>
@@ -150,7 +150,7 @@
             <div *ngIf="!btnValid.cond" class="text-danger">{{btnValid.msg}}</div>
             <div class="d-flex justify-content-between">
                 <div class="form-inline">
-                    <button [disabled]="isAddInvVaild" class="btn btn-outline-primary mb-1 mt-3 printX" type="submit"
+                    <button [disabled]="isAddInvVaild" class="btn btnPrimary mb-1 mt-3 printX" type="submit"
                         id="addNewInvoicetBtn"></button>
                 </div>
                 <div class="form-inline ml-5  mt-3 darkBg text-light py-2 rounded">

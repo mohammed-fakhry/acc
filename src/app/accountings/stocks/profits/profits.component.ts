@@ -428,7 +428,7 @@ export class ProfitsComponent implements OnInit {
                 },
                 profitsColor: () => {
                   if (prodDetails.profits.profit < 0) {
-                    return 'alert-danger'
+                    return 'dangerBg'
                   } else {
                     return 'alert-success'
                   }
@@ -437,7 +437,7 @@ export class ProfitsComponent implements OnInit {
                   let perc = Math.floor((prodDetails.profits.profit / prodDetails.sold.qtyVal) * 100)
                   return `${perc}%`
                 },
-                productCss: () => (prodDetails.profits.profit < 0) ? 'alert-danger' : 'navHeader'
+                productCss: () => (prodDetails.profits.profit < 0) ? 'dangerBg' : 'navHeader'
               },
 
               profitForSort: ((Math.floor(pricesDetailsArr.sold.avarege - Math.floor(pricesDetailsArr.in.avarege()))) * pricesDetailsArr.sold.totalQty),
@@ -535,7 +535,7 @@ export class ProfitsComponent implements OnInit {
         let arrAdd = arrTotals.filter(total => total > 0);
 
         this.totalProfit = (this._servicesService.sumArry(arrTotals) + this.employeeExpence + this.otherExpence).toLocaleString();
-        this.totalProfitClass = (parseInt(this.totalProfit) < 0) ? 'alert-danger' : 'alert-info';
+        this.totalProfitClass = (parseInt(this.totalProfit) < 0) ? 'dangerBg' : 'alert-info';
         this.totalMin = this._servicesService.sumArry(arrMin);
         this.totalAdd = this._servicesService.sumArry(arrAdd);
 
@@ -619,8 +619,8 @@ export class ProfitsComponent implements OnInit {
           colorTotal: ''
         };
 
-        (newObj.unitProfit < 0) ? newObj.color = 'alert-danger' : newObj.color = 'alert-success';
-        (newObj.totalProfit < 0) ? newObj.colorTotal = 'alert-danger' : newObj.colorTotal = 'text-dark';
+        (newObj.unitProfit < 0) ? newObj.color = 'dangerBg' : newObj.color = 'alert-success';
+        (newObj.totalProfit < 0) ? newObj.colorTotal = 'dangerBg' : newObj.colorTotal = 'text-dark';
 
         this.profitArrCust.push(newObj);
       };

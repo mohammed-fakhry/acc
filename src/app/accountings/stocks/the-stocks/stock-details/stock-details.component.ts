@@ -24,12 +24,6 @@ export class StockDetailsComponent implements OnInit {
     let date = Date.now()
     let toDate = new Date (date)
     let dateStr = toDate.toUTCString(); //`${toDate.getFullYear()}, ${toDate.getMonth()}, ${toDate.getDay()}, ${toDate.getHours()}, ${toDate.getMinutes()}` //new Date(date)
-    console.log({
-      date: toDate,
-      str: dateStr,
-      result: this._service.setDate_time(dateStr),
-      dateConverted: new Date ('2020-29-6T1:54')
-    })
     this.today = this._service.setDate_time(dateStr)
   }
 

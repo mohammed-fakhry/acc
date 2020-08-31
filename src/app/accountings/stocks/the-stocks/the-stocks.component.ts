@@ -34,7 +34,7 @@ export class TheStocksComponent implements OnInit {
   ngOnInit() {
 
     this.logService.logStart(); this.logService.reternlog();
-    
+
     // getStocks data from backEnd
     this._service.handleTableHeight();
 
@@ -236,36 +236,39 @@ export class TheStocksComponent implements OnInit {
 
     let products = [];
 
-    let filterd = this.tranceArr.filter(trance => trance.stockId == stock.stockId || trance.sndStockId == stock.stockId);
+    let filterd = []
 
-    for (let i = 0; i < this._stockService.allProducts.length; i++) {
+    if (stock) {
+      filterd = this.tranceArr.filter(trance => trance.stockId == stock.stockId || trance.sndStockId == stock.stockId);
+      for (let i = 0; i < this._stockService.allProducts.length; i++) {
 
-      let addProdArry =
-        filterd.filter(trance => trance.productId == this._stockService.allProducts[i].productId &&
-          trance.transactionType == 1).map(trance => trance.Qty)
+        let addProdArry =
+          filterd.filter(trance => trance.productId == this._stockService.allProducts[i].productId &&
+            trance.transactionType == 1).map(trance => trance.Qty)
 
-      let minProdArry =
-        filterd.filter(trance => trance.productId == this._stockService.allProducts[i].productId &&
-          trance.transactionType == 2).map(trance => trance.Qty);
+        let minProdArry =
+          filterd.filter(trance => trance.productId == this._stockService.allProducts[i].productId &&
+            trance.transactionType == 2).map(trance => trance.Qty);
 
-      let addTrance = filterd.filter(trance => trance.productId == this._stockService.allProducts[i].productId &&
-        trance.transactionType == 3 && trance.sndStockId == stock.stockId).map(trance => trance.Qty);
+        let addTrance = filterd.filter(trance => trance.productId == this._stockService.allProducts[i].productId &&
+          trance.transactionType == 3 && trance.sndStockId == stock.stockId).map(trance => trance.Qty);
 
-      let minTrance = filterd.filter(trance => trance.productId == this._stockService.allProducts[i].productId &&
-        trance.transactionType == 3 && trance.sndStockId != stock.stockId).map(trance => trance.Qty);
+        let minTrance = filterd.filter(trance => trance.productId == this._stockService.allProducts[i].productId &&
+          trance.transactionType == 3 && trance.sndStockId != stock.stockId).map(trance => trance.Qty);
 
-      let productDet = {
-        productName: this._stockService.allProducts[i].productName,
-        plus: this._service.sumArry(addProdArry),
-        min: this._service.sumArry(minProdArry),
-        plusTrance: this._service.sumArry(addTrance),
-        minTrance: this._service.sumArry(minTrance),
-        productQty: ((this._service.sumArry(addProdArry) + this._service.sumArry(addTrance)) - (this._service.sumArry(minProdArry) + this._service.sumArry(minTrance)))
+        let productDet = {
+          productName: this._stockService.allProducts[i].productName,
+          plus: this._service.sumArry(addProdArry),
+          min: this._service.sumArry(minProdArry),
+          plusTrance: this._service.sumArry(addTrance),
+          minTrance: this._service.sumArry(minTrance),
+          productQty: ((this._service.sumArry(addProdArry) + this._service.sumArry(addTrance)) - (this._service.sumArry(minProdArry) + this._service.sumArry(minTrance)))
+        };
+
+        products = [...products, productDet]
+
       };
-
-      products = [...products, productDet]
-
-    };
+    }
 
     return products
   }
@@ -374,13 +377,15 @@ export class TheStocksComponent implements OnInit {
 
   showAddToStockPrem() {
 
+    $('#containerLoader').show()
+
     let getProds = new Promise((res) => {
       this._stockService.getProducts().subscribe((data: ProductsClass[]) => {
         this._stockService.allProducts = data;
         res(data);
       });
     })
-    
+
     let StockTrance = new Promise((res) => {
       this._stockService.getStockTransactionList().subscribe((data: StockTransaction[]) => {
         //this._stockService.stockTransactionArr = data;
@@ -421,11 +426,15 @@ export class TheStocksComponent implements OnInit {
         };
         this._service.clearForm();
 
+        $('#containerLoader').hide()
+
       });
   };
 
   newTranceInvNumber: number;
   showTranceStockPrem() {
+
+    $('#containerLoader').show()
 
     let getProds = new Promise((res) => {
       this._stockService.getProducts().subscribe((data: ProductsClass[]) => {
@@ -470,12 +479,16 @@ export class TheStocksComponent implements OnInit {
           this.newTranceInvNumber = this.tranceInvArry[lastArrIndx].invNumber + 1
         };
 
+        $('#containerLoader').hide()
+
       });
 
   };
 
   newMinInvNumber: number;
   showMinToStockPrem() {
+
+    $('#containerLoader').show()
 
     let getProds = new Promise((res) => {
       this._stockService.getProducts().subscribe((data: ProductsClass[]) => {
@@ -519,6 +532,7 @@ export class TheStocksComponent implements OnInit {
           let lastArrIndx: number = this.minInvArry.length - 1
           this.newMinInvNumber = this.minInvArry[lastArrIndx].invNumber + 1
         };
+        $('#containerLoader').hide()
 
       });
   };

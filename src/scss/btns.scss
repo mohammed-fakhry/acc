@@ -28,8 +28,29 @@
   }
 }
 
-.btn-info {
-  background-color: $infoBg;
+.btnPrimary {
+  border: solid $primaryBg 1px;
+  color: $primaryBg;
+}
+
+.btnPrimary:hover:enabled {
+  background-color: $primaryBg;
+  color: white;
+};
+
+
+.btnPrimary:active:enabled {
+  border-color: #005cbf;
+}
+
+.btnDanger {
+  border: solid $dangerBg 1px;
+  color: $dangerBg;
+}
+
+.btnDanger:hover:enabled {
+  background-color: $dangerBg;
+  color: white;
 }
 
 .printBtns {

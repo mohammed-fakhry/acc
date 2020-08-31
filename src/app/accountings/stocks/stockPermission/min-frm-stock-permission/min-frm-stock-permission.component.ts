@@ -138,24 +138,33 @@ export class MinFrmStockPermissionComponent implements OnInit {
 
     this.makeCustomerCss();
 
-    let stockInfo: Stock = this._stockService.stocks.find(stock => stock.stockName == this.stockNameInpt);
-
-    this._theStockComp.getStockTrance.then((data: any[]) => {
-      this.theStockProds = this._theStockComp.stockProdFactory(stockInfo)
+    const getTransDetails = new Promise((res) => {
+      this._stockService.allStockProductsTrans().subscribe((data: any[]) => {
+        res(data)
+      });
     });
 
-    // stockNameForMin
-    if (this.stockNameInpt.includes('سيف')) {
-      $('#stockNameForMin').addClass('lightBg')
-    } else {
-      $('#stockNameForMin').removeClass('lightBg')
-    }
+    let stockInfo: Stock = this._stockService.stocks.find(stock => stock.stockName == this.stockNameInpt);
 
-    this.inputDisabled = false;
+    getTransDetails.then((data: any[]) => {
+      this._theStockComp.tranceArr = data
+      this.theStockProds = this._theStockComp.stockProdFactory(stockInfo)
+    }).then(() => {
+      // stockNameForMin
+      if (this.stockNameInpt.includes('سيف')) {
+        $('#stockNameForMin').addClass('lightBg')
+      } else {
+        $('#stockNameForMin').removeClass('lightBg')
+      }
 
-    if (this.custNameInpt) {
-      this.isCustNameInvaild();
-    };
+      this.inputDisabled = false;
+
+      if (this.custNameInpt) {
+        this.isCustNameInvaild();
+      };
+    })
+
+
   }
 
   stockNameVaild: boolean;
@@ -406,7 +415,7 @@ export class MinFrmStockPermissionComponent implements OnInit {
         this.isInvoiceVaild()
       };
       this.isAddQtyVaild(i);
-      
+
       if (this.invoiceInpArry[i].Qtyinvaild == false) {
         if (this.invoiceInpArry[i].price > 0) {
           this.invoiceInpArry[i].total = this.invoiceInpArry[i].qty * this.invoiceInpArry[i].price
@@ -420,7 +429,7 @@ export class MinFrmStockPermissionComponent implements OnInit {
         }
       }
 
-      
+
     }
 
     this.totalInvoice = this.invoiceInpArry.map(inv => inv.total);

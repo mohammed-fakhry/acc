@@ -1,14 +1,14 @@
 <!--fadeLayer-->
 <div class="fadeLayer" id="fadeLayer_SafeReceipt">
     <div class="container p-3 card askForDelete">
-        <h3 class="alert alert-danger p-3">هل انت متأكد من حذف الايصال رقم {{safeReceipt_inpts.safeReceiptId}}</h3>
+        <h3 class="alert dangerBg p-3">هل انت متأكد من حذف الايصال رقم {{safeReceipt_inpts.safeReceiptId}}</h3>
         <p>بقيمة {{safeReceipt_inpts.receiptVal}} جنيه</p>
         <p>من {{safeReceipt_inpts.safeName}}</p>
         <p class="text-danger">هذه الخطوة لا يمكن الرجوع عنها و فى حالة عدم عمل نسخة احتياطية لن تتمكن من استعادة هذه
             البيانات</p>
         <hr>
         <div class="d-flex flex-row-reverse">
-            <button class="btn btn-outline-danger mr-2" id="delete_SafeReceipt" (click)="deleteSafeReceipt()">متأكد من
+            <button class="btn btnDanger mr-2" id="delete_SafeReceipt" (click)="deleteSafeReceipt()">متأكد من
                 الحذف</button>
             <button class="btn btn-outline-info" id="hideFadeLayer_SafeReceipt"
                 (click)='hideFadeLayer_SafeReceipt()'>الغاء</button>
@@ -27,7 +27,7 @@
             <option *ngFor="let safeReceipt of _safeDataService.safeReceiptList" value="{{safeReceipt.safeReceiptId}}">
             </option>
         </datalist>
-        <button class="btn btn-outline-primary ml-2" type="submit" id="call_SafeRecieptBtn"
+        <button class="btn btnPrimary ml-2" type="submit" id="call_SafeRecieptBtn"
             (click)="showAddNewSafeReceipt()">ايصال
             جديد</button>
     </div>
@@ -38,7 +38,7 @@
     <div class="d-flex justify-content-between">
         <!--  <h2 class="mb-2 cardHeader">{{safeReceipt_inpts?.receiptKind}}</h2> -->
         <i  id="receiptEditing" class="fa fa-print btn py-2 btn-outline-info text-center" (click)='print()' style="display: none;"></i>
-        <button id="deleteSafeReceipt" class="btn btn-outline-danger" [disabled]='deleteReceiptCond'
+        <button id="deleteSafeReceipt" class="btn btnDanger" [disabled]='deleteReceiptCond'
             (click)="showDeleteSafeReciept()" style="display: none">حذف
             الفاتورة</button>
     </div>
@@ -188,7 +188,7 @@
         </div>
         <hr>
         <div class="form-inline">
-            <button [disabled]="isReceiptValid" class="btn btn-outline-primary mb-1 mt-3" type="submit"
+            <button [disabled]="isReceiptValid" class="btn btnPrimary mb-1 mt-3" type="submit"
                 id="addNewSafeReceipt">حفظ الايصال</button>
         </div>
     </form>
