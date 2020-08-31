@@ -133,7 +133,9 @@ export class SideBarComponent implements OnInit {
 
   activeSecBtn() {
     let btnInfo = this.urlBTnArr.find(btn => btn.url == this.url);
-    btnInfo.btn.removeClass('btn-light').addClass('btn-secondary');
+    if (btnInfo) {
+      btnInfo.btn.removeClass('btn-light').addClass('btn-secondary');
+    }
   }
 
   secButtonClick(btnId) {

@@ -20,7 +20,7 @@ if ($result = mysqli_query($con, $sql)) {
         $stocktrans[$cr]['customerId'] = $row['customerId'];
         $stocktrans[$cr]['customerName'] = $row['customerName'];
         $stocktrans[$cr]['transactionType'] = $row['transactionType'];
-        $stocktrans[$cr]['invoiceTotal'] = $row['invoiceTotal'];
+        $stocktrans[$cr]['invoiceTotal'] = (int)$row['invoiceTotal'];
         $stocktrans[$cr]['date_time'] = $row['date_time'];
         $stocktrans[$cr]['notes'] = $row['notes'];
         $cr++;

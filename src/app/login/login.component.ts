@@ -23,9 +23,11 @@ export class LoginComponent implements OnInit {
     auth: null,
   }
 
+  errMsg: string;
+
   currentRoute: string = this.logService.checkCurrentRoute();
 
-  constructor(private router: Router, private logService: LoginService,public _service:ServicesService) { }
+  constructor(private router: Router, private logService: LoginService, public _service: ServicesService) { }
 
   ngOnInit() {
 
@@ -42,22 +44,31 @@ export class LoginComponent implements OnInit {
 
   //check = localStorage.getItem('y')
   log() {
-    let found = this.users.find(user => user.name === this.user.name);
-    if (found) {
-      if (found.name == 'mohammed') {
-        localStorage.setItem('tmpDB', 'http://localhost/accounting/');
-      } else if (found.name === 'ali') {
-        localStorage.setItem('tmpDB', 'http://localhost/accountings_ali/');
+    console.log(this.user)
+    if (this.users) {
+      let found = this.users.find(user => user.name === this.user.name);
+      if (found) {
+        if (found.name == 'mohammed') {
+          localStorage.setItem('tmpDB', 'http://localhost/accounting/');
+        } else if (found.name === 'ali') {
+          localStorage.setItem('tmpDB', 'http://localhost/accountings_ali/');
+        }
+        sessionStorage.setItem('y', `${found.prem}`);
+        this.logService.isUser = true;
+
+        this.router.navigate(['/home']);
+        this.logService.checkIsUser();
+      } else {
+        this.errMsg = 'خطأ فى اسم المستخدم او كلمة السر'
+        $('.form-control').addClass('is-invalid');
+        $('.invalid-feedback').removeClass('d-none');
       }
-      sessionStorage.setItem('y', `${found.prem}`);
-      this.logService.isUser = true;
-      
-      this.router.navigate(['/home']);
-      this.logService.checkIsUser();
     } else {
+      this.errMsg = 'تأكد من الاتصال بالخادم و اعد المحاولة'
       $('.form-control').addClass('is-invalid');
       $('.invalid-feedback').removeClass('d-none');
     }
+
 
   } // logIn
 

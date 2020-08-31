@@ -2,7 +2,7 @@
 require 'connect.php';
 $invoiceData = [];
 
-$sql = "SELECT invNumber, invoiceTotal, stockTransaction.date_time,
+$sql = "SELECT invNumber, invoiceTotal, stockTransaction.date_time, stockTransaction.notes,
          productName, stockTransactiondetails.stockTransactionId, transactionType,
           price, Qty, customers.customerId, customers.customerName
            FROM stockTransaction join stockTransactiondetails
@@ -24,6 +24,7 @@ if ($result = mysqli_query($con, $sql)) {
         $invoiceData[$cr2]['transactionType'] = $row['transactionType'];
         $invoiceData[$cr2]['price'] =  (int)$row['price'];
         $invoiceData[$cr2]['Qty'] = (int)$row['Qty'];
+        $invoiceData[$cr2]['notes'] = $row['notes'];
         $invoiceData[$cr2]['customerId'] = $row['customerId'];
         $invoiceData[$cr2]['customerName'] = $row['customerName'];
         $cr2++;

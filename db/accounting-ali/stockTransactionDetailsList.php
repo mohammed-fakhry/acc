@@ -8,7 +8,7 @@ if ($result = mysqli_query($con, $sql)) {
     while ($row = mysqli_fetch_assoc($result)) {
         $stocktransDetail[$cr]['stockTransactionId'] = $row['stockTransactionId'];
         $stocktransDetail[$cr]['productId'] = $row['productId'];
-        $stocktransDetail[$cr]['price'] = $row['price'];
+        $stocktransDetail[$cr]['price'] = (float)$row['price'];
         $stocktransDetail[$cr]['Qty'] = $row['Qty'];
         $cr++;
     }
