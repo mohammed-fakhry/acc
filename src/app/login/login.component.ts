@@ -26,6 +26,8 @@ export class LoginComponent implements OnInit {
   errMsg: string;
 
   currentRoute: string = this.logService.checkCurrentRoute();
+  currentUrl: string;
+  mainUrl: string;
 
   constructor(private router: Router, private logService: LoginService, public _service: ServicesService) { }
 
@@ -43,16 +45,40 @@ export class LoginComponent implements OnInit {
 
 
   //check = localStorage.getItem('y')
+
+  makeUrl() {
+    this.currentUrl = window.location.href;
+    let i = this.currentUrl.indexOf("#");
+    let dots = this.currentUrl.indexOf(":");
+    this.mainUrl = this.currentUrl.slice(dots + 2, i);
+    let url = (this.mainUrl.includes('localhost')) ? 'http://localhost/' : 'http://192.168.1.103/' //http://localhost:4200/#/logIn
+    return url
+  }
+
+  linksArry(url: string) {
+    return [
+      {
+        name: 'mohammed',
+        url: `${url}/accounting/`
+      },
+      {
+        name: 'ali',
+        url: `${url}/accountings_ali/`
+      }
+    ]
+  }
+
   log() {
-    console.log(this.user)
+
+    let url = this.makeUrl();
+
     if (this.users) {
-      let found = this.users.find(user => user.name === this.user.name);
+      let found = this.users.find(user => user.name === this.user.name && user.auth === this.user.auth);
       if (found) {
-        if (found.name == 'mohammed') {
-          localStorage.setItem('tmpDB', 'http://localhost/accounting/');
-        } else if (found.name === 'ali') {
-          localStorage.setItem('tmpDB', 'http://localhost/accountings_ali/');
-        }
+
+        let linkInfo = this.linksArry(url).find(link => link.name === found.name)
+        localStorage.setItem('tmpDB', `${linkInfo.url}`);
+        
         sessionStorage.setItem('y', `${found.prem}`);
         this.logService.isUser = true;
 

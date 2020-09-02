@@ -910,7 +910,7 @@ export class SafeReceiptComponent implements OnInit {
             return resultCheck
           }
         },
-        css: (this.safeReceipt_inpts.receiptKind == 'ايصال استلام نقدية') ? 'text-light' : 'text-info',
+        css: 'textPrimary',//(this.safeReceipt_inpts.receiptKind == 'ايصال استلام نقدية') ? 'textPrimary' : 'text-info',
       },
 
       to: {
@@ -921,11 +921,11 @@ export class SafeReceiptComponent implements OnInit {
             return resultCheck
           }
         },
-        css: (this.safeReceipt_inpts.receiptKind == 'ايصال استلام نقدية') ? 'text-info' : 'text-light',
+        css: 'textPrimary',//(this.safeReceipt_inpts.receiptKind == 'ايصال استلام نقدية') ? 'text-info' : 'textPrimary',
       },
 
-      fstCss: (this.safeReceipt_inpts.receiptKind == 'ايصال استلام نقدية') ? 'bg-info text-light' : 'inpCard_row',
-      sndCss: (this.safeReceipt_inpts.receiptKind == 'ايصال استلام نقدية') ? 'inpCard_row' : 'bg-info text-light',
+      fstCss: (this.safeReceipt_inpts.receiptKind == 'ايصال استلام نقدية') ? 'lightBg' : 'inpCard_row',
+      sndCss: (this.safeReceipt_inpts.receiptKind == 'ايصال استلام نقدية') ? 'inpCard_row' : 'lightBg',
       val: this.safeReceipt_inpts.receiptVal,
       notes: this.safeReceipt_inpts.recieptNote
     }

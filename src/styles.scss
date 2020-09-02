@@ -1,14 +1,15 @@
 /* You can add global styles to this file, and also import other style files */
 
-@import 'scss/varibals.scss';
-@import 'scss/nav.scss';
-@import 'scss/btns.scss';
-@import 'scss/backgrounds.scss';
-@import 'scss/tables.scss';
-@import 'scss/card.scss';
-@import 'scss/input.scss';
-@import 'scss/loader.scss';
-@import 'scss/print.scss';
+@import "scss/varibals.scss";
+@import "scss/nav.scss";
+@import "scss/btns.scss";
+@import "scss/backgrounds.scss";
+@import "scss/tables.scss";
+@import "scss/card.scss";
+@import "scss/input.scss";
+@import "scss/loader.scss";
+@import "scss/print.scss";
+@import "scss/text.scss";
 
 * {
   font-family: "Droid Arabic Kufi", sans-serif;
@@ -95,4 +96,3 @@ body .wideScreen {
 .bigNum {
   letter-spacing: 3px;
 }
-

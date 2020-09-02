@@ -11,6 +11,8 @@ import { OtherAcc } from './accountings/other-acc';
 })
 export class ServicesService {
 
+  elem: HTMLElement = document.querySelector('.theNav');
+
   constructor(public http: HttpClient, public router: Router, public _stockService: StocksService) { }
 
   showAddNewInvoiceSer(invoice) {
@@ -29,16 +31,11 @@ export class ServicesService {
   date_time: any;
 
   handleTableHeight() {
-    if (window.innerHeight == screen.height) {
-      // browser is fullscreen
-      $('.panel-body').not('.invoiceTable').not('.standTable').not('.tableWithHeader').css('height', '920px')
-      $('.invoiceTable').css('height', '590px')
-      $('.tableWithHeader').css('height', '860px')
-    } else {
-      $('.panel-body').not('.invoiceTable').not('.standTable').not('.tableWithHeader').css('height', '820px')
-      $('.tableWithHeader').css('height', '740px')
-      $('.invoiceTable').css('height', '530px')
-    }
+    this.elem = document.querySelector('.theNav')
+    let height = window.innerHeight - this.elem.offsetHeight - 75
+    $('.panel-body').not('.invoiceTable').not('.standTable').not('.tableWithHeader').css('height', `${height}px`)
+    $('.invoiceTable').css('height', `${height - 330}px`)
+    $('.tableWithHeader').css('height', `${height - 85}px`)
   }
 
   sortArry(key, order = 'asc') {

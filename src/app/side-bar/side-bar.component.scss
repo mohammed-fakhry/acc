@@ -1,75 +1,57 @@
+@import "../../scss/varibals.scss";
+
 $borderColor: rgba(0, 7, 7, 0.95); //white;
 
 body {
-    position: relative;
+  position: relative;
 }
-/* --- new
-#sideBar {
-    position: absolute;
-    top: 0;
-    //bottom: 0;
-    left: 0;
-    right: 0;
-}
-
-#sideBar button {
-    width: 100%;
-    //height: 40px;
-    padding-right: 5px;
-    overflow: hidden;
-}
-h3 {
-    width: 100%;
-    //height: 50px;
-    font-size: 1.2em;
-    overflow: hidden;
-}
-.ch3 {
-    border: solid 1px teal;
-}*/
 
 #sideBar div {
-    display: none;
+  display: none;
 }
 
 #sidebar {
-    //margin-top: 50px;
-    height: 0px;
-    width: 300px;
-    position: fixed;
-    right: 0;
-    top: 0;
-    z-index: 99999999999;
+  //margin-top: 50px;
+  height: 0px;
+  width: 300px;
+  position: fixed;
+  right: 0;
+  top: 0;
+  z-index: 99999999999;
+  @media (max-width: $maxMediam) {
+    position: relative !important;
+    font-size: medium !important;
+  }
 }
 
 #sidebar button {
-    width: 100%;
-    padding-left: 15px;
-    height: 50px;
+  width: 100%;
+  padding-left: 15px;
+  height: 50px;
+  @media (max-width: $maxMediam) {
+    font-size: medium !important;
+  }
 }
 
 .pFixed {
-    position: fixed;
-    //height:100%;
-    overflow: hidden;
+  position: fixed;
+  //height:100%;
+  overflow: hidden;
 }
 
 #sidebarToggle {
-    cursor: pointer;
-    font-size: 35px;
-    // border-top: solid 1px $borderColor;
-    // border-bottom: solid 1px $borderColor;
-    // border-left: solid 1px $borderColor; //rgba(0, 7, 7, 0.95);
-    z-index: 99999999999999;
-    display: none;
-    color: #037ac4; //white; //rgb(1, 64, 73);
-    margin-top: 10px;
-    background-color: rgb(241, 242, 246); //rgb(54, 107, 148); //rgba(0, 7, 7, 0.95);
-    right: 0;
-    padding: 10px;
-    //padding-right: 15px;
+  cursor: pointer;
+  font-size: 35px;
+  z-index: 99999999999999;
+  display: none;
+  color: $primaryBg;
+  margin-top: 10px;
+  background-color: rgb(241, 242, 246);
+  right: 0;
+  padding: 10px;
+  //padding-right: 15px;
 }
 
 .card {
-    padding-top: 0px;
+  padding-top: 0px;
 }

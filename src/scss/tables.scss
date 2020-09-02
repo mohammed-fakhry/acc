@@ -8,6 +8,10 @@
   .panel-body {
     height: 820px;
     padding: 0px;
+    @media (max-width: $maxMediam) {
+      overflow-x: scroll!important;
+      height: 100%!important;
+    }
     table.flex-table {
       display: flex;
       flex-direction: column;
@@ -35,6 +39,7 @@
           text-align: center;
           @media (max-width: $maxMediam) {
             height: fit-content !important;
+            //flex: none!important;
           }
         }
       }
@@ -76,6 +81,10 @@
   background-color: #f1f1f1; //rgb(228, 228, 228); //f8f9fa
   border-radius: 5px;
   box-shadow: $shadow;
+}
+
+.standTable {
+  height: 100% !important;
 }
 
 

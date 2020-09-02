@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {HttpClient} from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { UserData } from './user-data';
 
@@ -16,8 +16,8 @@ export class LoginService {
   url: string;
   mainRoute: string;
 
-  constructor( private http: HttpClient, private router: Router ) { }
-  
+  constructor(private http: HttpClient, private router: Router) { }
+
   checkCurrentRoute() {
     this.currentUrl = window.location.href;
     this.ind = this.currentUrl.lastIndexOf("/");
@@ -51,16 +51,24 @@ export class LoginService {
       this.checkIsUser();
     }
   };
-  
+
   reternlog() {
+
     if (this.isUser == false) {
       this.router.navigate(['/logIn'])
       //console.log(this.check)
     }
   }
 
+  mainUrl: string;
+
   getUsers() {
-    return this.http.get<UserData[]>('http://localhost/auth/getUsers.php');
+    let i = this.currentUrl.indexOf("#");
+    let dots = this.currentUrl.indexOf(":");
+    this.mainUrl = this.currentUrl.slice(dots + 2, i);
+    let url = (this.mainUrl.includes('localhost')) ? 'http://localhost/auth/getUsers.php' : 'http://192.168.1.103/auth/getUsers.php' //http://localhost:4200/#/logIn
+
+    return this.http.get<UserData[]>(url /* 'http://localhost/auth/getUsers.php' */);
   }
 
 }
