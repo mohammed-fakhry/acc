@@ -99,8 +99,6 @@ export class SideBarComponent implements OnInit {
       $('#sidBar h3').removeClass('navHeader').addClass('btn-light')
     };
 
-    //console.log('stillinside')
-
     // active main btn
     for (let i = 0; i <= this.htmlDbItemsBtns.length; i++) {
       if (this.url == this.dBUrls[i]) { // dataBase

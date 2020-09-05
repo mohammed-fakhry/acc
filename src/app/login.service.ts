@@ -56,7 +56,6 @@ export class LoginService {
 
     if (this.isUser == false) {
       this.router.navigate(['/logIn'])
-      //console.log(this.check)
     }
   }
 

@@ -187,6 +187,7 @@
             </div>
         </div>
         <hr>
+        <div *ngIf="validCheck" class="textDanger">يجب التأكد من صحة البيانات</div>
         <div class="form-inline">
             <button [disabled]="isReceiptValid" class="btn btnPrimary mb-1 mt-3" type="submit"
                 id="addNewSafeReceipt">حفظ الايصال</button>

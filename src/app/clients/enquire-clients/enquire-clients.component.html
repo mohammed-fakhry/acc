@@ -14,15 +14,19 @@
                     <th>اسم العميل</th>
                     <th>رقم الهاتف</th>
                     <th>العنوان</th>
-                    <th class="printX">تعديل</th>
+                    <th style="flex: .5;">عدد الوحدات</th>
+                    <th>اجمالى مستحق</th>
+                    <th style="flex: .25;" class="printX">تعديل</th>
                 </tr>
             </thead>
             <tbody class=" mt-3 tableBody">
-                <tr *ngFor="let client of _clientService.clients|searchClient:searchClient;">
+                <tr *ngFor="let client of _clientService.clientsEnquireArr|searchClient:searchClient;">
                     <td class="textBtn btn-outline-secondary" (click)='showClientDetails(client)'>{{client.clientName}}</td>
                     <td>{{client.clientTell}}</td>
                     <td>{{client.clientAddress}}</td>
-                    <td class="textBtn btn-outline-success ml-2 printX" id="showCliebtDetails"
+                    <td style="flex: .5;">{{client.unites.unitesQts()}}</td>
+                    <td>{{client.remain()}}</td>
+                    <td style="flex: .25;" class="textBtn btn-outline-success ml-2 printX" id="showCliebtDetails"
                         (click)="editClientDetails(client)"><i class="fa fa-edit"></i></td>
                 </tr>
             </tbody>

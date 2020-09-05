@@ -873,7 +873,6 @@ export class StocTrancePremComponent implements OnInit {
     if (this.stockDetailsIdArr.length != 0) {
       for (let i = 0; i < this.stockDetailsIdArr.length; i++) {
         this._stockService.deleteStockTransactionDetails(this.stockDetailsIdArr[i]).subscribe();
-        console.log('detail id deleted')
       };
     }
     this.showInvoiceDone();

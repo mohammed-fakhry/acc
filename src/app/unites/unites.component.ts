@@ -11,6 +11,8 @@ import { ContractVaildInpts } from '../contract-vaild-inpts';
 import { ContractInpts } from '../contract-inpts';
 import { ClientServiceService } from '../client-service.service';
 import { ClientsData } from '../clients-data';
+import { ClientPaymentService } from '../client-payment.service';
+import { ClientPayment } from '../client-payment';
 
 @Component({
   selector: 'app-unites',
@@ -54,9 +56,15 @@ export class UnitesComponent implements OnInit {
     this.remainPrice = this.totalPrice - this.preMoneyResult;
     this.remainPaid = Math.ceil(this.remainPrice / this.years / 12);
   }
-  constructor(public router: Router, public logService: LoginService,
-    public formBuilder: FormBuilder, public _unitService: UnitService,
-    public _service: ServicesService, public _clientService: ClientServiceService) { }
+  constructor(
+    public router: Router,
+    public logService: LoginService,
+    public formBuilder: FormBuilder,
+    public _unitService: UnitService,
+    public _service: ServicesService,
+    public _clientService: ClientServiceService,
+    public _clientPaymentService: ClientPaymentService
+  ) { }
 
   ngOnInit() {
 
@@ -149,7 +157,6 @@ export class UnitesComponent implements OnInit {
     let today_Date = Date.now();
     let d = new Date(today_Date);
     this._unitService.todayName = this._unitService.days[d.getDay()];
-    //console.log(d.getDay())
 
     let day = d.getDate();
     let month = d.getMonth() + 1;
@@ -170,14 +177,73 @@ export class UnitesComponent implements OnInit {
     $('#containerLoader').fadeIn();
     this.unites = []
 
+    let clientPayments: ClientPayment[] = []
+    let clientUnites: UnitData[] = []
+
     const getUnites = new Promise((res) => {
       this._unitService.getUnites().subscribe((data: UnitData[]) => {
         //this.unites = data;
         res(data)
       });
-    })
+    });
 
-    getUnites.then((data: UnitData[]) => this.unites = data).then(() => {
+    const getPayments = new Promise((res) => {
+      this._clientPaymentService.getClientPayment().subscribe((data: ClientPayment[]) => {
+        // clientPayments = data;
+        res(data)
+      });
+    });
+
+    const reviewUnit = (unites: UnitData[], paymentArr: ClientPayment[]) => {
+
+      for (let i = 0; i < unites.length; i++) {
+
+        let unitDet = {
+
+          payments: {
+            arr: clientPayments.filter(payment => payment.unitId == unites[i].unitId),
+            totalVal: () => {
+              if (unitDet.payments.arr.length == 0) {
+                return 0
+              }
+              return this._service.sumArry(unitDet.payments.arr)
+            },
+          },
+
+          totalPrice: unites[i].unitExtent * unites[i].unitPrice,
+
+          remain: () => unitDet.totalPrice - unitDet.payments.totalVal()
+
+        };
+
+        if (unites[i].remainVal != unitDet.remain()) {
+          unites[i].remainVal = unitDet.remain();
+          unites[i].paidVal = unitDet.payments.totalVal();
+          this._unitService.updateUnit(unites[i]).subscribe();
+        };
+
+      };
+
+    };
+
+    Promise.all([getUnites, getPayments])
+      .then((res: any[]) => {
+
+        this.unites = res[0];
+        reviewUnit(res[0], res[1]);
+
+      }).then(() => {
+
+        this.unites.sort(this._service.sortArry('unitNum'))
+        $('.unitsClass').not('#unitEnquiry').hide();
+        $('#unitEnquiry').show();
+        $('#unitSearch').show(100);
+        this.buttonEffect('#mainEnquir_Towers', '#mainAdd_Towers', '#mainContracts');
+        $('#containerLoader').fadeOut();
+
+      });
+
+    /* getUnites.then((data: UnitData[]) => this.unites = data).then(() => {
       this.unites.sort(this._service.sortArry('unitNum'))
 
       $('.unitsClass').not('#unitEnquiry').hide();
@@ -185,7 +251,7 @@ export class UnitesComponent implements OnInit {
       $('#unitSearch').show(100);
       this.buttonEffect('#mainEnquir_Towers', '#mainAdd_Towers', '#mainContracts');
       $('#containerLoader').fadeOut();
-    })
+    }) */
   };
 
   showTowerEnquiry() {
@@ -336,11 +402,8 @@ export class UnitesComponent implements OnInit {
     if (this.clientValid.cond) {
       if (this.addBtnVal == 'اضافة') {
 
-        this._unitService.creatUnit(this.unitDataView).subscribe(() => {
-          //console.log('added')
-        },
+        this._unitService.creatUnit(this.unitDataView).subscribe(() => { },
           error => {
-            //console.log(error.status);
             if (error.status == 201) {
               this.showUnitEnquiry();
               this._service.clearForm();
@@ -351,10 +414,7 @@ export class UnitesComponent implements OnInit {
       } else if (this.addBtnVal == 'تعديل') {
 
         this._unitService.updateUnit(this.unitDataView).subscribe(() => {
-          //console.log('added')
-          // this.showUnitEnquiry();
-          this.showTowerEnquiry();
-          //this._service.clearForm();
+          this.showUnitEnquiry();
         });
       };
     };
@@ -381,7 +441,7 @@ export class UnitesComponent implements OnInit {
   };
 
   showContractsDetail = () => {
-    
+
   }
 } // end
 

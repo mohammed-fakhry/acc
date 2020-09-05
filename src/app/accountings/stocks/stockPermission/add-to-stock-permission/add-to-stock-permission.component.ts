@@ -1008,10 +1008,7 @@ export class AddToStockPermissionComponent implements OnInit {
 
     if (this.domElements.btn.callInvoiceBtn.innerHTML == "فاتورة جديدة") {
 
-      let currentDateNow = Date.now() //new Date()
-      let currentDate = new Date(currentDateNow)
-      this._service.makeTime_date(currentDate);
-      this.date_time = this._service.date_time;
+      this.date_time = this._service.makeTime_date(new Date(Date.now()))
 
       this.domElements.html.invNum.style.display = 'none';
       this.domElements.html.callInvoice.style.display = 'none';

@@ -17,14 +17,19 @@
             <div class="headerLeftBorder"></div>
             <button style="font-size: 1.5em;" class="btn btn-outline-secondary ml-2 mx-2 headerMainBtn"
                 id="showClientsBtn" (click)="showClientsEnquir()" disabled>استعلام</button>
-            <button class="btn btn-light ml-2 mx-2 headerMainBtn"
-                id="showAddClient" (click)="showAddClient('new')">اضافة</button>
+            <button class="btn btn-light ml-2 mx-2 headerMainBtn" id="showAddClientBtn"
+                (click)="showAddClient('new')">اضافة</button>
+            <button class="btn btn-light ml-2 mx-2 headerMainBtn" id="showClientsPaymentsBtn"
+                (click)="showClientsPayments()">تحصيلات</button>
         </div>
     </nav>
 </div>
 <!-- enquireClient -->
-<app-enquire-clients id="enquireClient" class="clientsClass mainContainer" style="display: block;"></app-enquire-clients>
+<app-enquire-clients id="enquireClient" class="clientsClass mainContainer" style="display: block;">
+</app-enquire-clients>
 <!-- addClient -->
 <app-add-client id="addClient" class="clientsClass mainContainer"></app-add-client>
 <!-- clientDetails -->
 <app-client-details id="clientDetails" class="clientsClass mainContainer"></app-client-details>
+<!-- clientsPayments -->
+<app-clients-payments id="clientsPayments" class="clientsClass mainContainer"></app-clients-payments>

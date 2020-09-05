@@ -15,6 +15,9 @@ export class HomeComponent implements OnInit {
 
     this.logService.logStart(); this.logService.reternlog();
     
+    $('#homeLogo').fadeIn(1500)
+
+    setTimeout(() => $('#hint').fadeIn(1000), 2000)
   }
 
 }

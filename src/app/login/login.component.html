@@ -1,14 +1,13 @@
-<!-- style="margin-top: 5%; width: 40%;" -->
-<div class="container mt-5">
-    <!-- <div class="cardBorderY "> -->
+<div class="container mt-5 pt-5">
+    <div class="pt-5">
         <div class="card col-lg-7 col-md-10" style="margin: auto;">
-            <form class="formgroup"  (ngSubmit)="log()">
+            <form class="formgroup" (ngSubmit)="log()">
                 <h1 class="cardHeader">تسجيل الدخول</h1>
                 <hr>
                 <label>اسم المستخدم</label>
-                <input name="name" [(ngModel)]="user.name"  type="text" class="form-control mb-3">
+                <input name="name" [(ngModel)]="user.name" type="text" class="form-control mb-3">
                 <label>كلمة السر</label>
-                <input name="auth" [(ngModel)]="user.auth"  type="password" class="form-control mb-3">
+                <input name="auth" [(ngModel)]="user.auth" type="password" class="form-control mb-3">
                 <div class="invalid-feedback d-none m-2">
                     {{errMsg}}
                 </div>
@@ -17,8 +16,8 @@
             </form>
             <div class="form-inline" style="direction: ltr; font-size: small;">
                 <p>powerd by</p>
-                <p class="cardHeader px-1" >theGenius</p>
+                <p class="cardHeader px-1">theGenius</p>
             </div>
         </div>
-    <!-- </div> -->
+    </div>
 </div>

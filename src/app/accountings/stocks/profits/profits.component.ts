@@ -239,11 +239,6 @@ export class ProfitsComponent implements OnInit {
         }
 
         this.otherExpence = this._service.sumArry(otherAccTotals);
-        console.log({
-          arr: otherAccArry,
-          totalArr: otherAccTotals,
-          total: this.otherExpence
-        })
       }
 
     };
@@ -590,8 +585,6 @@ export class ProfitsComponent implements OnInit {
       filterdArr = this._stockService.HandleAddtoStockPrimArry
         .filter(h => (h.transactionType == 2 && h.stockId == stock.stockId) && h.date_time < match_toDate && h.date_time > match_fromDate)
     };
-
-    //console.log(this.filtered)
 
     //let stockProds = this.profitArr.filter(prod => prod.productId) //this._stockService.handleBackEnd.filter(stockF => stockF.stockId == stock.stockId)
 

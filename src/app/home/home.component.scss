@@ -2,3 +2,49 @@ button {
     width: 100px;
     height: 100px;
 }
+
+footer {
+    position: fixed;
+    bottom: 0;
+    height: 35px;
+    width: 100%;
+    background-color: #0277bd;
+}
+
+p {
+    font-family: "segoe ui light";
+}
+
+#homeLogo {
+    display: none;
+}
+
+a {
+    color: white;
+}
+
+a:link {
+    text-decoration: none;
+}
+a:hover {
+    text-decoration: none;
+    color: white;
+}
+
+h3 {
+    font-family: "segoe ui light";
+    font-weight: bold;
+    letter-spacing: 2px;
+}
+
+#hint {
+    display: none;
+}
+
+#welcomeForm {
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    flex-direction: column;
+    min-width: 0;
+}

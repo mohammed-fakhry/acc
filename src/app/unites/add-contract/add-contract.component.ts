@@ -124,7 +124,6 @@ export class AddContractComponent implements OnInit {
 
     if ((number = number.toString()).length > 9) return 'overflow';
     aNum = ('000000000' + number).substr(-9).match(/^(\d{2})(\d{1})(\d{1})(\d{2})(\d{1})(\d{2})$/);
-    ////console.log('aNum : ' + aNum)
     if (!aNum) return; var strA = '';
     strA += (aNum[1] != 0) ? (one[Number(aNum[1])] || two[aNum[1][0]] + ' ' + one[aNum[1][1]]) + 'بليون ' : '';
     strA += (aNum[2] != 0) ? (one[Number(aNum[2])] || two[aNum[2][0]] + ' ' + one[aNum[2][1]]) + 'مليون ' : '';
@@ -135,7 +134,6 @@ export class AddContractComponent implements OnInit {
       ((aNum[4] == 0) ? 'الف ' : '')
       : '';
 
-    ////console.log(two[aNum[4][0]])
     strA += (aNum[4] != 0) ?
       ((aNum[3] != 0 && one[aNum[4][1]] != '') ? 'و' : '') +
       ((one[Number(aNum[4])] != undefined) ? ` ${one[Number(aNum[4])]} الف ` : `${one[aNum[4][1]]}و ${two[aNum[4][0]]} الف `) : '';
@@ -143,7 +141,6 @@ export class AddContractComponent implements OnInit {
     strA += (aNum[5] != 0) ? `و ${(hund[Number(aNum[5])])} ` : '';
 
     strA += (aNum[6] != 0) ? ((one[aNum[6][1]] != '') ? 'و ' : '') + (one[Number(aNum[6])] || `${one[aNum[6][1]]}و ${two[aNum[6][0]]}`) : '';
-    //console.log(aNum)
 
     return strA;
 
@@ -345,7 +342,6 @@ export class AddContractComponent implements OnInit {
   clientNameChanged() {
 
     let clientInfo = this.clients.find(client => client.clientName == this._unitService.contractInpts.clientName)
-    ////console.log(clientInfo)
 
     if (clientInfo != undefined) {
 
@@ -595,15 +591,8 @@ export class AddContractComponent implements OnInit {
     };
 
 
-    //let dates = this.getDates(new Date('2013-10-22'), 12);
-    ////console.log(dates);
     let datesArr = [];
-    //datesArr.length
-    /* dates.forEach(function(date) {
-      datesArr = [...datesArr, `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`]
-    }); */
 
-    //console.log(datesArr)
     this.fstCheckArr = this.checkArr.slice(0, Math.ceil(this._unitService.contractInpts.checkQtys / 2))
     this.secCheckArr = this.checkArr.slice(Math.ceil(this._unitService.contractInpts.checkQtys / 2))
   };
@@ -635,16 +624,12 @@ export class AddContractComponent implements OnInit {
 
     // Usage
     var dates = getDates(new Date('2013-10-22'), 12);
-    ////console.log(dates);
     let datesArr = [];
     let d = new Date('Mon Jan 20 2014 02:00:00 GMT+0200 (Eastern European Standard Time)')
-    //console.log(d.getMonth())
 
     dates.forEach(function (date) {
       datesArr = [...datesArr, `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`]
     });
-
-    //console.log(datesArr)
 
   };
 
@@ -675,8 +660,6 @@ export class AddContractComponent implements OnInit {
         checkValue: this._unitService.contractInpts.checksValue, //number;
         checksQty: this._unitService.contractInpts.checkQtys, //number;
       };
-
-      ////console.log('contractdata : ' + JSON.stringify(this.contractData))
     };
 
   };

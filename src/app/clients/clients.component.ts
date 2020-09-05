@@ -7,6 +7,8 @@ import { UnitData } from '../unit-data';
 import { TowerData } from '../tower-data';
 import { ClientsData } from '../clients-data';
 import { ClientServiceService } from '../client-service.service';
+import { ClientPaymentService } from '../client-payment.service';
+import { ClientPayment } from '../client-payment';
 
 @Component({
   selector: 'app-clients',
@@ -18,8 +20,14 @@ export class ClientsComponent implements OnInit {
   unites: UnitData[];
   towerDataArr: any[];
 
-  constructor(public logService: LoginService, public _safeDataService: SafeDataService,
-    public _unitService: UnitService, public _service: ServicesService, public _clientServiceService: ClientServiceService) { }
+  constructor(
+    public logService: LoginService,
+    public _safeDataService: SafeDataService,
+    public _unitService: UnitService,
+    public _service: ServicesService,
+    public _clientServiceService: ClientServiceService,
+    public _clientPaymentService: ClientPaymentService
+  ) { }
 
   ngOnInit() {
     // log
@@ -32,7 +40,7 @@ export class ClientsComponent implements OnInit {
     });
 
     // getTowers
-    
+
     this._unitService.getTowers().subscribe((data: TowerData[]) => {
       this.towerDataArr = data;
     });
@@ -44,14 +52,28 @@ export class ClientsComponent implements OnInit {
     });
 
     this._service.handleTableHeight();
+
+    this.showClientsEnquir();
   };
 
-  buttonEffect(max: string, min: string) {
+  buttonEffect(max: string) {
     $(max).removeClass("btn-light").addClass("btn-outline-secondary").animate({ fontSize: '1.5em' }, 50);
-    $(min).removeClass('btn-outline-secondary').addClass('btn-light').animate({ fontSize: '1em' }, 50);
+    $('.headerMainBtn').not(max).removeClass('btn-outline-secondary').addClass('btn-light').animate({ fontSize: '1em' }, 50);
     $(max).attr({ 'disabled': true });
-    $(min).attr({ 'disabled': false });
+    $('.headerMainBtn').not(max).attr({ 'disabled': false });
   };
+
+  switchEffect(elementId: String) {
+    $('.clientsClass').not(`${elementId}`).hide();
+    $(elementId).show();
+  };
+
+  showClientsPayments = () => {
+    this.buttonEffect('#showClientsPaymentsBtn');
+    this.switchEffect('#clientsPayments');
+    $('#header_ClientPayment').show();
+    $('#add_clientPaymentInside').hide();
+  }
 
   showAddClient(statu) {
 
@@ -66,9 +88,8 @@ export class ClientsComponent implements OnInit {
 
       this._clientServiceService.clientsNames = this._clientServiceService.clients.map(client => client.clientName);
 
-      $('.clientsClass').not('#addClient').hide();
-      $('#addClient').show();
-      this.buttonEffect('#showAddClient', '#showClientsBtn');
+      this.buttonEffect('#showAddClientBtn');
+      this.switchEffect('#addClient');
       //this._service.clearForm();
       $('.form-control').removeClass('is-invalid is-valid');
       this._clientServiceService.clientInptValid = {
@@ -99,23 +120,77 @@ export class ClientsComponent implements OnInit {
 
     })
 
-
-
   };
 
   showClientsEnquir() {
+
+    $('#containerLoader').fadeIn()
+
+    this._clientServiceService.clientsEnquireArr = [];
+
     let getClients = new Promise((res) => {
       this._clientServiceService.getClients().subscribe((data: ClientsData[]) => {
         res(data)
-        //this._clientServiceService.clients = data;
       });
-    })
+    });
 
-    getClients.then((data: ClientsData[]) => this._clientServiceService.clients = data).then(() => {
-      $('.clientsClass').not('#enquireClient').hide();
-      $('#enquireClient').show();
-      this.buttonEffect('#showClientsBtn', '#showAddClient');
-    })
+    let getUnites = new Promise((res) => {
+      this._unitService.getUnites().subscribe((data: UnitData[]) => {
+        res(data)
+      });
+    });
+
+    let getClientPayments = new Promise((res) => {
+      this._clientPaymentService.getClientPayment().subscribe((data: ClientPayment[]) => {
+        res(data)
+      });
+    });
+
+    const theMethod = (clients: ClientsData[], unites: UnitData[], clientPayments: ClientPayment[]) => {
+
+      for (let i = 0; i < clients.length; i++) {
+
+        let clientDetails = {
+          clientId: clients[i].clientId,
+          clientName: clients[i].clientName,
+          clientTell: clients[i].clientTell,
+          clientAddress: clients[i].clientAddress,
+          clientNationNum: clients[i].clientNationNum,
+
+          payments: {
+            arr: clientPayments.filter(payment => payment.clientId == clients[i].clientId).map(paymet => paymet.paymentVal),
+            total: () => this._service.sumArry(clientDetails.payments.arr)
+          },
+
+          unites: {
+            arr: unites.filter(unit => unit.clientId == clients[i].clientId).map(unit => unit.unitExtent * unit.unitPrice),
+            total: () => this._service.sumArry(clientDetails.unites.arr),
+            unitesQts: () => clientDetails.unites.arr.length
+          },
+
+          remain: () => (clientDetails.unites.total() - clientDetails.payments.total()).toFixed(0)
+        }
+
+        this._clientServiceService.clientsEnquireArr = [...this._clientServiceService.clientsEnquireArr, clientDetails];
+
+      }
+
+    };
+
+    Promise.all([getClients, getUnites, getClientPayments])
+      .then((res: any[]) => theMethod(res[0], res[1], res[2]))
+      .then(() => {
+        this.switchEffect('#enquireClient');
+        this.buttonEffect('#showClientsBtn');
+        $('#containerLoader').fadeOut();
+      })
+
+    /* getClients.then((data: ClientsData[]) => this._clientServiceService.clients = data).then(() => {
+      this.switchEffect('#enquireClient');
+      this.buttonEffect('#showClientsBtn');
+
+      $('#containerLoader').fadeOut();
+    }) */
 
   };
 

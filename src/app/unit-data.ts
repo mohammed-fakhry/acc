@@ -12,4 +12,6 @@ export class UnitData {
     unitFloar: number;
     clientId: number;
     clientName: string;
+    paidVal: number;
+    remainVal: number;
 }

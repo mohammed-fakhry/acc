@@ -137,6 +137,8 @@ export class ServicesService {
     this.fullTime.toString()
     this.date_time = this.fullDate + 'T' + this.fullTime // + ' ' + this.fullTime
 
+    return this.fullDate + 'T' + this.fullTime
+
   };
 
   setDate_time(date: string) {
@@ -199,7 +201,7 @@ export class ServicesService {
   };
 
   deleteWorkerSer(id: number) {
-    return this.http.delete<Worker[]>(`${this.url}deleteEmployee.php?id=` + id)
+    return this.http.delete<Worker>(`${this.url}deleteEmployee.php?id=` + id)
   };
 
   updateWorkerSer(employee: Worker) {

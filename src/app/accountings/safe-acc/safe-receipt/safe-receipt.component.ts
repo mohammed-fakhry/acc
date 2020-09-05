@@ -48,12 +48,6 @@ export class SafeReceiptComponent implements OnInit {
     });
   };
 
-  getCurrentDate() {
-    let currentDateNow = Date.now() //new Date()
-    let currentDate = new Date(currentDateNow)
-    this._service.makeTime_date(currentDate);
-  };
-
   getSafeInfo(safeName) {
     let safeInfo = this._safeDataService.safeList.find(
       safe => safe.safeName == safeName
@@ -62,7 +56,7 @@ export class SafeReceiptComponent implements OnInit {
   };
 
   getCustomerInfo(customerName) {
-    let customerInfo = this._safeAccComponent.customers.find(
+    let customerInfo = this.customerInpArry.find(
       customer => customer.customerName == customerName
     )
     return customerInfo;
@@ -81,8 +75,7 @@ export class SafeReceiptComponent implements OnInit {
 
     this._safeAccComponent.getBackendData_Receipt();
 
-    this.getCurrentDate();
-    this.safeReceipt_inpts.date_time = this._service.date_time;
+    this.safeReceipt_inpts.date_time = this._service.makeTime_date(new Date(Date.now()))
     this.safeReceipt_inpts.safeName = this._safeDataService.safeList[0].safeName;
     this.safeReceipt_inpts.safeId = this._safeDataService.safeList[0].safeId;
     this.safeReceipt_inpts.currentSafeVal = this._safeDataService.safeList[0].currentSafeVal;
@@ -381,7 +374,6 @@ export class SafeReceiptComponent implements OnInit {
   customerInpArry: Customer[];
 
   filterCustomersForSafe = () => {
-
     if (this.safeReceipt_inpts.safeName != undefined) {
       if (this.safeReceipt_inpts.safeName.includes('سيف -')) {
         this.customerInpArry = this._safeAccComponent.customers.filter(customer => customer.customerName.includes('- سيف'))
@@ -393,7 +385,6 @@ export class SafeReceiptComponent implements OnInit {
     } else {
       this.customerInpArry = this._safeAccComponent.customers
     }
-
   }
 
   safeChanged() {
@@ -475,7 +466,6 @@ export class SafeReceiptComponent implements OnInit {
   customerCss: any[]
 
   makeCustomerCss() {
-
     //this.filterCustomersForSafe();
     this.custClass = ''
     this.customerCss = this.customerInpArry.map((cust) => {
@@ -685,7 +675,6 @@ export class SafeReceiptComponent implements OnInit {
           // pass new Value to edit
           this._safeAccComponent.customers[indx].customerRemain = oldCustomer.customerRemain;
         }
-
       };
     }
   };
@@ -721,17 +710,47 @@ export class SafeReceiptComponent implements OnInit {
 
   };
 
+  creat_FstSafe_Data = () => {
+
+    let fstSafe_NewVal: number;
+    let fstSafe_NewData = new SafeData()
+
+    if (this.theReceiptKind == 'add') {
+      fstSafe_NewVal = this.theSafeInfo.currentSafeVal + this.safeReceipt_inpts.receiptVal;
+    } else { // if (this.theReceiptKind == 'min')
+      fstSafe_NewVal = this.theSafeInfo.currentSafeVal - this.safeReceipt_inpts.receiptVal;
+    };
+
+    return fstSafe_NewData = { // first safe update in backend
+      safeId: this.theSafeInfo.safeId,
+      safeName: this.theSafeInfo.safeName,
+      opendVal: this.theSafeInfo.opendVal,
+      safeEmployee: this.theSafeInfo.safeEmployee,
+      workerId: this.theSafeInfo.workerId,
+      currentSafeVal: fstSafe_NewVal, // the only changed val
+    };
+  };
+
+  sndData_val = (sndVal: number) => {
+    if (this.theReceiptKind == 'add') {
+      return sndVal - this.safeReceipt_inpts.receiptVal;
+    } else { // if (this.theReceiptKind == 'min')
+      return sndVal + this.safeReceipt_inpts.receiptVal;
+    };
+  }
+
+
   saveRecieptData() {
 
-    let fstSafe_NewVal: number; //
-    let sndSafe_NewVal: number; //
+    /* let fstSafe_NewVal: number; //
+    let sndSafe_NewVal: number; // */
     let fstSafe_NewData: SafeData; //
     let sndSafe_NewData: SafeData; //
     // customer
-    let customer_NewVal: number;
+    /* let customer_NewVal: number; */
     let customer_NewData: Customer;
     // acc
-    let acc_NewVal: number;
+    /* let acc_NewVal: number; */
     let acc_NewData: OtherAcc;
     // validations
     let isSndSafe: Boolean = false;
@@ -752,28 +771,12 @@ export class SafeReceiptComponent implements OnInit {
       this.editOtherAccVal(theReceipt.receiptVal);
     };
 
+    fstSafe_NewData = this.creat_FstSafe_Data();
+    this._safeDataService.updateSafeData(fstSafe_NewData).subscribe();
+
     if (this.safeReceipt_inpts.transactionAccKind == 'خزنة') { // safe modify
       //make defult customer Id
       isSndSafe = true;
-
-      if (this.theReceiptKind == 'add') {
-        fstSafe_NewVal = this.theSafeInfo.currentSafeVal + this.safeReceipt_inpts.receiptVal;
-        sndSafe_NewVal = this.theSafeInfo.currentSafeVal - this.safeReceipt_inpts.receiptVal;
-      } else { // if (this.theReceiptKind == 'min')
-        fstSafe_NewVal = this.theSafeInfo.currentSafeVal - this.safeReceipt_inpts.receiptVal;
-        sndSafe_NewVal = this.theSafeInfo.currentSafeVal + this.safeReceipt_inpts.receiptVal;
-      };
-
-      fstSafe_NewData = { // first safe update in backend
-        safeId: this.theSafeInfo.safeId,
-        safeName: this.theSafeInfo.safeName,
-        opendVal: this.theSafeInfo.opendVal,
-        safeEmployee: this.theSafeInfo.safeEmployee,
-        workerId: this.theSafeInfo.workerId,
-        currentSafeVal: fstSafe_NewVal, // the only changed val
-      };
-      // save to backend
-      this._safeDataService.updateSafeData(fstSafe_NewData).subscribe();
 
       sndSafe_NewData = { // snd safe update in backend
         safeId: this.theSnd_SafeInfo.safeId,
@@ -781,7 +784,7 @@ export class SafeReceiptComponent implements OnInit {
         opendVal: this.theSnd_SafeInfo.opendVal,
         safeEmployee: this.theSnd_SafeInfo.safeEmployee,
         workerId: this.theSnd_SafeInfo.workerId,
-        currentSafeVal: sndSafe_NewVal, // the only changed val
+        currentSafeVal: this.sndData_val(this.theSafeInfo.currentSafeVal) // the only changed val
       };
       // save to backend
       this._safeDataService.updateSafeData(sndSafe_NewData).subscribe();
@@ -789,25 +792,6 @@ export class SafeReceiptComponent implements OnInit {
     } else if (this.safeReceipt_inpts.transactionAccKind == 'عميل') { // customer modify
 
       isCustomer = true;
-
-      if (this.theReceiptKind == 'add') {
-        fstSafe_NewVal = this.theSafeInfo.currentSafeVal + this.safeReceipt_inpts.receiptVal;
-        customer_NewVal = this.theCustomerInfo.customerRemain - this.safeReceipt_inpts.receiptVal
-      } else {
-        fstSafe_NewVal = this.theSafeInfo.currentSafeVal - this.safeReceipt_inpts.receiptVal;
-        customer_NewVal = this.safeReceipt_inpts.receiptVal + this.theCustomerInfo.customerRemain;
-      };
-
-      fstSafe_NewData = { // first safe update in backend
-        safeId: this.theSafeInfo.safeId,
-        safeName: this.theSafeInfo.safeName,
-        opendVal: this.theSafeInfo.opendVal,
-        safeEmployee: this.theSafeInfo.safeEmployee,
-        workerId: this.theSafeInfo.workerId,
-        currentSafeVal: fstSafe_NewVal, // the only changed val
-      };
-      // save to backend
-      this._safeDataService.updateSafeData(fstSafe_NewData).subscribe();
 
       customer_NewData = { // customer update in backend
         customerId: this.theCustomerInfo.customerId,
@@ -817,7 +801,7 @@ export class SafeReceiptComponent implements OnInit {
         customerPaid: this.theCustomerInfo.customerPaid,
         customerTell: this.theCustomerInfo.customerTell,
         customerUnit: this.theCustomerInfo.customerUnit,
-        customerRemain: customer_NewVal // the only changed val
+        customerRemain: this.sndData_val(this.theCustomerInfo.customerRemain) // the only changed val
       };
 
       // save to backend
@@ -825,29 +809,10 @@ export class SafeReceiptComponent implements OnInit {
 
     } else if (this.safeReceipt_inpts.transactionAccKind == 'حساب') { // transactionAccKind modify
 
-      if (this.theReceiptKind == 'add') {
-        fstSafe_NewVal = this.theSafeInfo.currentSafeVal + this.safeReceipt_inpts.receiptVal;
-        acc_NewVal = this.theOtherAccInfo.currentAccVal - this.safeReceipt_inpts.receiptVal;
-      } else {
-        fstSafe_NewVal = this.theSafeInfo.currentSafeVal - this.safeReceipt_inpts.receiptVal;
-        acc_NewVal = this.theOtherAccInfo.currentAccVal + this.safeReceipt_inpts.receiptVal;
-      };
-
-      fstSafe_NewData = { // first safe update in backend
-        safeId: this.theSafeInfo.safeId,
-        safeName: this.theSafeInfo.safeName,
-        opendVal: this.theSafeInfo.opendVal,
-        safeEmployee: this.theSafeInfo.safeEmployee,
-        workerId: this.theSafeInfo.workerId,
-        currentSafeVal: fstSafe_NewVal, // the only changed val
-      };
-      // save to backend
-      this._safeDataService.updateSafeData(fstSafe_NewData).subscribe();
-
       acc_NewData = {
         accId: this.theOtherAccInfo.accId,
         AccName: this.theOtherAccInfo.AccName,
-        currentAccVal: acc_NewVal // the only changed val
+        currentAccVal: this.sndData_val(this.theOtherAccInfo.currentAccVal) // the only changed val
       };
       // save to backend
       this._service.updateOtherAccSer(acc_NewData).subscribe();
@@ -879,7 +844,6 @@ export class SafeReceiptComponent implements OnInit {
     this._safeAccComponent.ngOnInit();
 
     let lastIndex = this._safeDataService.safeReceiptList.length - 1
-    //console.log(this._safeDataService.safeReceiptList[lastIndex].safeReceiptId)
 
     let resultCheck: string;
     if (this.safeReceipt_inpts.transactionAccKind == 'عميل') {
@@ -932,9 +896,17 @@ export class SafeReceiptComponent implements OnInit {
     this._safeAccComponent.showAddSafeReceipt_fade('showAddSafeReceipt_fade');
   };
 
+  validCheck: boolean;
+
   addNewSafeReceipt() {
-    this.saveRecieptData();
-    this.showInvoiceDone();
+    
+    if (this.isReceiptValid) {
+      this.validCheck = true;
+    } else {
+      this.validCheck = false;
+      this.showInvoiceDone();
+      this.saveRecieptData();
+    }
   };
 
   showDeleteSafeReciept() {

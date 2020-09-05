@@ -108,7 +108,7 @@ export class CustomerComponent implements OnInit {
     this._custService.getCustomerReceipts().subscribe((data: CustomerReceipt[]) => {
       this.customerReceiptArr = data
     })
-    
+
     this._stockService.url = localStorage.getItem('tmpDB');
     this._stockService.getStockTransactionList().subscribe((data: StockTransaction[]) => {
       this._stockService.stockTransactionArr = data;
@@ -498,7 +498,6 @@ export class CustomerComponent implements OnInit {
 
     this._custService.customerInv = [];
     this._custService.invTotalArry = [];
-    console.log(this.customersInvoices)
     for (let i = 0; i < this.customersInvoices.length; i++) {
 
       if (this.customersInvoices[i].stockTransactionId == invoice.stockTransactionId) {

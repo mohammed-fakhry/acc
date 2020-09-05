@@ -24,6 +24,5 @@ export class NavBarComponent implements OnInit {
       this.logService.checkIsUser();
       //this.logService.changeIsUser();
       $('#logOut').hide()
-      console.log(this.logService.isUser)
   }
 }

@@ -28,6 +28,10 @@
   }
 }
 
+.btn-outline-danger:hover {
+  background-color: $dangerBg !important;
+}
+
 .btnPrimary {
   border: solid $primaryBg 1px;
   color: $primaryBg;
@@ -36,8 +40,7 @@
 .btnPrimary:hover:enabled {
   background-color: $primaryBg;
   color: white;
-};
-
+}
 
 .btnPrimary:active:enabled {
   border-color: #005cbf;
