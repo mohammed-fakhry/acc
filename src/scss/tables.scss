@@ -4,7 +4,7 @@
 }
 
 // scrolltable
-.card {
+.box {
   .panel-body {
     height: 820px;
     padding: 0px;
@@ -27,6 +27,14 @@
         flex: 1; //variable height
         overflow-y: auto;
         margin-bottom: 15px;
+        .btn-outline-danger:hover {
+          background-color: $dangerBg !important;
+        }
+        .btn-outline-secondary:not(:disabled):not(.disabled):hover {
+          background-color: #144d7bb4;
+          color: white;
+          border: none;
+        }
       }
       tr {
         width: 100%;

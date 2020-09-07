@@ -44,8 +44,13 @@ export class StocTrancePremComponent implements OnInit {
   deleteInvTranceBtnDisabled: boolean;
   stockDetailsIdArr: any;
 
-  constructor(public _stockService: StocksService, public formBuilder: FormBuilder,
-    public _service: ServicesService, public _custService: CustomerService, public _theStockComp: TheStocksComponent) { }
+  constructor(
+    public _stockService: StocksService,
+    public formBuilder: FormBuilder,
+    public _service: ServicesService,
+    public _custService: CustomerService,
+    public _theStockComp: TheStocksComponent
+  ) { }
 
   ngOnInit() {
 
@@ -446,7 +451,7 @@ export class StocTrancePremComponent implements OnInit {
         this.isInvoiceVaild()
       };
       this.isAddQtyVaild(i);
-      
+
       if (this.invoiceInpArry[i].Qtyinvaild == false) {
         if (this.invoiceInpArry[i].price > 0) {
           this.invoiceInpArry[i].total = this.invoiceInpArry[i].qty * this.invoiceInpArry[i].price
@@ -460,7 +465,7 @@ export class StocTrancePremComponent implements OnInit {
         }
       }
 
-      
+
     }
 
     this.totalInvoice = this.invoiceInpArry.map(inv => inv.total);

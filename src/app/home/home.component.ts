@@ -9,12 +9,15 @@ import { Router } from '@angular/router';
 })
 export class HomeComponent implements OnInit {
 
-  constructor(private router: Router, private logService: LoginService) { }
+  constructor(
+    private router: Router,
+    private logService: LoginService
+  ) { }
 
   ngOnInit() {
 
     this.logService.logStart(); this.logService.reternlog();
-    
+
     $('#homeLogo').fadeIn(1500)
 
     setTimeout(() => $('#hint').fadeIn(1000), 2000)

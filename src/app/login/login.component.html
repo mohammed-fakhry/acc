@@ -1,17 +1,19 @@
 <div class="container mt-5 pt-5">
     <div class="pt-5">
-        <div class="card col-lg-7 col-md-10" style="margin: auto;">
+        <div class="box inpCard col-lg-7 col-md-10" style="margin: auto;">
             <form class="formgroup" (ngSubmit)="log()">
-                <h1 class="cardHeader">تسجيل الدخول</h1>
-                <hr>
-                <label>اسم المستخدم</label>
-                <input name="name" [(ngModel)]="user.name" type="text" class="form-control mb-3">
-                <label>كلمة السر</label>
-                <input name="auth" [(ngModel)]="user.auth" type="password" class="form-control mb-3">
-                <div class="invalid-feedback d-none m-2">
-                    {{errMsg}}
+                <h1 class="cardHeader mb-5">تسجيل الدخول</h1>
+                <div class="mb-5 px-2">
+                    <label>اسم المستخدم</label>
+                    <input name="name" [(ngModel)]="user.name" type="text" class="form-control mb-3">
+                    <label>كلمة السر</label>
+                    <input name="auth" [(ngModel)]="user.auth" type="password" class="form-control mb-3">
+                    <div class="invalid-feedback d-none m-2">
+                        {{errMsg}}
+                    </div>
                 </div>
-                <button id="logInBtn" class="btn btnPrimary" type="submit">تسجيل الدخول</button>
+
+                <button id="logInBtn" class="btn btnPrimary px-2" type="submit">تسجيل الدخول</button>
                 <div class="alert dangerBg d-none mt-2" role="alert"></div>
             </form>
             <div class="form-inline" style="direction: ltr; font-size: small;">

@@ -26,8 +26,13 @@ export class ProfitsComponent implements OnInit {
 
   sortProducts: HTMLElement;
 
-  constructor(public _stockService: StocksService,
-    public _theStocksComponent: TheStocksComponent, public _servicesService: ServicesService, public _safeDataService: SafeDataService, public _service: ServicesService) { }
+  constructor(
+    public _stockService: StocksService,
+    public _theStocksComponent: TheStocksComponent,
+    public _servicesService: ServicesService,
+    public _safeDataService: SafeDataService,
+    public _service: ServicesService
+  ) { }
 
   ngOnInit() {
     this.sortProducts = document.querySelector('#sortProducts') as HTMLElement;
@@ -68,8 +73,8 @@ export class ProfitsComponent implements OnInit {
     $('#productProfits').hide();
     $('#customersProfits').hide();
     $('#totalProfits').hide();
-    $('.chooseBtn').not(`#showStockProfits${this.theIndex}`).removeClass('lightBg').addClass('btn-light');
-    $(`#showStockProfits${this.theIndex}`).removeClass('btn-light').addClass('lightBg');
+    $('.chooseBtn').not(`#showStockProfits${this.theIndex}`).removeClass('btn-secondary').addClass('btn-light');
+    $(`#showStockProfits${this.theIndex}`).removeClass('btn-light').addClass('btn-secondary');
 
   };
 
@@ -530,7 +535,7 @@ export class ProfitsComponent implements OnInit {
         let arrAdd = arrTotals.filter(total => total > 0);
 
         this.totalProfit = (this._servicesService.sumArry(arrTotals) + this.employeeExpence + this.otherExpence).toLocaleString();
-        this.totalProfitClass = (parseInt(this.totalProfit) < 0) ? 'dangerBg' : 'alert-info';
+        this.totalProfitClass = (parseInt(this.totalProfit) < 0) ? 'dangerBg' : 'lightBg';
         this.totalMin = this._servicesService.sumArry(arrMin);
         this.totalAdd = this._servicesService.sumArry(arrAdd);
 
@@ -545,7 +550,7 @@ export class ProfitsComponent implements OnInit {
         $('#containerLoader').fadeOut(0, () => {
           $('#totalProfits').show();
           $('#customersProfits').hide();
-          $('#productProfits').slideDown(300);
+          $('#productProfits').fadeIn('fast');
           $('#searchProd').show();
           $('#showProfitsPreBtn').html('تفاصيل حركة البيع')
         });

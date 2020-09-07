@@ -22,19 +22,29 @@ export class SideBarComponent implements OnInit {
   safeAccBtn = $('#safeAccBtn');
   settBtn = $('#SettBtn');
   stocksBtn = $('#stocksBtn');
-  clientsBtn = $('#clientsBtn')
+  clientsBtn = $('#clientsBtn');
+  mainSettingBtn = $('#SettBtn');
   //safeAcc
   htmlDbItemsBtns: any[] = [this.workersBtn, this.unitesBtn, this.clientsBtn]
   dBUrls: any[] = ['/workers', '/unites', '/clients'] // dataBaseUrls
 
   htmlAccItemsBtns: any[] = [this.customerBtn, this.stocksBtn, this.safeAccBtn];
   accUrls: any[] = ['/customers', '/stocks', '/safe-acc'];
+
+  htmlMainSettingsBtn: any[] = [this.mainSettingBtn];
+  settingsUrls: any[] = ['/MainSetting'];
+
   urlBTnArr: any[];
 
   elem: HTMLElement = document.querySelector('.theNav');
 
 
-  constructor(public _sideBarEffect: SideEffectService, public router: Router, public logService: LoginService, public _service: ServicesService) { }
+  constructor(
+    public _sideBarEffect: SideEffectService,
+    public router: Router,
+    public logService: LoginService,
+    public _service: ServicesService
+  ) { }
 
   ngOnInit() {
 
@@ -63,6 +73,10 @@ export class SideBarComponent implements OnInit {
         btn: $('#safeAccBtn'),
         url: '/safe-acc'
       },
+      {
+        btn: $('#MainSettingBtn'),
+        url: '/MainSetting'
+      }
     ]
 
     this.currentUrl = window.location.href;
@@ -93,6 +107,11 @@ export class SideBarComponent implements OnInit {
       $('#accBtn').next().show()
       $('#accBtn').removeClass('btn-light').addClass('navHeader')
       $('#sidebar .secDiv').not($('#accBtn').next()).hide()
+    } else if (this.settingsUrls.includes(this.url)) {
+      this.mainRoute = 'setting'
+      $('#SettBtn').next().show()
+      $('#SettBtn').removeClass('btn-light').addClass('navHeader')
+      $('#sidebar .secDiv').not($('#SettBtn').next()).hide()
     } else {
       this.mainRoute = 'false'
       $('#sidebar .secDiv').hide();
@@ -100,13 +119,13 @@ export class SideBarComponent implements OnInit {
     };
 
     // active main btn
-    for (let i = 0; i <= this.htmlDbItemsBtns.length; i++) {
+    /* for (let i = 0; i <= this.htmlDbItemsBtns.length; i++) {
       if (this.url == this.dBUrls[i]) { // dataBase
         this.htmlDbItemsBtns[i].removeClass('btn-light').addClass('btn-secondary');
       } else if (this.url == this.accUrls[i]) { // accounting
         this.htmlAccItemsBtns[i].removeClass('btn-light').addClass('btn-secondary');
       }
-    }
+    } */
 
     this._sideBarEffect.sideBarEffect()
 
@@ -122,7 +141,7 @@ export class SideBarComponent implements OnInit {
         let height = window.innerHeight - this.elem.offsetHeight - 75
         $('.panel-body').not('.invoiceTable').not('.standTable').not('.tableWithHeader').css('height', `${height}px`)
         $('.invoiceTable').css('height', `${height - 330}px`)
-        $('.tableWithHeader').css('height', `${height - 70}px`)
+        $('.tableWithHeader').css('height', `${height - 65}px`)
       }
 
     });
@@ -176,6 +195,9 @@ export class SideBarComponent implements OnInit {
     } else if (this.accUrls.includes(this.url)) {
       this.mainRoute = 'acc'
       sideHight('#accBtn')
+    } else if (this.settingsUrls.includes(this.url)) {
+      this.mainRoute = 'setting'
+      sideHight('#SettBtn')
     } else {
       this.mainRoute = 'false'
       $('#sidebar .secDiv').hide();
@@ -191,7 +213,7 @@ export class SideBarComponent implements OnInit {
       'marginRight': '15px'
     })
     if (sideBarHeight == 0) { //open sideBar
-      $('#sidebar').animate({ height: `${sidebarBtnsHeight + 20}px` }, 200).toggleClass('card');
+      $('#sidebar').animate({ height: `${sidebarBtnsHeight + 20}px` }, 200);
       $('#sidebarBtns').show()
       $('#fadeEffect').fadeIn().css({
         'height': `100%`,
@@ -199,7 +221,7 @@ export class SideBarComponent implements OnInit {
       $('#sidebarToggle').hide();
     } else { //close sideBar
       $('#sidebarBtns').hide()
-      $('#sidebar').css('height', '0').toggleClass('card');
+      $('#sidebar').css('height', '0');
       $('#fadeEffect').hide()
       $('#sidebarToggle').show();
     };
@@ -207,7 +229,7 @@ export class SideBarComponent implements OnInit {
 
   fadeEffect() {
     $('#sidebarBtns').hide()
-    $('#sidebar').removeClass("card").css('height', '0')
+    $('#sidebar').removeClass("box").css('height', '0')
     $('#fadeEffect').hide()
     $('#sidebarToggle').show()
   };

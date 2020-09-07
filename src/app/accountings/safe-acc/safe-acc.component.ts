@@ -21,8 +21,12 @@ export class SafeAccComponent implements OnInit {
 
   theANum = "1000000"
 
-  constructor(public logService: LoginService, public _safeDataService: SafeDataService,
-    public _service: ServicesService, public _custService: CustomerService) { }
+  constructor(
+    public logService: LoginService,
+    public _safeDataService: SafeDataService,
+    public _service: ServicesService,
+    public _custService: CustomerService
+  ) { }
 
   ngOnInit() {
     this.logService.logStart(); this.logService.reternlog();
@@ -152,7 +156,7 @@ export class SafeAccComponent implements OnInit {
 
   showAddSafeReceipt() {
     this.getBackendData_Receipt();
-    
+
     //this._service.clearForm();
     $('#call_SafeRecieptBtn').html('ايصال جديد');
     $('.safeClass').not('#safeReceipt').hide();

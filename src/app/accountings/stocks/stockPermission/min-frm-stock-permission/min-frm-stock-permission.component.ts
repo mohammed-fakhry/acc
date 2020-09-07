@@ -33,8 +33,13 @@ export class MinFrmStockPermissionComponent implements OnInit {
     msg: null
   }
 
-  constructor(public _stockService: StocksService, public formBuilder: FormBuilder,
-    public _service: ServicesService, public _custService: CustomerService, public _theStockComp: TheStocksComponent) { }
+  constructor(
+    public _stockService: StocksService,
+    public formBuilder: FormBuilder,
+    public _service: ServicesService,
+    public _custService: CustomerService,
+    public _theStockComp: TheStocksComponent
+  ) { }
 
   ngOnInit() {
 

@@ -36,8 +36,15 @@ export class CustomerComponent implements OnInit {
   addCustomer: HTMLElement;
   customerEnquiry: HTMLElement;
 
-  constructor(public formBuilder: FormBuilder, public _service: ServicesService, public _custService: CustomerService,
-    public router: Router, public logService: LoginService, public _stockService: StocksService, public _safeDataService: SafeDataService) { }
+  constructor(
+    public formBuilder: FormBuilder,
+    public _service: ServicesService,
+    public _custService: CustomerService,
+    public router: Router,
+    public logService: LoginService,
+    public _stockService: StocksService,
+    public _safeDataService: SafeDataService
+  ) { }
 
   ngOnInit() {
 
@@ -524,9 +531,9 @@ export class CustomerComponent implements OnInit {
       invTotal: this._service.sumArry(this._custService.invTotalArry),
     }
     if (invoice.transactionType == 2) {
-      this._custService.invKindColor = 'text-danger'
+      this._custService.invKindColor = 'textDanger'
     } else {
-      this._custService.invKindColor = 'text-info'
+      this._custService.invKindColor = 'textPrimary'
     }
 
     this.customerFadeLayer.style.display = 'block'

@@ -13,8 +13,11 @@ import { HandleBackEnd } from 'src/app/handle-back-end';
 })
 export class EnquireStocksComponent implements OnInit {
 
-  constructor(public _stockService: StocksService,
-    public _theStocksComponent: TheStocksComponent, public _service: ServicesService) { }
+  constructor(
+    public _stockService: StocksService,
+    public _theStocksComponent: TheStocksComponent,
+    public _service: ServicesService
+  ) { }
 
   ngOnInit() {
     // hide Fade layer
@@ -126,7 +129,7 @@ export class EnquireStocksComponent implements OnInit {
 
         let filterd = tranceArr.filter(trance => trance.stockId == stock.stockId || trance.sndStockId == stock.stockId);
         let filterdProdsId = [...new Set(filterd.map(prod => prod.productId))];
-        
+
 
         for (let i = 0; i < filterdProdsId.length; i++) {
 

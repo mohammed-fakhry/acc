@@ -15,7 +15,11 @@ export class SafeTransactionComponent implements OnInit {
   balance: number;
   balanceContain: HTMLElement;
 
-  constructor(public _safeAccComponent: SafeAccComponent, public _safeDataService: SafeDataService, public _service: ServicesService) { }
+  constructor(
+    public _safeAccComponent: SafeAccComponent,
+    public _safeDataService: SafeDataService,
+    public _service: ServicesService
+  ) { }
 
   ngOnInit() {
 

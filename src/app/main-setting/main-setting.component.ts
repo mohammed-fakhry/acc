@@ -11,17 +11,22 @@ import { UserData } from '../user-data';
 })
 export class MainSettingComponent implements OnInit {
 
-  
-  
+
+
   userDataView: UserData;
 
-  userData = new FormGroup ({
+  userData = new FormGroup({
     userId: new FormControl(),
     userName: new FormControl(),
     userPassword: new FormControl(),
     userPremission: new FormControl()
-  })
-  constructor(public router: Router, public logService: LoginService, public formBuilder: FormBuilder) { }
+  });
+
+  constructor(
+    public router: Router,
+    public logService: LoginService,
+    public formBuilder: FormBuilder
+  ) { }
 
   ngOnInit() {
     // first check
@@ -41,10 +46,10 @@ export class MainSettingComponent implements OnInit {
       prem: null,
     }
 
-    
+
 
   } // ngOnInit
-  
+
 
 
 } // end

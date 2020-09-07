@@ -1,7 +1,7 @@
 <!-- ClientPayment -->
 <!--fadeLayer-->
 <div class="fadeLayer" id="fadeLayer_ClientPayment">
-    <div class="container p-3 card askForDelete">
+    <div class="container p-3 box askForDelete">
         <h3 class="alert dangerBg p-3">
             <!-- هل انت متأكد من حذف الايصال رقم {{ClientPayment_inpts.ClientPaymentId}} -->
         </h3>
@@ -24,7 +24,7 @@
     </div>
 </div>
 <!--onlyForm-->
-<div class="card inpCard p-3 cPInpClass" id="header_ClientPayment">
+<div class="box inpCard p-3 cPInpClass" id="header_ClientPayment">
     <div class="form-inline" id="callClientPayment">
         <h2 class="cardHeader">ايصال (استلام | صرف) نقدية</h2>
         <div class="headerLeftBorder mr-2"></div>
@@ -44,7 +44,7 @@
 <!-- (click)="showDeletecPayment()" -->
 <!-- (click)='print()' -->
 <!-- [disabled]='deletecPaymentCond' -->
-<div class="card inpCard p-3 cPInpClass" style="display: none;" id="add_clientPaymentInside">
+<div class="box inpCard p-3 cPInpClass" style="display: none;" id="add_clientPaymentInside">
     <div class="d-flex justify-content-between">
         <h2 class="cardHeader">ايصال تحصيل من عميل</h2>
         <i id="cPaymentEditing" class="fa fa-print btn py-2 btn-outline-info text-center" 
@@ -56,7 +56,6 @@
             <input class="form-control" name="date_time" [(ngModel)]='cPayment_inpts.date_time' type="datetime-local"
                 id="date_time">
         </div>
-
     </div>
     <form (ngSubmit)="addNewcPayment()" class="py-3">
         <div class="row navHeader p-2">

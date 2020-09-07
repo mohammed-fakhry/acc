@@ -1,6 +1,6 @@
 <!--fadeLayer-->
 <div class="fadeLayer" id="theStockFadeLayer">
-    <div class="container p-3 card askForDelete" style="display: none; width: 35%;" id="askForDeleteStock">
+    <div class="container p-3 box askForDelete" style="display: none; width: 35%;" id="askForDeleteStock">
         <h3 class="p-3 alert dangerBg">تحذير!</h3> <!-- تحذير! هل انت متأكد من حذف -->
         <h6>هل انت متأكد من حذف {{_stockService.stockDataView.stockName}}</h6>
         <!-- <h4 class="mb-2">
@@ -13,7 +13,7 @@
             <button class="btn btn-outline-info" id="hideFadeLayer">الغاء</button>
         </div>
     </div>
-    <div class="container card p-3 askForDelete" style="display: none; width: 40%;" id="stockPerDone">
+    <div class="container box p-3 askForDelete" style="display: none; width: 40%;" id="stockPerDone">
         <h3 class="navHeader p-3">تم تسجيل "{{_stockService.invoiceDoneMsg.invoiceKind}}"</h3>
         <!--  -->
         <hr>

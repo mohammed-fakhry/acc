@@ -17,8 +17,12 @@ export class AddProductsComponent implements OnInit {
   productNameAlert: string;
   addProductFormVaild: boolean;
 
-  constructor(public _stockService: StocksService, public formBuilder: FormBuilder,
-    public _service: ServicesService, public _theStockComp: TheStocksComponent) { }
+  constructor(
+    public _stockService: StocksService,
+    public formBuilder: FormBuilder,
+    public _service: ServicesService,
+    public _theStockComp: TheStocksComponent
+  ) { }
 
   ngOnInit() {
 

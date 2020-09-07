@@ -17,8 +17,12 @@ export class TowerEnquireComponent implements OnInit {
   unites: UnitData[];
   //theTowerInfo: TowerData;
 
-  constructor(public router: Router, public _unitService: UnitService,
-    public _service: ServicesService, _unitesComponent: UnitesComponent) { }
+  constructor(
+    public router: Router,
+    public _unitService: UnitService,
+    public _service: ServicesService,
+    _unitesComponent: UnitesComponent
+  ) { }
 
   ngOnInit() {
 

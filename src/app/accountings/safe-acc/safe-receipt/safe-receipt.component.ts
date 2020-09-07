@@ -26,8 +26,13 @@ export class SafeReceiptComponent implements OnInit {
   theSafeList: SafeData[];
   deleteReceiptCond: boolean = true;
 
-  constructor(public _safeDataService: SafeDataService, public _stockService: StocksService,
-    public _service: ServicesService, public _custService: CustomerService, public _safeAccComponent: SafeAccComponent) { }
+  constructor(
+    public _safeDataService: SafeDataService,
+    public _stockService: StocksService,
+    public _service: ServicesService,
+    public _custService: CustomerService,
+    public _safeAccComponent: SafeAccComponent
+  ) { }
 
   ngOnInit() {
 
@@ -899,7 +904,7 @@ export class SafeReceiptComponent implements OnInit {
   validCheck: boolean;
 
   addNewSafeReceipt() {
-    
+
     if (this.isReceiptValid) {
       this.validCheck = true;
     } else {

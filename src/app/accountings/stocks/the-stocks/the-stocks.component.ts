@@ -26,8 +26,12 @@ export class TheStocksComponent implements OnInit {
   searchTxt: string;
   deleteMsg: string;
 
-  constructor(public router: Router, public logService: LoginService,
-    public _stockService: StocksService, public _service: ServicesService) { }
+  constructor(
+    public router: Router,
+    public logService: LoginService,
+    public _stockService: StocksService,
+    public _service: ServicesService
+  ) { }
 
   productNameVaild: boolean;
 

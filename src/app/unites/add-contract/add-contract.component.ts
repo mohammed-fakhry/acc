@@ -57,8 +57,12 @@ export class AddContractComponent implements OnInit {
   fourteenBand: string;
   coNameLast: string;
 
-  constructor(public router: Router, public _unitService: UnitService,
-    public _service: ServicesService, _unitesComponent: UnitesComponent) { }
+  constructor(
+    public router: Router,
+    public _unitService: UnitService,
+    public _service: ServicesService,
+    _unitesComponent: UnitesComponent
+  ) { }
 
 
 

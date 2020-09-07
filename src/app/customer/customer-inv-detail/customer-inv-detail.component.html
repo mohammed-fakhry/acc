@@ -1,9 +1,5 @@
-<div id="custInvDetTable" class="card">
-    <!-- <div>
-        <button class="btn btn-danger mr-2" id="hideInvDet">اخفاء</button>
-    </div>
-    <hr> -->
-    <div class="d-flex justify-content-between px-1">
+<div id="custInvDetTable" class="box">
+    <div class="d-flex justify-content-between px-1 mb-2">
         <button class="btn btnDanger mr-2 font-weight-bold" id="hideInvDet" style="height: calc(1.5em + .75rem + 2px);">x</button>
         <h5 class="{{_customerService.invKindColor}}">{{_customerService.customerInvMainDet.invoiceKind}}</h5>
         <h6 class="py-2"> رقم : {{_customerService.customerInvMainDet.invoiceNum}}</h6>
@@ -14,8 +10,7 @@
         <!--<h5 class="py-2">{{_customerService.date_time}}</h5>-->
         <input disabled [(ngModel)]='_customerService.customerInvMainDet.date_time' type="datetime-local">
     </div>
-    <hr>
-    <div class="panel-body panel-flex-table tableWithHeader">
+     <div class="panel-body panel-flex-table tableWithHeader">
         <table class="flex-table table table-hover">
             <thead class="navHeader text-white">
                 <tr>

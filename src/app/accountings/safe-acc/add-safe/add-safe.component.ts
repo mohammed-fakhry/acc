@@ -18,10 +18,13 @@ export class AddSafeComponent implements OnInit {
   addSafeInvalid: boolean;
   safeData: SafeData;
 
-  
 
-  constructor(public _service: ServicesService, public _safeDataService: SafeDataService,
-    public _safeAccComponent: SafeAccComponent) { }
+
+  constructor(
+    public _service: ServicesService,
+    public _safeDataService: SafeDataService,
+    public _safeAccComponent: SafeAccComponent
+  ) { }
 
   ngOnInit() {
 

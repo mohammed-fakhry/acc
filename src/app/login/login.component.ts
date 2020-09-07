@@ -18,10 +18,7 @@ export class LoginComponent implements OnInit {
     auth: new FormControl()
   }); */
 
-  user = {
-    name: null,
-    auth: null,
-  }
+  user = new UserData();
 
   errMsg: string;
 
@@ -29,7 +26,11 @@ export class LoginComponent implements OnInit {
   currentUrl: string;
   mainUrl: string;
 
-  constructor(private router: Router, private logService: LoginService, public _service: ServicesService) { }
+  constructor(
+    private router: Router,
+    private logService: LoginService,
+    public _service: ServicesService
+  ) { }
 
   ngOnInit() {
 
@@ -78,7 +79,7 @@ export class LoginComponent implements OnInit {
 
         let linkInfo = this.linksArry(url).find(link => link.name === found.name)
         localStorage.setItem('tmpDB', `${linkInfo.url}`);
-        
+
         sessionStorage.setItem('y', `${found.prem}`);
         this.logService.isUser = true;
 

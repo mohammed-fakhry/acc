@@ -17,8 +17,11 @@ export class AddClientComponent implements OnInit {
   //clients: ClientsData[];
   //clientsNames: any[];
 
-  constructor(public _clientServiceService: ClientServiceService, public _service: ServicesService,
-    public _clientsComponent: ClientsComponent) { }
+  constructor(
+    public _clientServiceService: ClientServiceService,
+    public _service: ServicesService,
+    public _clientsComponent: ClientsComponent
+  ) { }
 
   ngOnInit() {
 

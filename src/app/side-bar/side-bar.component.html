@@ -1,5 +1,5 @@
 <div id="fadeBackupDone" (click)="fadeEffect()" class="fadeLayer">
-    <div class="container p-3 card askForDelete" style="display: none;" id="backupDone">
+    <div class="container p-3 box askForDelete" style="display: none;" id="backupDone">
         <h1 class="p-3 navHeader">تم حفظ النسخة الاحتياطية</h1>
         <table class="table">
             <tbody>
@@ -65,11 +65,11 @@
             <button class="btn btn-dark py-2 ch3 mt-1 mainBtns" id="SettBtn"
                 style="border: solid 1px rgb(26, 51, 70);"><i class="fa fa-cog pl-2"></i>الاعدادات</button>
             <div class="my-1 secDiv">
+                <button class="secButton btn btn-light text-right" id="MainSettingBtn" routerLink="/MainSetting"
+                    (click)='secButtonClick("MainSettingBtn")'><i class="fa fa-cog pl-2"></i>الاعدادات العامة</button>
                 <button class="secButton btn btn-light text-success text-right" id="backupBtn" (click)="backup()"><i
                         class="fa fa-cog pl-2"></i>انشاء
                     نسخة احتياطية</button>
-                <button class="secButton btn btn-light text-right" id="MainSettingBtn" routerLink="/MainSetting"><i
-                        class="fa fa-cog pl-2"></i>الاعدادات العامة</button>
             </div>
         </div>
     </div>

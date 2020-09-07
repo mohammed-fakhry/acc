@@ -9,20 +9,23 @@ import { Router } from '@angular/router';
 })
 export class NavBarComponent implements OnInit {
 
-  constructor(private logService: LoginService, private router: Router) { }
+  constructor(
+    private logService: LoginService,
+    private router: Router
+  ) { }
 
   ngOnInit() {
-    
+
     //routerLink="/logIn"
   }
 
   logOut() {
-      //this.logService.isUser = false;
-      sessionStorage.removeItem('y')
-      this.logService.isUser = false;
-      this.router.navigate(['/logIn']);
-      this.logService.checkIsUser();
-      //this.logService.changeIsUser();
-      $('#logOut').hide()
+    //this.logService.isUser = false;
+    sessionStorage.removeItem('y')
+    this.logService.isUser = false;
+    this.router.navigate(['/logIn']);
+    this.logService.checkIsUser();
+    //this.logService.changeIsUser();
+    $('#logOut').hide()
   }
 }

@@ -60,8 +60,12 @@ export class WorkersComponent implements OnInit {
   checkCurrentRoute = this.logService.checkCurrentRoute();
   //------
 
-  constructor(public _service: ServicesService, public formBuilder: FormBuilder,
-    public router: Router, public logService: LoginService) { }
+  constructor(
+    public _service: ServicesService,
+    public formBuilder: FormBuilder,
+    public router: Router,
+    public logService: LoginService
+  ) { }
 
   ngOnInit() {
 

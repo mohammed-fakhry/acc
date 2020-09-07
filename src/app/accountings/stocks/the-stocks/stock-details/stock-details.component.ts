@@ -9,12 +9,13 @@ import { ServicesService } from 'src/app/services.service';
 })
 export class StockDetailsComponent implements OnInit {
 
-  productSearchTxt:string;
+  productSearchTxt: string;
   today: string;
 
-  constructor(public _stockService: StocksService, public _service: ServicesService) {
-
-   }
+  constructor(
+    public _stockService: StocksService,
+    public _service: ServicesService
+  ) { }
 
   ngOnInit() {
     this.makeTodayDate()
@@ -22,7 +23,7 @@ export class StockDetailsComponent implements OnInit {
 
   makeTodayDate = () => {
     let date = Date.now()
-    let toDate = new Date (date)
+    let toDate = new Date(date)
     let dateStr = toDate.toUTCString(); //`${toDate.getFullYear()}, ${toDate.getMonth()}, ${toDate.getDay()}, ${toDate.getHours()}, ${toDate.getMinutes()}` //new Date(date)
     this.today = this._service.setDate_time(dateStr)
   }

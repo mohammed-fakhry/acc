@@ -47,6 +47,7 @@ import { EnquireClientsComponent } from './clients/enquire-clients/enquire-clien
 import { SearchClientPipe } from './search-client.pipe';
 import { ClientDetailsComponent } from './clients/client-details/client-details.component';
 import { ClientsPaymentsComponent } from './clients/clients-payments/clients-payments.component';
+import { UserSettingComponent } from './main-setting/user-setting/user-setting.component';
 
 @NgModule({
   declarations: [
@@ -93,6 +94,7 @@ import { ClientsPaymentsComponent } from './clients/clients-payments/clients-pay
     SearchClientPipe,
     ClientDetailsComponent,
     ClientsPaymentsComponent,
+    UserSettingComponent,
   ],
   imports: [
     BrowserModule,

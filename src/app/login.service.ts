@@ -16,7 +16,10 @@ export class LoginService {
   url: string;
   mainRoute: string;
 
-  constructor(private http: HttpClient, private router: Router) { }
+  constructor(
+    private http: HttpClient,
+    private router: Router
+  ) { }
 
   checkCurrentRoute() {
     this.currentUrl = window.location.href;
@@ -62,6 +65,8 @@ export class LoginService {
   mainUrl: string;
 
   getUsers() {
+    this.checkCurrentRoute();
+
     let i = this.currentUrl.indexOf("#");
     let dots = this.currentUrl.indexOf(":");
     this.mainUrl = this.currentUrl.slice(dots + 2, i);

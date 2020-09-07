@@ -16,8 +16,11 @@ export class TowerDetailsComponent implements OnInit {
   unites: UnitData[] = [];
   searchTxt: string;
 
-  constructor(public _unitService: UnitService,
-    public _service: ServicesService,public _unitesComponent: UnitesComponent) { }
+  constructor(
+    public _unitService: UnitService,
+    public _service: ServicesService,
+    public _unitesComponent: UnitesComponent
+  ) { }
 
   ngOnInit() {
 

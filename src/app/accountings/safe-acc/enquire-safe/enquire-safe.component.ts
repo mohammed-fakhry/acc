@@ -14,7 +14,11 @@ export class EnquireSafeComponent implements OnInit {
 
   balanceContain: HTMLElement;
 
-  constructor(public _safeDataService: SafeDataService, public _safeAccComponent: SafeAccComponent, public _service: ServicesService) { }
+  constructor(
+    public _safeDataService: SafeDataService,
+    public _safeAccComponent: SafeAccComponent,
+    public _service: ServicesService
+  ) { }
 
   ngOnInit() {
     this.balanceContain = document.querySelector('#balanceContain') as HTMLElement;

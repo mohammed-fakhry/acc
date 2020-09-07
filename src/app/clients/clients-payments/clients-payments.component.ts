@@ -134,7 +134,7 @@ export class ClientsPaymentsComponent implements OnInit {
     $('#addNewcPaymentBtn').attr({ 'disabled': true })
     this.isFormValid = true;
 
-    // card effect
+    // box effect
     this.cardSwitch('#add_clientPaymentInside');
     $('#showClientsPaymentsBtn').attr({ 'disabled': false });
   };

@@ -1,6 +1,6 @@
 <!--fadeLayer-->
 <div class="fadeLayer" id="DelFade">
-    <div class="container p-3 card askForDelete">
+    <div class="container p-3 box askForDelete">
         <h3 class="p-3 bg-danger text-light">هل انت متأكد من حذف</h3>
         <h4 class="mb-2">الوحدة رقم {{unitDataView.unitNum}}</h4>
         <hr>
@@ -73,7 +73,7 @@
 </div>
 <!--addUnit-->
 <div class="container-fluid mainContainer mt-3 unitsClass" id="addUnit">
-    <div class="inpCard card p-3">
+    <div class="inpCard box p-3">
         <h2 class="pb-3 cardHeader">اضافة بيانات وحدة</h2>
         <hr>
         <form (ngSubmit)="addNewUnit()" class="pt-3">
@@ -149,7 +149,7 @@
 </div>
 <!--unitEnquiry-->
 <div class="container-fluid mainContainer unitsClass mt-3" id="unitEnquiry">
-    <div class="card">
+    <div class="box">
         <div class="panel-body panel-flex-table">
             <table class="flex-table table table-hover">
                 <thead class="navHeader text-light">
@@ -187,11 +187,10 @@
             </table>
         </div>
     </div>
-
 </div>
 <!--calculator--->
 <div class="fadeLayer" id="calcFade" style="display: none; padding-top: 10%;">
-    <div class="container card p-3 mt-2" id="calculator" style="margin: auto;">
+    <div class="container box p-3 mt-2" id="calculator" style="margin: auto;">
         <div class="row">
             <div class="form-group col-md-2 col-sm-6">
                 <label class="settinLable p-2">المساحة</label>
@@ -230,8 +229,9 @@
                 </div>
             </div>
         </div>
-        <div class="mt-2">
-            <button class="btn btn-outline-info" (click)='calcRemain()'>احسب</button>
+        <div class="mt-2 form-inline">
+            <button class="btn btnPrimary mx-2" (click)='calcRemain()'>احسب</button>
+            <button class="btn btnDanger" id="hideCalcLayer">الغاء</button>
         </div>
         <div>
             <div class="panel-body panel-flex-table standTable" style="height: 100%;">
@@ -270,9 +270,6 @@
                     </tbody>
                 </table>
             </div>
-        </div>
-        <div>
-            <button class="btn btnDanger mb-3" id="hideCalcLayer">الغاء</button>
         </div>
     </div>
 </div>

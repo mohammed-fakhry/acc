@@ -13,7 +13,11 @@ export class ServicesService {
 
   elem: HTMLElement = document.querySelector('.theNav');
 
-  constructor(public http: HttpClient, public router: Router, public _stockService: StocksService) { }
+  constructor(
+    public http: HttpClient,
+    public router: Router,
+    public _stockService: StocksService
+  ) { }
 
   showAddNewInvoiceSer(invoice) {
     this.router.navigate['stocks'];
@@ -35,7 +39,7 @@ export class ServicesService {
     let height = window.innerHeight - this.elem.offsetHeight - 75
     $('.panel-body').not('.invoiceTable').not('.standTable').not('.tableWithHeader').css('height', `${height}px`)
     $('.invoiceTable').css('height', `${height - 330}px`)
-    $('.tableWithHeader').css('height', `${height - 85}px`)
+    $('.tableWithHeader').css('height', `${height - 65}px`)
   }
 
   sortArry(key, order = 'asc') {
