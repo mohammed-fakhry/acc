@@ -57,16 +57,20 @@ export class LoginComponent implements OnInit {
   }
 
   linksArry(url: string) {
-    return [
-      {
-        name: 'mohammed',
-        url: `${url}/accounting/`
-      },
-      {
-        name: 'ali',
-        url: `${url}/accountings_ali/`
+    return this.users.map(user => {
+      return {
+        name: user.name,
+        url: () => {
+          if (user.name == 'mohammed') {
+            return `${url}/accounting/`
+          } else if (user.name == 'ali') {
+            return `${url}/accountings_ali/`
+          } else {
+            return `${url}/accounting/`
+          }
+        }
       }
-    ]
+    })
   }
 
   log() {
@@ -78,13 +82,15 @@ export class LoginComponent implements OnInit {
       if (found) {
 
         let linkInfo = this.linksArry(url).find(link => link.name === found.name)
-        localStorage.setItem('tmpDB', `${linkInfo.url}`);
+        localStorage.setItem('tmpDB', `${linkInfo.url()}`);
 
-        sessionStorage.setItem('y', `${found.prem}`);
+        sessionStorage.setItem('y', `${JSON.stringify(found)}`);
         this.logService.isUser = true;
 
         this.router.navigate(['/home']);
         this.logService.checkIsUser();
+
+        this.logService.check = JSON.parse(sessionStorage.getItem('y'));
       } else {
         this.errMsg = 'خطأ فى اسم المستخدم او كلمة السر'
         $('.form-control').addClass('is-invalid');

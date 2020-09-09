@@ -5,6 +5,7 @@ import { WorkerRules } from './worker-rules';
 import { Router } from '@angular/router';
 import { StocksService } from './accountings/stocks/the-stocks/stocks.service';
 import { OtherAcc } from './accountings/other-acc';
+import { UserData } from './user-data';
 
 @Injectable({
   providedIn: 'root'
@@ -12,6 +13,7 @@ import { OtherAcc } from './accountings/other-acc';
 export class ServicesService {
 
   elem: HTMLElement = document.querySelector('.theNav');
+  user: UserData;
 
   constructor(
     public http: HttpClient,

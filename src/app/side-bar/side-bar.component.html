@@ -35,13 +35,14 @@
             <button class="btn btn-light py-2 ch3 mt-1 mainBtns" id="dbBtn"
                 style="border: solid 1px rgb(26, 51, 70);"><i class="fa fa-database pl-2"></i>البيانات</button>
             <div class="my-1 secDiv">
-                <button id="workersBtn" routerLink="/workers" (click)='secButtonClick("workersBtn")'
+                <!--  -->
+                <button *ngIf="logService.check?.workers == 1" id="workersBtn" routerLink="/workers" (click)='secButtonClick("workersBtn")'
                     class="secButton btn btn-light text-right" style="font-size: 1em;"><i
                         class="fa fa-user fa-lg px-2"></i>العاملين</button>
                 <!-- ClientsBtn -->
-                <button id="clientsBtn" routerLink="/clients" (click)='secButtonClick("clientsBtn")'
+                <button *ngIf="logService.check?.clients == 1" id="clientsBtn" routerLink="/clients" (click)='secButtonClick("clientsBtn")'
                     class="secButton btn btn-light text-right"><i class="fa fa-users fa-lg px-2"></i>العملاء</button>
-                <button id="unitesBtn" routerLink="/unites" (click)='secButtonClick("unitesBtn")'
+                <button *ngIf="logService.check?.unites == 1" id="unitesBtn" routerLink="/unites" (click)='secButtonClick("unitesBtn")'
                     class="secButton btn btn-light text-right" style="font-size: 1em;"><i
                         class="fa fa-building fa-lg px-2"></i>الوحدات</button>
             </div>
@@ -50,13 +51,13 @@
             <button class="btn btn-light py-2 ch3 mt-1 mainBtns" id="accBtn"
                 style="border: solid 1px rgb(26, 51, 70);"><i class="fa fa-calculator pl-2"></i>حسابات</button>
             <div class="my-1 secDiv">
-                <button id="stocksBtn" routerLink="/stocks" (click)='secButtonClick("stocksBtn")'
+                <button *ngIf="logService.check?.stockes == 1" id="stocksBtn" routerLink="/stocks" (click)='secButtonClick("stocksBtn")'
                     class="secButton btn btn-light text-right" style="font-size: 1em;"><i
                         class="fa fa-cubes fa-lg px-2"></i>المخازن</button>
-                <button id="safeAccBtn" routerLink="/safe-acc" (click)='secButtonClick("safeAccBtn")'
+                <button *ngIf="logService.check?.safes == 1" id="safeAccBtn" routerLink="/safe-acc" (click)='secButtonClick("safeAccBtn")'
                     class="secButton btn btn-light text-right"><i class="fa fa-building fa-lg px-2"
                         style="font-size: 1 em;"></i>الخزنة</button>
-                <button id="customersBtn" routerLink="/customers" (click)='secButtonClick("customersBtn")'
+                <button *ngIf="logService.check?.customers == 1" id="customersBtn" routerLink="/customers" (click)='secButtonClick("customersBtn")'
                     class="secButton btn btn-light text-right" style="font-size: 1em;"><i
                         class="fa fa-users fa-lg px-2"></i>موردين المخازن</button>
             </div>
@@ -65,7 +66,7 @@
             <button class="btn btn-dark py-2 ch3 mt-1 mainBtns" id="SettBtn"
                 style="border: solid 1px rgb(26, 51, 70);"><i class="fa fa-cog pl-2"></i>الاعدادات</button>
             <div class="my-1 secDiv">
-                <button class="secButton btn btn-light text-right" id="MainSettingBtn" routerLink="/MainSetting"
+                <button *ngIf="logService.check?.prem == 1" class="secButton btn btn-light text-right" id="MainSettingBtn" routerLink="/MainSetting"
                     (click)='secButtonClick("MainSettingBtn")'><i class="fa fa-cog pl-2"></i>الاعدادات العامة</button>
                 <button class="secButton btn btn-light text-success text-right" id="backupBtn" (click)="backup()"><i
                         class="fa fa-cog pl-2"></i>انشاء

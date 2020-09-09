@@ -238,7 +238,7 @@ export class WorkersComponent implements OnInit {
 
   // CRUD Functions
   addNewWorker() {
-    this.addBtnVal = $('#addNewWorkerBtn').html()
+    //this.addBtnVal = $('#addNewWorkerBtn').html()
     if (this.addBtnVal == 'اضافة') {
       this._service.creatEmployee(this.workerData.value)
         .subscribe()
@@ -246,6 +246,9 @@ export class WorkersComponent implements OnInit {
       //location.reload();
       this.getBackendData();
     } else if (this.addBtnVal == 'تعديل') {
+      //if (this.logService.check.edi != 1) {
+      //window.alert('لا يوجد صلاحية للتعديل')
+      //} else {
       this._service.updateWorkerSer(this.workerData.value).subscribe(() => { //view
         this.showWorkerEnquiry()
         //location.reload();
@@ -254,25 +257,36 @@ export class WorkersComponent implements OnInit {
           alert(error);
         });
       this.getBackendData();
+      //}
     };
   };
 
   askForDelete(worker: Worker) {
-    $('#workersfadeLayer').show(0)
-    $('.askForDelete').show().addClass('animate')
-    this.putWorkerDataValue(worker);
+    if (this.logService.check.del != 1) {
+      window.alert('لا يوجد صلاحية للحذف')
+    } else {
+      $('#workersfadeLayer').show(0)
+      $('.askForDelete').show().addClass('animate')
+      this.putWorkerDataValue(worker);
+    }
   };
 
   showUpdateWorker(worker: Worker) {
-    $('.workerClass').not('#addWorker').hide();
-    $('#addWorker').show();
-    $('#addNewWorkerBtn').html('تعديل');
-    $('#addWorker h2:first').html('تعديل بيانات موظف');
 
-    this.buttonEffect('#showAddWorkerBtn', '#workerEnquirybtn');
+    if (this.logService.check.edi != 1) {
+      window.alert('لا يوجد صلاحية للتعديل')
+    } else {
+      $('.workerClass').not('#addWorker').hide();
+      $('#addWorker').show();
+      $('#addNewWorkerBtn').html('تعديل');
+      $('#addWorker h2:first').html('تعديل بيانات موظف');
 
-    $('#workerSearch').hide(100)
-    this.putWorkerDataValue(worker);
+      this.buttonEffect('#showAddWorkerBtn', '#workerEnquirybtn');
+
+      $('#workerSearch').hide(100)
+      this.putWorkerDataValue(worker);
+    }
+
   };
 
   deletWorker() {

@@ -4,6 +4,7 @@ import { FormControl, FormGroup, FormBuilder } from '@angular/forms'
 import { Stock } from 'src/app/accountings/stock';
 import { ServicesService } from 'src/app/services.service';
 import { TheStocksComponent } from '../the-stocks.component';
+import { LoginService } from 'src/app/login.service';
 
 @Component({
   selector: 'app-add-stocks',
@@ -19,7 +20,8 @@ export class AddStocksComponent implements OnInit {
     public _stockService: StocksService,
     public formBuilder: FormBuilder,
     public _service: ServicesService,
-    public _theStockComp: TheStocksComponent
+    public _theStockComp: TheStocksComponent,
+    public _logService: LoginService
   ) { }
 
   ngOnInit() {
@@ -49,19 +51,23 @@ export class AddStocksComponent implements OnInit {
       this.getStocksInfo();
       this._theStockComp.showStocksEnquiry();
     } else if (this.addBtnVal == 'تعديل') {
-      this._stockService.updateStockSer(this._stockService.stockDataView).subscribe(() => {
-        // show stockEnquiry
-        $('.stocksClass').not('#stocksEnquiry').hide();
-        $('#stocksEnquiry').show();
-        $('#stocksSearch').show(100);
-        $('#stockBtn').removeClass("btn-info").addClass("btn-light").animate({ fontSize: '1.5em' }, 50);
-        $('#premissionBtn').removeClass('btn-light').addClass('btn-info').animate({ fontSize: '1em' }, 50);
-        this.getStocksInfo();
-        this._theStockComp.showStocksEnquiry();
-      },
-        error => {
-          alert(error);
-        });
+      if (this._logService.check.edi != 1) {
+        window.alert('لا يوجد صلاحية للتعديل')
+      } else {
+        this._stockService.updateStockSer(this._stockService.stockDataView).subscribe(() => {
+          // show stockEnquiry
+          $('.stocksClass').not('#stocksEnquiry').hide();
+          $('#stocksEnquiry').show();
+          $('#stocksSearch').show(100);
+          $('#stockBtn').removeClass("btn-info").addClass("btn-light").animate({ fontSize: '1.5em' }, 50);
+          $('#premissionBtn').removeClass('btn-light').addClass('btn-info').animate({ fontSize: '1em' }, 50);
+          this.getStocksInfo();
+          this._theStockComp.showStocksEnquiry();
+        },
+          error => {
+            alert(error);
+          });
+      }
     };
   };
 

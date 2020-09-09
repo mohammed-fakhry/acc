@@ -39,12 +39,7 @@ export class MainSettingComponent implements OnInit {
     }
 
     // models vars
-    this.userDataView = {
-      id: null,
-      name: null,
-      auth: null,
-      prem: null,
-    }
+    this.userDataView = new UserData();
 
 
 

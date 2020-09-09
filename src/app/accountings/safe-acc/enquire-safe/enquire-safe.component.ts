@@ -4,6 +4,7 @@ import { SafeAccComponent } from '../safe-acc.component';
 import { SafeData } from '../safe-data';
 import { SafeTransaction } from '../safe-transaction';
 import { ServicesService } from 'src/app/services.service';
+import { LoginService } from 'src/app/login.service';
 
 @Component({
   selector: 'app-enquire-safe',
@@ -17,7 +18,8 @@ export class EnquireSafeComponent implements OnInit {
   constructor(
     public _safeDataService: SafeDataService,
     public _safeAccComponent: SafeAccComponent,
-    public _service: ServicesService
+    public _service: ServicesService,
+    public _logService: LoginService
   ) { }
 
   ngOnInit() {
@@ -33,14 +35,19 @@ export class EnquireSafeComponent implements OnInit {
   };
 
   showEditSafe(safe) {
-    this.fillData(safe);
-    $('#addSafeHeader').html('تعديل بيانات خزنة')
-    $('#addNewSafeBtn').html('تعديل')
-    $('.safeClass').not('#addSafe').hide();
-    $('#addSafe').show();
-    $('#showAddSafeBtn').removeClass("btn-light").addClass("btn-outline-secondary").animate({ fontSize: '1.5em' }, 50);
-    $('.headerMainBtn').not('#showAddSafeBtn').removeClass('btn-outline-secondary').addClass('btn-light').animate({ fontSize: '1em' }, 50);
-    $('.headerMainBtn').attr({ 'disabled': false });
+    if (this._logService.check.edi != 1) {
+      window.alert('لا يوجد صلاحية للتعديل')
+    } else {
+      this.fillData(safe);
+      $('#addSafeHeader').html('تعديل بيانات خزنة')
+      $('#addNewSafeBtn').html('تعديل')
+      $('.safeClass').not('#addSafe').hide();
+      $('#addSafe').show();
+      $('#showAddSafeBtn').removeClass("btn-light").addClass("btn-outline-secondary").animate({ fontSize: '1.5em' }, 50);
+      $('.headerMainBtn').not('#showAddSafeBtn').removeClass('btn-outline-secondary').addClass('btn-light').animate({ fontSize: '1em' }, 50);
+      $('.headerMainBtn').attr({ 'disabled': false });
+    }
+
   };
 
   makeSafeTransaction(safe: SafeData) {

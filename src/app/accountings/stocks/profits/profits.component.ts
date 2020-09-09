@@ -441,7 +441,9 @@ export class ProfitsComponent implements OnInit {
               },
 
               profitForSort: ((Math.floor(pricesDetailsArr.sold.avarege - Math.floor(pricesDetailsArr.in.avarege()))) * pricesDetailsArr.sold.totalQty),
-              percForSort: ((((Math.floor(pricesDetailsArr.sold.avarege - Math.floor(pricesDetailsArr.in.avarege()))) * pricesDetailsArr.sold.totalQty) / (pricesDetailsArr.sold.totalPrices)) * 100), // () => Math.floor((prodDetails.profits.profit / prodDetails.sold.qtyVal) * 100),
+              percForSort:
+                ((((Math.floor(pricesDetailsArr.sold.avarege - Math.floor(pricesDetailsArr.in.avarege())))
+                  * pricesDetailsArr.sold.totalQty) / (pricesDetailsArr.sold.totalPrices)) * 100),
 
               profitLastPrice: {
                 val: () => {

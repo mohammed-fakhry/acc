@@ -22,8 +22,8 @@
             <button class="btn btn-outline-success d-none" (click)='makeCustomerInvArry()'>test</button>
             <h1 class="px-2" style="font-weight: bold;">موردين المخازن</h1>
             <div class="headerLeftBorder"></div>
-            <button class="btn btn-light mx-2" id="showAddCustomerBtn" (click)="ShowAddNewCustomer()">اضافة</button>
             <button class="btn btn-light mx-2" id="customerEnquirybtn" (click)="setCustomerRemain()">استعلام</button>
+            <button class="btn btn-light mx-2" id="showAddCustomerBtn" (click)="ShowAddNewCustomer()">اضافة</button>
             <div class="headerLeftBorder"></div>
             <div class="col text-center" id="printCustomerList" style="display: none;">
                 <input *ngIf="router.url === '/customers'" type="search" [(ngModel)]="searchCust"

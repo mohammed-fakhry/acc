@@ -3,6 +3,7 @@ import { SideEffectService } from '../side-effect.service';
 import { Router } from '@angular/router';
 import { LoginService } from '../login.service';
 import { ServicesService } from '../services.service';
+import { UserData } from '../user-data';
 
 @Component({
   selector: 'app-side-bar',
@@ -10,6 +11,8 @@ import { ServicesService } from '../services.service';
   styleUrls: ['./side-bar.component.scss']
 })
 export class SideBarComponent implements OnInit {
+
+  us = new UserData();
 
   currentUrl: string;
   ind: number;
@@ -48,6 +51,10 @@ export class SideBarComponent implements OnInit {
 
   ngOnInit() {
 
+    this.currentUrl = window.location.href;
+    this.ind = this.currentUrl.lastIndexOf("/");
+    this.url = this.currentUrl.slice(this.ind);
+    
     this.urlBTnArr = [
       {
         btn: $('#workersBtn'),
@@ -78,12 +85,6 @@ export class SideBarComponent implements OnInit {
         url: '/MainSetting'
       }
     ]
-
-    this.currentUrl = window.location.href;
-    this.ind = this.currentUrl.lastIndexOf("/");
-    this.url = this.currentUrl.slice(this.ind);
-
-    this.activeSecBtn()
 
     $(".mainBtns").click(function () {
       //this.logService.reternlog()
@@ -146,6 +147,8 @@ export class SideBarComponent implements OnInit {
 
     });
 
+    this.activeSecBtn()
+
   }; // ngOnInit
 
   activeSecBtn() {
@@ -164,11 +167,13 @@ export class SideBarComponent implements OnInit {
 
   gO() {
     //this.logService.isUser = false;
+    this.sidebarToggle();
     sessionStorage.removeItem('y')
     this.logService.isUser = false;
     this.router.navigate(['/logIn']);
     //localStorage.removeItem('tmpDB')
     this.logService.checkIsUser();
+    
   };
 
   // new effects

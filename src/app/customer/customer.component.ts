@@ -98,6 +98,8 @@ export class CustomerComponent implements OnInit {
       this.balanceContain.classList.add('infoCard')
       this.balanceContain.style.border = 'none'
     })
+
+    this.setCustomerRemain();
   };
 
   getCustomerData_BackEnd() {
@@ -551,20 +553,28 @@ export class CustomerComponent implements OnInit {
 
     } else if (addBtnVal == 'تعديل') {
 
-      this._custService.updateCustomerSer(this.customerData.value).subscribe(() => {
-        this.showCustomerEnquiry();
-      },
-        error => {
-          // alert(error);
-        });
+      if (this.logService.check.edi != 1) {
+        window.alert('لا يوجد صلاحية للتعديل')
+      } else {
+        this._custService.updateCustomerSer(this.customerData.value).subscribe(() => {
+          this.showCustomerEnquiry();
+        },
+          error => {
+            // alert(error);
+          });
+      }
     };
 
   };
 
   askForDelete(customer: Customer) {
-    this.customerFadeLayer.style.display = 'block'
-    $('.askForDelete').show().addClass('animate')
-    this.putCustomerDataValue(customer);
+    if (this.logService.check.del != 1) {
+      window.alert('لا يوجد صلاحية للحذف')
+    } else {
+      this.customerFadeLayer.style.display = 'block'
+      $('.askForDelete').show().addClass('animate')
+      this.putCustomerDataValue(customer);
+    }
   };
 
   deletCustomer() {

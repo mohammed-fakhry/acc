@@ -11,6 +11,7 @@ import { HandleBackEnd } from 'src/app/handle-back-end';
 import { Customer } from 'src/app/customer';
 import { InvoiceInp } from 'src/app/accountings/invoice-inp';
 import { Stock } from 'src/app/accountings/stock';
+import { LoginService } from 'src/app/login.service';
 
 @Component({
   selector: 'app-min-frm-stock-permission',
@@ -38,7 +39,8 @@ export class MinFrmStockPermissionComponent implements OnInit {
     public formBuilder: FormBuilder,
     public _service: ServicesService,
     public _custService: CustomerService,
-    public _theStockComp: TheStocksComponent
+    public _theStockComp: TheStocksComponent,
+    public _logService: LoginService
   ) { }
 
   ngOnInit() {
@@ -1081,7 +1083,7 @@ export class MinFrmStockPermissionComponent implements OnInit {
     //return (this.btnValid.cond == true) ? true : false;
   };
 
-  minFrmStockPrem() {
+  proceedToAdd() {
     this.makeMinStockPremArry();
     this.showInvoiceDone();
     // delete invDetail when delete the productName
@@ -1093,12 +1095,32 @@ export class MinFrmStockPermissionComponent implements OnInit {
         };
       }
     }
+  }
+
+  minFrmStockPrem() {
+
+    let BtnSubmitHtml = $('#minNewInvoicetBtn').html();
+
+    if (BtnSubmitHtml == "تعديل الفاتورة") {
+      if (this._logService.check.edi != 1) {
+        window.alert('لا يوجد صلاحية للتعديل')
+      } else {
+        this.proceedToAdd();
+      }
+    } else {
+      this.proceedToAdd();
+    }
+
   }; // minFrmStockPrem
 
   showDeleteMinInvoice() {
-    $('#fadeLayerMP').show(0);
-    $('.askForDelete').addClass('animate');
-    let stockTransId = $('#minStockTransactionId').val();
+    if (this._logService.check.del != 1) {
+      window.alert('لا يوجد صلاحية للحذف')
+    } else {
+      $('#fadeLayerMP').show(0);
+      $('.askForDelete').addClass('animate');
+      let stockTransId = $('#minStockTransactionId').val();
+    }
   };
 
   deleteMinInvoice() {

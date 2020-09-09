@@ -542,11 +542,16 @@ export class TheStocksComponent implements OnInit {
   };
 
   deleteStock() {
-    $('#theStockFadeLayer').hide()
-    this._stockService.deleteStockSer(this._stockService.stockDataView.stockId)
-      .subscribe(data => {
-        this._stockService.stocks = this._stockService.stocks.filter(u => u !== this._stockService.stockDataView)
-      });
+    if (this.logService.check.del != 1) {
+      window.alert('لا يوجد صلاحية للحذف')
+    } else {
+      $('#theStockFadeLayer').hide()
+      this._stockService.deleteStockSer(this._stockService.stockDataView.stockId)
+        .subscribe(data => {
+          this._stockService.stocks = this._stockService.stocks.filter(u => u !== this._stockService.stockDataView)
+        });
+    }
+
   };
 
 }; // End

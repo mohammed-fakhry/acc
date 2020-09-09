@@ -11,6 +11,7 @@ import { StockTransactionD } from '../../stock-transaction-d';
 import { StockTransaction } from '../../stock-transaction';
 import { ProductsClass } from '../../products-class';
 import { Stock } from 'src/app/accountings/stock';
+import { LoginService } from 'src/app/login.service';
 
 @Component({
   selector: 'app-stoc-trance-prem',
@@ -49,7 +50,8 @@ export class StocTrancePremComponent implements OnInit {
     public formBuilder: FormBuilder,
     public _service: ServicesService,
     public _custService: CustomerService,
-    public _theStockComp: TheStocksComponent
+    public _theStockComp: TheStocksComponent,
+    public _logService: LoginService
   ) { }
 
   ngOnInit() {
@@ -873,7 +875,7 @@ export class StocTrancePremComponent implements OnInit {
     this._theStockComp.showFade_newInvoice('fade_showTranceStockPrem');
   };
 
-  tranceFrmStockPrem() {
+  proceedToAdd() {
     this.makeTranceStockPremArry();
     if (this.stockDetailsIdArr.length != 0) {
       for (let i = 0; i < this.stockDetailsIdArr.length; i++) {
@@ -881,14 +883,32 @@ export class StocTrancePremComponent implements OnInit {
       };
     }
     this.showInvoiceDone();
+  }
+
+  tranceFrmStockPrem() {
+    let subBtn = $('#newTranceInvoicetBtn').html()
+    if (subBtn == 'تعديل الاذن') {
+      if (this._logService.check.edi != 1) {
+        window.alert('لا يوجد صلاحية للتعديل')
+      } else {
+        this.proceedToAdd();
+      }
+    } else {
+      this.proceedToAdd();
+    }
+
   };
 
   testBtn() {
   };
 
   showDeleteTranceInvoice() {
-    $('#tranceFadeLayer').show(0);
-    $('.askForDelete').addClass('animate');
+    if (this._logService.check.del != 1) {
+      window.alert('لا يوجد صلاحية للحذف')
+    } else {
+      $('#tranceFadeLayer').show(0);
+      $('.askForDelete').addClass('animate');
+    }
   };
 
   deleteTranceInvoice() {

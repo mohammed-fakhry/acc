@@ -413,18 +413,26 @@ export class UnitesComponent implements OnInit {
 
       } else if (this.addBtnVal == 'تعديل') {
 
-        this._unitService.updateUnit(this.unitDataView).subscribe(() => {
-          this.showUnitEnquiry();
-        });
+        if (this.logService.check.edi != 1) {
+          window.alert('لا يوجد صلاحية للتعديل')
+        } else {
+          this._unitService.updateUnit(this.unitDataView).subscribe(() => {
+            this.showUnitEnquiry();
+          });
+        }
       };
     };
 
   }; //addNewUnit
 
   askForDeleteUnit(unit: UnitData) {
-    $('#DelFade').show(0)
-    $('.askForDelete').addClass('animate')
-    this.unitDataView = unit;
+    if (this.logService.check.del != 1) {
+      window.alert('لا يوجد صلاحية للحذف')
+    } else {
+      $('#DelFade').show(0)
+      $('.askForDelete').addClass('animate')
+      this.unitDataView = unit;
+    }
   };
 
   deletUnit() {

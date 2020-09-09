@@ -8,6 +8,7 @@ import { SafeData } from '../safe-data';
 import { SafeAccComponent } from '../safe-acc.component';
 import { SafeReceiptInpts } from '../safe-receipt-inpts';
 import { OtherAcc } from '../../other-acc';
+import { LoginService } from 'src/app/login.service';
 
 @Component({
   selector: 'app-safe-receipt',
@@ -31,7 +32,8 @@ export class SafeReceiptComponent implements OnInit {
     public _stockService: StocksService,
     public _service: ServicesService,
     public _custService: CustomerService,
-    public _safeAccComponent: SafeAccComponent
+    public _safeAccComponent: SafeAccComponent,
+    public _logService: LoginService
   ) { }
 
   ngOnInit() {
@@ -903,8 +905,7 @@ export class SafeReceiptComponent implements OnInit {
 
   validCheck: boolean;
 
-  addNewSafeReceipt() {
-
+  proceedToAdd() {
     if (this.isReceiptValid) {
       this.validCheck = true;
     } else {
@@ -912,11 +913,31 @@ export class SafeReceiptComponent implements OnInit {
       this.showInvoiceDone();
       this.saveRecieptData();
     }
+  }
+
+  addNewSafeReceipt() {
+
+    let addNewSafeReceipt_Btn = $('#addNewSafeReceipt').html();
+
+    if (addNewSafeReceipt_Btn == "تعديل الايصال") {
+      if (this._logService.check.edi != 1) {
+        window.alert('لا يوجد صلاحية للتعديل')
+      } else {
+        this.proceedToAdd();
+      }
+    } else {
+      this.proceedToAdd();
+    }
+
   };
 
   showDeleteSafeReciept() {
-    $('#fadeLayer_SafeReceipt').show(0);
-    $('.askForDelete').addClass('animate');
+    if (this._logService.check.del != 1) {
+      window.alert('لا يوجد صلاحية للحذف')
+    } else {
+      $('#fadeLayer_SafeReceipt').show(0);
+      $('.askForDelete').addClass('animate');
+    }
   };
 
   deleteSafeReceipt() {

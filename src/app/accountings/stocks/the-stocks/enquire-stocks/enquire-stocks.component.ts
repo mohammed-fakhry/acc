@@ -5,6 +5,7 @@ import { TheStocksComponent } from '../the-stocks.component';
 import { StockTransactionD } from '../../stock-transaction-d';
 import { ServicesService } from 'src/app/services.service';
 import { HandleBackEnd } from 'src/app/handle-back-end';
+import { LoginService } from 'src/app/login.service';
 
 @Component({
   selector: 'app-enquire-stocks',
@@ -16,7 +17,8 @@ export class EnquireStocksComponent implements OnInit {
   constructor(
     public _stockService: StocksService,
     public _theStocksComponent: TheStocksComponent,
-    public _service: ServicesService
+    public _service: ServicesService,
+    public _logService: LoginService
   ) { }
 
   ngOnInit() {
@@ -29,22 +31,31 @@ export class EnquireStocksComponent implements OnInit {
   } // ngOnInit
 
   askForDelete(stock: Stock) {
-    $('#theStockFadeLayer').show(0);
-    $('#askForDeleteStock').show();
-    $('.askForDelete').show().addClass('animate');
-    this._stockService.stockDataView = stock;
-    this._theStocksComponent.deleteMsg = 'سيتم حذف بيانات المخزن و ايضاً حذف بيانات الاصناف .. يجب عمل نسخة احتياطية ربما لن يمكنك استرجاع هذه البيانات'
+    if (this._logService.check.del != 1) {
+      window.alert('لا يوجد صلاحية للحذف')
+    } else {
+      $('#theStockFadeLayer').show(0);
+      $('#askForDeleteStock').show();
+      $('.askForDelete').show().addClass('animate');
+      this._stockService.stockDataView = stock;
+      this._theStocksComponent.deleteMsg = 'سيتم حذف بيانات المخزن و ايضاً حذف بيانات الاصناف .. يجب عمل نسخة احتياطية ربما لن يمكنك استرجاع هذه البيانات'
+    }
+
   };
 
   showUpdateStock(stock: Stock) {
-    $('.stocksClass').not('#addNewStock').hide();
-    $('#addNewStock').show();
-    $('#addNewStockBtn').html('تعديل');
-    $('#addWorkerInside h2:first').html('تعديل بيانات مخزن');
-    $('#stocksSearch').hide(100);
-    $('#stockBtn').removeClass("btn-outline-info").addClass("btn-outline-secondary").animate({ fontSize: '1.5em' }, 50);
-    $('#premissionBtn').removeClass('btn-outline-secondary').addClass('btn-outline-info').animate({ fontSize: '1em' }, 50);
-    this._stockService.stockDataView = stock;
+    if (this._logService.check.edi != 1) {
+      window.alert('لا يوجد صلاحية للتعديل')
+    } else {
+      $('.stocksClass').not('#addNewStock').hide();
+      $('#addNewStock').show();
+      $('#addNewStockBtn').html('تعديل');
+      $('#addWorkerInside h2:first').html('تعديل بيانات مخزن');
+      $('#stocksSearch').hide(100);
+      $('#stockBtn').removeClass("btn-outline-info").addClass("btn-outline-secondary").animate({ fontSize: '1.5em' }, 50);
+      $('#premissionBtn').removeClass('btn-outline-secondary').addClass('btn-outline-info').animate({ fontSize: '1em' }, 50);
+      this._stockService.stockDataView = stock;
+    }
   }
 
   sumArry(arr: any[]) {

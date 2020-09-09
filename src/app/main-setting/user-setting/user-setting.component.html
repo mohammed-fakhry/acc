@@ -1,44 +1,232 @@
 <div id="fadeCheckPass" class="fadeLayer">
-  <div class="container p-3 box askForDelete" style="display: none;" id="fadeCheck">
-    <div class="form-group">
-      <label for="userNameFade">اسم المستخدم</label>
-      <div id="userNameFade" class="form-control">{{userInfo.name}}</div>
+    <div class="container p-3 box askForDelete" style="display: none;" id="fadeCheck">
+        <div *ngIf="fadeCond.cond == 'check'">
+            <form (ngSubmit)="checkUser()">
+                <div class="form-group">
+                    <label>ادخل كلمة سر المستخدم المسؤول</label>
+                    <input id="checkAuth" name="auth" [(ngModel)]="auth" type="password" class="form-control mb-3">
+                    <div *ngIf="!checkValid.cond" class="textDanger">خطأ فى كلمة السر</div>
+                </div>
+                <div class="form-inline">
+                    <button type="submit" class="btn btnPrimary" id="hideBackupDone">تم</button>
+                    <button class="btn btnDanger mx-2" (click)='hideFadeCheck("cancel")'>الغاء</button>
+                </div>
+            </form>
+        </div>
+        <div *ngIf="fadeCond.cond == 'done'">
+            <h4 class="navHeader p-2">{{fadeCond.msg}}</h4>
+            <button class="btn btnPrimary" (click)='hideFadeCheck("addDone")'>تم</button>
+        </div>
     </div>
-    <div class="form-group">
-      <label>ادخل كلمة السر</label>
-      <input id="checkAuth" name="auth" [(ngModel)]="auth" type="password" class="form-control mb-3">
-      <div *ngIf="checkValid.cond" class="textDanger">خطأ فى كلمة السر</div>
-    </div>
-    <div class="form-inline">
-      <button class="btn btnPrimary" id="hideBackupDone" (click)='checkUser()'>تم</button>
-      <button class="btn btnDanger mx-2" (click)='hideFadeCheck()'>الغاء</button>
-    </div>
-  </div>
 </div>
 <!-- body -->
-<div class="container-fluid">
-  <div class="row" style="padding-left: 20px;">
-    <div class="col-md-12 col-lg-2 printX">
-      <div class="stickyInp mt-3">
-        <div class="box">
-          <!--   -->
-          <div class="panel-body panel-flex-table standTable" style="height: fit-content;">
-            <table class="flex-table table table-hover">
-              <thead class="navHeader">
-                <tr>
-                  <th class="text-center">اسم المستخدم</th>
-                </tr>
-              </thead>
-              <tbody class=" mt-3 tableBody">
-                <tr *ngFor="let user of users; let i = index">
-                  <td class="btn btn-light chooseBtn" id="showUserInfo{{i}}" (click)="showUserInfo(user,i)"
-                    style="flex: 3;">{{user.name}}</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+<div id='settingMainSection'>
+    <div class="row">
+        <div class="col-md-12 col-lg-2 printX">
+            <div class="stickyInp">
+                <div class="box mb-3 mt-3 bg-light">
+                    <!--   -->
+                    <div class="panel-body panel-flex-table standTable" style="height: fit-content;">
+                        <table class="flex-table table table-hover">
+                            <thead class="navHeader">
+                                <tr>
+                                    <th class="text-center">اسم المستخدم</th>
+                                </tr>
+                            </thead>
+                            <tbody class=" mt-3 tableBody">
+                                <tr *ngFor="let user of users; let i = index">
+                                    <td class="btn btn-light chooseBtn" id="showUserInfo{{i}}"
+                                        (click)="showUserInfo(user,i)" style="flex: 3;">{{user.name}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="box pb-3 px-2">
+                    <button class="btn btnPrimary" (click)="showUserInfo()">اضافة مستخدم جديد</button>
+                </div>
+            </div>
         </div>
-      </div> 
+        <!--  -->
+        <div *ngIf="checked" class="col-md-12 col-lg-10 pt-4" id="userSettings">
+            <div class="box inpCard_noPadding mb-3 pb-3">
+                <!-- <div class="row"> -->
+                <h4 class="cardHeader pb-3">بيانات المستخدم</h4>
+                <div class="row px-3">
+                    <div class="form-group col">
+                        <label for="userName">اسم المستخدم</label>
+                        <input id="userName" type="text" class="form-control" name="userName"
+                            [(ngModel)]="inpts.userName">
+                    </div>
+                    <div class="form-group col">
+                        <label for="pass">كلمة سر جديدة</label>
+                        <input type="password" id="pass" class="form-control" name="pass" [(ngModel)]="inpts.pass">
+                    </div>
+                    <div class="form-group col">
+                        <label for="rePass">تأكيد كلمة السر الجديدة</label>
+                        <input type="password" id="rePass" class="form-control" name="rePass"
+                            [(ngModel)]="inpts.rePass">
+                    </div>
+                </div>
+                <!-- </div> -->
+            </div>
+            <div class="box">
+                <h4 class="cardHeader pb-2">الصلاحيات</h4>
+                <div class="row px-2">
+                    <div class="col">
+                        <div class="inpCard_row">
+                            <div class="panel-body panel-flex-table standTable">
+                                <table class="flex-table table table-hover">
+                                    <thead class="navHeader">
+                                        <tr>
+                                            <th scope="col">العمليات الاساسية</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr class="alert-secondary">
+                                            <th scope="row">
+                                                جميع الصلاحيات
+                                            </th>
+                                            <th>
+                                                <label class="switch">
+                                                    <input name="master" [(ngModel)]="prems.tasks.master"
+                                                        (change)='switchPrem()' type="checkbox">
+                                                    <span class="slider round"></span>
+                                                </label>
+                                            </th>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">
+                                                تعديل
+                                            </th>
+                                            <th>
+                                                <label class="switch">
+                                                    <input name="edit" [(ngModel)]="prems.tasks.edit" type="checkbox">
+                                                    <span class="slider round"></span>
+                                                </label>
+                                            </th>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row" class="textDanger">
+                                                حذف
+                                            </th>
+                                            <th>
+                                                <label class="switch">
+                                                    <input name="del" [(ngModel)]="prems.tasks.del" type="checkbox">
+                                                    <span class="slider round"></span>
+                                                </label>
+                                            </th>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="inpCard_row">
+                            <div class="panel-body panel-flex-table standTable">
+                                <table class="flex-table table table-hover">
+                                    <thead class="navHeader">
+                                        <tr>
+                                            <th scope="col">البيانات</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <th scope="row">
+                                                العاملين
+                                            </th>
+                                            <th>
+                                                <label class="switch">
+                                                    <input name="workers" [(ngModel)]="prems.db.workers"
+                                                        type="checkbox">
+                                                    <span class="slider round"></span>
+                                                </label>
+                                            </th>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">
+                                                العملاء
+                                            </th>
+                                            <th>
+                                                <label class="switch">
+                                                    <input name="clients" [(ngModel)]="prems.db.clients"
+                                                        type="checkbox">
+                                                    <span class="slider round"></span>
+                                                </label>
+                                            </th>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">
+                                                الوحدات
+                                            </th>
+                                            <th>
+                                                <label class="switch">
+                                                    <input name="unites" [(ngModel)]="prems.db.unites" type="checkbox">
+                                                    <span class="slider round"></span>
+                                                </label>
+                                            </th>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="inpCard_row">
+                            <div class="panel-body panel-flex-table standTable">
+                                <table class="flex-table table table-hover">
+                                    <thead class="navHeader">
+                                        <tr>
+                                            <th scope="col">الحسابات</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <th scope="row">
+                                                المخازن
+                                            </th>
+                                            <th>
+                                                <label class="switch">
+                                                    <input name="stockes" [(ngModel)]="prems.acc.stockes"
+                                                        type="checkbox">
+                                                    <span class="slider round"></span>
+                                                </label>
+                                            </th>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">
+                                                الخزنة
+                                            </th>
+                                            <th>
+                                                <label class="switch">
+                                                    <input name="safes" [(ngModel)]="prems.acc.safes" type="checkbox">
+                                                    <span class="slider round"></span>
+                                                </label>
+                                            </th>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">
+                                                موردين المخازن
+                                            </th>
+                                            <th>
+                                                <label class="switch">
+                                                    <input name="customers" [(ngModel)]="prems.acc.customers"
+                                                        type="checkbox">
+                                                    <span class="slider round"></span>
+                                                </label>
+                                            </th>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="mx-2 my-3">
+                    <button class="btn btnPrimary" id="submitUserSetBtn" (click)="postUser()">تسجيل</button>
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
 </div>

@@ -12,6 +12,7 @@ import { StockTransactionD } from '../../stock-transaction-d';
 import { StockTransaction } from '../../stock-transaction';
 import { Stock } from 'src/app/accountings/stock';
 import { equal } from 'assert';
+import { LoginService } from 'src/app/login.service';
 //import { CustomerComponent } from 'src/app/customer/customer.component';
 
 @Component({
@@ -75,7 +76,8 @@ export class AddToStockPermissionComponent implements OnInit {
     public formBuilder: FormBuilder,
     public _service: ServicesService,
     public _custService: CustomerService,
-    public _theStockComp: TheStocksComponent
+    public _theStockComp: TheStocksComponent,
+    public _logService: LoginService
   ) { }
 
   ngOnInit() {
@@ -960,7 +962,7 @@ export class AddToStockPermissionComponent implements OnInit {
     this._theStockComp.showFade_newInvoice('fade_addNewApBtn');
   };
 
-  addToStockPrem() { // the main function
+  proceedToAdd() {
     this.makeAddStockPremArry();
     this.showInvoiceDone();
     // delete invDetail when delete the productName
@@ -969,6 +971,20 @@ export class AddToStockPermissionComponent implements OnInit {
         this._stockService.deleteStockTransactionDetails(this.stockDetailsIdArr[i]).subscribe();
       };
     }
+  }
+
+  addToStockPrem() { // the main function
+
+    if (this.domElements.btn.addNewInvoicetBtn.innerHTML == "تعديل الفاتورة") {
+      if (this._logService.check.edi != 1) {
+        window.alert('لا يوجد صلاحية للتعديل')
+      } else {
+        this.proceedToAdd();
+      }
+    } else {
+      this.proceedToAdd();
+    }
+
   };
 
 
@@ -1086,9 +1102,13 @@ export class AddToStockPermissionComponent implements OnInit {
   }; // showAddNewInvoice
 
   showDeleteAddInvoice() {
-    $('#fadeLayerAP').show(0)
-    $('.askForDelete').addClass('animate');
-    //this.domElements.html.fadeLayerAP.style.display = 'block'
+    if (this._logService.check.del != 1) {
+      window.alert('لا يوجد صلاحية للحذف')
+    } else {
+      $('#fadeLayerAP').show(0)
+      $('.askForDelete').addClass('animate');
+      //this.domElements.html.fadeLayerAP.style.display = 'block'
+    }
   };
 
   deleteAddInvoice() {

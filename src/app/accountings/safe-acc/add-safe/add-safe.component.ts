@@ -5,6 +5,7 @@ import { Worker } from '../../../worker'
 import { SafeData } from '../safe-data';
 import { SafeDataService } from '../safe-data.service';
 import { SafeAccComponent } from '../safe-acc.component';
+import { LoginService } from 'src/app/login.service';
 
 @Component({
   selector: 'app-add-safe',
@@ -23,7 +24,8 @@ export class AddSafeComponent implements OnInit {
   constructor(
     public _service: ServicesService,
     public _safeDataService: SafeDataService,
-    public _safeAccComponent: SafeAccComponent
+    public _safeAccComponent: SafeAccComponent,
+    public _logService: LoginService
   ) { }
 
   ngOnInit() {
@@ -120,7 +122,12 @@ export class AddSafeComponent implements OnInit {
         opendVal: this._safeDataService.safeInpts.opendVal,
         currentSafeVal: safeInfo.currentSafeVal
       }
-      this._safeDataService.updateSafeData(this.safeData).subscribe()
+      if (this._logService.check.edi != 1) {
+        window.alert('لا يوجد صلاحية للتعديل')
+      } else {
+        this._safeDataService.updateSafeData(this.safeData).subscribe()
+      }
+
     } else if (addSafeBtnVal == 'اضافة') {
       this.safeData = {
         safeId: null,
